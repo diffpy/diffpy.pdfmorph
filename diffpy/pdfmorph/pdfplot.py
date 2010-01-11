@@ -71,34 +71,37 @@ def comparePDFs(pairlist, labels = [], rmin = None, rmax = None):
     rmax        --  The maximum r-value to plot. If this is None (default), the
                     upper bound of the PDF is not altered.
 
-    The first PDF will be shown as blue circles, and the second as a red line.
-    The difference curve will be in green and offset for clarity.
+    The second PDF will be shown as blue circles below and the first as a red
+    line.  The difference curve will be in green and offset for clarity.
     
     """
 
-    r1, gr1 = pairlist[0]
+    rfit, grfit = pairlist[0]
     r2, gr2 = pairlist[1]
+    labeldata = labels[1]
+    labelfit = labels[0]
 
-    r1, gr1 = truncatePDFs(r1, gr1, rmin, rmax)
+    rdata, grdata = truncatePDFs(r2, gr2, rmin, rmax)
 
     gap = 2 - len(labels)
     labels = list(labels)
     labels.extend([""] * gap)
 
-    # Put gr2 on the same grid as r1
-    gr2i = numpy.interp(r1, r2, gr2)
+    # Put gr1 on the same grid as rdata
+    grfit = numpy.interp(rdata, rfit, grfit)
 
-    diff = gr1 - gr2i
+    # Calculate the difference
+    diff = grdata - grfit
 
-    miny = min(min(gr1), min(gr2i))
+    miny = min(min(grdata), min(grfit))
     maxy = max(diff)
     offset = -1.2*(maxy - miny)
 
     pylab.clf()
     pylab.ioff()
-    pylab.plot(r1, gr1, 'bo', label = labels[0])
-    pylab.plot(r1, gr2i, 'r-', label = labels[1])
-    pylab.plot(r1, diff + offset, 'g-', label = "difference")
+    pylab.plot(rdata, grdata, 'bo', label = labeldata)
+    pylab.plot(rdata, grfit, 'r-', label = labelfit)
+    pylab.plot(rdata, diff + offset, 'g-', label = "difference")
 
     pylab.xlabel("$r (\AA)$")
     pylab.ylabel("$G (\AA^{-1})$")

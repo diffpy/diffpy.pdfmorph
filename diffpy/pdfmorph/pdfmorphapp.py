@@ -9,16 +9,16 @@ Usage: %(fn)s [options] file1 file2
 
 %(fn)s takes two PDF files, file1 and file2, and plots them on top of one
 another, and produces a difference curve. Options may manipulate the PDF from
-file2 before plotting.
+file1 before plotting.
 
 Options:
   -h, --help      display this message
   -V, --version   show script version
-  --broaden=SS    broaden the PDF from file2 using sigma^2 = SS.
+  --broaden=SIG   broaden the PDF from file1 by Gaussian width SIG
   --noplot        do not show the plot
   --rmin=RMIN     the minimum r-value to show
   --rmax=RMAX     the maximum r-value to show
-  --save=FILE     save full extent of manipulated PDF from file2 to FILE
+  --save=FILE     save full extent of manipulated PDF from file1 to FILE
 
 Report bugs to diffpy-dev@googlegroups.com.
 """% {"fn" : scriptname }
@@ -27,13 +27,11 @@ __id__ = "$Id$"
 
 import sys
 import os
-import re
 
 from diffpy.pdfmorph import pdfplot, tools
 
 def usage(style = None):
     """show usage info, for style=="brief" show only first 2 lines"""
-    import os.path
     myname = os.path.basename(sys.argv[0])
     msg = __doc__
     if style == 'brief':
@@ -57,7 +55,7 @@ def main():
         print >> sys.stderr, errmsg
         sys.exit(2)
     # process options
-    ss = None
+    sig = None
     savefile = None
     noplot = False
     rmin = None
@@ -70,7 +68,7 @@ def main():
             version()
             sys.exit()
         elif "--broaden" == o:
-            ss = getFloat(a, 'broaden')
+            sig = getFloat(a, 'broaden')
         elif "--save" == o:
             savefile = a
         elif "--noplot" == o:
@@ -90,22 +88,22 @@ def main():
     r2, gr2 = getPDFFromFile(file2)
 
     # Broaden if we must
-    if ss is not None:
-        gr2 = tools.broadenPDF(r2, gr2, ss)
-        labels[1] += " (ss = %f)" % ss
+    if sig is not None:
+        gr1 = tools.broadenPDF(r1, gr1, sig)
+        labels[0] += " (sig = %f)" % sig
     if savefile is not None:
         import numpy
         header = "# PDF created by %s\n" % scriptname
-        header += "# from %s\n" % os.path.abspath(file2)
-        header += "# ss = %f" % ss
+        header += "# from %s\n" % os.path.abspath(file1)
+        header += "# sig = %f" % sig
         outfile = file(savefile, 'w')
         print >> outfile, header
-        numpy.savetxt(outfile, zip(r2, gr2))
+        numpy.savetxt(outfile, zip(r1, gr1))
         outfile.close()
 
     # Now we can plot
     if not noplot:
-        pdfplot.comparePDFs([(r1, gr1), (r2, gr2)], 
+        pdfplot.comparePDFs([(r1, gr1), (r2, gr2)],
                 labels, rmin = rmin, rmax = rmax)
     return
 

@@ -123,16 +123,16 @@ def RDFtoPDF(r, rr, rho0):
 
     return gr
 
-def broadenPDF(r, gr, ss, rho0 = None):
+def broadenPDF(r, gr, sig, rho0 = None):
     """Uniformly broaden the peaks of the PDF.
 
     This simulates PDF peak broadening from thermal or other effects.  This
     calculates the RDF from the PDF, and then convolutes it with a Gaussian of
-    of variance ss, and transforms back to the PDF.
+    of width sig, and transforms back to the PDF.
 
     r       --  The r-grid used for the PDF.
     gr      --  The PDF over the r-grid.
-    ss      --  The sigma^2 to broaden the peaks by.
+    sig     --  The Gaussian width to broaden the peaks by.
     rho0    --  The scaled number density of the sample giving the PDF.
                 (Scaling this correctly requires knowing the scale on the PDF.)
                 If this is None (default), then it will be estimated using
@@ -150,7 +150,7 @@ def broadenPDF(r, gr, ss, rho0 = None):
     # The Gaussian to convolute with. No need to normalize, we'll do that
     # later.
     r0 = r[len(r) / 2]
-    gaussian = numpy.exp(-0.5 * (r - r0)**2 / ss )
+    gaussian = numpy.exp(-0.5 * ((r - r0)/sig)**2 )
 
     # Get the full convolution
     c = numpy.convolve(rr, gaussian, mode="full")

@@ -27,7 +27,7 @@ class TestRoutines(unittest.TestCase):
     def setUp(self):
         self.r, self.gr = tools.readPDF( testdata("nickel_ss0.01.cgr") )
         self.rho0 = 0.0917132
-        self.ss = 0.01
+        self.sig = 0.1
         return
 
     def tearDown(self):
@@ -88,9 +88,9 @@ class TestRoutines(unittest.TestCase):
         r, gr = self.r, self.gr
         rho0 = self.rho0
 
-        ss = 0.01
+        sig = self.sig
 
-        gr2 = tools.broadenPDF(r, gr, ss, rho0)
+        gr2 = tools.broadenPDF(r, gr, sig, rho0)
 
         # Compare this with a PDF generated with ss = 0.02. We expect there to
         # be edge effects, so we'll be with 1% agreement.
