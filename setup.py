@@ -15,7 +15,13 @@ setup(
         name = "diffpy.pdfmorph",
         version = "1.0",
         namespace_packages = ['diffpy'],
-        packages = find_packages(exclude=['tests']),
+        packages = find_packages(exclude=['tests', 'applications']),
+        entry_points = {
+            # define console_scripts here, see setuptools docs for details.
+            'console_scripts' : [
+                'pdfmorph = diffpy.pdfmorph.pdfmorphapp:main',
+            ],
+        },
         test_suite = 'tests',
         author = 'Simon J.L. Billinge',
         author_email = 'sb2896@columbia.edu',

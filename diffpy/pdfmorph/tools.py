@@ -11,15 +11,15 @@
 # See LICENSE.txt for license information.
 #
 ##############################################################################
-"""Collection of functions and classes for manipulating pdfs."""
+"""Collection of functions and classes for manipulating PDFs."""
 
 import re
 import numpy
 from numpy import pi
 
 # FIXME - common functionality like this needs to be factored out. Things like
-# this exist in SrFit and PDFgui. We need a common, python-only package for
-# this sort of stuff.
+# this exist in SrFit and PDFgui. We need a common, python-only diffpy package
+# for this sort of stuff.
 def readPDF(fname):
     """Reads an .gr file, loads r and G(r) vectors.
 
@@ -31,7 +31,11 @@ def readPDF(fname):
     from numpy import loadtxt
     
     data = open(fname).read()
-    pos = re.search(r'^#+ +start data', data, re.M).start()
+    pos = re.search(r'^#+ +start data', data, re.M)
+    if pos is not None:
+        pos = pos.start()
+    else:
+        pos = 0
     nlines = data[:pos].count('\n')
     r, gr = loadtxt(fname, skiprows=nlines, usecols=(0, 1), unpack=True)
     return r, gr
@@ -78,8 +82,9 @@ def PDFtoRDF(r, gr, rho0 = None):
 
     r       --  The r-grid used for the PDF.
     gr      --  The PDF over the r-grid.
-    rho0    --  The number density of the sample giving the PDF. If this is
-                None (defualt), then it will be estimated using
+    rho0    --  The scaled number density of the sample giving the PDF.
+                (Scaling this correctly requires knowing the scale on the PDF.)
+                If this is None (default), then it will be estimated using
                 estimateBaselineSlope.
 
     Returns R(r) over the r-grid.
@@ -103,7 +108,8 @@ def RDFtoPDF(r, rr, rho0):
 
     r       --  The r-grid used for the RDF.
     rr      --  The RDF over the r-grid.
-    rho0    --  The density of the sample giving the RDF.
+    rho0    --  The scaled number density of the sample giving the PDF.
+                (Scaling this correctly requires knowing the scale on the PDF.)
 
     Returns G(r) over the r-grid.
 
@@ -117,7 +123,7 @@ def RDFtoPDF(r, rr, rho0):
 
     return gr
 
-def broadenPDF(r, gr, ss, rho0 = 0):
+def broadenPDF(r, gr, ss, rho0 = None):
     """Uniformly broaden the peaks of the PDF.
 
     This simulates PDF peak broadening from thermal or other effects.  This
@@ -127,13 +133,17 @@ def broadenPDF(r, gr, ss, rho0 = 0):
     r       --  The r-grid used for the PDF.
     gr      --  The PDF over the r-grid.
     ss      --  The sigma^2 to broaden the peaks by.
-    rho0    --  The number density of the sample giving the PDF. If this is
-                None (defualt), then it will be estimated using
+    rho0    --  The scaled number density of the sample giving the PDF.
+                (Scaling this correctly requires knowing the scale on the PDF.)
+                If this is None (default), then it will be estimated using
                 estimateBaselineSlope.
 
     Returns the broadened gr.
 
     """
+
+    if rho0 is None:
+        rho0 = estimateBaselineSlope(r, gr) / (-4 * pi)
 
     rr = PDFtoRDF(r, gr, rho0)
 
@@ -141,7 +151,6 @@ def broadenPDF(r, gr, ss, rho0 = 0):
     # later.
     r0 = r[len(r) / 2]
     gaussian = numpy.exp(-0.5 * (r - r0)**2 / ss )
-    from pylab import plot, show
 
     # Get the full convolution
     c = numpy.convolve(rr, gaussian, mode="full")
