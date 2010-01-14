@@ -108,9 +108,10 @@ class TestRoutines(unittest.TestCase):
         r2, gr2 = tools.readPDF( testdata("nickel_ss0.02.cgr") )
         rho0 = self.rho0
 
-        sig, gr3 = tools.autoBroadenPDF(r1, gr1, r2, gr2, rho0)
+        sig, scale, gr3 = tools.autoBroadenPDF(r1, gr1, r2, gr2, rho0)
 
         self.assertAlmostEquals(0.1, sig, 2)
+        self.assertAlmostEquals(1, scale, 2)
 
         # Compare gr3 with a PDF generated with ss = 0.02. We expect there to
         # be edge effects, so we'll be with 1% agreement.

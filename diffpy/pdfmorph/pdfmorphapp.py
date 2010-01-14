@@ -27,7 +27,8 @@ Options:
   --scale=SCALE   A scale factor by which to multiply the PDF from file1. If
                   SCALE=auto, this will found automatically in order to match
                   the file1 PDF with the file2 PDF over the range defined by
-                  CMIN and CMAX.
+                  CMIN and CMAX. Note that scale is ignored if --broaden is
+                  specified as auto.
 
 Report bugs to diffpy-dev@googlegroups.com.
 """% {"fn" : scriptname }
@@ -110,19 +111,21 @@ def main():
     r1, gr1 = getPDFFromFile(file1)
     r2, gr2 = getPDFFromFile(file2)
 
-    if scale is not None:
+    # rescale if requested, but not if we're auto-broadening
+    if scale is not None and sig != 'auto':
         if scale == 'auto':
-            scale = tools.estimateScale(r1, gr1, r2, gr2, cmin, cmax)
+            scale = tools.estimatePDFScale(r1, gr1, r2, gr2, rmin=cmin,
+                    rmax=cmax)
         gr1 *= scale
 
-    # Broaden if we must
+    # broaden if requested, this might change and apply a new scale
     if sig is not None:
         if sig != 'auto':
             gr1 = tools.broadenPDF(r1, gr1, sig)
         else:
-            sig, gr1 = tools.autoBroadenPDF(r1, gr1, r1, gr2, rmin = cmin, rmax
-                    = cmax)
-
+            sig, newscale, gr1 = tools.autoBroadenPDF(r1, gr1, r2, gr2, rmin =
+                    cmin, rmax = cmax)
+            scale = newscale
 
     # For recording purposes
     if scale is None:
@@ -134,7 +137,7 @@ def main():
         import numpy
         header = "# PDF created by %s\n" % scriptname
         header += "# from %s\n" % os.path.abspath(file1)
-        header += "# scale = %f" % scale
+        header += "# scale = %f\n" % scale
         header += "# sig = %f" % sig
         outfile = file(savefile, 'w')
         print >> outfile, header

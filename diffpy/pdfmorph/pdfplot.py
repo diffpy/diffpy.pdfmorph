@@ -51,7 +51,7 @@ def plotPDFs(pairlist, labels = [], offset = 'auto', rmin = None, rmax = None):
         pylab.plot(r, gr + idx * offset, label = labels[idx])
 
     if gap == 0:
-        pylab.legend()
+        pylab.legend(loc = 0)
 
     pylab.xlabel("$r (\AA)$")
     pylab.ylabel("$G (\AA^{-1})$")
@@ -101,6 +101,7 @@ def comparePDFs(pairlist, labels = [], rmin = None, rmax = None):
     pylab.ioff()
     pylab.plot(rdata, grdata, 'bo', label = labeldata)
     pylab.plot(rdata, grfit, 'r-', label = labelfit)
+    pylab.plot(rdata, offset*numpy.ones_like(diff), 'k-')
     pylab.plot(rdata, diff + offset, 'g-', label = "difference")
 
     pylab.xlabel("$r (\AA)$")

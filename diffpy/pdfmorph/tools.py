@@ -75,14 +75,14 @@ def estimateBaselineSlope(r, gr):
     # Return the slope
     return slope
 
-def PDFtoRDF(r, gr, rho0 = None):
+def PDFtoRDF(r, gr, rho = None):
     """Transform a PDF into the RDF.
 
-    R(r) = r*(G(r) + 4*pi*rho0*r)
+    R(r) = r*(G(r) + 4*pi*rho*r)
 
     r       --  The r-grid used for the PDF.
     gr      --  The PDF over the r-grid.
-    rho0    --  The scaled number density of the sample giving the PDF.
+    rho     --  The scaled number density of the sample giving the PDF.
                 (Scaling this correctly requires knowing the scale on the PDF.)
                 If this is None (default), then it will be estimated using
                 estimateBaselineSlope.
@@ -91,8 +91,8 @@ def PDFtoRDF(r, gr, rho0 = None):
 
     """
 
-    if rho0 is not None:
-        slope = -4*pi*rho0
+    if rho is not None:
+        slope = -4*pi*rho
     else:
         slope = estimateBaselineSlope(r, gr)
 
@@ -100,15 +100,15 @@ def PDFtoRDF(r, gr, rho0 = None):
 
     return rr
 
-def RDFtoPDF(r, rr, rho0):
+def RDFtoPDF(r, rr, rho):
     """Transform a RDF into the PDF.
 
-    R(r) = r*(G(r) + 4*pi*rho0*r)
-    G(r) = R(r) / r - 4*pi*rho0*r
+    R(r) = r*(G(r) + 4*pi*rho*r)
+    G(r) = R(r) / r - 4*pi*rho*r
 
     r       --  The r-grid used for the RDF.
     rr      --  The RDF over the r-grid.
-    rho0    --  The scaled number density of the sample giving the PDF.
+    rho     --  The scaled number density of the sample giving the PDF.
                 (Scaling this correctly requires knowing the scale on the PDF.)
 
     Returns G(r) over the r-grid.
@@ -119,11 +119,11 @@ def RDFtoPDF(r, rr, rho0):
     if r[0] == 0:
         gr[0] = 0
 
-    gr -= 4 * pi * rho0 * r
+    gr -= 4 * pi * rho * r
 
     return gr
 
-def broadenPDF(r, gr, sig, rho0 = None):
+def broadenPDF(r, gr, sig, rho = None):
     """Uniformly broaden the peaks of the PDF.
 
     This simulates PDF peak broadening from thermal or other effects.  This
@@ -133,7 +133,7 @@ def broadenPDF(r, gr, sig, rho0 = None):
     r       --  The r-grid used for the PDF.
     gr      --  The PDF over the r-grid.
     sig     --  The Gaussian width to broaden the peaks by.
-    rho0    --  The scaled number density of the sample giving the PDF.
+    rho     --  The scaled number density of the sample giving the PDF.
                 (Scaling this correctly requires knowing the scale on the PDF.)
                 If this is None (default), then it will be estimated using
                 estimateBaselineSlope.
@@ -142,15 +142,15 @@ def broadenPDF(r, gr, sig, rho0 = None):
 
     """
 
-    if rho0 is None:
-        rho0 = estimateBaselineSlope(r, gr) / (-4 * pi)
+    if rho  is None:
+        rho  = estimateBaselineSlope(r, gr) / (-4 * pi)
 
-    rr = PDFtoRDF(r, gr, rho0)
+    rr = PDFtoRDF(r, gr, rho )
 
     rrbroad = broadenRDF(r, rr, sig)
 
     # Now get the PDF back.
-    grbroad = RDFtoPDF(r, rrbroad, rho0)
+    grbroad = RDFtoPDF(r, rrbroad, rho)
 
     return grbroad
 
@@ -196,72 +196,145 @@ def broadenRDF(r, rr, sig):
 
     return rrbroad
 
-def autoBroadenPDF(r1, gr1, r2, gr2, rho0 = None, rmin = None, rmax = None):
+def autoBroadenPDF(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
+        rmax = None):
     """Uniformly broaden the peaks of one PDF to match another.
 
     This simulates PDF peak broadening from thermal or other effects. This
-    calculates the RDF from the PDF, and then convolutes it with a Gaussian of
-    of width sig while auto-scaling the result, and transforms back to the PDF.
+    calculates the RDF from the PDF, finds the best scale and then convolutes
+    it with a Gaussian of of width sig result, and transforms back to the PDF.
 
     r1      --  The r-grid used for the PDF to be broadened.
     gr1     --  The PDF to be broadened over the r-grid.
     r2      --  The r-grid used for the target PDF.
     gr2     --  The target PDF over the r-grid.
-    rho0    --  The scaled number density of the sample giving the PDF. It is
-                assumed that this is the same for gr1 and gr2.  (Scaling this
-                correctly requires knowing the scale on the PDF.) If this is
-                None (default), then it will be estimated from gr2 using
-                estimateBaselineSlope.
+    rho1    --  The scaled number density of the sample giving the PDF.
+                (Scaling this correctly requires knowing the scale on the PDF.)
+                If this is None (default), then it will be estimated from gr1
+                using estimateBaselineSlope.
+    rho2    --  The scaled number density of the sample giving the PDF.
+                (Scaling this correctly requires knowing the scale on the PDF.)
+                If this is None (default), then it will be estimated from gr2
+                using estimateBaselineSlope.
     rmin    --  The minimum r-value to compare over during broadening. If rmin
                 is None, then the minimum of r2 is used.
     rmax    --  The maximum r-value to compare over during broadening. If rmax
                 is None, then the maximum of r2 is used.
 
-    Returns the (sig, gr1broad), where sig is the broadening factor (described
-    in broadenPDF) and gr1broad is the broadened and scaled gr1.
+    Returns the (sig, scale, gr1broad), where sig is the broadening factor
+    (described in broadenPDF), scale is the scale in gr1 and gr1broad is the
+    broadened and scaled gr1.
 
     """
 
-    if rho0 is None:
-        rho0 = estimateBaselineSlope(r2, gr2) / (-4 * pi)
+    if rho1 is None:
+        rho1 = estimateBaselineSlope(r1, gr1) / (-4 * pi)
+    if rho2 is None:
+        rho2 = estimateBaselineSlope(r2, gr2) / (-4 * pi)
 
-    rr1 = PDFtoRDF(r1, gr1, rho0)
-    rr2 = PDFtoRDF(r2, gr2, rho0)
+    rr1 = PDFtoRDF(r1, gr1, rho1)
+    rr2 = PDFtoRDF(r2, gr2, rho2)
 
     # Make sure these are on the same grid, and that rmin and rmax are
     # respected.
-    rtarget = r2.copy()
-    if rmax is not None:
-        rtarget = rtarget[ rtarget <= rmax ]
-    if rmin is not None:
-        rtarget = rtarget[ rtarget >= rmin ]
-    # Interpolate
-    rrtarget = numpy.interp(rtarget, r2, rr2)
-    rrvaried = numpy.interp(rtarget, r1, rr1)
+    rtarget, rrvaried, rrtarget = _reGrid(r1, rr1, r2, rr2, rmin, rmax)
+
+    # Get the best scale and apply it to the RDF and density
+    scale = estimateRDFScale(rtarget, rrvaried, rtarget, rrtarget)
+    rrvaried *= scale
+    rho1 *= scale
 
     # Now create a fitting function and fit.
     def chiv(pars):
 
         sig = pars[0]
         rrbroad = broadenRDF(rtarget, rrvaried, sig)
-        # Now get the best scale
-        scale = estimateScale(rtarget, rrbroad, rtarget, rrtarget)
 
-        return scale * rrbroad - rrtarget
+        return rrbroad - rrtarget
 
     from scipy.optimize import leastsq
     sig, ier = leastsq(chiv, 0.1)
 
-    # Now broaden the entire rr1 with our found sig
-    rr1broad = broadenRDF(r1, rr1, sig)
+    # Now scale and broaden the entire rr1 with our found sig
+    rr1broad = broadenRDF(r1, scale * rr1, sig)
 
     # Now get the PDF back.
-    gr1broad = RDFtoPDF(r1, rr1broad, rho0)
+    gr1broad = RDFtoPDF(r1, rr1broad, rho1)
 
-    return sig, gr1broad
+    return sig, scale, gr1broad
+
+def estimatePDFScale(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
+        rmax = None):
+    """Estimate the scale of one PDF by comparing to another.
+
+    This estimates the scale to multiply gr1 by so that gr1 and gr2 have the
+    same integrated RDF intensity. 
+    
+    r1      --  The r-grid of gr1
+    gr1     --  The PDF to be scaled
+    r2      --  The r-grid of gr2
+    gr2     --  The PDF to be scaled against.
+    rho1    --  The scaled number density fro gr1.  If this is None (default),
+                then it will be estimated from gr1 using estimateBaselineSlope.
+    rho2    --  The scaled number density fro gr2.  If this is None (default),
+                then it will be estimated from gr2 using estimateBaselineSlope.
+    rmin    --  The minimum r-value over which to compare. If rmin is None,
+                then the minimum of r2 is used.
+    rmax    --  The maximum r-value over which to compare. If rmax is None,
+                then the maximum of r2 is used.
+
+    Returns the scale factor
+
+    """
+    rtarget, grvaried, grtarget = _reGrid(r1, gr1, r2, gr2, rmin, rmax)
+
+    if rho1 is not None:
+        slope1 = -4*pi*rho1
+    else:
+        slope = estimateBaselineSlope(rtarget, grvaried)
+    if rho2 is not None:
+        slope2 = -4*pi*rho2
+    else:
+        slope = estimateBaselineSlope(rtarget, grvaried)
+
+    rrtarget = PDFtoRDF(rtarget, grtarget, rho1)
+    rrvaried = PDFtoRDF(rtarget, grtarget, rho2)
+
+    return estimateRDFScale(rtarget, rrvaried, rtarget, rrtarget)
+
+def estimateRDFScale(r1, rr1, r2, rr2, rmin = None, rmax = None):
+    """Estimate the scale of one RDF by comparing to another.
+
+    This estimates the scale to multiply rr1 by so that rr1 and rr2 have the
+    same integrated intensity.
+    
+    r1      --  The r-grid of rr1
+    rr1     --  The PDF to be scaled
+    r2      --  The r-grid of rr2
+    rr2     --  The PDF to be scaled against.
+    rmin    --  The minimum r-value over which to compare. If rmin is None,
+                then the minimum of r2 is used.
+    rmax    --  The maximum r-value over which to compare. If rmax is None,
+                then the maximum of r2 is used.
+
+    Returns the scale factor
+
+    """
+    # Put these on the same grid
+    rtarget, rrvaried, rrtarget = _reGrid(r1, rr1, r2, rr2, rmin, rmax)
+
+    itarget = sum(rrtarget)
+    ivaried = sum(rrvaried)
+
+    scale = itarget / ivaried
+
+    return scale
 
 def estimateScale(r1, s1, r2, s2, rmin = None, rmax = None):
-    """Estimage the scale of a signal so it is comparable to another signal.
+    """Estimate the scale of a signal so it is comparable to another signal.
+
+    This performs linear regression to get the scale factor for s1 to compare
+    best with s2.
 
     r1      --  The r-grid used for s1
     s1      --  The signal whose scale is to be found
@@ -275,19 +348,32 @@ def estimateScale(r1, s1, r2, s2, rmin = None, rmax = None):
     Returns the scale factor such that scale * s1 compares best with s2.
 
     """
-    # Put these on the same grid
+    # Put on the same grid
+    rtarget, svaried, starget = _reGrid(r1, s1, r2, s2, rmin, rmax)
 
-    rtarget = r2.copy()
-    if rmax is not None:
-        rtarget = rtarget[ rtarget <= rmax ]
-    if rmin is not None:
-        rtarget = rtarget[ rtarget >= rmin ]
-    # Interpolate
-    starget = numpy.interp(rtarget, r2, s2)
-    svaried = numpy.interp(rtarget, r1, s1)
-
-    # Use linear interpolation to determine the scale
+    # Use linear regression to determine the scale
     dot = numpy.dot
     scale = dot(starget, svaried) / dot(svaried, svaried)
 
     return scale
+
+
+def _reGrid(r1, s1, r2, s2, rmin = None, rmax = None):
+    """Puts s1 and s2 on the same grid.
+
+    The grid of r2 is used by default and truncated by rmin and rmax, if
+    specified.
+
+    Returns newr, news1, news2
+
+    """
+    newr = r2.copy()
+    if rmax is not None:
+        newr = newr[ newr <= rmax ]
+    if rmin is not None:
+        newr = newr[ newr >= rmin ]
+
+    news1 = numpy.interp(newr, r1, s1)
+    news2 = numpy.interp(newr, r2, s2)
+
+    return newr, news1, news2
