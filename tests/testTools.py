@@ -101,6 +101,36 @@ class TestRoutines(unittest.TestCase):
 
         return
 
+    def test_autoBroadenPDF(self):
+        """check autoBroadenPDF() using calculated data
+        """
+        r1, gr1 = self.r, self.gr
+        r2, gr2 = tools.readPDF( testdata("nickel_ss0.02.cgr") )
+        rho0 = self.rho0
+
+        sig, gr3 = tools.autoBroadenPDF(r1, gr1, r2, gr2, rho0)
+
+        self.assertAlmostEquals(0.1, sig, 2)
+
+        # Compare gr3 with a PDF generated with ss = 0.02. We expect there to
+        # be edge effects, so we'll be with 1% agreement.
+        diff = gr2 - gr3
+        Rw = dot(diff, diff) / dot(gr2, gr2)
+        self.assertTrue(Rw < 0.01)
+
+        return
+
+    def test_estimateScale(self):
+        """check estimateScale() using calculated data
+        """
+        r1, gr1 = self.r, self.gr
+        import random
+        x = random.random()
+        scale = tools.estimateScale(r1, gr1, r1, x*gr1)
+        self.assertAlmostEquals(x, scale)
+        return
+
+
 # End of class TestRoutines
 
 if __name__ == '__main__':
