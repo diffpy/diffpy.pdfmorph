@@ -123,6 +123,32 @@ def RDFtoPDF(r, rr, rho):
 
     return gr
 
+def expandSignal(r, s, eps):
+    """Expand the scale of a signal
+
+    This multiplies the r values by 1 + eps and then interpolates s from this
+    grid back onto r. This simulates isotropic expansion, but it distorts the
+    shape of the peaks by stretching more on the high-r side than on the low-r
+    side. 
+    
+    r       --  The r-grid used for gr.
+    s       --  The signal to expand.
+    eps     --  The expansion factor.
+
+    Returns the stretched s defined over r.
+
+    """
+    if eps == 0:
+        return s.copy()
+
+    # Get the stretched version of r.
+    rstretch = (1 + eps) * r
+
+    # Interpolate gr from this grid back onto r
+    sstretch = numpy.interp(r, rstretch, s)
+
+    return sstretch
+
 def broadenPDF(r, gr, sig, rho = None):
     """Uniformly broaden the peaks of the PDF.
 
@@ -168,6 +194,9 @@ def broadenRDF(r, rr, sig):
 
     """
 
+    if sig == 0:
+        return rr.copy()
+
     # The Gaussian to convolute with. No need to normalize, we'll do that
     # later.
     r0 = r[len(r) / 2]
@@ -196,18 +225,14 @@ def broadenRDF(r, rr, sig):
 
     return rrbroad
 
-def autoBroadenPDF(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
+def autoMorphPDF(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
         rmax = None):
-    """Uniformly broaden the peaks of one PDF to match another.
+    """Fit gr1 to gr2 over range by broadening, expanding and scaling.
 
-    This simulates PDF peak broadening from thermal or other effects. This
-    calculates the RDF from the PDF, finds the best scale and then convolutes
-    it with a Gaussian of of width sig result, and transforms back to the PDF.
-
-    r1      --  The r-grid used for the PDF to be broadened.
-    gr1     --  The PDF to be broadened over the r-grid.
-    r2      --  The r-grid used for the target PDF.
-    gr2     --  The target PDF over the r-grid.
+    r1      --  The r-grid used for gr1.
+    gr1     --  The PDF to be morphed.
+    r2      --  The r-grid used for gr2
+    gr2     --  The target PDF.
     rho1    --  The scaled number density of the sample giving the PDF.
                 (Scaling this correctly requires knowing the scale on the PDF.)
                 If this is None (default), then it will be estimated from gr1
@@ -221,8 +246,9 @@ def autoBroadenPDF(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
     rmax    --  The maximum r-value to compare over during broadening. If rmax
                 is None, then the maximum of r2 is used.
 
-    Returns the (sig, scale, gr1broad), where sig is the broadening factor
-    (described in broadenPDF), scale is the scale in gr1 and gr1broad is the
+    Returns the (scale, eps, sig, gr1broad), where sig is the broadening factor
+    (described in broadenPDF), eps is the expansion factor (described in
+    expandSignal), scale is the scale applied to gr1 and gr1broad is the
     broadened and scaled gr1.
 
     """
@@ -235,33 +261,40 @@ def autoBroadenPDF(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
     rr1 = PDFtoRDF(r1, gr1, rho1)
     rr2 = PDFtoRDF(r2, gr2, rho2)
 
-    # Make sure these are on the same grid, and that rmin and rmax are
-    # respected.
-    rtarget, rrvaried, rrtarget = _reGrid(r1, rr1, r2, rr2, rmin, rmax)
-
-    # Get the best scale and apply it to the RDF and density
-    scale = estimateRDFScale(rtarget, rrvaried, rtarget, rrtarget)
-    rrvaried *= scale
-    rho1 *= scale
+    def transform(pars):
+        # Get the parameters
+        scale, eps, sig = pars
+        # Scale the RDF
+        rr1fit = rr1 * scale
+        # Apply the expansion
+        rr1fit = expandSignal(r1, rr1fit, eps)
+        # Now broaden
+        rr1fit = broadenRDF(r1, rr1fit, sig)
+        return rr1fit
 
     # Now create a fitting function and fit.
     def chiv(pars):
 
-        sig = pars[0]
-        rrbroad = broadenRDF(rtarget, rrvaried, sig)
+        rr1fit = transform(pars)
 
-        return rrbroad - rrtarget
+        # Now put on the proper grid
+        rtarget, rrvaried, rrtarget = _reGrid(r1, rr1fit, r2, rr2, rmin, rmax)
+
+        return rrvaried - rrtarget
 
     from scipy.optimize import leastsq
-    sig, ier = leastsq(chiv, 0.1)
+    pars = [1.0, 0.0, 0.0]
+    pars, ier = leastsq(chiv, pars)
 
-    # Now scale and broaden the entire rr1 with our found sig
-    rr1broad = broadenRDF(r1, scale * rr1, sig)
+    # Now transform to the new PDF
+    rr1fit = transform(pars)
+    scale, eps, sig = pars
+    rho1 *= scale
 
     # Now get the PDF back.
-    gr1broad = RDFtoPDF(r1, rr1broad, rho1)
+    gr1fit = RDFtoPDF(r1, rr1fit, rho1)
 
-    return sig, scale, gr1broad
+    return scale, eps, sig, gr1fit
 
 def estimatePDFScale(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
         rmax = None):

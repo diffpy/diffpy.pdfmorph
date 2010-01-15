@@ -14,12 +14,14 @@ file1 before plotting.
 Options:
   -h, --help      display this message
   -V, --version   show script version
-  --broaden=SIG   broaden the PDF from file1 by Gaussian width SIG. If
-                  SIG=auto, the broadening will be performed automatically in
-                  order to match the file1 PDF with the file2 PDF over the
-                  range defined by CMIN and CMAX.
+  --automorph     broaden, expand and scale the PDF from file1 to best match
+                  the PDF from file2 over the range defined by CMIN and CMAX.
+  --broaden=SIG   broaden the PDF from file1 by Gaussian width SIG.
   --cmin=CMIN     the minimum r-value to use for PDF comparisons
   --cmax=CMAX     the maximum r-value to use for PDF comparisons
+  --expand=EPS    the amount to expand the scale of the PDF from file1. This is
+                  used to simulate isotropic expansion, where 1+EPS is the
+                  expansion fraction.
   --noplot        do not show the plot
   --rmin=RMIN     the minimum r-value to show
   --rmax=RMAX     the maximum r-value to show
@@ -27,8 +29,9 @@ Options:
   --scale=SCALE   A scale factor by which to multiply the PDF from file1. If
                   SCALE=auto, this will found automatically in order to match
                   the file1 PDF with the file2 PDF over the range defined by
-                  CMIN and CMAX. Note that scale is ignored if --broaden is
-                  specified as auto.
+                  CMIN and CMAX.
+
+  Note that transforms are performed in the order of scale, expand, broaden.
 
 Report bugs to diffpy-dev@googlegroups.com.
 """% {"fn" : scriptname }
@@ -60,20 +63,23 @@ def main():
     # default parameters
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hV",
-                ["help", "version", "broaden=", "cmin=", "cmax=", "save=",
-                    "rmin=", "rmax=", "scale=", "noplot"])
+                ["help", "version", "automorph", "broaden=", "expand=",
+                    "cmin=", "cmax=", "save=", "rmin=", "rmax=", "scale=",
+                    "noplot"])
     except getopt.GetoptError, errmsg:
         print >> sys.stderr, errmsg
         sys.exit(2)
     # process options
-    sig = None
-    savefile = None
+    cmin = None
+    cmax = None
+    eps=None
     noplot = False
     rmin = None
     rmax = None
-    cmin = None
-    cmax = None
+    savefile = None
     scale=None
+    sig = None
+    automorph = False
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
@@ -81,10 +87,10 @@ def main():
         elif o in ("-V", "--version"):
             version()
             sys.exit()
+        elif "--automorph" == o:
+            automorph = True
         elif "--broaden" == o:
-            sig = a
-            if sig != 'auto':
-                sig = getFloat(a, 'broaden')
+            sig = getFloat(a, 'broaden')
         elif "--save" == o:
             savefile = a
         elif "--noplot" == o:
@@ -101,6 +107,9 @@ def main():
             scale = a
             if scale != 'auto':
                 scale = getFloat(a, 'scale')
+        elif "--expand" == o:
+            eps = getFloat(a, 'expand')
+
     if len(args) != 2:
         usage('brief')
         sys.exit()
@@ -111,34 +120,50 @@ def main():
     r1, gr1 = getPDFFromFile(file1)
     r2, gr2 = getPDFFromFile(file2)
 
-    # rescale if requested, but not if we're auto-broadening
-    if scale is not None and sig != 'auto':
-        if scale == 'auto':
-            scale = tools.estimatePDFScale(r1, gr1, r2, gr2, rmin=cmin,
-                    rmax=cmax)
-        gr1 *= scale
+    morphed = False
 
-    # broaden if requested, this might change and apply a new scale
-    if sig is not None:
-        if sig != 'auto':
-            gr1 = tools.broadenPDF(r1, gr1, sig)
-        else:
-            sig, newscale, gr1 = tools.autoBroadenPDF(r1, gr1, r2, gr2, rmin =
-                    cmin, rmax = cmax)
-            scale = newscale
+    if automorph is True:
+        scale, eps, sig, gr1 = tools.autoMorphPDF(r1, gr1, r2, gr2, rmin =
+                cmin, rmax = cmax)
+        morphed = True
+    else:
+
+        # rescale if requested, but not if we're auto-broadening
+        if scale is not None:
+            if scale == 'auto':
+                scale = tools.estimatePDFScale(r1, gr1, r2, gr2, rmin=cmin,
+                        rmax=cmax)
+            gr1 *= scale
+            morphed = True
+
+        # expand if requested
+        if eps is not None:
+            gr1 = tools.expandSignal(r1, gr1, eps)
+            morphed = True
+
+        # broaden if requested, this might change and apply a new scale
+        if sig is not None:
+            sig, scale, gr1 = tools.autoBroadenPDF(r1, gr1, r2, gr2,
+                    rmin = cmin, rmax = cmax)
+            morphed = True
 
     # For recording purposes
     if scale is None:
         scale = 1
     if sig is None:
         sig = 0
+    if eps is None:
+        eps = 0
 
+    output = "# scale = %f\n" % scale
+    output += "# eps = %f\n" % eps
+    output += "# sig = %f" % sig
+    print output
     if savefile is not None:
-        import numpy
         header = "# PDF created by %s\n" % scriptname
         header += "# from %s\n" % os.path.abspath(file1)
-        header += "# scale = %f\n" % scale
-        header += "# sig = %f" % sig
+        header += output
+        import numpy
         outfile = file(savefile, 'w')
         print >> outfile, header
         numpy.savetxt(outfile, zip(r1, gr1))
@@ -146,7 +171,8 @@ def main():
 
     # Now we can plot
     if not noplot:
-        labels[0] += " (scale = %f, sig = %f)" % (scale, sig)
+        if morphed:
+            labels[0] += " (morphed)"
         pdfplot.comparePDFs([(r1, gr1), (r2, gr2)],
                 labels, rmin = rmin, rmax = rmax)
     return
