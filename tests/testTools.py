@@ -101,23 +101,43 @@ class TestRoutines(unittest.TestCase):
 
         return
 
-    def test_autoBroadenPDF(self):
-        """check autoBroadenPDF() using calculated data
+    def test_expandSignal(self):
+        """check expandSignal() using calculated data
         """
-        r1, gr1 = self.r, self.gr
-        r2, gr2 = tools.readPDF( testdata("nickel_ss0.02.cgr") )
-        rho0 = self.rho0
+        r1, gr1 = tools.readPDF( testdata("nickel_ss0.02.cgr") )
 
-        sig, scale, gr3 = tools.autoBroadenPDF(r1, gr1, r2, gr2, rho0)
+        gr2 = tools.expandSignal(r1, gr1, 0.002)
 
-        self.assertAlmostEquals(0.1, sig, 2)
-        self.assertAlmostEquals(1, scale, 2)
+        r3, gr3 = tools.readPDF( testdata("nickel_ss0.02_eps0.002.cgr") )
 
-        # Compare gr3 with a PDF generated with ss = 0.02. We expect there to
-        # be edge effects, so we'll be with 1% agreement.
         diff = gr2 - gr3
         Rw = dot(diff, diff) / dot(gr2, gr2)
         self.assertTrue(Rw < 0.01)
+
+        gr4 = tools.expandSignal(r1, gr1, 0.022)
+        gr5 = tools.expandSignal(r3, gr3, 0.020)
+
+        diff = gr4 - gr5
+        Rw = dot(diff, diff) / dot(gr2, gr2)
+        self.assertTrue(Rw < 0.01)
+
+        return
+
+
+    def test_autoMorphPDF(self):
+        """check autoMorphPDF() using calculated data
+        """
+        r1, gr1 = self.r, self.gr
+        r2, gr2 = tools.readPDF( testdata("nickel_ss0.02_eps0.002.cgr") )
+        rho0 = self.rho0
+
+        scale, eps, sig, gr3 = tools.autoMorphPDF(r1, gr1, r2, gr2, rho0)
+
+        # Compare gr3 with the target PDF. We expect there to be edge and
+        # stretching effects, so we'll be happy with 2% agreement.
+        diff = gr2 - gr3
+        Rw = dot(diff, diff) / dot(gr2, gr2)
+        self.assertTrue(Rw < 0.02)
 
         return
 
