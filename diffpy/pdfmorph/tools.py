@@ -127,9 +127,7 @@ def expandSignal(r, s, eps):
     """Expand the scale of a signal
 
     This multiplies the r values by 1 + eps and then interpolates s from this
-    grid back onto r. This simulates isotropic expansion, but it distorts the
-    shape of the peaks by stretching more on the high-r side than on the low-r
-    side. 
+    grid back onto r. This simulates isotropic expansion.
     
     r       --  The r-grid used for gr.
     s       --  The signal to expand.
@@ -168,8 +166,8 @@ def broadenPDF(r, gr, sig, rho = None):
 
     """
 
-    if rho  is None:
-        rho  = estimateBaselineSlope(r, gr) / (-4 * pi)
+    if rho is None:
+        rho = estimateBaselineSlope(r, gr) / (-4 * pi)
 
     rr = PDFtoRDF(r, gr, rho )
 
@@ -186,8 +184,8 @@ def broadenRDF(r, rr, sig):
     This simulates RDF peak broadening from thermal or other effects.  This
     convolutes the RDF with a Gaussian of of width sig.
 
-    r       --  The r-grid used for the PDF.
-    rr      --  The RDF over the r-grid.
+    r       --  The r-grid used rr
+    rr      --  The RDF to broaden
     sig     --  The Gaussian width to broaden the peaks by.
 
     Returns the broadened rr.
@@ -226,7 +224,7 @@ def broadenRDF(r, rr, sig):
     return rrbroad
 
 def autoMorphPDF(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
-        rmax = None):
+        rmax = None, scale = None, eps = None, sig = None):
     """Fit gr1 to gr2 over range by broadening, expanding and scaling.
 
     r1      --  The r-grid used for gr1.
@@ -245,6 +243,9 @@ def autoMorphPDF(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
                 is None, then the minimum of r2 is used.
     rmax    --  The maximum r-value to compare over during broadening. If rmax
                 is None, then the maximum of r2 is used.
+    scale   --  A suggested scale to apply to gr1.
+    eps     --  A suggested expansion to apply to gr1.
+    sig     --  A suggested broadening to apply to gr1.
 
     Returns the (scale, eps, sig, gr1broad), where sig is the broadening factor
     (described in broadenPDF), eps is the expansion factor (described in
@@ -282,13 +283,19 @@ def autoMorphPDF(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
 
         return rrvaried - rrtarget
 
-    from scipy.optimize import leastsq
-    pars = [1.0, 0.0, 0.0]
-    pars, ier = leastsq(chiv, pars)
+    pars = [scale or 1.0, eps or 0.0, sig or 0.0]
+    #from scipy.optimize import leastsq
+    #pars, ier = leastsq(chiv, pars)
+    from scipy.optimize import fmin
+    def chi2(pars):
+        t = chiv(pars)
+        return numpy.dot(t, t)
+    pars = fmin(chi2, pars)
 
     # Now transform to the new PDF
     rr1fit = transform(pars)
     scale, eps, sig = pars
+    sig = numpy.fabs(sig)
     rho1 *= scale
 
     # Now get the PDF back.

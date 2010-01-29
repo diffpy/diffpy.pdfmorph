@@ -124,8 +124,9 @@ def main():
 
     if automorph is True:
         scale, eps, sig, gr1 = tools.autoMorphPDF(r1, gr1, r2, gr2, rmin =
-                cmin, rmax = cmax)
+                cmin, rmax = cmax, scale = scale, eps = eps, sig = sig)
         morphed = True
+
     else:
 
         # rescale if requested, but not if we're auto-broadening
@@ -141,10 +142,9 @@ def main():
             gr1 = tools.expandSignal(r1, gr1, eps)
             morphed = True
 
-        # broaden if requested, this might change and apply a new scale
+        # broaden if requested
         if sig is not None:
-            sig, scale, gr1 = tools.autoBroadenPDF(r1, gr1, r2, gr2,
-                    rmin = cmin, rmax = cmax)
+            gr1 = tools.broadenPDF(r1, gr1, sig)
             morphed = True
 
     # For recording purposes
