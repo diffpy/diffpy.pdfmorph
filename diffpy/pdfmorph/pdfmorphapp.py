@@ -4,10 +4,10 @@ import os.path
 
 scriptname = os.path.basename(__file__)
 
-__doc__ = """%(fn)s   Manipulate and compare PDFs.
-Usage: %(fn)s [options] file1 file2
+__doc__ = """pdfmorph   Manipulate and compare PDFs.
+Usage: pdfmorph [options] file1 file2
 
-%(fn)s takes two PDF files, file1 and file2, and plots them on top of one
+pdfmorph takes two PDF files, file1 and file2, and plots them on top of one
 another, and produces a difference curve. Options may manipulate the PDF from
 file1 before plotting.
 
@@ -34,7 +34,7 @@ Options:
   Note that transforms are performed in the order of scale, expand, broaden.
 
 Report bugs to diffpy-dev@googlegroups.com.
-"""% {"fn" : scriptname }
+"""
 
 __id__ = "$Id$"
 

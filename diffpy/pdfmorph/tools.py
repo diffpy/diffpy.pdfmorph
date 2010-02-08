@@ -65,7 +65,7 @@ def estimateBaselineSlope(r, gr):
         diff = chiv.copy()
         diff[diff > 0] = 0
         negpenalty = dot(diff, diff)
-        chiv *= 1 + negpenalty
+        chiv *= 1 + 0.5*negpenalty
 
         return chiv
 
@@ -284,13 +284,13 @@ def autoMorphPDF(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
         return rrvaried - rrtarget
 
     pars = [scale or 1.0, eps or 0.0, sig or 0.0]
-    #from scipy.optimize import leastsq
-    #pars, ier = leastsq(chiv, pars)
-    from scipy.optimize import fmin
-    def chi2(pars):
-        t = chiv(pars)
-        return numpy.dot(t, t)
-    pars = fmin(chi2, pars)
+    from scipy.optimize import leastsq
+    pars, ier = leastsq(chiv, pars)
+    #from scipy.optimize import fmin
+    #def chi2(pars):
+    #    t = chiv(pars)
+    #    return numpy.dot(t, t)
+    #pars = fmin(chi2, pars)
 
     # Now transform to the new PDF
     rr1fit = transform(pars)
