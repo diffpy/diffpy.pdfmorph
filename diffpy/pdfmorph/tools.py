@@ -40,13 +40,17 @@ def readPDF(fname):
     r, gr = loadtxt(fname, skiprows=nlines, usecols=(0, 1), unpack=True)
     return r, gr
 
-def estimateBaselineSlope(r, gr):
+def estimateBaselineSlope(r, gr, rmin = None, rmax = None):
     """Estimate the slope of the linear baseline of a PDF.
 
     This fits a the equation slope*r through the bottom of the PDF.
 
     r       --  The r-grid used for the PDF.
     gr      --  The PDF over the r-grid.
+    rmin    --  The minimum r-value to consider. If this is None (default)
+                is None, then the minimum of r is used.
+    rmax    --  The maximum r-value to consider. If this is None (default)
+                is None, then the maximum of r is used.
 
     Returns the slope of baseline. If the PDF is scaled properly, this is equal
     to -4*pi*rho0.
@@ -54,11 +58,24 @@ def estimateBaselineSlope(r, gr):
     """
     from scipy.optimize import leastsq
     from numpy import dot
+
+    rp = r.copy()
+    grp = gr.copy()
+    if rmin is not None:
+        sel = (rp >= rmin)
+        rp = rp[sel]
+        grp = grp[sel]
+    if rmax is not None:
+        sel = (rp <= rmax)
+        rp = rp[sel]
+        grp = grp[sel]
+
+
     def chiv(pars):
 
         slope = pars[0]
         # This tries to fit the baseline through the center of the PDF.
-        chiv = gr - slope * r
+        chiv = grp - slope * rp
 
         # This adds additional penalty if there are negative terms, that
         # is, if baseline > PDF.
@@ -328,17 +345,15 @@ def estimatePDFScale(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
     """
     rtarget, grvaried, grtarget = _reGrid(r1, gr1, r2, gr2, rmin, rmax)
 
-    if rho1 is not None:
-        slope1 = -4*pi*rho1
-    else:
+    if rho1 is None:
         slope = estimateBaselineSlope(rtarget, grvaried)
-    if rho2 is not None:
-        slope2 = -4*pi*rho2
-    else:
-        slope = estimateBaselineSlope(rtarget, grvaried)
+        rho1 = slope / (-4 * pi)
+    if rho2 is None:
+        slope = estimateBaselineSlope(rtarget, grtarget)
+        rho2 = slope / (-4 * pi)
 
-    rrtarget = PDFtoRDF(rtarget, grtarget, rho1)
-    rrvaried = PDFtoRDF(rtarget, grtarget, rho2)
+    rrvaried = PDFtoRDF(rtarget, grvaried, rho1)
+    rrtarget = PDFtoRDF(rtarget, grtarget, rho2)
 
     return estimateRDFScale(rtarget, rrvaried, rtarget, rrtarget)
 
