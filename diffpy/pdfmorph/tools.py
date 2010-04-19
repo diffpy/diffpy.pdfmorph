@@ -40,6 +40,25 @@ def readPDF(fname):
     r, gr = loadtxt(fname, skiprows=nlines, usecols=(0, 1), unpack=True)
     return r, gr
 
+def estimatePDFDensity(r, gr, rmin = None, rmax = None):
+    """Estimate the density of a PDF from its baseline.
+
+    This calls estimateBaselineSlope and then divides the slope by -4 * pi
+
+    r       --  The r-grid used for the PDF.
+    gr      --  The PDF over the r-grid.
+    rmin    --  The minimum r-value to consider. If this is None (default)
+                is None, then the minimum of r is used.
+    rmax    --  The maximum r-value to consider. If this is None (default)
+                is None, then the maximum of r is used.
+
+    Returns the estimated density. This will be improperly scaled if the PDF is
+    not normalized.
+
+    """
+    slope = estimateBaselineSlope(r, gr, rmin, rmax)
+    return -0.25 * slope / pi
+
 def estimateBaselineSlope(r, gr, rmin = None, rmax = None):
     """Estimate the slope of the linear baseline of a PDF.
 
@@ -61,15 +80,12 @@ def estimateBaselineSlope(r, gr, rmin = None, rmax = None):
 
     rp = r.copy()
     grp = gr.copy()
-    if rmin is not None:
-        sel = (rp >= rmin)
-        rp = rp[sel]
-        grp = grp[sel]
     if rmax is not None:
-        sel = (rp <= rmax)
-        rp = rp[sel]
-        grp = grp[sel]
-
+        grp = grp[ rp <= rmax ]
+        rp = rp[ rp <= rmax ]
+    if rmin is not None:
+        grp = grp[ rp >= rmin ]
+        rp = rp[ rp >= rmin ]
 
     def chiv(pars):
 
@@ -157,7 +173,7 @@ def expandSignal(r, s, eps):
         return s.copy()
 
     # Get the stretched version of r.
-    rstretch = (1 + eps) * r
+    rstretch = (1.0 + eps) * r
 
     # Interpolate gr from this grid back onto r
     sstretch = numpy.interp(r, rstretch, s)
@@ -184,9 +200,9 @@ def broadenPDF(r, gr, sig, rho = None):
     """
 
     if rho is None:
-        rho = estimateBaselineSlope(r, gr) / (-4 * pi)
+        rho = estimatePDFDensity(r, gr)
 
-    rr = PDFtoRDF(r, gr, rho )
+    rr = PDFtoRDF(r, gr, rho)
 
     rrbroad = broadenRDF(r, rr, sig)
 
@@ -251,15 +267,17 @@ def autoMorphPDF(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
     rho1    --  The scaled number density of the sample giving the PDF.
                 (Scaling this correctly requires knowing the scale on the PDF.)
                 If this is None (default), then it will be estimated from gr1
-                using estimateBaselineSlope.
+                using estimatePDFDensity.
     rho2    --  The scaled number density of the sample giving the PDF.
                 (Scaling this correctly requires knowing the scale on the PDF.)
                 If this is None (default), then it will be estimated from gr2
-                using estimateBaselineSlope.
+                using estimatePDFDensity.
     rmin    --  The minimum r-value to compare over during broadening. If rmin
-                is None, then the minimum of r2 is used.
+                is None, then the minimum of r2 is used. This is not used in
+                the density estimation.
     rmax    --  The maximum r-value to compare over during broadening. If rmax
-                is None, then the maximum of r2 is used.
+                is None, then the maximum of r2 is used. This is not used in
+                the density estimation.
     scale   --  A suggested scale to apply to gr1.
     eps     --  A suggested expansion to apply to gr1.
     sig     --  A suggested broadening to apply to gr1.
@@ -272,9 +290,9 @@ def autoMorphPDF(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
     """
 
     if rho1 is None:
-        rho1 = estimateBaselineSlope(r1, gr1) / (-4 * pi)
+        rho1 = estimatePDFDensity(r1, gr1)
     if rho2 is None:
-        rho2 = estimateBaselineSlope(r2, gr2) / (-4 * pi)
+        rho2 = estimatePDFDensity(r2, gr2)
 
     rr1 = PDFtoRDF(r1, gr1, rho1)
     rr2 = PDFtoRDF(r2, gr2, rho2)
@@ -298,7 +316,9 @@ def autoMorphPDF(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
         # Now put on the proper grid
         rtarget, rrvaried, rrtarget = _reGrid(r1, rr1fit, r2, rr2, rmin, rmax)
 
-        return rrvaried - rrtarget
+        res =  rrvaried - rrtarget
+
+        return res
 
     pars = [scale or 1.0, eps or 0.0, sig or 0.0]
     from scipy.optimize import leastsq
@@ -332,13 +352,15 @@ def estimatePDFScale(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
     r2      --  The r-grid of gr2
     gr2     --  The PDF to be scaled against.
     rho1    --  The scaled number density fro gr1.  If this is None (default),
-                then it will be estimated from gr1 using estimateBaselineSlope.
+                then it will be estimated from gr1 using estimatePDFDensity.
     rho2    --  The scaled number density fro gr2.  If this is None (default),
-                then it will be estimated from gr2 using estimateBaselineSlope.
+                then it will be estimated from gr2 using estimatePDFDensity.
     rmin    --  The minimum r-value over which to compare. If rmin is None,
-                then the minimum of r2 is used.
+                then the minimum of r2 is used. This is not used in the density
+                estimation.
     rmax    --  The maximum r-value over which to compare. If rmax is None,
-                then the maximum of r2 is used.
+                then the maximum of r2 is used. This is not used in the density
+                estimation.
 
     Returns the scale factor
 
@@ -346,11 +368,9 @@ def estimatePDFScale(r1, gr1, r2, gr2, rho1 = None, rho2 = None, rmin = None,
     rtarget, grvaried, grtarget = _reGrid(r1, gr1, r2, gr2, rmin, rmax)
 
     if rho1 is None:
-        slope = estimateBaselineSlope(rtarget, grvaried)
-        rho1 = slope / (-4 * pi)
+        rho1 = estimatePDFDensity(rtarget, grvaried)
     if rho2 is None:
-        slope = estimateBaselineSlope(rtarget, grtarget)
-        rho2 = slope / (-4 * pi)
+        rho2 = estimatePDFDensity(rtarget, grtarget)
 
     rrvaried = PDFtoRDF(rtarget, grvaried, rho1)
     rrtarget = PDFtoRDF(rtarget, grtarget, rho2)
@@ -422,6 +442,9 @@ def _reGrid(r1, s1, r2, s2, rmin = None, rmax = None):
     Returns newr, news1, news2
 
     """
+    if r1 is r2 and rmin is None and rmax is None:
+        return r1, s1, s2
+
     newr = r2.copy()
     if rmax is not None:
         newr = newr[ newr <= rmax ]
