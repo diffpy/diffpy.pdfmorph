@@ -1,10 +1,10 @@
-History written: Fri Jan  8 14:50:41 2010
-produced by chris
-##### PDFgui calculation
-stype=X  x-ray scattering
-dscale=1
-qmax=0   correction not applied
-qdamp=0.001
+#History written: Fri Jan  8 14:50:41 2010
+#produced by chris
+###### PDFgui calculation
+#stype=X  x-ray scattering
+#dscale=1
+#qmax=0   correction not applied
+#qdamp=0.001
 ##### start data
 #L r(A) G(r)
 0.1 -0.11525
