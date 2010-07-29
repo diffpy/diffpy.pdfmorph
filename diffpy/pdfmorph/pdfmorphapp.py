@@ -132,7 +132,7 @@ def main():
         # rescale if requested, but not if we're auto-broadening
         if scale is not None:
             if scale == 'auto':
-                scale = tools.estimatePDFScale(r1, gr1, r2, gr2, rmin=cmin,
+                scale = tools.estimateScale(r1, gr1, r2, gr2, rmin=cmin,
                         rmax=cmax)
             gr1 *= scale
             morphed = True
@@ -195,7 +195,7 @@ def getPDFFromFile(fn):
         print >> sys.stderr, "%s: %s" % (fn, errmsg)
         sys.exit(1)
     except ValueError, errmsg:
-        print >> sys.stderr ("Cannot read %s : " % (fn, errmsg))
+        print >> sys.stderr, "Cannot read %s" % fn
         sys.exit(1)
 
     return r, gr
