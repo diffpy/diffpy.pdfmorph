@@ -505,3 +505,64 @@ def _reGrid(r1, s1, r2, s2, rmin = None, rmax = None):
     news2 = numpy.interp(newr, r2, s2)
 
     return newr, news1, news2
+
+def gaussianEnvelope(r1, g1, r2, g2, sigma = None):
+    """ Applies a Gaussian envelope correction function to a PDF.
+
+    This function accounts for differences in resolution between instruments
+    by applying a Gaussian envelope function to g1. In effect, this function
+    dampens a PDF.
+
+    r1      -- the r-grid used for g1
+    g1      -- the PDF that we want to dampen
+    r2      -- the r-grid used for g2
+    g2      -- the PDF that we use as the reference
+    sigma   -- the dampening factor that a user wants to use (if none,
+    then we will calculate it)
+
+    """
+
+    from numpy import exp
+
+    if sigma is None:
+        sigma = calcSigma(r1,g1,r2,g2)
+        
+    newg1 = g1*exp(-0.5*(r1**2)*(sigma**2))
+
+    return newg1
+
+def calcSigma(r1,g1,r2,g2):
+    """ Calculates the broadening factor for a Gaussian envelope function.
+
+    r1      -- the r-grid used for g1
+    g1      -- the PDF that we want to dampen
+    r2      -- the r-grid used for g2
+    g2      -- the PDF that we use as the reference
+
+    """
+
+    from numpy import exp
+    from scipy.optimize import leastsq
+
+    # First, we interpolate both sets of data onto the same grid
+    r,g1,g2 = _reGrid(r1,g1,r2,g2)
+
+    # Then we rescale the two PDFs
+    scale = estimateScale(r,g1,r,g2)
+    g1 = g1*scale
+    
+    
+    sigma0 = 0.01
+
+    def diff(sigma0,g1,g2,r1):
+        newg1 = g1*exp(-0.5*(r1**2)*(sigma0**2))
+        difference = sum(newg1 - g2)
+
+        return difference
+
+    # Do least squares to find the ideal sigma    
+    sigma, err = leastsq(diff, sigma0, args=(g1,g2,r))
+    
+    print sigma
+
+    return sigma
