@@ -432,6 +432,39 @@ def estimateScale(r1, s1, r2, s2, rmin = None, rmax = None):
 
     return scale
 
+def estimateSize(r1, gr1, r2, gr2, scale = None, psize = None, rmin = None, rmax = None):
+    """Estimate the size of a nanoparticle from attenuation of PDF.
+
+    r1      --  The r-grid of gr1
+    gr1     --  The PDF to be attenuated.
+    r2      --  The r-grid of gr2
+    gr2     --  The nanoparticle PDF whose size needs to be determined.
+    scale   --  Estimated scale factor taking gr1 to gr2.
+    psize   --  Estimated size of particle.
+    rmin    --  The minimum r-value over which to compare. If rmin is None,
+                then the minimum of r2 is used. This is not used in the density
+                estimation.
+    rmax    --  The maximum r-value over which to compare. If rmax is None,
+                then the maximum of r2 is used. This is not used in the density
+                estimation.
+
+    Returns the particle size, psize, and scale such that scale *
+    sphericalFF(r1, psize) * gr1 agrees best with gr2.
+
+    """
+    rtarget, grvaried, grtarget = _reGrid(r1, gr1, r2, gr2, rmin, rmax)
+
+    def chiv(p):
+        scale, psize = p
+        gp = scale * grvaried * sphericalFF(rtarget, psize)
+        return gp - grtarget
+
+    pars = [scale or 1, psize or rtarget[-1]]
+    from scipy.optimize import leastsq
+    pars, ier = leastsq(chiv, pars)
+
+    return pars
+
 def resample(r, s, dr):
     """Resample a PDF on a new grid.
 
@@ -483,6 +516,25 @@ def resample(r, s, dr):
     return r.copy(), s.copy()
 
 
+def sphericalFF(r, psize):
+    """Spherical nanoparticle form factor.
+    
+    r       --  distance of interaction
+    psize   --  The particle diameter
+    
+    From Kodama et al., Acta Cryst. A, 62, 444-453 
+    (converted from radius to diameter)
+
+    """
+    f = numpy.zeros_like(r)
+    if psize > 0: 
+        x = r/psize
+        g = (1.0 - 1.5*x + 0.5*x*x*x)
+        g[x > 1] = 0
+        f += g
+    return f
+
+
 def _reGrid(r1, s1, r2, s2, rmin = None, rmax = None):
     """Puts s1 and s2 on the same grid.
 
@@ -505,64 +557,3 @@ def _reGrid(r1, s1, r2, s2, rmin = None, rmax = None):
     news2 = numpy.interp(newr, r2, s2)
 
     return newr, news1, news2
-
-def gaussianEnvelope(r1, g1, r2, g2, sigma = None):
-    """ Applies a Gaussian envelope correction function to a PDF.
-
-    This function accounts for differences in resolution between instruments
-    by applying a Gaussian envelope function to g1. In effect, this function
-    dampens a PDF.
-
-    r1      -- the r-grid used for g1
-    g1      -- the PDF that we want to dampen
-    r2      -- the r-grid used for g2
-    g2      -- the PDF that we use as the reference
-    sigma   -- the dampening factor that a user wants to use (if none,
-    then we will calculate it)
-
-    """
-
-    from numpy import exp
-
-    if sigma is None:
-        sigma = calcSigma(r1,g1,r2,g2)
-        
-    newg1 = g1*exp(-0.5*(r1**2)*(sigma**2))
-
-    return newg1
-
-def calcSigma(r1,g1,r2,g2):
-    """ Calculates the broadening factor for a Gaussian envelope function.
-
-    r1      -- the r-grid used for g1
-    g1      -- the PDF that we want to dampen
-    r2      -- the r-grid used for g2
-    g2      -- the PDF that we use as the reference
-
-    """
-
-    from numpy import exp
-    from scipy.optimize import leastsq
-
-    # First, we interpolate both sets of data onto the same grid
-    r,g1,g2 = _reGrid(r1,g1,r2,g2)
-
-    # Then we rescale the two PDFs
-    scale = estimateScale(r,g1,r,g2)
-    g1 = g1*scale
-    
-    
-    sigma0 = 0.01
-
-    def diff(sigma0,g1,g2,r1):
-        newg1 = g1*exp(-0.5*(r1**2)*(sigma0**2))
-        difference = sum(newg1 - g2)
-
-        return difference
-
-    # Do least squares to find the ideal sigma    
-    sigma, err = leastsq(diff, sigma0, args=(g1,g2,r))
-    
-    print sigma
-
-    return sigma
