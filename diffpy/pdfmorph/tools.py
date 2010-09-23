@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# diffpy.pdfgetx    by DANSE Diffraction group
+# diffpy.pdfmorph   by DANSE Diffraction group
 #                   Simon J. L. Billinge
 #                   (c) 2010 Trustees of the Columbia University
 #                   in the City of New York.  All rights reserved.
