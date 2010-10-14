@@ -31,12 +31,12 @@ class MorphSmear(Morph):
 
     Attributes:
 
-    sigma   --  The smear factor to apply to yrefin.
+    sigma   --  The smear factor to apply to yobjin.
 
     '''
 
     # Define input output types
-    summary = 'Scale objective by desired amount or to the reference'
+    summary = 'Stretch objective by desired amount'
     xinlabel = LABEL_RA
     yinlabel = LABEL_RR
     xoutlabel = LABEL_RA
