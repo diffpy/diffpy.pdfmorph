@@ -20,9 +20,9 @@ class TestMorphRGrid(unittest.TestCase):
 
     def setUp(self):
         self.xobj = numpy.arange(0, 10, 0.01)
-        self.yobj = numpy.ones_like(self.xobj)
+        self.yobj = self.xobj.copy()
         self.xref = numpy.arange(1, 5, 0.01)
-        self.yref = numpy.ones_like(self.xref)
+        self.yref = self.xref**2
         return
 
     def _runTests(self, xyallout, morph):
