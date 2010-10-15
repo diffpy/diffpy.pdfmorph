@@ -28,10 +28,10 @@ class MorphStretch(Morph):
 
     This stretches (broadens) the objective.
 
-    Attributes:
+    Configuration variables:
 
-    epsilon --  The stretch factor to apply to yobjin. This is applied such
-                that a feature at r is moved to r * (1 + epsilon).
+    stretch --  The stretch factor to apply to yobjin. This is applied such
+                that a feature at r is moved to r * (1 + stretch).
 
     '''
 
@@ -45,10 +45,10 @@ class MorphStretch(Morph):
     def morph(self, xobj, yobj, xref, yref):
         """Resample arrays onto specified grid."""
         Morph.morph(self, xobj, yobj, xref, yref)
-        if self.epsilon == 0:
+        if self.stretch == 0:
             return self.xyallout
 
-        r = self.xobjin / (1.0 + self.epsilon)
+        r = self.xobjin / (1.0 + self.stretch)
         self.yobjout = numpy.interp(r, self.xobjin, self.yobjin)
         return self.xyallout
 

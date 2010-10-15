@@ -32,7 +32,7 @@ class MorphRGrid(Morph):
     This resamples both the objective and reference arrays to be on the
     specified grid.
 
-    Attributes:
+    Configuration variables:
 
     rmin    --  The lower-bound on the r-range.
     rmax    --  The upper-bound on the r-range (exclusive within tolerance of
@@ -51,6 +51,7 @@ class MorphRGrid(Morph):
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_GR
+    parnames = ["rmin", "rmax", "rstep"]
 
     def morph(self, xobj, yobj, xref, yref):
         """Resample arrays onto specified grid."""

@@ -29,9 +29,9 @@ class MorphSmear(Morph):
     This smears (broadens) the peaks of the objective.  Note that this operates
     on the RDF. Inputs are not automatically converted to the RDF.
 
-    Attributes:
+    Configuration variables:
 
-    sigma   --  The smear factor to apply to yobjin.
+    smear   --  The smear factor to apply to yobjin.
 
     '''
 
@@ -41,24 +41,21 @@ class MorphSmear(Morph):
     yinlabel = LABEL_RR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_RR
+    parnames = ["smear"]
 
     def morph(self, xobj, yobj, xref, yref):
         """Resample arrays onto specified grid."""
         Morph.morph(self, xobj, yobj, xref, yref)
-        self._smear(self.sigma)
-        return self.xyallout
 
-    def _smear(self, sigma):
-        """Smear the peaks by the smear factor."""
-
-        if sigma == 0: return
+        if self.smear == 0: 
+            return self.xyallout
 
         # The Gaussian to convolute with. No need to normalize, we'll do that
         # later.
         r = self.xobjin
         rr = self.yobjin
         r0 = r[len(r) / 2]
-        gaussian = numpy.exp(-0.5 * ((r - r0)/sigma)**2 ) 
+        gaussian = numpy.exp(-0.5 * ((r - r0)/self.smear)**2 ) 
 
         # Get the full convolution
         c = numpy.convolve(rr, gaussian, mode="full")
@@ -80,6 +77,6 @@ class MorphSmear(Morph):
 
         self.yobjout = rrbroad
 
-        return
+        return self.xyallout
 
 # End of class MorphSmear

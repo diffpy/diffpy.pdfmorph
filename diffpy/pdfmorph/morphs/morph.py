@@ -35,13 +35,16 @@ class Morph(object):
     morph may modify the config dictionary. This is the means by which to
     communicate automatically modified attributes.
 
+    Class attributes:
+
     summary      -- short description of a morph
     xinlabel     -- descriptive label for the x input array
     yinlabel     -- descriptive label for the y input array
     xoutlabel    -- descriptive label for the x output array
     youtlabel    -- descriptive label for the y output array
+    parnames     -- list of names of configuration variables
 
-    Instance variables:
+    Instance attributes:
 
     config      -- dictionary that contains all configuration variables
     xobjin      -- last objective input x data
@@ -69,6 +72,7 @@ class Morph(object):
     yinlabel = 'y'
     xoutlabel = 'x'
     youtlabel = 'y'
+    parnames = []
 
     # Properties
 
@@ -84,13 +88,12 @@ class Morph(object):
             (self.xobjout, self.yobjout, self.xrefout, self.yrefout), 
             doc='Return a tuple of all output arrays')
 
-    def __init__(self, config=None):
+    def __init__(self, config = {}):
         '''Create a default Morph instance.
 
         config  -- dictionary that contains all configuration variables
         '''
         # declare empty attributes
-        self.config = None
         self.xobjin = None
         self.yobjin = None
         self.xobjout = None
@@ -100,8 +103,7 @@ class Morph(object):
         self.xrefout = None
         self.yrefout = None
         # process arguments
-        if config is not None:
-            self.applyConfig(config)
+        self.applyConfig(config)
         return
 
 
@@ -197,12 +199,25 @@ class Morph(object):
         Return self.config.get(name).
         Raise AttributeError, when name is not available from self.config.
         '''
-        if self.config is not None and name in self.config:
+        if name in self.config:
             return self.config[name]
         else:
             emsg = 'Object has no attribute %r' % name
             raise AttributeError(emsg)
         return rv
+
+    def __setattr__(self, name, val):
+        '''Set configuration variables to config.
+
+        name -- name of the attribute
+        val  -- value of the attribute
+
+        '''
+        if name in self.parnames:
+            self.config[name] = val
+        else:
+            object.__setattr__(self, name, val)
+        return
 
 # End class Morph
 

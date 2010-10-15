@@ -29,7 +29,7 @@ class MorphXtalRDFtoPDF(Morph):
 
     This morphs both the objective and the reference.
 
-    Attributes:
+    Configuration variables:
 
     baselineslope   --  The slope of the PDF baseline.  With the perfect scale,
                         the baseline slope is equal to -4*pi*rho0, where rho0
@@ -46,6 +46,7 @@ class MorphXtalRDFtoPDF(Morph):
     yinlabel = LABEL_RR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_GR
+    parnames = ["baselineslope"]
 
     def morph(self, xobj, yobj, xref, yref):
         """Morph to the PDF."""

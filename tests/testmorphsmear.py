@@ -18,10 +18,10 @@ from diffpy.pdfmorph.morphs.morphsmear import MorphSmear
 class TestMorphSmear(unittest.TestCase):
 
     def setUp(self):
-        self.sigma = 0.1
+        self.smear = 0.1
         self.r0 = 7 * numpy.pi / 22.0 * 2
         self.xobj = numpy.arange(0.01, 5, 0.01)
-        self.yobj = numpy.exp(-0.5 * ((self.xobj-self.r0)/self.sigma)**2)
+        self.yobj = numpy.exp(-0.5 * ((self.xobj-self.r0)/self.smear)**2)
         self.xref = self.xobj.copy()
         self.yref = self.xref.copy()
         return
@@ -30,7 +30,7 @@ class TestMorphSmear(unittest.TestCase):
         """check MorphSmear.morph()
         """
         morph = MorphSmear()
-        morph.sigma = 0.15
+        morph.smear = 0.15
 
         xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref,
                 self.yref)
@@ -39,9 +39,9 @@ class TestMorphSmear(unittest.TestCase):
         self.assertTrue(numpy.allclose(self.yref, yref))
 
         # Compare to broadened Gaussian
-        sigbroad = (self.sigma**2 + morph.sigma**2)**0.5
+        sigbroad = (self.smear**2 + morph.smear**2)**0.5
         ysmear = numpy.exp(-0.5 * ((self.xobj-self.r0)/sigbroad)**2)
-        ysmear *= self.sigma / sigbroad
+        ysmear *= self.smear / sigbroad
 
         self.assertTrue(numpy.allclose(ysmear, yobj))
         return

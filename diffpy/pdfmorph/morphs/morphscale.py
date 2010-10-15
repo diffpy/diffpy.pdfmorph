@@ -26,7 +26,7 @@ class MorphScale(Morph):
 
     This scales the objective.
 
-    Attributes:
+    Configuration variables:
 
     scale   --  The scale to apply to yrefin.
 
@@ -38,6 +38,7 @@ class MorphScale(Morph):
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_GR
+    parnames = ["scale"]
 
     def morph(self, xobj, yobj, xref, yref):
         """Apply a scale factor."""
