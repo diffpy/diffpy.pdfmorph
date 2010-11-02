@@ -41,6 +41,7 @@ class MorphStretch(Morph):
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_GR
+    parnames = ["stretch"]
 
     def morph(self, xobj, yobj, xref, yref):
         """Resample arrays onto specified grid."""

@@ -111,7 +111,7 @@ class Morph(object):
         '''Morph arrays objective or reference.
 
         xobj, yobj  --  Objective arrays.
-        xobj, yobj  --  Objective arrays.
+        xref, yref  --  Reference arrays.
 
         Identity operation.  This method should be overloaded in a derived
         class.

@@ -8,8 +8,6 @@ __id__ = '$Id$'
 
 import os
 import unittest
-from bisect import bisect
-from numpy import pi, dot
 
 # useful variables
 thisfile = locals().get('__file__', 'file.py')

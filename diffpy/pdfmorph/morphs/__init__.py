@@ -17,6 +17,14 @@
 
 __id__ = "$Id$"
 
+from diffpy.pdfmorph.morphs.morphchain import MorphChain
+from diffpy.pdfmorph.morphs.morphpdftordf import MorphXtalPDFtoRDF
+from diffpy.pdfmorph.morphs.morphrdftopdf import MorphXtalRDFtoPDF
+from diffpy.pdfmorph.morphs.morphrgrid import MorphRGrid
+from diffpy.pdfmorph.morphs.morphscale import MorphScale
+from diffpy.pdfmorph.morphs.morphsmear import MorphSmear
+from diffpy.pdfmorph.morphs.morphstretch import MorphStretch
+
 # obtain version information
 from diffpy.pdfmorph.version import __version__
 
