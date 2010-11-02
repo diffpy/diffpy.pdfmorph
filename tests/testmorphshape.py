@@ -18,9 +18,9 @@ from diffpy.pdfmorph.morphs.morphshape import MorphSphere, MorphSpheroid
 class TestMorphSphere(unittest.TestCase):
 
     def setUp(self):
-        objfile = os.path.join(testdata_dir, "ni_qmax25.calc")
+        objfile = os.path.join(testdata_dir, "ni_qmax25.cgr")
         self.xobj, self.yobj = numpy.loadtxt(objfile, unpack = True)
-        reffile = os.path.join(testdata_dir, "ni_qmax25_psize30.calc")
+        reffile = os.path.join(testdata_dir, "ni_qmax25_psize30.cgr")
         self.xref, self.yref = numpy.loadtxt(reffile, unpack = True)
         return
 
@@ -42,9 +42,9 @@ class TestMorphSphere(unittest.TestCase):
 class TestMorphSpheroid(unittest.TestCase):
 
     def setUp(self):
-        objfile = os.path.join(testdata_dir, "ni_qmax25.calc")
+        objfile = os.path.join(testdata_dir, "ni_qmax25.cgr")
         self.xobj, self.yobj = numpy.loadtxt(objfile, unpack = True)
-        reffile = os.path.join(testdata_dir, "ni_qmax25_e17.5_p5.0.calc")
+        reffile = os.path.join(testdata_dir, "ni_qmax25_e17.5_p5.0.cgr")
         self.xref, self.yref = numpy.loadtxt(reffile, unpack = True)
         return
 
