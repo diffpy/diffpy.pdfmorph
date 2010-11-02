@@ -16,7 +16,7 @@ tests_dir = os.path.dirname(os.path.abspath(thisfile))
 from diffpy.pdfmorph.morphs.morphchain import MorphChain
 from diffpy.pdfmorph.morphs.morphscale import MorphScale
 from diffpy.pdfmorph.morphs.morphstretch import MorphStretch
-from diffpy.pdfmorph.refine import refine
+from diffpy.pdfmorph.refine import refine, refinefmin
 
 class TestRefine(unittest.TestCase):
 
@@ -62,7 +62,7 @@ class TestRefine(unittest.TestCase):
         mstretch = MorphStretch(config)
         chain = MorphChain(config, mscale, mstretch)
 
-        res = refine(chain, self.xobj, self.yobj, self.xref, self.yref)
+        res = refinefmin(chain, self.xobj, self.yobj, self.xref, self.yref)
 
         # Compare the objective to the reference. Note that due to
         # interpolation, there will be issues at the boundary of the step
