@@ -108,7 +108,7 @@ class TestRefineUC(unittest.TestCase):
         chain.append(MorphXtalPDFtoRDF())
         chain.append(MorphSmear())
         chain.append(MorphXtalRDFtoPDF())
-        
+
         # Do this as two-stage fit. First refine amplitude parameters, and then
         # position parameters.
         res = refine(chain, self.xobj, self.yobj, self.xref, self.yref,
@@ -123,7 +123,6 @@ class TestRefineUC(unittest.TestCase):
         yrsel = yref[sel]
         diff = yrsel - yobj[sel]
         rw = (numpy.dot(diff, diff) / numpy.dot(yrsel, yrsel))**0.5
-        print rw
         self.assertTrue(rw < 0.01)
         return
 
