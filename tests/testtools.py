@@ -8,7 +8,7 @@ __id__ = '$Id$'
 
 import os
 import unittest
-from numpy import pi, dot
+import numpy
 
 # useful variables
 thisfile = locals().get('__file__', 'file.py')
@@ -24,7 +24,7 @@ import diffpy.pdfmorph.tools as tools
 class TestTools(unittest.TestCase):
 
     def setUp(self):
-        objfile = os.path.join(testdata_dir, "ni_qmax25.cgr")
+        objfile = os.path.join(testdata_dir, "nickel_ss0.01.cgr")
         self.xobj, self.yobj = numpy.loadtxt(objfile, unpack = True)
         self.rho0 = 0.0917132
         return
@@ -33,16 +33,16 @@ class TestTools(unittest.TestCase):
         """check estimateBaselineSlope() using calculated data
         """
         slope = tools.estimateBaselineSlope(self.xobj, self.yobj)
-        self.assertAlmostEqual( -4*pi*self.rho0, slope, 2)
+        slopecalc = -4 * numpy.pi * self.rho0
+        self.assertAlmostEqual(slopecalc, slope, 2)
         return
 
     def test_estimateScale(self):
         """check estimateScale() using calculated data
         """
-        r1, gr1 = self.r, self.gr
         import random
         x = random.random()
-        scale = tools.estimateScale(r1, gr1, r1, x*gr1)
+        scale = tools.estimateScale(self.yobj, x * self.yobj)
         self.assertAlmostEquals(x, scale)
         return
 
