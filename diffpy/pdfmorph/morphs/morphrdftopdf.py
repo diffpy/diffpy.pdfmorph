@@ -56,7 +56,7 @@ class MorphXtalRDFtoPDF(Morph):
         self.yrefout =  self.yrefin / self.xrefin + objbaseline
         if self.xrefin[0] == 0:
             self.yrefout[0] = 0
-        self.yobjout =  self.yobjin / self.xobjin + objbaseline
+        self.yobjout =  self.yobjin / self.xobjin + refbaseline
         if self.xobjin[0] == 0:
             self.yobjout[0] = 0
         return self.xyallout

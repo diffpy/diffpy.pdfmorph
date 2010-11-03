@@ -36,7 +36,7 @@ class MorphSmear(Morph):
     '''
 
     # Define input output types
-    summary = 'Stretch objective by desired amount'
+    summary = 'Smear objective by desired amount'
     xinlabel = LABEL_RA
     yinlabel = LABEL_RR
     xoutlabel = LABEL_RA

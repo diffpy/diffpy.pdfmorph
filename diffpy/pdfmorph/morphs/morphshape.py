@@ -13,7 +13,8 @@
 ##############################################################################
 
 
-"""class MorphShape -- apply a shape function to the objective
+"""class MorphSphere -- apply a spherical shape function to the objective
+class MorphSpheroid -- apply a spheroidal shape function to the objective
 """
 
 # module version

@@ -89,6 +89,7 @@ class TestRefineUC(unittest.TestCase):
         reffile = os.path.join(testdata_dir, "nickel_ss0.02_eps0.002.cgr")
         self.xref, self.yref = numpy.loadtxt(reffile, unpack = True, skiprows
                 = 8)
+        self.yref *= 1.5
         return
 
     def test_refine(self):
@@ -96,34 +97,33 @@ class TestRefineUC(unittest.TestCase):
                 "scale" : 1.0,
                 "stretch" : 0,
                 "smear" : 0,
+                "baselineslope" : -4 * numpy.pi * 0.0917132
                 }
 
-        from diffpy.pdfmorph.tools import estimateBaselineSlope
-        slope = estimateBaselineSlope(self.xobj, self.yobj)
-        config["baselineslope"] = slope
-
-        mpdftordf = MorphXtalPDFtoRDF(config)
-        mscale = MorphScale(config)
-        mstretch = MorphStretch(config)
-        msmear = MorphSmear(config)
-        mrdftopdf = MorphXtalRDFtoPDF(config)
-        chain = MorphChain(config, mpdftordf, mscale, mstretch, msmear,
-                mrdftopdf)
-
-        # Do this as two-stage fit
+        # Note that scale must go first, since it does not commute with the
+        # PDF <--> RDF conversion.
+        chain = MorphChain(config)
+        chain.append(MorphScale())
+        chain.append(MorphStretch())
+        chain.append(MorphXtalPDFtoRDF())
+        chain.append(MorphSmear())
+        chain.append(MorphXtalRDFtoPDF())
+        
+        # Do this as two-stage fit. First refine amplitude parameters, and then
+        # position parameters.
         res = refine(chain, self.xobj, self.yobj, self.xref, self.yref,
                 "scale", "smear")
         res = refine(chain, self.xobj, self.yobj, self.xref, self.yref,
                 "scale", "stretch", "smear")
 
         xobj, yobj, xref, yref = chain.xyallout
-
         # We want the fit good to 1%. We will disregard the last bit of the
         # fit, since we know we have unavoidable edge effects there.
         sel = xobj < 9.5
         yrsel = yref[sel]
         diff = yrsel - yobj[sel]
         rw = (numpy.dot(diff, diff) / numpy.dot(yrsel, yrsel))**0.5
+        print rw
         self.assertTrue(rw < 0.01)
         return
 
