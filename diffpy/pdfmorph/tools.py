@@ -77,3 +77,28 @@ def estimateBaselineSlope(r, gr, rmin = None, rmax = None):
     # Return the slope
     return slope
 
+
+# FIXME - common functionality like this needs to be factored out. Things like
+# this exist in SrFit and PDFgui. We need a common, python-only diffpy package
+# for this sort of stuff.
+def readPDF(fname):
+    """Reads an .gr file, loads r and G(r) vectors.
+
+    fname -- name of the file we want to read.
+
+    Returns r and gr arrays.
+
+    """
+    from numpy import loadtxt
+    import re
+    
+    data = open(fname).read()
+    pos = re.search(r'^#+ +start data', data, re.M)
+    if pos is not None:
+        pos = pos.start()
+    else:
+        pos = 0
+    nlines = data[:pos].count('\n')
+    r, gr = loadtxt(fname, skiprows=nlines, usecols=(0, 1), unpack=True)
+    return r, gr
+

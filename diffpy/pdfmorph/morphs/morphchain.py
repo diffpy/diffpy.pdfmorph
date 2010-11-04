@@ -35,6 +35,14 @@ class MorphChain(list):
 
     These return tuples of None if there are no morphs.
 
+    xobjin      -- last objective input x data
+    yobjin      -- last objective input y data
+    xobjout     -- last objective result x data
+    yobjout     -- last objective result y data
+    xrefin      -- last reference input x data
+    yrefin      -- last reference input y data
+    xrefout     -- last reference result x data
+    yrefout     -- last reference result y data
     xyobjin     -- tuple of (xobjin, yobjin) from first morph
     xyobjout    -- tuple of (xobjout, yobjout) from last morph
     xyrefin     -- tuple of (xrefin, yrefin) from first morph
@@ -44,6 +52,22 @@ class MorphChain(list):
 
     '''
 
+    xobjin = property(
+            lambda self: None if len(self) == 0 else self[0].xobjin)
+    yobjin = property(
+            lambda self: None if len(self) == 0 else self[0].yobjin)
+    xrefin = property(
+            lambda self: None if len(self) == 0 else self[0].xrefin)
+    yrefin = property(
+            lambda self: None if len(self) == 0 else self[0].yrefin)
+    xobjout = property(
+            lambda self: None if len(self) == 0 else self[-1].xobjout)
+    yobjout = property(
+            lambda self: None if len(self) == 0 else self[-1].yobjout)
+    xrefout = property(
+            lambda self: None if len(self) == 0 else self[-1].xrefout)
+    yrefout = property(
+            lambda self: None if len(self) == 0 else self[-1].yrefout)
     xyobjin = property(
             lambda self: (None, None) if len(self) == 0 else self[0].xyobjin)
     xyobjout = property(

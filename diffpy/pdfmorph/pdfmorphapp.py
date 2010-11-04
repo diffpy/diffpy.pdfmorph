@@ -1,214 +1,218 @@
 #!/usr/bin/env python
-
-import os.path
-
-scriptname = os.path.basename(__file__)
-
-__doc__ = """pdfmorph   Manipulate and compare PDFs.
-Usage: pdfmorph [options] file1 file2
-
-pdfmorph takes two PDF files, file1 and file2, and plots them on top of one
-another, and produces a difference curve. Options may manipulate the PDF from
-file1 before plotting.
-
-Options:
-  -h, --help      display this message
-  -V, --version   show script version
-  --automorph     smear, stretch and scale the PDF from file1 to best match
-                  the PDF from file2 over the range defined by CMIN and CMAX.
-  --cmin=CMIN     the minimum r-value to use for PDF comparisons
-  --cmax=CMAX     the maximum r-value to use for PDF comparisons
-  --noplot        do not show the plot
-  --rmin=RMIN     the minimum r-value to show
-  --rmax=RMAX     the maximum r-value to show
-  --save=FILE     save full extent of manipulated PDF from file1 to FILE
-  --scale=SCALE   A scale factor by which to multiply the PDF from file1. If
-                  SCALE=auto, this will found automatically in order to match
-                  the file1 PDF with the file2 PDF over the range defined by
-                  CMIN and CMAX.
-  --size=DIAM     apply a spherical attenuation factor to the PDF from file1.
-                  If DIAM=auto, then figure out the best attenuation factor
-                  while scaling the PDF.
-  --smear=SIG     smear the PDF from file1 by Gaussian width SIG.
-  --stretch=EPS   the amount to stretch the scale of the PDF from file1. This is
-                  used to simulate isotropic expansion, where 1+EPS is the
-                  expansion fraction.
-
-  Note that transforms are performed in the order of scale, stretch, smear.
-
-Report bugs to diffpy-dev@googlegroups.com.
-"""
-
-__id__ = "$Id$"
+##############################################################################
+#
+# diffpy.pdfmorph   by DANSE Diffraction group
+#                   Simon J. L. Billinge
+#                   (c) 2010 Trustees of the Columbia University
+#                   in the City of New York.  All rights reserved.
+#
+# File coded by:    Chris Farrow
+#
+# See AUTHORS.txt for a list of people who contributed.
+# See LICENSE.txt for license information.
+#
+##############################################################################
 
 import sys
 import os
+import os.path
 
-from diffpy.pdfmorph import pdfplot, tools
+import numpy
 
-def usage(style = None):
-    """show usage info, for style=="brief" show only first 2 lines"""
-    myname = os.path.basename(sys.argv[0])
-    msg = __doc__
-    if style == 'brief':
-        msg = msg.split("\n")[1] + "\n" + \
-                "Try `%s --help' for more information." % myname
-    print msg
-    return
+from diffpy.pdfmorph import __version__
+import diffpy.pdfmorph.tools as tools
+import diffpy.pdfmorph.pdfplot as pdfplot
+import diffpy.pdfmorph.morphs as morphs
+import diffpy.pdfmorph.refine as refine
 
-def version():
-    from diffpy.pdfmorph import __version__
-    print __id__
-    print "diffpy.pdfmorph", __version__
+__id__ = "$Id$"
+
+def createOptionParser():
+
+    import optparse
+    parser = optparse.OptionParser(
+        usage = '\n'.join([
+        "%prog [options] FILE1 FILE2",
+        "Manipulate and compare PDFs.",
+        ]),
+        epilog="Please report bugs to diffpy-dev@googlegroups.com."
+        )
+
+    parser.add_option('-V', '--version', action="version",
+        help="Show program version and exit.")
+    parser.version = __version__
+    parser.add_option('-a', '--apply', action="store_false", dest="refine",
+            help="Apply manipulations but do not refine.")
+    parser.add_option('-x', '--exclude', action="append", dest="exclude",
+            metavar="MANIP",
+            help="""Exclude a manipulation from refinement by name. This can
+appear multiple times.""")
+    parser.add_option('-n', '--noplot', action="store_false", dest="plot",
+            help="Do not show the plot.")
+    parser.add_option('--save', metavar="FILE", dest="savefile",
+            help="Save manipulated PDF from FILE1 to FILE.")
+    parser.add_option('--rmin', type="float",
+            help="Minimum r-value to use for PDF comparisons.")
+    parser.add_option('--rmax', type="float",
+            help="Maximum r-value to use for PDF comparisons.")
+    parser.add_option('--pmin', type="float",
+            help="Minimum r-value to plot.")
+    parser.add_option('--pmax', type="float",
+            help="Maximum r-value to plot.")
+
+    # Manipulations
+    group = optparse.OptionGroup(parser, "Manipulations",
+            """These options select the manipulations that are to be applied to
+the PDF from FILE1. The passed values will be refined unless specifically
+excluded with the -a or -x options.""")
+    parser.add_option_group(group)
+    group.add_option('--scale', type="float", metavar="SCALE",
+            help="Apply scale factor SCALE.")
+    group.add_option('--smear', type="float", metavar="SMEAR",
+            help="Smear peaks with a Gaussian of width SMEAR.")
+    group.add_option('--stretch', type="float", metavar="STRETCH",
+            help="Stretch PDF by a fraction STRETCH.")
+    group.add_option('--slope', type="float", dest="baselineslope",
+            help="""Slope of the baseline. This is used when applying the smear
+factor. It will be estimated if not provided.""")
+    group.add_option('--qdamp', type="float", metavar="QDAMP",
+            help="Dampen PDF by a factor QDAMP.")
+    group.add_option('--radius', type="float", metavar="RADIUS",
+            help="Apply characteristic function of sphere with radius RADIUS.")
+    group.add_option('--eradius', type="float", metavar="ERADIUS",
+            help="""Apply characteristic function of spheroid with equatorial
+radius ERADIUS and polar radius PRADIUS. If only one of these is given, then
+use a sphere instead.""")
+    group.add_option('--pradius', type="float", metavar="PRADIUS",
+            help="""Apply characteristic function of spheroid with equatorial
+radius ERADIUS and polar radius PRADIUS. If only one of these is given, then
+use a sphere instead.""")
+
+    # Defaults
+    parser.set_defaults(plot=True)
+    parser.set_defaults(refine=True)
+
+    return parser
 
 def main():
-    import getopt
-    # default parameters
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "hV",
-                ["help", "version", "automorph", "cmin=", "cmax=", "save=",
-                    "rmin=", "rmax=", "scale=", "size=", "smear=", "stretch=",
-                    "noplot"])
-    except getopt.GetoptError, errmsg:
-        print >> sys.stderr, errmsg
-        sys.exit(2)
-    # process options
-    cmin = None
-    cmax = None
-    eps = None
-    noplot = False
-    rmin = None
-    rmax = None
-    savefile = None
-    scale = None
-    sig = None
-    size = None
-    automorph = False
-    for o, a in opts:
-        if o in ("-h", "--help"):
-            usage()
-            sys.exit()
-        elif o in ("-V", "--version"):
-            version()
-            sys.exit()
-        elif "--automorph" == o:
-            automorph = True
-        elif "--smear" == o:
-            sig = getFloat(a, 'smear')
-        elif "--save" == o:
-            savefile = a
-        elif "--noplot" == o:
-            noplot = True
-        elif "--rmin" == o:
-            rmin = getFloat(a, 'rmin')
-        elif "--rmax" == o:
-            rmax = getFloat(a, 'rmax')
-        elif "--cmin" == o:
-            cmin = getFloat(a, 'cmin')
-        elif "--cmax" == o:
-            cmax = getFloat(a, 'cmax')
-        elif "--scale" == o:
-            scale = a
-            if scale != 'auto':
-                scale = getFloat(a, 'scale')
-        elif "--stretch" == o:
-            eps = getFloat(a, 'stretch')
-        elif "--size" == o:
-            size = a
-            if size != 'auto':
-                size = getFloat(a, 'size')
+    parser = createOptionParser()
+    (opts, pargs) = parser.parse_args()
 
-    if len(args) != 2:
-        usage('brief')
-        sys.exit()
+    if len(pargs) != 2:
+        parser.error("You must supply FILE1 and FILE2")
 
-    file1, file2 = args
-    labels = map(os.path.basename, args)
+    # Get the PDFs
+    xobj, yobj = getPDFFromFile(pargs[0])
+    xref, yref = getPDFFromFile(pargs[1])
 
-    r1, gr1 = getPDFFromFile(file1)
-    r2, gr2 = getPDFFromFile(file2)
+    # Get configuration values
+    pars = []
+    for klass in morphs.morphs:
+        pars.extend(klass.parnames)
+    pars = set(pars)
+    keys = [p for p in pars if hasattr(opts, p)]
+    vals = [getattr(opts, k) for k in keys]
+    items = [(k, v) for k, v in zip(keys, vals) if v is not None]
+    config = dict(items)
 
-    morphed = False
+    # We may need to morph the rgrid no matter what.
+    if "rmin" not in config:
+        config["rmin"] = None
+    if "rmax" not in config:
+        config["rmax"] = None
+    if "rstep" not in config:
+        config["rstep"] = None
 
-    if automorph is True:
-        scale, eps, sig, gr1 = tools.autoMorphPDF(r1, gr1, r2, gr2, rmin =
-                cmin, rmax = cmax, scale = scale, eps = eps, sig = sig)
-        morphed = True
+    # Set up the morphs
+    chain = morphs.MorphChain(config)
+    chain.append( morphs.MorphRGrid() )
+    refpars = []
+    if "scale" in config:
+        chain.append( morphs.MorphScale() )
+        refpars.append("scale")
+    if "stretch" in config:
+        chain.append( morphs.MorphStretch() )
+        refpars.append("stretch")
+    if "smear" in config:
+        chain.append( morphs.MorphXtalPDFtoRDF() )
+        chain.append( morphs.MorphSmear() )
+        chain.append( morphs.MorphXtalRDFtoPDF() )
+        refpars.append("smear")
+        refpars.append("baselineslope")
+    # We need exactly one of "radius", "eradius" or "pradius"
+    radii = [config.get("eradius"), config.get("pradius")]
+    rad = None
+    if "radius" in config:
+        rad = config["radius"]
+    elif radii.count(None) == 1:
+        radii.remove(None)
+        rad = radii[0]
+    if rad is not None:
+        config["radius"] = rad
+        chain.append( morphs.MorphSphere() )
+        refpars.append("radius")
+    elif radii.count(None) == 0:
+        chain.append( morphs.MorphSpheroid() )
+        refpars.append("eradius")
+        refpars.append("pradius")
+    if "qdamp" in config:
+        chain.append( MorphResolutionDamping() )
+        refpars.append("qdamp")
 
+    # Now remove non-refinable parameters
+    if opts.exclude is not None:
+        refpars = set(refpars) - set(opts.exclude)
+        refpars = list(refpars)
+
+    # Refine or execute the morph
+    if opts.refine and refpars:
+        try:
+            refine.refine(chain, xobj, yobj, xref, yref, *refpars)
+        except ValueError, e:
+            config.error(str(e))
+    elif "smear" in refpars and opts.baselineslope is None:
+        try:
+            refine.refine(chain, xobj, yobj, xref, yref, "baselineslope",
+                    baselineslope = -0.5)
+        except ValueError, e:
+            config.error(str(e))
     else:
+        chain(xobj, yobj, xref, yref)
 
-        # rescale if requested, but not if we're auto-smearing
-        if scale is not None:
-            if scale == 'auto':
-                scale = tools.estimateScale(r1, gr1, r2, gr2, rmin=cmin,
-                        rmax=cmax)
-            gr1 *= scale
-            morphed = True
+    diff = chain.yrefout - chain.yobjout
+    rw = numpy.dot(diff, diff)
+    rw /= numpy.dot(chain.yrefout, chain.yrefout)
+    rw = rw**0.5
 
-        # stretch if requested
-        if eps is not None:
-            gr1 = tools.expandSignal(r1, gr1, eps)
-            morphed = True
-
-        # smear if requested
-        if sig is not None:
-            gr1 = tools.broadenPDF(r1, gr1, sig)
-            morphed = True
-
-        if size is not None:
-            if size == 'auto':
-                size, scale = tools.estimateSize(r1, gr1, r2, gr2, rmin=cmin,
-                        rmax=cmax, scale=scale)
-            gr1 *= (scale or 1) * tools.sphericalFF(r1, size)
-
-
-    # For recording purposes
-    if scale is None:
-        scale = 1
-    if sig is None:
-        sig = 0
-    if eps is None:
-        eps = 0
-    if size is None:
-        size = 0
-
-    output = "# scale = %f\n" % scale
-    output += "# eps = %f\n" % eps
-    output += "# sig = %f\n" % sig
-    output += "# size = %f" % size
+    items = config.items()
+    items.sort()
+    output = "\n".join("# %s = %f"%i for i in items)
+    output += "\n# Rw = %f\n" % rw
     print output
-    if savefile is not None:
-        header = "# PDF created by %s\n" % scriptname
-        header += "# from %s\n" % os.path.abspath(file1)
+    if opts.savefile is not None:
+        header = "# PDF created by pdfmorph\n"
+        header += "# from %s\n" % os.path.abspath(pargs[0])
+
         header += output
-        import numpy
         outfile = file(savefile, 'w')
         print >> outfile, header
         numpy.savetxt(outfile, zip(r1, gr1))
         outfile.close()
 
-    # Now we can plot
-    if not noplot:
-        if morphed:
-            labels[0] += " (morphed)"
-        pdfplot.comparePDFs([(r1, gr1), (r2, gr2)],
-                labels, rmin = rmin, rmax = rmax)
+    if opts.plot:
+        pairlist = [chain.xyobjout, chain.xyrefout]
+        labels = ["objective", "reference"]
+        pdfplot.comparePDFs(pairlist, labels, rmin = opts.pmin, rmax =
+                opts.pmax)
+
+
     return
-
-def getFloat(val, name):
-    f = val
-    try: 
-        f = float(val)
-    except ValueError:
-        msg = "Do not understand '%s' option"%name
-        print >> sys.stderr, msg
-
-    return f
 
 
 def getPDFFromFile(fn):
+    from diffpy.pdfmorph.tools import readPDF
     try:
-        r, gr = tools.readPDF(fn)
+        r, gr = readPDF(fn)
     except IOError, (errno, errmsg):
         print >> sys.stderr, "%s: %s" % (fn, errmsg)
         sys.exit(1)
