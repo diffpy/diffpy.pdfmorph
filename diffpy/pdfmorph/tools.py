@@ -78,6 +78,16 @@ def estimateBaselineSlope(r, gr, rmin = None, rmax = None):
     return slope
 
 
+def getRw(chain):
+    """Get Rw from the outputs of a morph or chain."""
+    xobj, yobj, xref, yref = chain.xyallout
+    diff = yref - yobj
+    rw = numpy.dot(diff, diff)
+    rw /= numpy.dot(yref, yref)
+    rw = rw**0.5
+    return rw
+
+
 # FIXME - common functionality like this needs to be factored out. Things like
 # this exist in SrFit and PDFgui. We need a common, python-only diffpy package
 # for this sort of stuff.

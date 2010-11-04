@@ -17,7 +17,6 @@ import sys
 import os
 import os.path
 
-import numpy
 
 from diffpy.pdfmorph import __version__
 import diffpy.pdfmorph.tools as tools
@@ -114,18 +113,13 @@ def main():
     vals = [getattr(opts, k) for k in keys]
     items = [(k, v) for k, v in zip(keys, vals) if v is not None]
     config = dict(items)
-
-    # We may need to morph the rgrid no matter what.
-    if "rmin" not in config:
-        config["rmin"] = None
-    if "rmax" not in config:
-        config["rmax"] = None
-    if "rstep" not in config:
-        config["rstep"] = None
+    # We'll need these as well
+    config.setdefault("rmin", None)
+    config.setdefault("rmax", None)
+    config.setdefault("rstep", None)
 
     # Set up the morphs
     chain = morphs.MorphChain(config)
-    chain.append( morphs.MorphRGrid() )
     refpars = []
     if "scale" in config:
         chain.append( morphs.MorphScale() )
@@ -167,36 +161,41 @@ def main():
     # Refine or execute the morph
     if opts.refine and refpars:
         try:
+            # This works better when we adjust scale and smear first.
+            if "smear" and "scale" in refpars and len(refpars) > 2:
+                refine.refine(chain, xobj, yobj, xref, yref, "smear", "scale")
             refine.refine(chain, xobj, yobj, xref, yref, *refpars)
         except ValueError, e:
-            config.error(str(e))
+            parser.error(str(e))
     elif "smear" in refpars and opts.baselineslope is None:
         try:
             refine.refine(chain, xobj, yobj, xref, yref, "baselineslope",
                     baselineslope = -0.5)
         except ValueError, e:
-            config.error(str(e))
+            parser.error(str(e))
     else:
         chain(xobj, yobj, xref, yref)
 
-    diff = chain.yrefout - chain.yobjout
-    rw = numpy.dot(diff, diff)
-    rw /= numpy.dot(chain.yrefout, chain.yrefout)
-    rw = rw**0.5
+    # Get Rw and the proper r-range
+    from diffpy.pdfmorph.morphs.morphrgrid import MorphRGrid
+    morph = MorphRGrid(config)
+    morph(*chain.xyallout)
+    rw = tools.getRw(morph)
 
     items = config.items()
     items.sort()
     output = "\n".join("# %s = %f"%i for i in items)
-    output += "\n# Rw = %f\n" % rw
+    output += "\n# Rw = %f" % rw
     print output
     if opts.savefile is not None:
         header = "# PDF created by pdfmorph\n"
         header += "# from %s\n" % os.path.abspath(pargs[0])
 
         header += output
-        outfile = file(savefile, 'w')
+        outfile = file(opts.savefile, 'w')
         print >> outfile, header
-        numpy.savetxt(outfile, zip(r1, gr1))
+        import numpy
+        numpy.savetxt(outfile, zip(chain.xobjout, chain.yobjout))
         outfile.close()
 
     if opts.plot:
@@ -204,7 +203,6 @@ def main():
         labels = ["objective", "reference"]
         pdfplot.comparePDFs(pairlist, labels, rmin = opts.pmin, rmax =
                 opts.pmax)
-
 
     return
 
