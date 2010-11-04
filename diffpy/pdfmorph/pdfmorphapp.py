@@ -133,6 +133,7 @@ def main():
         chain.append( morphs.MorphXtalRDFtoPDF() )
         refpars.append("smear")
         refpars.append("baselineslope")
+        config.setdefault("baselineslope", -0.5)
     # We need exactly one of "radius", "eradius" or "pradius"
     radii = [config.get("eradius"), config.get("pradius")]
     rad = None
@@ -162,8 +163,11 @@ def main():
     if opts.refine and refpars:
         try:
             # This works better when we adjust scale and smear first.
-            if "smear" and "scale" in refpars and len(refpars) > 2:
-                refine.refine(chain, xobj, yobj, xref, yref, "smear", "scale")
+            if "smear" in refpars:
+                rptemp = ["smear"]
+                if "scale" in refpars:
+                    rptemp.appear("scale")
+                refine.refine(chain, xobj, yobj, xref, yref, *rptemp)
             refine.refine(chain, xobj, yobj, xref, yref, *refpars)
         except ValueError, e:
             parser.error(str(e))
