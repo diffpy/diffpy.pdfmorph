@@ -120,6 +120,8 @@ def main():
 
     # Set up the morphs
     chain = morphs.MorphChain(config)
+    # Add the r-range morph, we will remove it when saving and plotting
+    chain.append( morphs.MorphRGrid() )
     refpars = []
     if "scale" in config:
         chain.append( morphs.MorphScale() )
@@ -166,7 +168,7 @@ def main():
             if "smear" in refpars:
                 rptemp = ["smear"]
                 if "scale" in refpars:
-                    rptemp.appear("scale")
+                    rptemp.append("scale")
                 refine.refine(chain, xobj, yobj, xref, yref, *rptemp)
             refine.refine(chain, xobj, yobj, xref, yref, *refpars)
         except ValueError, e:
@@ -181,10 +183,9 @@ def main():
         chain(xobj, yobj, xref, yref)
 
     # Get Rw and the proper r-range
-    from diffpy.pdfmorph.morphs.morphrgrid import MorphRGrid
-    morph = MorphRGrid(config)
-    morph(*chain.xyallout)
-    rw = tools.getRw(morph)
+    del chain[0]
+    chain(xobj, yobj, xref, yref)
+    rw = tools.getRw(chain)
 
     items = config.items()
     items.sort()

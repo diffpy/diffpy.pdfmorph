@@ -80,7 +80,11 @@ def estimateBaselineSlope(r, gr, rmin = None, rmax = None):
 
 def getRw(chain):
     """Get Rw from the outputs of a morph or chain."""
-    xobj, yobj, xref, yref = chain.xyallout
+    # Make sure we put these on the proper grid
+    config = {"rmin" : None, "rmax" : None, "rstep" : None}
+    from diffpy.pdfmorph.morphs import MorphRGrid
+    morph = MorphRGrid(config)
+    xobj, yobj, xref, yref = morph(*chain.xyallout)
     diff = yref - yobj
     rw = numpy.dot(diff, diff)
     rw /= numpy.dot(yref, yref)
