@@ -182,10 +182,11 @@ def main():
     else:
         chain(xobj, yobj, xref, yref)
 
-    # Get Rw and the proper r-range
-    del chain[0]
-    chain(xobj, yobj, xref, yref)
+    # Get Rw for the morph range
     rw = tools.getRw(chain)
+    # Replace the MorphRGrid with Morph identity
+    chain[0] = morphs.Morph()
+    chain(xobj, yobj, xref, yref)
 
     items = config.items()
     items.sort()
