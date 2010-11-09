@@ -48,7 +48,7 @@ def createOptionParser():
 appear multiple times.""")
     parser.add_option('-n', '--noplot', action="store_false", dest="plot",
             help="Do not show the plot.")
-    parser.add_option('--save', metavar="FILE", dest="savefile",
+    parser.add_option('-s', '--save', metavar="FILE", dest="savefile",
             help="Save manipulated PDF from FILE1 to FILE.")
     parser.add_option('--rmin', type="float",
             help="Minimum r-value to use for PDF comparisons.")

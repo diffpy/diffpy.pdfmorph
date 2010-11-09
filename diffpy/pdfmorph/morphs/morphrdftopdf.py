@@ -53,10 +53,10 @@ class MorphXtalRDFtoPDF(Morph):
         Morph.morph(self, xobj, yobj, xref, yref)
         objbaseline = self.baselineslope * self.xobjin
         refbaseline = self.baselineslope * self.xrefin
-        self.yrefout =  self.yrefin / self.xrefin + objbaseline
+        self.yrefout =  self.yrefin / self.xrefin + refbaseline
         if self.xrefin[0] == 0:
             self.yrefout[0] = 0
-        self.yobjout =  self.yobjin / self.xobjin + refbaseline
+        self.yobjout =  self.yobjin / self.xobjin + objbaseline
         if self.xobjin[0] == 0:
             self.yobjout[0] = 0
         return self.xyallout
