@@ -88,7 +88,6 @@ def getRw(chain):
     rw = rw**0.5
     return rw
 
-
 # FIXME - common functionality like this needs to be factored out. Things like
 # this exist in SrFit and PDFgui. We need a common, python-only diffpy package
 # for this sort of stuff.
@@ -100,16 +99,10 @@ def readPDF(fname):
     Returns r and gr arrays.
 
     """
-    from numpy import loadtxt
-    import re
-    
-    data = open(fname).read()
-    pos = re.search(r'^#+ +start data', data, re.M)
-    if pos is not None:
-        pos = pos.start()
-    else:
-        pos = 0
-    nlines = data[:pos].count('\n')
-    r, gr = loadtxt(fname, skiprows=nlines, usecols=(0, 1), unpack=True)
-    return r, gr
+    from diffpy.util import loadData
+
+    rv = loadData(fname)
+    if len(rv) >= 2:
+        return rv[:2]
+    return (None, None)
 

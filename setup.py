@@ -23,6 +23,9 @@ setup(
             ],
         },
         test_suite = 'tests',
+        install_requires = [
+            'diffpy.util',
+        ],
         author = 'Simon J.L. Billinge',
         author_email = 'sb2896@columbia.edu',
         maintainer = 'Chris Farrow',
