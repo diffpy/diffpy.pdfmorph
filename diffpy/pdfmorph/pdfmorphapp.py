@@ -55,9 +55,9 @@ appear multiple times.""")
     parser.add_option('--rmax', type="float",
             help="Maximum r-value to use for PDF comparisons.")
     parser.add_option('--pmin', type="float",
-            help="Minimum r-value to plot.")
+            help="Minimum r-value to plot. Defaults to rmin.")
     parser.add_option('--pmax', type="float",
-            help="Maximum r-value to plot.")
+            help="Maximum r-value to plot. Defaults to rmax.")
 
     # Manipulations
     group = optparse.OptionGroup(parser, "Manipulations",
@@ -207,8 +207,10 @@ def main():
     if opts.plot:
         pairlist = [chain.xyobjout, chain.xyrefout]
         labels = ["objective", "reference"]
-        pdfplot.comparePDFs(pairlist, labels, rmin = opts.pmin, rmax =
-                opts.pmax)
+        pmin = opts.pmin
+        pmin = opts.pmin if opts.pmin is not None else opts.rmin
+        pmax = opts.pmax if opts.pmax is not None else opts.rmax
+        pdfplot.comparePDFs(pairlist, labels, rmin = pmin, rmax = pmax)
 
     return
 
