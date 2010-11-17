@@ -86,6 +86,10 @@ use a sphere instead.""")
             help="""Apply characteristic function of spheroid with equatorial
 radius ERADIUS and polar radius PRADIUS. If only one of these is given, then
 use a sphere instead.""")
+    group.add_option('--vshift', type="float", metavar="VSHIFT",
+            help="Shift the objective vertically by VSHIFT.")
+    group.add_option('--hshift', type="float", metavar="HSHIFT",
+            help="Shift the objective horizontally by HSHIFT.")
 
     # Defaults
     parser.set_defaults(plot=True)
@@ -108,6 +112,7 @@ def main():
     pars = []
     for klass in morphs.morphs:
         pars.extend(klass.parnames)
+    print pars
     pars = set(pars)
     keys = [p for p in pars if hasattr(opts, p)]
     vals = [getattr(opts, k) for k in keys]
@@ -117,6 +122,9 @@ def main():
     config.setdefault("rmin", None)
     config.setdefault("rmax", None)
     config.setdefault("rstep", None)
+    if config["rmin"] is not None and config["rmax"] <= config["rmin"]:
+        e = "rmin must be less than rmax"
+        parser.error(e)
 
     # Set up the morphs
     chain = morphs.MorphChain(config)
@@ -155,6 +163,10 @@ def main():
     if "qdamp" in config:
         chain.append( morphs.MorphResolutionDamping() )
         refpars.append("qdamp")
+    if "vshift" in config or "hshift" in config:
+        config.setdefault("vshift", 0)
+        config.setdefault("hshift", 0)
+        chain.append( morphs.MorphShift() )
 
     # Now remove non-refinable parameters
     if opts.exclude is not None:
