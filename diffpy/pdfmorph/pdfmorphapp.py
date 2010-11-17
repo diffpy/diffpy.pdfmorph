@@ -112,7 +112,6 @@ def main():
     pars = []
     for klass in morphs.morphs:
         pars.extend(klass.parnames)
-    print pars
     pars = set(pars)
     keys = [p for p in pars if hasattr(opts, p)]
     vals = [getattr(opts, k) for k in keys]
@@ -164,8 +163,12 @@ def main():
         chain.append( morphs.MorphResolutionDamping() )
         refpars.append("qdamp")
     if "vshift" in config or "hshift" in config:
-        config.setdefault("vshift", 0)
+        if "vshift" in config:
+            refpars.append("vshift")
+        if "hshift" in config:
+            refpars.append("hshift")
         config.setdefault("hshift", 0)
+        config.setdefault("vshift", 0)
         chain.append( morphs.MorphShift() )
 
     # Now remove non-refinable parameters

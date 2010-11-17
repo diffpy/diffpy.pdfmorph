@@ -36,7 +36,7 @@ class MorphShift(Morph):
     '''
 
     # Define input output types
-    summary = 'Vertically shift objective by specified amount'
+    summary = 'Shift objective by specified amount'
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA

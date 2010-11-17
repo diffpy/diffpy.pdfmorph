@@ -68,6 +68,7 @@ def refine(chain, xobj, yobj, xref, yref, *args, **kw):
 
     return dot(fvec, fvec)
 
+
 def refinefmin(chain, xobj, yobj, xref, yref, *args, **kw):
     """Refine a morph or morph chain to match the objective to the reference.
 
