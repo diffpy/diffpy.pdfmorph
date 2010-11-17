@@ -153,7 +153,7 @@ def main():
         refpars.append("eradius")
         refpars.append("pradius")
     if "qdamp" in config:
-        chain.append( MorphResolutionDamping() )
+        chain.append( morphs.MorphResolutionDamping() )
         refpars.append("qdamp")
 
     # Now remove non-refinable parameters
@@ -198,7 +198,10 @@ def main():
         header += "# from %s\n" % os.path.abspath(pargs[0])
 
         header += output
-        outfile = file(opts.savefile, 'w')
+        if opts.savefile == "-":
+            outfile = sys.stdout
+        else:
+            outfile = file(opts.savefile, 'w')
         print >> outfile, header
         import numpy
         numpy.savetxt(outfile, zip(chain.xobjout, chain.yobjout))
@@ -207,7 +210,7 @@ def main():
     if opts.plot:
         pairlist = [chain.xyobjout, chain.xyrefout]
         labels = ["objective", "reference"]
-        pmin = opts.pmin
+        # Plot extent defaults to calculation extent
         pmin = opts.pmin if opts.pmin is not None else opts.rmin
         pmax = opts.pmax if opts.pmax is not None else opts.rmax
         pdfplot.comparePDFs(pairlist, labels, rmin = pmin, rmax = pmax)
