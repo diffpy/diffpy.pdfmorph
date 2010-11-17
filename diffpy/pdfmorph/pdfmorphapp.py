@@ -121,7 +121,8 @@ def main():
     config.setdefault("rmin", None)
     config.setdefault("rmax", None)
     config.setdefault("rstep", None)
-    if config["rmin"] is not None and config["rmax"] <= config["rmin"]:
+    if config["rmin"] is not None and config["rmax"] is not None and \
+            config["rmax"] <= config["rmin"]:
         e = "rmin must be less than rmax"
         parser.error(e)
 
