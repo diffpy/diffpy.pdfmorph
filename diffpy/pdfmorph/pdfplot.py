@@ -16,7 +16,6 @@
 import pylab
 import numpy
 
-
 # FIXME - make this return the figure object in the future, so several views
 # can be composed.
 def plotPDFs(pairlist, labels = [], offset = 'auto', rmin = None, rmax = None):
@@ -47,8 +46,8 @@ def plotPDFs(pairlist, labels = [], offset = 'auto', rmin = None, rmax = None):
     pylab.ioff()
     for idx, pair in enumerate(pairlist):
         r, gr = pair
-        r, gr = truncatePDFs(r, gr, rmin, rmax)
         pylab.plot(r, gr + idx * offset, label = labels[idx])
+    pylab.xlim(rmin, rmax)
 
     if gap == 0:
         pylab.legend(loc = 0)
@@ -78,38 +77,53 @@ def comparePDFs(pairlist, labels = [], rmin = None, rmax = None, show = True):
     """
 
     rfit, grfit = pairlist[0]
-    r2, gr2 = pairlist[1]
+    rdata, grdata = pairlist[1]
     labeldata = labels[1]
     labelfit = labels[0]
     labeldiff = "difference" if len(labels) < 3 else labels[2]
-
-    rdata, grdata = truncatePDFs(r2, gr2, rmin, rmax)
 
     gap = 2 - len(labels)
     labels = list(labels)
     labels.extend([""] * gap)
 
     # Put gr1 on the same grid as rdata
-    grfit = numpy.interp(rdata, rfit, grfit)
+    gtemp = numpy.interp(rdata, rfit, grfit)
 
     # Calculate the difference
-    diff = grdata - grfit
+    diff = grdata - gtemp
 
     miny = min(min(grdata), min(grfit))
     maxy = max(diff)
-    offset = -1.2*(maxy - miny)
+    offset = -1.1*(maxy - miny)
 
-
+    # Make the plot
     pylab.clf()
     pylab.ioff()
-    pylab.plot(rdata, grdata, 'bo', label = labeldata)
-    pylab.plot(rdata, grfit, 'r-', label = labelfit)
-    pylab.plot(rdata, offset*numpy.ones_like(diff), 'k-')
-    pylab.plot(rdata, diff + offset, 'g-', label = labeldiff)
 
-    pylab.xlabel("$r (\AA)$")
-    pylab.ylabel("$G (\AA^{-1})$")
-    pylab.legend()
+    pylab.plot(rdata, grdata, label = labeldata, marker = 'o', markerfacecolor
+            = 'white', markeredgecolor = 'blue', markersize = 6)
+    pylab.plot(rfit, grfit, label = labelfit, linestyle = 'solid', linewidth =
+            2, color = 'red')
+    pylab.plot(rdata, offset*numpy.ones_like(diff), 'k-')
+    diff += offset
+    pylab.plot(rdata, diff, label = labeldiff, linestyle = 'solid',
+            linewidth = 2, color = 'green')
+
+    pylab.xlim(rmin, rmax)
+
+    # Get a tight view
+    ymin = 1.1 * min(diff)
+    ymax = 1.1 * max(max(grdata), max(grfit))
+    pylab.ylim(ymin, ymax)
+    
+    # Make labels and legends
+    pylab.xlabel("$r\,(\AA)$", fontsize='x-large')
+    pylab.ylabel("$G\,(\AA^{-1})$", fontsize='x-large')
+    from matplotlib.font_manager import FontProperties
+    font= FontProperties(size='large');
+    pylab.legend(loc = 0, prop=font)
+
+
     if show: pylab.show()
     return
 
