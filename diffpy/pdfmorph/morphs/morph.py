@@ -206,6 +206,7 @@ class Morph(object):
             raise AttributeError(emsg)
         return rv
 
+
     def __setattr__(self, name, val):
         '''Set configuration variables to config.
 

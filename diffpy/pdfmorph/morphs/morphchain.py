@@ -15,6 +15,8 @@
 """MorphChain -- Chain of morphs executed in order.
 """
 
+from itertools import chain
+
 # module version
 __id__ = "$Id$"
 
@@ -34,7 +36,6 @@ class MorphChain(list):
     Properties:
 
     These return tuples of None if there are no morphs.
-
     xobjin      -- last objective input x data
     yobjin      -- last objective input y data
     xobjout     -- last objective result x data
@@ -49,6 +50,8 @@ class MorphChain(list):
     xyrefout    -- tuple of (xrefout, yrefout) from last morph
     xyallout    -- tuple of (xobjout, yobjout, xrefout, yrefout) from last
                    morph
+
+    parnames    -- Names of parameters collected from morphs (Read only).
 
     '''
 
@@ -79,6 +82,9 @@ class MorphChain(list):
     xyallout = property(
             lambda self: (None, None, None, None) if len(self) == 0 \
                     else self[-1].xyallout)
+    parnames = property(lambda self:
+            set(chain(*(m.parnames for m in self))))
+
 
     def __init__(self, config, *args):
         """Initialize the configuration.
@@ -91,6 +97,7 @@ class MorphChain(list):
         self.config = config
         self.extend(args)
         return
+
 
     def morph(self, xobj, yobj, xref, yref):
         '''Apply the chain of morphs to the input data.
@@ -109,10 +116,12 @@ class MorphChain(list):
             xyall = morph(*xyall)
         return xyall
 
+
     def __call__(self, xobj, yobj, xref, yref):
         '''Alias for morph.
         '''
         return self.morph(xobj, yobj, xref, yref)
+
 
     def __getattr__(self, name):
         '''Obtain the value from self.config, when normal lookup fails.
@@ -128,6 +137,20 @@ class MorphChain(list):
             emsg = 'Object has no attribute %r' % name
             raise AttributeError(emsg)
         return rv
+
+
+    def __setattr__(self, name, val):
+        '''Set configuration variables to config.
+
+        name -- name of the attribute
+        val  -- value of the attribute
+
+        '''
+        if name in self.parnames:
+            self.config[name] = val
+        else:
+            object.__setattr__(self, name, val)
+        return
 
 
 # End class MorphChain
