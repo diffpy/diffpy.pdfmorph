@@ -16,127 +16,122 @@
 """
 
 from scipy.optimize import leastsq, fmin
-from numpy import dot
+from scipy.stats.stats import pearsonr
+from numpy import exp, dot, ones_like, concatenate
 
 # module version
 __id__ = "$Id$"
 
 # Map of scipy minimizer names to the method that uses them
 
-def refine(chain, xobj, yobj, xref, yref, *args, **kw):
-    """Refine a morph or morph chain to match the objective to the reference.
+class Refiner(object):
+    """Class for refining a Morph or MorphChain.
 
+    This is provided to allow for custom residuals and refinement algorithms.
+
+    Attributes:
+
+    chain       --  The Morph or MorphChain to refine
     xobj, yobj  --  Objective arrays.
     xref, yref  --  Reference arrays.
-
-    Additional arguments are used to specify which parameters are to be
-    refined. If no arguments are passed, then all parameters will be refined.
-    Keywords pass initial values to the parameters, whether or not they are
-    refined.
-
-    This uses the leastsq algorithm from scipy.optimize.
-
-    This returns the final scalar residual value. The parameters from the fit
-    can be retrieved from the config dictionary of the morph or morph chain.
-
-    Raises ValueError if a minimum cannot be found.
+    pars        --  List of names of parameters to be refined.
+    residual    --  The residual function to optimize. Default _residual. Can
+                    be assigned to other functions.
 
     """
 
-    pars = args or chain.config.keys()
+    def __init__(self, chain, xobj, yobj, xref, yref):
+        """Initialize the arrays.
 
-    config = chain.config
-    config.update(kw)
+        chain       --  The Morph or MorphChain to refine
+        xobj, yobj  --  Objective arrays.
+        xref, yref  --  Reference arrays.
+        """
+        self.chain = chain
+        self.xobj = xobj
+        self.yobj = yobj
+        self.xref = xref
+        self.yref = yref
+        self.pars = []
+        self.residual = self._residual
+        return
 
-    if not pars:
-        return 0.0
+    def _updateChain(self, pvals):
+        """Update the parameters in the chain."""
+        pairs = zip(self.pars, pvals)
+        self.chain.config.update(pairs)
+        return
 
-    initial = [config[p] for p in pars]
+    def _residual(self, pvals):
+        """Standard vector residual."""
+        self._updateChain(pvals)
+        _xobj, _yobj, _xref, _yref = self.chain(self.xobj, self.yobj,
+                self.xref, self.yref)
+        rvec = _yref - _yobj
+        return rvec
 
-    residual = _makeResidual(chain, pars, xobj, yobj, xref, yref)
-    out = leastsq(residual, initial, full_output = 1)
-    fvec = out[2]["fvec"]
-    if out[4] not in (1,2,3,4):
-        mesg = out[3]
-        raise ValueError(mesg)
+    def _pearson(self, pvals):
+        """Pearson correlation function.
 
-    # Place the fit parameters in config
-    vals = out[0]
-    if not hasattr(vals, "__iter__"):
-        vals = [vals]
-    chain.config.update(zip(pars, vals))
+        This gives e**-p (vector), where p is the pearson correlation function.
+        We seek to minimize this, which occurrs when the correlation is the
+        largest.
+        
+        """
+        self._updateChain(pvals)
+        _xobj, _yobj, _xref, _yref = self.chain(self.xobj, self.yobj,
+                self.xref, self.yref)
+        pcc, pval = pearsonr(_yobj, _yref)
+        return ones_like(_xobj) * exp(-pcc)
 
-    return dot(fvec, fvec)
+    def _addpearson(self, pvals):
+        """Refine both the pearson and residual."""
+        res1 = self._residual(pvals)
+        res2 = self._pearson(pvals)
+        res = concatenate([res1, res2])
+        return res
+
+    def refine(self, *args, **kw):
+        """Refine the chain.
+
+        Additional arguments are used to specify which parameters are to be
+        refined. If no arguments are passed, then all parameters will be
+        refined.  Keywords pass initial values to the parameters, whether or
+        not they are refined.
+
+        This uses the leastsq algorithm from scipy.optimize.
+
+        This returns the final scalar residual value. The parameters from the
+        fit can be retrieved from the config dictionary of the morph or morph
+        chain.
+
+        Raises ValueError if a minimum cannot be found.
+
+        """
+
+        self.pars = args or self.chain.config.keys()
+
+        config = self.chain.config
+        config.update(kw)
+
+        if not self.pars:
+            return 0.0
+
+        initial = [config[p] for p in self.pars]
+        out = leastsq(self.residual, initial, full_output = 1)
+        fvec = out[2]["fvec"]
+        if out[4] not in (1,2,3,4):
+            mesg = out[3]
+            raise ValueError(mesg)
+
+        # Place the fit parameters in config
+        vals = out[0]
+        if not hasattr(vals, "__iter__"):
+            vals = [vals]
+        self.chain.config.update(zip(self.pars, vals))
+
+        return dot(fvec, fvec)
 
 
-def refinefmin(chain, xobj, yobj, xref, yref, *args, **kw):
-    """Refine a morph or morph chain to match the objective to the reference.
 
-    xobj, yobj  --  Objective arrays.
-    xref, yref  --  Reference arrays.
-
-    Additional arguments are used to specify which parameters are to be
-    refined. If no arguments are passed, then all parameters will be refined.
-    Keywords pass initial values to the parameters, whether or not they are
-    refined.
-
-    This uses the fmin algorithm from scipy.optimize.
-
-    This returns the final scalar residual value. The parameters from the fit
-    can be retrieved from the config dictionary of the morph or morph chain.
-
-    Raises ValueError if a minimum cannot be found.
-
-    """
-
-    pars = args or chain.config.keys()
-
-    config = chain.config
-    config.update(kw)
-
-    if not pars:
-        return 0.0
-
-    initial = [config[p] for p in pars]
-
-    residual = _makeScalarResidual(chain, pars, xobj, yobj, xref, yref)
-    out = fmin(residual, initial, full_output = 1, disp = 0)
-
-    # Place the fit parameters in config
-    vals = out[0]
-    if not hasattr(vals, "__iter__"):
-        vals = [vals]
-    chain.config.update(zip(pars, vals))
-
-    fopt = out[1]
-
-    return fopt
-
-
-def _makeResidual(chain, pars, xobj, yobj, xref, yref):
-    """Make a residual function."""
-
-    def residual(pvals):
-        pairs = zip(pars, pvals)
-        chain.config.update(pairs)
-        _xobj, _yobj, _xref, _yref = chain(xobj, yobj, xref, yref)
-        return _yobj - _yref
-
-    return residual
-
-def _makeScalarResidual(chain, pars, xobj, yobj, xref, yref):
-    """Make a scalar residual function."""
-
-    _residual = _makeResidual(chain, pars, xobj, yobj, xref, yref)
-
-    def residual(pvals):
-        res = _residual(pvals)
-        return dot(res, res)
-
-    return residual
-
-minmap = {
-        "leastsq": refine,
-        "fmin": refinefmin,
-        }
-
+# End class Refiner

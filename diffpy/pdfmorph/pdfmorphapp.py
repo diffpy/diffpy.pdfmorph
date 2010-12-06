@@ -58,6 +58,10 @@ appear multiple times.""")
             help="Minimum r-value to plot. Defaults to rmin.")
     parser.add_option('--pmax', type="float",
             help="Maximum r-value to plot. Defaults to rmax.")
+    parser.add_option('--pearson', action="store_true", dest="pearson",
+            help="Maximize agreement in the Pearson function. Note that this is insensitive to scale.")
+    parser.add_option('--addpearson', action="store_true", dest="addpearson",
+            help="Maximize agreement in the Pearson function as well as the residual.")
 
     # Manipulations
     group = optparse.OptionGroup(parser, "Manipulations",
@@ -94,6 +98,8 @@ use a sphere instead.""")
     # Defaults
     parser.set_defaults(plot=True)
     parser.set_defaults(refine=True)
+    parser.set_defaults(pearson=False)
+    parser.set_defaults(addpearson=False)
 
     return parser
 
@@ -178,6 +184,11 @@ def main():
         refpars = list(refpars)
 
     # Refine or execute the morph
+    refiner = refine.Refiner(chain, xobj, yobj, xref, yref)
+    if opts.pearson:
+        refiner.residual = refiner._pearson
+    if opts.addpearson:
+        refiner.residual = refiner._addpearson
     if opts.refine and refpars:
         try:
             # This works better when we adjust scale and smear first.
@@ -185,14 +196,13 @@ def main():
                 rptemp = ["smear"]
                 if "scale" in refpars:
                     rptemp.append("scale")
-                refine.refine(chain, xobj, yobj, xref, yref, *rptemp)
-            refine.refine(chain, xobj, yobj, xref, yref, *refpars)
+                refiner.refine(*rptemp)
+            refiner.refine(*refpars)
         except ValueError, e:
             parser.error(str(e))
     elif "smear" in refpars and opts.baselineslope is None:
         try:
-            refine.refine(chain, xobj, yobj, xref, yref, "baselineslope",
-                    baselineslope = -0.5)
+            refiner.refine("baselineslope", baselineslope = -0.5)
         except ValueError, e:
             parser.error(str(e))
     else:

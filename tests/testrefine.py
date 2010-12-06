@@ -19,7 +19,7 @@ from diffpy.pdfmorph.morphs.morphstretch import MorphStretch
 from diffpy.pdfmorph.morphs.morphsmear import MorphSmear
 from diffpy.pdfmorph.morphs.morphpdftordf import MorphXtalPDFtoRDF
 from diffpy.pdfmorph.morphs.morphrdftopdf import MorphXtalRDFtoPDF
-from diffpy.pdfmorph.refine import refine, refinefmin
+from diffpy.pdfmorph.refine import Refiner
 
 class TestRefine(unittest.TestCase):
 
@@ -39,7 +39,8 @@ class TestRefine(unittest.TestCase):
                 }
 
         mscale = MorphScale(config)
-        res = refine(mscale, self.xobj, self.yobj, self.xref, self.yref)
+        refiner = Refiner(mscale, self.xobj, self.yobj, self.xref, self.yref)
+        res = refiner.refine()
 
         xobj, yobj, xref, yref = mscale.xyallout
 
@@ -65,7 +66,8 @@ class TestRefine(unittest.TestCase):
         mstretch = MorphStretch(config)
         chain = MorphChain(config, mscale, mstretch)
 
-        res = refinefmin(chain, self.xobj, self.yobj, self.xref, self.yref)
+        refiner = Refiner(chain, self.xobj, self.yobj, self.xref, self.yref)
+        res = refiner.refine()
 
         # Compare the objective to the reference. Note that due to
         # interpolation, there will be issues at the boundary of the step
@@ -109,12 +111,12 @@ class TestRefineUC(unittest.TestCase):
         chain.append(MorphSmear())
         chain.append(MorphXtalRDFtoPDF())
 
+        refiner = Refiner(chain, self.xobj, self.yobj, self.xref, self.yref)
+
         # Do this as two-stage fit. First refine amplitude parameters, and then
         # position parameters.
-        res = refine(chain, self.xobj, self.yobj, self.xref, self.yref,
-                "scale", "smear")
-        res = refine(chain, self.xobj, self.yobj, self.xref, self.yref,
-                "scale", "stretch", "smear")
+        res = refiner.refine("scale", "smear")
+        res = refiner.refine("scale", "stretch", "smear")
 
         xobj, yobj, xref, yref = chain.xyallout
         # We want the fit good to 1%. We will disregard the last bit of the

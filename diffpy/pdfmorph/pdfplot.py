@@ -100,31 +100,44 @@ def comparePDFs(pairlist, labels = [], rmin = None, rmax = None, show = True):
     pylab.clf()
     pylab.ioff()
 
+    # Look and feel. 
+    # We use the rc and set it back to default later.
+    # print "\n".join( "%s:%s"%pair for pair in pylab.rcParams.items())
+    pylab.rc("axes", linewidth = 2, labelsize = 'xx-large')
+    pylab.rc("xtick", labelsize = 'x-large')
+    pylab.rc("xtick.major", size = 5)
+    pylab.rc("xtick.minor", size = 2)
+    pylab.rc("ytick", labelsize = 'x-large')
+    pylab.rc("ytick.major", size = 5)
+    pylab.rc("ytick.minor", size = 2)
+    pylab.rc("legend", fontsize='x-large')
+    pylab.rc("lines", markeredgewidth = 1.5) # thicker axes and symbols
+
     pylab.plot(rdata, grdata, label = labeldata, marker = 'o', markerfacecolor
-            = 'white', markeredgecolor = 'blue', markersize = 6)
+            = 'white', markeredgecolor = 'blue', markersize = 7,
+            markeredgewidth = 0.75)
     pylab.plot(rfit, grfit, label = labelfit, linestyle = 'solid', linewidth =
             2, color = 'red')
-    pylab.plot(rdata, offset*numpy.ones_like(diff), 'k-')
+    pylab.plot(rdata, offset*numpy.ones_like(diff), linestyle = '--', linewidth
+            = 1, color = 'black', dashes = (15, 15), aa = False)
     diff += offset
     pylab.plot(rdata, diff, label = labeldiff, linestyle = 'solid',
-            linewidth = 2, color = 'green')
-
-    pylab.xlim(rmin, rmax)
+            linewidth = 1.5, color = 'green')
 
     # Get a tight view
+    pylab.xlim(rmin, rmax)
     ymin = 1.1 * min(diff)
     ymax = 1.1 * max(max(grdata), max(grfit))
     pylab.ylim(ymin, ymax)
-    
-    # Make labels and legends
-    pylab.xlabel("$r\,(\AA)$", fontsize='x-large')
-    pylab.ylabel("$G\,(\AA^{-1})$", fontsize='x-large')
-    from matplotlib.font_manager import FontProperties
-    font= FontProperties(size='large');
-    pylab.legend(loc = 0, prop=font)
 
+    # Make labels and legends
+    pylab.xlabel("r $(\AA)$")
+    pylab.ylabel("G $(\AA^{-1})$")
+    pylab.legend(loc = 0)
 
     if show: pylab.show()
+
+    pylab.rcdefaults()
     return
 
 def truncatePDFs(r, gr, rmin = None, rmax = None):
