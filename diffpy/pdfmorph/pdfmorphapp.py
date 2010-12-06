@@ -178,6 +178,7 @@ def main():
         config.setdefault("vshift", 0)
         chain.append( morphs.MorphShift() )
 
+    print chain.parnames
     # Now remove non-refinable parameters
     if opts.exclude is not None:
         refpars = set(refpars) - set(opts.exclude)

@@ -15,8 +15,6 @@
 """MorphChain -- Chain of morphs executed in order.
 """
 
-from itertools import chain
-
 # module version
 __id__ = "$Id$"
 
@@ -82,8 +80,7 @@ class MorphChain(list):
     xyallout = property(
             lambda self: (None, None, None, None) if len(self) == 0 \
                     else self[-1].xyallout)
-    parnames = property(lambda self:
-            set(chain(*(m.parnames for m in self))))
+    parnames = property(lambda self: set(p for m in self for p in m.parnames))
 
 
     def __init__(self, config, *args):
