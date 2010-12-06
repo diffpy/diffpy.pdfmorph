@@ -210,6 +210,7 @@ def main():
 
     # Get Rw for the morph range
     rw = tools.getRw(chain)
+    pcc = tools.getPearson(chain)
     # Replace the MorphRGrid with Morph identity
     chain[0] = morphs.Morph()
     chain(xobj, yobj, xref, yref)
@@ -218,6 +219,7 @@ def main():
     items.sort()
     output = "\n".join("# %s = %f"%i for i in items)
     output += "\n# Rw = %f" % rw
+    output += "\n# Pearson = %f" % pcc
     print output
     if opts.savefile is not None:
         header = "# PDF created by pdfmorph\n"

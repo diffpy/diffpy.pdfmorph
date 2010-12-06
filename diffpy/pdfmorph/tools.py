@@ -88,6 +88,12 @@ def getRw(chain):
     rw = rw**0.5
     return rw
 
+def getPearson(chain):
+    from scipy.stats.stats import pearsonr
+    xobj, yobj, xref, yref = chain.xyallout
+    pcc, pval = pearsonr(yobj, yref)
+    return pcc
+
 # FIXME - common functionality like this needs to be factored out. Things like
 # this exist in SrFit and PDFgui. We need a common, python-only diffpy package
 # for this sort of stuff.
