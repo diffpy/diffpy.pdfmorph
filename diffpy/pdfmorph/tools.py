@@ -94,9 +94,6 @@ def getPearson(chain):
     pcc, pval = pearsonr(yobj, yref)
     return pcc
 
-# FIXME - common functionality like this needs to be factored out. Things like
-# this exist in SrFit and PDFgui. We need a common, python-only diffpy package
-# for this sort of stuff.
 def readPDF(fname):
     """Reads an .gr file, loads r and G(r) vectors.
 
