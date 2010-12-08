@@ -58,7 +58,7 @@ class MorphSpheroid(Morph):
 
     Configuration variables:
 
-    eradius  --  The equatorial radius of the spheroid
+    radius   --  The equatorial radius of the spheroid
     pradius  --  The polar radius of the spheroid
 
     '''
@@ -69,12 +69,12 @@ class MorphSpheroid(Morph):
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_GR
-    parnames = ["eradius", "pradius"]
+    parnames = ["radius", "pradius"]
 
     def morph(self, xobj, yobj, xref, yref):
         """Apply a scale factor."""
         Morph.morph(self, xobj, yobj, xref, yref)
-        f = _spheroidalCF(xobj, self.eradius, self.pradius)
+        f = _spheroidalCF(xobj, self.radius, self.pradius)
         self.yobjout *= f
         return self.xyallout
 

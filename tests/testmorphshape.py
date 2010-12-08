@@ -51,7 +51,7 @@ class TestMorphSpheroid(unittest.TestCase):
     def test_morph(self):
         """check MorphSphere.morph()
         """
-        config = {"eradius" : 17.5,
+        config = {"radius" : 17.5,
                   "pradius" : 5.0,
                   }
         morph = MorphSpheroid(config)

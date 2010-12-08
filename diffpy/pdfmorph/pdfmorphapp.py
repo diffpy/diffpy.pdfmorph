@@ -40,28 +40,18 @@ def createOptionParser():
     parser.add_option('-V', '--version', action="version",
         help="Show program version and exit.")
     parser.version = __version__
-    parser.add_option('-a', '--apply', action="store_false", dest="refine",
-            help="Apply manipulations but do not refine.")
-    parser.add_option('-x', '--exclude', action="append", dest="exclude",
-            metavar="MANIP",
-            help="""Exclude a manipulation from refinement by name. This can
-appear multiple times.""")
-    parser.add_option('-n', '--noplot', action="store_false", dest="plot",
-            help="Do not show the plot.")
     parser.add_option('-s', '--save', metavar="FILE", dest="savefile",
             help="Save manipulated PDF from FILE1 to FILE.")
     parser.add_option('--rmin', type="float",
             help="Minimum r-value to use for PDF comparisons.")
     parser.add_option('--rmax', type="float",
             help="Maximum r-value to use for PDF comparisons.")
-    parser.add_option('--pmin', type="float",
-            help="Minimum r-value to plot. Defaults to rmin.")
-    parser.add_option('--pmax', type="float",
-            help="Maximum r-value to plot. Defaults to rmax.")
     parser.add_option('--pearson', action="store_true", dest="pearson",
             help="Maximize agreement in the Pearson function. Note that this is insensitive to scale.")
     parser.add_option('--addpearson', action="store_true", dest="addpearson",
-            help="Maximize agreement in the Pearson function as well as the residual.")
+            help="""Maximize agreement in the Pearson function as well as
+minimizing the residual.""")
+
 
     # Manipulations
     group = optparse.OptionGroup(parser, "Manipulations",
@@ -69,6 +59,12 @@ appear multiple times.""")
 the PDF from FILE1. The passed values will be refined unless specifically
 excluded with the -a or -x options.""")
     parser.add_option_group(group)
+    group.add_option('-a', '--apply', action="store_false", dest="refine",
+            help="Apply manipulations but do not refine.")
+    group.add_option('-x', '--exclude', action="append", dest="exclude",
+            metavar="MANIP",
+            help="""Exclude a manipulation from refinement by name. This can
+appear multiple times.""")
     group.add_option('--scale', type="float", metavar="SCALE",
             help="Apply scale factor SCALE.")
     group.add_option('--smear', type="float", metavar="SMEAR",
@@ -79,27 +75,37 @@ excluded with the -a or -x options.""")
             help="""Slope of the baseline. This is used when applying the smear
 factor. It will be estimated if not provided.""")
     group.add_option('--qdamp', type="float", metavar="QDAMP",
-            help="Dampen PDF by a factor QDAMP.")
+            help="Dampen PDF by a factor QDAMP. (See PDFGui manual.)")
     group.add_option('--radius', type="float", metavar="RADIUS",
-            help="Apply characteristic function of sphere with radius RADIUS.")
-    group.add_option('--eradius', type="float", metavar="ERADIUS",
-            help="""Apply characteristic function of spheroid with equatorial
-radius ERADIUS and polar radius PRADIUS. If only one of these is given, then
-use a sphere instead.""")
+            help="""Apply characteristic function of sphere with radius RADIUS.
+If PRADIUS is also specified, instead apply characteristic function of spheroid with equatorial radius RADIUS and polar radius PRADIUS.""")
     group.add_option('--pradius', type="float", metavar="PRADIUS",
             help="""Apply characteristic function of spheroid with equatorial
-radius ERADIUS and polar radius PRADIUS. If only one of these is given, then
-use a sphere instead.""")
-    group.add_option('--vshift', type="float", metavar="VSHIFT",
-            help="Shift the objective vertically by VSHIFT.")
-    group.add_option('--hshift', type="float", metavar="HSHIFT",
-            help="Shift the objective horizontally by HSHIFT.")
+radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead apply characteristic function of sphere with radius PRADIUS.""")
+    
+
+    # Plot Options
+    group = optparse.OptionGroup(parser, "Plot Options",
+            """These options control plotting.""")
+    parser.add_option_group(group)
+    group.add_option('-n', '--noplot', action="store_false", dest="plot",
+            help="Do not show the plot.")
+    group.add_option('--pmin', type="float",
+            help="Minimum r-value to plot. Defaults to RMIN.")
+    group.add_option('--pmax', type="float",
+            help="Maximum r-value to plot. Defaults to RMAX.")
+    group.add_option('--maglim', type="float",
+            help="Magnify plot curves beyond MAGLIM by MAG.")
+    group.add_option('--mag', type="float",
+            help="Magnify plot curves beyond MAGLIM by MAG.")
+
 
     # Defaults
     parser.set_defaults(plot=True)
     parser.set_defaults(refine=True)
     parser.set_defaults(pearson=False)
     parser.set_defaults(addpearson=False)
+    parser.set_defaults(mag=5)
 
     return parser
 
@@ -115,20 +121,12 @@ def main():
     xref, yref = getPDFFromFile(pargs[1])
 
     # Get configuration values
-    pars = []
-    for klass in morphs.morphs:
-        pars.extend(klass.parnames)
-    pars = set(pars)
-    keys = [p for p in pars if hasattr(opts, p)]
-    vals = [getattr(opts, k) for k in keys]
-    items = [(k, v) for k, v in zip(keys, vals) if v is not None]
-    config = dict(items)
-    # We'll need these as well
+    config = {}
     config.setdefault("rmin", None)
     config.setdefault("rmax", None)
     config.setdefault("rstep", None)
-    if config["rmin"] is not None and config["rmax"] is not None and \
-            config["rmax"] <= config["rmin"]:
+    if opts.rmin is not None and opts.rmax is not None and \
+            opts.rmax <= opts.rmin:
         e = "rmin must be less than rmax"
         parser.error(e)
 
@@ -137,46 +135,47 @@ def main():
     # Add the r-range morph, we will remove it when saving and plotting
     chain.append( morphs.MorphRGrid() )
     refpars = []
-    if "scale" in config:
+
+    ## Scale
+    if opts.scale is not None:
         chain.append( morphs.MorphScale() )
+        config["scale"] = opts.scale
         refpars.append("scale")
-    if "stretch" in config:
+    ## Stretch
+    if opts.stretch is not None:
         chain.append( morphs.MorphStretch() )
+        config["stretch"] = opts.stretch
         refpars.append("stretch")
-    if "smear" in config:
+    ## Smear
+    if opts.smear is not None:
         chain.append( morphs.MorphXtalPDFtoRDF() )
         chain.append( morphs.MorphSmear() )
         chain.append( morphs.MorphXtalRDFtoPDF() )
         refpars.append("smear")
-        refpars.append("baselineslope")
-        config.setdefault("baselineslope", -0.5)
-    # We need exactly one of "radius", "eradius" or "pradius"
-    radii = [config.get("eradius"), config.get("pradius")]
-    rad = None
-    if "radius" in config:
-        rad = config["radius"]
-    elif radii.count(None) == 1:
+        config["smear"] = opts.smear
+        config["baselineslope"] = opts.baselineslope
+        if opts.baselineslope is None:
+            refpars.append("baselineslope")
+            config["baselineslope"] = -0.5
+    ## Size
+    radii = [opts.radius, opts.pradius]
+    nrad = 2 - radii.count(None)
+    if nrad == 1:
         radii.remove(None)
-        rad = radii[0]
-    if rad is not None:
-        config["radius"] = rad
+        config["radius"] = radii[0]
         chain.append( morphs.MorphSphere() )
         refpars.append("radius")
-    elif radii.count(None) == 0:
-        chain.append( morphs.MorphSpheroid() )
-        refpars.append("eradius")
+    elif nrad == 2:
+        config["radius"] = radii[0]
+        refpars.append("radius")
+        config["pradius"] = radii[0]
         refpars.append("pradius")
-    if "qdamp" in config:
+        chain.append( morphs.MorphSpheroid() )
+    ## Resolution
+    if opts.qdamp is not None:
         chain.append( morphs.MorphResolutionDamping() )
         refpars.append("qdamp")
-    if "vshift" in config or "hshift" in config:
-        if "vshift" in config:
-            refpars.append("vshift")
-        if "hshift" in config:
-            refpars.append("hshift")
-        config.setdefault("hshift", 0)
-        config.setdefault("vshift", 0)
-        chain.append( morphs.MorphShift() )
+        config["qdamp"] = opts.qdamp
 
     # Now remove non-refinable parameters
     if opts.exclude is not None:
@@ -241,7 +240,10 @@ def main():
         # Plot extent defaults to calculation extent
         pmin = opts.pmin if opts.pmin is not None else opts.rmin
         pmax = opts.pmax if opts.pmax is not None else opts.rmax
-        pdfplot.comparePDFs(pairlist, labels, rmin = pmin, rmax = pmax)
+        maglim = opts.maglim
+        mag = opts.mag
+        pdfplot.comparePDFs(pairlist, labels, rmin = pmin, rmax = pmax, maglim
+                = maglim, mag = mag)
 
     return
 
