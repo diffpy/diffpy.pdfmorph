@@ -59,7 +59,7 @@ def plotPDFs(pairlist, labels = [], offset = 'auto', rmin = None, rmax = None):
     return
 
 def comparePDFs(pairlist, labels = [], rmin = None, rmax = None, show = True,
-        maglim = None, mag = 5):
+        maglim = None, mag = 5, rw = None, legend = True):
     """Plot two PDFs on top of each other and difference curve.
 
     pairlist    --  iterable of (r, gr) pairs to plot
@@ -74,6 +74,8 @@ def comparePDFs(pairlist, labels = [], rmin = None, rmax = None, show = True,
     maglim      --  Point after which to magnify the signal by mag. If None
                     (default), no magnification will take place.
     mag         --  Magnification factor (default 5)
+    rw          --  Rw value to display on the plot, if any.
+    legend      --  Display the legend (default True).
 
     The second PDF will be shown as blue circles below and the first as a red
     line.  The difference curve will be in green and offset for clarity.
@@ -101,8 +103,9 @@ def comparePDFs(pairlist, labels = [], rmin = None, rmax = None, show = True,
     diff = grdat - gtemp
 
     # Put rw in the label
-    rw = (sum(diff**2) / sum(grdat**2))**0.5
-    labeldiff = "difference (Rw = %.2f)"%rw if len(labels) < 3 else labels[2]
+    labeldiff = "difference" if len(labels) < 3 else labels[2]
+    if rw is not None:
+        labeldiff += " (Rw = %.3f)"%rw
 
     # Magnify if necessary
     if maglim is not None:
@@ -176,8 +179,9 @@ def comparePDFs(pairlist, labels = [], rmin = None, rmax = None, show = True,
     pylab.xlabel("r $(\AA)$")
     pylab.ylabel("G $(\AA^{-1})$")
     #pylab.legend(loc = 0)
-    pylab.legend(bbox_to_anchor=(0.005, 1.02, 0.99, .10), loc=3,
-            ncol=3, mode="expand", borderaxespad=0)
+    if legend:
+        pylab.legend(bbox_to_anchor=(0.005, 1.02, 0.99, .10), loc=3,
+                ncol=3, mode="expand", borderaxespad=0)
     if show: pylab.show()
 
     return

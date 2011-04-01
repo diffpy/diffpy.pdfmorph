@@ -82,7 +82,10 @@ If PRADIUS is also specified, instead apply characteristic function of spheroid 
     group.add_option('--pradius', type="float", metavar="PRADIUS",
             help="""Apply characteristic function of spheroid with equatorial
 radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead apply characteristic function of sphere with radius PRADIUS.""")
-    
+    group.add_option('--iradius', type="float", metavar="IRADIUS",
+            help="""Apply inverse characteristic function of sphere with radius IRADIUS.  If IPRADIUS is also specified, instead apply inverse characteristic function of spheroid with equatorial radius IRADIUS and polar radius IPRADIUS.""")
+    group.add_option('--ipradius', type="float", metavar="IPRADIUS",
+            help="""Apply inverse characteristic function of spheroid with equatorial radius IRADIUS and polar radius IPRADIUS. If only IPRADIUS is specified, instead apply inverse characteristic function of sphere with radius IPRADIUS.""")
 
     # Plot Options
     group = optparse.OptionGroup(parser, "Plot Options",
@@ -122,9 +125,9 @@ def main():
 
     # Get configuration values
     config = {}
-    config.setdefault("rmin", None)
-    config.setdefault("rmax", None)
-    config.setdefault("rstep", None)
+    config["rmin"] = opts.rmin
+    config["rmax"] = opts.rmax
+    config["rstep"] = None
     if opts.rmin is not None and opts.rmax is not None and \
             opts.rmax <= opts.rmin:
         e = "rmin must be less than rmax"
@@ -168,9 +171,23 @@ def main():
     elif nrad == 2:
         config["radius"] = radii[0]
         refpars.append("radius")
-        config["pradius"] = radii[0]
+        config["pradius"] = radii[1]
         refpars.append("pradius")
         chain.append( morphs.MorphSpheroid() )
+    iradii = [opts.iradius, opts.ipradius]
+    inrad = 2 - iradii.count(None)
+    if inrad == 1:
+        iradii.remove(None)
+        config["iradius"] = iradii[0]
+        chain.append( morphs.MorphISphere() )
+        refpars.append("iradius")
+    elif inrad == 2:
+        config["iradius"] = iradii[0]
+        refpars.append("iradius")
+        config["ipradius"] = iradii[1]
+        refpars.append("ipradius")
+        chain.append( morphs.MorphISpheroid() )
+
     ## Resolution
     if opts.qdamp is not None:
         chain.append( morphs.MorphResolutionDamping() )
@@ -243,7 +260,7 @@ def main():
         maglim = opts.maglim
         mag = opts.mag
         pdfplot.comparePDFs(pairlist, labels, rmin = pmin, rmax = pmax, maglim
-                = maglim, mag = mag)
+                = maglim, mag = mag, rw = rw)
 
     return
 

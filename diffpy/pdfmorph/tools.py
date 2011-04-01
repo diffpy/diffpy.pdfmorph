@@ -102,7 +102,7 @@ def readPDF(fname):
     Returns r and gr arrays.
 
     """
-    from diffpy.util import loadData
+    from diffpy.utils.parsers import loadData
 
     rv = loadData(fname)
     if len(rv) >= 2:

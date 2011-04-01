@@ -19,9 +19,7 @@
 # module version
 __id__ = "$Id$"
 
-
 from diffpy.pdfmorph.morphs.morph import *
-
 
 class MorphXtalPDFtoRDF(Morph):
     '''Morph crystal PDFs to RDFs.

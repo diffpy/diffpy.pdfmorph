@@ -20,7 +20,6 @@
 __id__ = "$Id$"
 
 
-import numpy
 from diffpy.pdfmorph.morphs.morph import *
 
 

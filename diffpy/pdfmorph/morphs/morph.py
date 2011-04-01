@@ -204,7 +204,7 @@ class Morph(object):
         else:
             emsg = 'Object has no attribute %r' % name
             raise AttributeError(emsg)
-        return rv
+        return
 
 
     def __setattr__(self, name, val):

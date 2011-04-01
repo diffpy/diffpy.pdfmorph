@@ -21,7 +21,7 @@ class MorphSpheroid -- apply a spheroidal shape function to the objective
 __id__ = "$Id$"
 
 import numpy
-from numpy import pi, sqrt, log, exp, log2, ceil, sign
+from numpy import sqrt
 from numpy import arctan as atan
 from numpy import arctanh as atanh
 
@@ -78,7 +78,7 @@ class MorphSpheroid(Morph):
         self.yobjout *= f
         return self.xyallout
 
-# End of class MorphScale
+# End of class MorphSpheroid
 
 def _sphericalCF(r, psize):
     """Spherical nanoparticle characteristic function.
