@@ -8,7 +8,6 @@ Packages:   diffpy.pdfmorph
 """
 
 from setuptools import setup, find_packages
-import fix_setuptools_chmod
 
 # define distribution
 setup(
@@ -24,15 +23,18 @@ setup(
         },
         test_suite = 'tests',
         install_requires = [
-            'diffpy.util',
+            'diffpy.utils>=1.0-r6337',
         ],
+        dependency_links = [
+            'http://www.diffpy.org/packages/',
+            ],
         author = 'Simon J.L. Billinge',
         author_email = 'sb2896@columbia.edu',
         maintainer = 'Chris Farrow',
         maintainer_email = 'clf2121@columbia.edu',
         url = 'http://www.diffpy.org/',
         download_url = 'http://www.diffpy.org/packages/',
-        description = "Tools for manipulating and comparing PDF data.",
+        description = "Tools for manipulating and comparing PDF profiles.",
         license = 'BSD',
         keywords = "diffpy PDF",
 )
