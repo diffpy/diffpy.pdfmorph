@@ -104,7 +104,7 @@ def readPDF(fname):
     """
     from diffpy.utils.parsers import loadData
 
-    rv = loadData(fname)
+    rv = loadData(fname, unpack=True)
     if len(rv) >= 2:
         return rv[:2]
     return (None, None)
