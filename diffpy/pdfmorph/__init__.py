@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 ##############################################################################
 #
 # pdfmorph          by DANSE Diffraction group
