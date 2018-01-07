@@ -1,0 +1,12 @@
+======================================
+Installing PDFmorph
+======================================
+
+From the command line type ::
+
+  python setup.py install
+
+For more installation options ::
+
+  python setup.py --help
+
