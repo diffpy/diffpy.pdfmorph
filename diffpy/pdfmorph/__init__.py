@@ -19,6 +19,6 @@
 __id__ = "$Id: __init__.py 1613 2012-03-14 18:56:22Z juhas $"
 
 # obtain version information
-from diffpy.pdfmorph.version import __version__
+__version__ = '1.0'
 
 # End of file
