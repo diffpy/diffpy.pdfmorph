@@ -89,12 +89,14 @@ class Morph(object):
             (self.xobjout, self.yobjout, self.xrefout, self.yrefout), 
             doc='Return a tuple of all output arrays')
 
-    def __init__(self, config = {}):
+    def __init__(self, config=None):
         '''Create a default Morph instance.
 
         config  -- dictionary that contains all configuration variables
         '''
         # declare empty attributes
+        if config is None:
+            config = {}
         self.xobjin = None
         self.yobjin = None
         self.xobjout = None
