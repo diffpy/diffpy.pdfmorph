@@ -55,7 +55,7 @@ class MorphSmear(Morph):
         # later.
         r = self.xobjin
         rr = self.yobjin
-        r0 = r[len(r) / 2]
+        r0 = r[len(r) // 2]
         gaussian = numpy.exp(-0.5 * ((r - r0)/self.smear)**2 ) 
 
         # Get the full convolution
