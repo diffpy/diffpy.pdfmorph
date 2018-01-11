@@ -31,7 +31,7 @@ class TestTools(unittest.TestCase):
         """
         slope = tools.estimateBaselineSlope(self.xobj, self.yobj)
         slopecalc = -4 * numpy.pi * self.rho0
-        self.assertAlmostEqual(slopecalc, slope, 2)
+        self.assertTrue(numpy.allclose(slopecalc, slope, 2))
         return
 
     def test_estimateScale(self):
