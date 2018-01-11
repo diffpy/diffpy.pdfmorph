@@ -19,7 +19,7 @@ import numpy
 
 # FIXME - make this return the figure object in the future, so several views
 # can be composed.
-def plotPDFs(pairlist, labels = [], offset = 'auto', rmin = None, rmax = None):
+def plotPDFs(pairlist, labels=None, offset ='auto', rmin = None, rmax = None):
     """Plots several PDFs on top of one another.
 
     pairlist    --  iterable of (r, gr) pairs to plot
@@ -36,6 +36,8 @@ def plotPDFs(pairlist, labels = [], offset = 'auto', rmin = None, rmax = None):
                     upper bound of the PDF is not altered.
 
     """
+    if labels is None:
+        labels = []
     if offset is 'auto':
         offset = _findOffset(pairlist)
 
@@ -59,8 +61,8 @@ def plotPDFs(pairlist, labels = [], offset = 'auto', rmin = None, rmax = None):
     pylab.show()
     return
 
-def comparePDFs(pairlist, labels = [], rmin = None, rmax = None, show = True,
-        maglim = None, mag = 5, rw = None, legend = True):
+def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
+                maglim = None, mag = 5, rw = None, legend = True):
     """Plot two PDFs on top of each other and difference curve.
 
     pairlist    --  iterable of (r, gr) pairs to plot
@@ -82,6 +84,8 @@ def comparePDFs(pairlist, labels = [], rmin = None, rmax = None, show = True,
     line.  The difference curve will be in green and offset for clarity.
     
     """
+    if labels is None:
+        labels = []
     rfit, grfit = pairlist[0]
     rdat, grdat = pairlist[1]
     labeldata = labels[1]
