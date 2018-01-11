@@ -231,7 +231,7 @@ def main():
     chain[0] = morphs.Morph()
     chain(xobj, yobj, xref, yref)
 
-    items = config.items()
+    items = list(config.items())
     items.sort()
     output = "\n".join("# %s = %f"%i for i in items)
     output += "\n# Rw = %f" % rw
@@ -245,7 +245,7 @@ def main():
         if opts.savefile == "-":
             outfile = sys.stdout
         else:
-            outfile = file(opts.savefile, 'w')
+            outfile = open(opts.savefile, 'w')
         print(header, file=outfile)
         import numpy
         numpy.savetxt(outfile, zip(chain.xobjout, chain.yobjout))
