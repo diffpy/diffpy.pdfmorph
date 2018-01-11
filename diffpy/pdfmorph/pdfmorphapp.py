@@ -214,12 +214,12 @@ def main():
                     rptemp.append("scale")
                 refiner.refine(*rptemp)
             refiner.refine(*refpars)
-        except ValueError, e:
+        except ValueError as e:
             parser.error(str(e))
     elif "smear" in refpars and opts.baselineslope is None:
         try:
             refiner.refine("baselineslope", baselineslope = -0.5)
-        except ValueError, e:
+        except ValueError as e:
             parser.error(str(e))
     else:
         chain(xobj, yobj, xref, yref)
@@ -236,7 +236,7 @@ def main():
     output = "\n".join("# %s = %f"%i for i in items)
     output += "\n# Rw = %f" % rw
     output += "\n# Pearson = %f" % pcc
-    print output
+    print(output)
     if opts.savefile is not None:
         header = "# PDF created by pdfmorph\n"
         header += "# from %s\n" % os.path.abspath(pargs[0])
@@ -246,7 +246,7 @@ def main():
             outfile = sys.stdout
         else:
             outfile = file(opts.savefile, 'w')
-        print >> outfile, header
+        print(header, file=outfile)
         import numpy
         numpy.savetxt(outfile, zip(chain.xobjout, chain.yobjout))
         outfile.close()
@@ -269,11 +269,11 @@ def getPDFFromFile(fn):
     from diffpy.pdfmorph.tools import readPDF
     try:
         r, gr = readPDF(fn)
-    except IOError, (errno, errmsg):
-        print >> sys.stderr, "%s: %s" % (fn, errmsg)
+    except IOError as (errno, errmsg):
+        print("%s: %s" % (fn, errmsg), file=sys.stderr)
         sys.exit(1)
-    except ValueError, errmsg:
-        print >> sys.stderr, "Cannot read %s" % fn
+    except ValueError as errmsg:
+        print("Cannot read %s" % fn, file=sys.stderr)
         sys.exit(1)
 
     return r, gr
