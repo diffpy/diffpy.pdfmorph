@@ -22,9 +22,7 @@ setup(
             ],
         },
         test_suite = 'tests',
-        install_requires = [
-            'diffpy.utils>=1.0-r6337',
-        ],
+        install_requires = [],
         dependency_links = [
             'http://www.diffpy.org/packages/',
             ],
