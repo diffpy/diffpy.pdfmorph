@@ -237,6 +237,7 @@ def main():
     output += "\n# Rw = %f" % rw
     output += "\n# Pearson = %f" % pcc
     print(output)
+    print(config, refpars)
     if opts.savefile is not None:
         header = "# PDF created by pdfmorph\n"
         header += "# from %s\n" % os.path.abspath(pargs[0])
@@ -269,7 +270,7 @@ def getPDFFromFile(fn):
     from diffpy.pdfmorph.tools import readPDF
     try:
         r, gr = readPDF(fn)
-    except IOError as (errno, errmsg):
+    except IOError as errmsg:
         print("%s: %s" % (fn, errmsg), file=sys.stderr)
         sys.exit(1)
     except ValueError as errmsg:
