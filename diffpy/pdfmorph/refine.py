@@ -16,7 +16,7 @@
 """refine -- Refine a morph or morph chain
 """
 
-from scipy.optimize import leastsq
+from scipy.optimize import leastsq, least_squares
 from scipy.stats.stats import pearsonr
 from numpy import exp, dot, ones_like, concatenate
 
@@ -120,14 +120,16 @@ class Refiner(object):
 
         initial = [config[p] for p in self.pars]
         print(args, kw, initial)
-        out = leastsq(self.residual, initial, full_output = 1)
-        fvec = out[2]["fvec"]
-        if out[4] not in (1,2,3,4):
-            mesg = out[3]
-            raise ValueError(mesg)
+        opt = least_squares(self.residual, initial, verbose=1)
+        #out = leastsq(self.residual, initial, full_output = 1)
+        #fvec = out[2]["fvec"]
+        fvec = opt.fun
+        #if out[4] not in (1,2,3,4):
+        #    mesg = out[3]
+        #    raise ValueError(mesg)
 
         # Place the fit parameters in config
-        vals = out[0]
+        vals = opt.x
         if not hasattr(vals, "__iter__"):
             vals = [vals]
         self.chain.config.update(zip(self.pars, vals))
