@@ -48,7 +48,7 @@ class MorphSmear(Morph):
         """Resample arrays onto specified grid."""
         Morph.morph(self, xobj, yobj, xref, yref)
 
-        if self.smear == 0: 
+        if self.smear == 0:
             return self.xyallout
 
         # The Gaussian to convolute with. No need to normalize, we'll do that
@@ -56,7 +56,7 @@ class MorphSmear(Morph):
         r = self.xobjin
         rr = self.yobjin
         r0 = r[len(r) // 2]
-        gaussian = numpy.exp(-0.5 * ((r - r0)/self.smear)**2 ) 
+        gaussian = numpy.exp(-0.5 * ((r - r0)/self.smear)**2 )
 
         # Get the full convolution
         c = numpy.convolve(rr, gaussian, mode="full")
