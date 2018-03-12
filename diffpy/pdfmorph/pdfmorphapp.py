@@ -17,7 +17,7 @@ import sys
 import os
 import os.path
 
-
+import numpy
 from diffpy.pdfmorph import __version__
 import diffpy.pdfmorph.tools as tools
 import diffpy.pdfmorph.pdfplot as pdfplot
@@ -247,8 +247,8 @@ def main():
         else:
             outfile = open(opts.savefile, 'w')
         print(header, file=outfile)
-        import numpy
-        numpy.savetxt(outfile, zip(chain.xobjout, chain.yobjout))
+        numpy.savetxt(outfile, numpy.transpose([chain.xobjout,
+                                                chain.yobjout]))
         outfile.close()
 
     if opts.plot:
