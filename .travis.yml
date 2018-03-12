@@ -17,7 +17,7 @@ before_install:
   - chmod +x miniconda.sh
   - ./miniconda.sh -b -p ~/mc
   - export PATH=~/mc/bin:$PATH
-  - conda config --add channels diffpy/channel/dev conda-forge 
+  - conda config --add channels conda-forge
   - conda config --set always_yes yes --set changeps1 no --set quiet true
   - conda update conda --yes
 
