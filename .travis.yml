@@ -15,9 +15,10 @@ before_install:
   - chmod +x miniconda.sh
   - ./miniconda.sh -b -p ~/mc
   - export PATH=~/mc/bin:$PATH
+  - conda config --add channels conda-forge
   - conda config --set always_yes yes --set changeps1 no --set quiet true
   - conda update conda --yes
-  - conda config --add channels conda-forge
+
 
 
 install:
@@ -43,6 +44,6 @@ script:
   - cd ..
   - doctr deploy . --built-docs ./docs/_build/html;
 
-after-script:
+after_script:
   - set +e
   - flake8 diffpy
