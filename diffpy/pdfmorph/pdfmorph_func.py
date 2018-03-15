@@ -16,7 +16,7 @@ morph_step_dict = dict(scale=morphs.MorphScale,
                               morphs.MorphXtalRDFtoPDF],
                        qdamp=morphs.MorphResolutionDamping)
 
-def pdfmorph(xobj, yobj, xref, yref, morph_config=morph_config,
+def pdfmorph(xref, yref, xobj, yobj, morph_config=default_config,
              rmin=None, rmax=None, pearson=False, addpearson=False,
              fixed_operations=None, refine=True):
     """function to perfom PDF morphing.
@@ -45,13 +45,11 @@ def pdfmorph(xobj, yobj, xref, yref, morph_config=morph_config,
     operation_dict = {}
     refpars = []
     rv_cfg = dict(morph_config)
-    # configure r-range
-    if not rmin:
-        rmin = min(xobj.min(), xref.min())
-        rv_cfg['rmin'] = rmin
-    if not rmax:
-        rmax = max(xobj.max(), xref.max())
-        rv_cfg['rmax'] = rmax
+    # morph operations
+    active_morphs = [k for k, v in rv_cfg.items() if (v is not None) and k in
+                     morph_step_dict]
+    rv_cfg['rmin'] = rmin
+    rv_cfg['rmax'] = rmax
     rv_cfg['rstep'] = None
     # configure smear
     if rv_cfg.get('smear') and not rv_cfg.get('baselineslope'):
@@ -63,9 +61,7 @@ def pdfmorph(xobj, yobj, xref, yref, morph_config=morph_config,
     # rgrid
     chain.append(morphs.MorphRGrid())
 
-    # morph operations
-    active_morphs = [k for k, v in rv_cfg.items() if (v is not None) and k in
-                     morph_step_dict]
+    # configure
     for k in active_morphs:
         morph_cls = morph_step_dict[k]
         if k == 'smear':
@@ -77,9 +73,11 @@ def pdfmorph(xobj, yobj, xref, yref, morph_config=morph_config,
 
     # exclude fixed options
     if fixed_operations:
+        if not isinstance(fixed_operations, Iterable):
+            fixed_operations = [fixed_operations]
         for opt in fixed_operations:
             refpars.remove(opt)
-        print("== INFO: Following morphing steps are fixed:\n{}\n =="
+        print("== INFO: Following morphing steps are fixed ==:\n{}\n"
               .format('\n'.join(fixed_operations)))
 
     # define refiner
@@ -108,26 +106,28 @@ def pdfmorph(xobj, yobj, xref, yref, morph_config=morph_config,
     # restore rgrid
     chain[0] = morphs.Morph()
     chain(xobj, yobj, xref, yref)
-
-    output = "\n".join(["# {} = {:.3f}".format(k, rv_cfg[k])\
-            for k in active_morphs])
-    output += "\n# Rw = {:.3f}".format(rw)
-    output += "\n# Pearson = {:.3f}".format(pcc)
+    # print output
+    output = "\n".join(["# {} = {:.6f}".format(k, v) for k, v in \
+            rv_cfg.items() if v is not None])
+    output += "\n# Rw = {:.6f}".format(rw)
+    output += "\n# Pearson = {:.6f}".format(pcc)
     print(output)
 
     return chain, rv_cfg, rw, pcc
 
 
 def plot_morph(chain, fig=None, **kwargs):
-    x, y = chain.xyrefout
-    xx, yy = chain.xyobjout
+    rfit, grfit = chain.xyobjout
+    rdat, grdat = chain.xyrefout
     if not fig:
         fig, ax = plt.subplots(**kwargs)
     else:
         ax = fig.axes[0]
-
-    ax.plot(x, y, label='reference')
-    ax.plot(xx, yy, label='objective')
+    ax.plot(rfit, grfit, label='objective')
+    ax.plot(rdat, grdat, label='reference')
+    ax.set_xlim([chain.config['rmin'], chain.config['rmax']])
     ax.legend()
+    ax.set_xlabel(r'r ($\mathrm{\AA}$)')
+    ax.set_ylabel(r'G ($\mathrm{\AA}^{-2}$)')
 
     return fig
