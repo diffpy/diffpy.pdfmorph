@@ -237,7 +237,6 @@ def main():
     output += "\n# Rw = %f" % rw
     output += "\n# Pearson = %f" % pcc
     print(output)
-    print(config, refpars)
     if opts.savefile is not None:
         header = "# PDF created by pdfmorph\n"
         header += "# from %s\n" % os.path.abspath(pargs[0])
