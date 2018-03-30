@@ -18,7 +18,7 @@ morph_step_dict = dict(scale=morphs.MorphScale,
 
 def pdfmorph(xref, yref, xobj, yobj, morph_config=default_config,
              rmin=None, rmax=None, pearson=False, addpearson=False,
-             fixed_operations=None, refine=True):
+             fixed_operations=None, refine=True, verbose=True):
     """function to perfom PDF morphing.
 
     Parameters
@@ -107,11 +107,12 @@ def pdfmorph(xref, yref, xobj, yobj, morph_config=default_config,
     chain[0] = morphs.Morph()
     chain(xobj, yobj, xref, yref)
     # print output
-    output = "\n".join(["# {} = {:.6f}".format(k, v) for k, v in \
-            rv_cfg.items() if v is not None])
-    output += "\n# Rw = {:.6f}".format(rw)
-    output += "\n# Pearson = {:.6f}".format(pcc)
-    print(output)
+    if verbose:
+        output = "\n".join(["# {} = {:.6f}".format(k, v) for k, v in \
+                rv_cfg.items() if v is not None])
+        output += "\n# Rw = {:.6f}".format(rw)
+        output += "\n# Pearson = {:.6f}".format(pcc)
+        print(output)
 
     return chain, rv_cfg, rw, pcc
 
