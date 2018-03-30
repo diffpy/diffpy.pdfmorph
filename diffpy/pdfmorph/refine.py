@@ -119,6 +119,7 @@ class Refiner(object):
             return 0.0
 
         initial = [config[p] for p in self.pars]
+        print('IN REFINER')
         print(args, kw, initial)
         out = leastsq(self.residual, initial, full_output = 1)
         fvec = out[2]["fvec"]
