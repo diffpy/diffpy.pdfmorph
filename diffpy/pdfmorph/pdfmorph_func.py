@@ -16,7 +16,7 @@ morph_step_dict = dict(scale=morphs.MorphScale,
                               morphs.MorphXtalRDFtoPDF],
                        qdamp=morphs.MorphResolutionDamping)
 
-def pdfmorph(xref, yref, xobj, yobj, morph_config=default_config,
+def pdfmorph(xobj, yobj, xref, yref, morph_config=default_config,
              rmin=None, rmax=None, pearson=False, addpearson=False,
              fixed_operations=None, refine=True, verbose=True):
     """function to perfom PDF morphing.
