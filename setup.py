@@ -13,7 +13,6 @@ from setuptools import setup, find_packages
 setup(
     name="diffpy.pdfmorph",
     version='0.0.1',
-    namespace_packages=['diffpy'],
     packages=find_packages(exclude=['tests', 'applications']),
     entry_points={
         # define console_scripts here, see setuptools docs for details.
@@ -23,9 +22,6 @@ setup(
     },
     test_suite='tests',
     install_requires=[],
-    dependency_links=[
-        'http://www.diffpy.org/packages/',
-    ],
     author='Simon J.L. Billinge',
     author_email='sb2896@columbia.edu',
     maintainer='Chris Farrow',
