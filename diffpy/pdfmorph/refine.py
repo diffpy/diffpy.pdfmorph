@@ -77,7 +77,6 @@ class Refiner(object):
         This gives e**-p (vector), where p is the pearson correlation function.
         We seek to minimize this, which occurrs when the correlation is the
         largest.
-        
         """
         self._updateChain(pvals)
         _xobj, _yobj, _xref, _yref = self.chain(self.xobj, self.yobj,
@@ -119,8 +118,6 @@ class Refiner(object):
             return 0.0
 
         initial = [config[p] for p in self.pars]
-        print('IN REFINER')
-        print(args, kw, initial)
         out = leastsq(self.residual, initial, full_output = 1)
         fvec = out[2]["fvec"]
         if out[4] not in (1,2,3,4):
