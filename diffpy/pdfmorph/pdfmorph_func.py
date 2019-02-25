@@ -5,7 +5,8 @@ from diffpy.pdfmorph import tools
 
 import matplotlib.pyplot as plt
 
-default_config = dict(scale=None, stretch=None, smear=None, qdamp=None)
+default_config = dict(scale=None, stretch=None, smear=None,
+                      baselineslope=None, qdamp=None)
 
 # map of operation dict
 # TODO: include morphing on psize
@@ -23,12 +24,46 @@ def pdfmorph(xobj, yobj, xref, yref, morph_config=default_config,
 
     Parameters
     ----------
-    morph_config : dict
+    xobj : ndarray
+        An array of objective x values, i.e., those will be manipulated by
+        morphing.
+    yobj : ndarray
+        An array of objective y values, i.e., those will be manipulated by
+        morphing.
+    xref : ndarray
+        An array of reference x values, i.e., those will be kept constant by
+        morphing.
+    yobj : ndarray
+        An array of reference y values, i.e., those will be kept constant by
+        morphing.
+    morph_config : dict, optional
+        A dictionary with morph parameters as keys and initial
+        values as values. Currently support:
 
-        'rmin', 'rmax', 'rstep', 'scale', 'stretch',
-        'smear', 'baselineslope'
-    fixed_operations : list
-        list of string specifying operations won't be refined.
+            - 'scale'
+            - 'stretch'
+            - 'smear'
+            - 'baselineslope'
+            - 'qdamp'
+    rmin : float, optional
+        A value to specify lower r-limit of morph operations.
+    rmax : float, optional
+        A value to specify upper r-limit of morph operations.
+    pearson: Bool, optional
+        Option to include Pearson coefficient as a minimizing target 
+        during morphing. Default to False.
+    addpearson: Bool, optional
+        Option to include **both** Pearson coefficient and Rw as
+        minimizing targets during morphing. Default to False.
+    fixed_operations : list, optional
+        A list of string specifying operations will be keep fixed during
+        morphing. Default is None.
+    refine : bool, optional
+        Option to execute the minimization step in morphing. If False,
+        the morphing will be applied with parameter values specified in
+        `morph_config`. Default to True.
+    verbose : bool, optional
+        Option to print full result after morph. Default to True.
 
     Returns
     -------
