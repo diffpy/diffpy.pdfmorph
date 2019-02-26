@@ -17,9 +17,9 @@ morph_step_dict = dict(scale=morphs.MorphScale,
                               morphs.MorphXtalRDFtoPDF],
                        qdamp=morphs.MorphResolutionDamping)
 
-def pdfmorph(xobj, yobj, xref, yref, morph_config=default_config,
-             rmin=None, rmax=None, pearson=False, addpearson=False,
-             fixed_operations=None, refine=True, verbose=True):
+def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
+             pearson=False, addpearson=False, fixed_operations=None,
+             refine=True, verbose=True, **kwargs):
     """function to perfom PDF morphing.
 
     Parameters
@@ -36,19 +36,12 @@ def pdfmorph(xobj, yobj, xref, yref, morph_config=default_config,
     yobj : ndarray
         An array of reference y values, i.e., those will be kept constant by
         morphing.
-    morph_config : dict, optional
-        A dictionary with morph parameters as keys and initial
-        values as values. Currently support:
-
-            - 'scale'
-            - 'stretch'
-            - 'smear'
-            - 'baselineslope'
-            - 'qdamp'
     rmin : float, optional
         A value to specify lower r-limit of morph operations.
     rmax : float, optional
         A value to specify upper r-limit of morph operations.
+    rstep : float, optional
+        A value to specify rstep of morph operations.
     pearson: Bool, optional
         Option to include Pearson coefficient as a minimizing target 
         during morphing. Default to False.
@@ -64,6 +57,16 @@ def pdfmorph(xobj, yobj, xref, yref, morph_config=default_config,
         `morph_config`. Default to True.
     verbose : bool, optional
         Option to print full result after morph. Default to True.
+    kwargs : dict, optional
+        A dictionary with morph parameters as keys and initial
+        values of morph parameters as values. Currently supported morph
+        parparameters are:
+
+            - 'scale'
+            - 'stretch'
+            - 'smear'
+            - 'baselineslope'
+            - 'qdamp'
 
     Returns
     -------
@@ -79,24 +82,24 @@ def pdfmorph(xobj, yobj, xref, yref, morph_config=default_config,
     """
     operation_dict = {}
     refpars = []
-    rv_cfg = dict(morph_config)
-    # morph operations
+    # base config
+    rv_cfg = dict(default_config)
+    if kwargs:
+        rv_cfg.update(kwargs)
+    # configure morph operations
     active_morphs = [k for k, v in rv_cfg.items() if (v is not None) and k in
                      morph_step_dict]
     rv_cfg['rmin'] = rmin
     rv_cfg['rmax'] = rmax
-    rv_cfg['rstep'] = None
+    rv_cfg['rstep'] = rstep
     # configure smear
     if rv_cfg.get('smear') and not rv_cfg.get('baselineslope'):
         rv_cfg['baselineslope'] = -0.5
-
     # config dict defines initial guess of parameters
     chain = morphs.MorphChain(rv_cfg)
-
     # rgrid
     chain.append(morphs.MorphRGrid())
-
-    # configure
+    # configure morph chain
     for k in active_morphs:
         morph_cls = morph_step_dict[k]
         if k == 'smear':
@@ -105,7 +108,6 @@ def pdfmorph(xobj, yobj, xref, yref, morph_config=default_config,
         else:
             chain.append(morph_cls())
         refpars.append(k)
-
     # exclude fixed options
     if fixed_operations:
         if not isinstance(fixed_operations, Iterable):
@@ -114,7 +116,6 @@ def pdfmorph(xobj, yobj, xref, yref, morph_config=default_config,
             refpars.remove(opt)
         print("== INFO: Following morphing steps are fixed ==:\n{}\n"
               .format('\n'.join(fixed_operations)))
-
     # define refiner
     refiner = ref.Refiner(chain, xobj, yobj, xref, yref)
     if pearson:
