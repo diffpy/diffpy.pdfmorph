@@ -37,14 +37,14 @@ script:
   - coverage run run_tests.py
   - coverage report -m
   - codecov
-  - |
-    if [ $TRAVIS_PYTHON_VERSION = "3.6" ]; then
-      conda install --yes --file requirements/docs.txt
-      cd doc
-      make html
-      cd ..
-      doctr deploy . --built-docs ./docs/_build/html;
-    fi
+#  - |
+#    if [ $TRAVIS_PYTHON_VERSION = "3.6" ]; then
+#      conda install --yes --file requirements/docs.txt
+#      cd doc
+#      make html
+#      cd ..
+#      doctr deploy . --built-docs ./docs/_build/html;
+#    fi
 
 after_script:
   - set +e
