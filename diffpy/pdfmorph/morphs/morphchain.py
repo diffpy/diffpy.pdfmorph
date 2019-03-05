@@ -134,7 +134,6 @@ class MorphChain(list):
         else:
             emsg = 'Object has no attribute %r' % name
             raise AttributeError(emsg)
-        return
 
 
     def __setattr__(self, name, val):

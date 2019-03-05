@@ -15,9 +15,6 @@ thisfile = locals().get('__file__', 'file.py')
 tests_dir = os.path.dirname(os.path.abspath(thisfile))
 testdata_dir = os.path.join(tests_dir, 'testdata')
 
-def testdata(filename):
-    return os.path.join(testdata_dir, filename)
-
 import diffpy.pdfmorph.tools as tools
 
 ##############################################################################
@@ -34,7 +31,7 @@ class TestTools(unittest.TestCase):
         """
         slope = tools.estimateBaselineSlope(self.xobj, self.yobj)
         slopecalc = -4 * numpy.pi * self.rho0
-        self.assertAlmostEqual(slopecalc, slope, 2)
+        self.assertTrue(numpy.allclose(slopecalc, slope, 1e-2))
         return
 
     def test_estimateScale(self):
