@@ -1,3 +1,19 @@
+
+#!/usr/bin/env python
+##############################################################################
+#
+# diffpy.pdfmorph   by DANSE Diffraction group
+#                   Simon J. L. Billinge
+#                   (c) 2018 Trustees of the Columbia University
+#                   in the City of New York.  All rights reserved.
+#
+# File coded by:    Timothy Liu
+#
+# See AUTHORS.txt for a list of people who contributed.
+# See LICENSE.txt for license information.
+#
+##############################################################################
+
 from collections import Iterable
 from diffpy.pdfmorph import morphs
 from diffpy.pdfmorph import refine as ref
