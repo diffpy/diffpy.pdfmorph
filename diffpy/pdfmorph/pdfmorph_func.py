@@ -108,8 +108,9 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     rv_cfg['rmin'] = rmin
     rv_cfg['rmax'] = rmax
     rv_cfg['rstep'] = rstep
-    # configure smear
-    if rv_cfg.get('smear') and not rv_cfg.get('baselineslope'):
+    # configure smear, guess baselineslope when it is not provided
+    if (rv_cfg.get('smear') is not None
+        and rv_cfg.get('baselineslope') is None):
         rv_cfg['baselineslope'] = -0.5
     # config dict defines initial guess of parameters
     chain = morphs.MorphChain(rv_cfg)
