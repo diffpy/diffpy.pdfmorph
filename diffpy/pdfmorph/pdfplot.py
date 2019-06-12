@@ -53,8 +53,9 @@ def plotPDFs(pairlist, labels=None, offset ='auto', rmin = None, rmax = None):
     if gap == 0:
         plt.legend(loc = 0)
 
-    plt.xlabel("$r (\mathrm(\AA))$")
-    plt.ylabel("$G (\mathrm(\AA)^{-1})$")
+
+    plt.xlabel("$r \mathrm{\AA}$")
+    plt.ylabel("$G \mathrm{\AA}^{-1}$")
 
     plt.show()
     return
@@ -179,8 +180,8 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     plt.ylim(ymin, ymax)
 
     # Make labels and legends
-    plt.xlabel("r $\mathrm(\AA)$")
-    plt.ylabel("G $\mathrm(\AA)^{-1}$")
+    plt.xlabel("r $\mathrm{\AA}$")
+    plt.ylabel("G $(\mathrm{\AA}^{-1})$")
     if legend:
         plt.legend(bbox_to_anchor=(0.005, 1.02, 0.99, .10), loc=3,
                 ncol=3, mode="expand", borderaxespad=0)
