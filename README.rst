@@ -19,9 +19,23 @@ REQUIREMENTS
 PDFmorph requires Python 3.7 and several third party libraries 
 that are used by PDFmorph and its components.
 
-* NumPy        - library for scientific computing with Python
-* matplotlib   - Python 2D plotting library
-* [insert more requirements here]
+* setuptools         - tools for installing and setting up Python packages
+* Sphinx             - documentation generator for reStructuredText files
+* sphinx_rtd_theme   - user-friendly sphinx theme
+* Doctr              - deploys docs from Travis CI to GitHub pages
+* pip                - package installer for Python
+* NumPy              - library for scientific computing with Python
+* matplotlib         - Python 2D plotting library
+* SciPy              - library for highly technical Python computing
+* diffpy.utils       - shared helper utilities for wx GUI, 
+https://github.com/diffpy/diffpy.utils
+* Flake8             - tool for performing static analysis of source code to
+check for discrepancies
+* pytest             - framework to make test writing more illustrative
+* codecov            - package to improve workflow
+* coverage           - tool for measuring code coverage of Python programs
+* pytest-env         - pytest plugin that allows you to add environment
+variables
 
 We recommend to use 'Anaconda Python <https://ww.anaconda.com/download>'_
 which allows to conveniently install PDFmorph and all its software
