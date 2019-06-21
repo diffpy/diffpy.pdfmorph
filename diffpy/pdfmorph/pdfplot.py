@@ -14,7 +14,7 @@
 ##############################################################################
 """Collection of plotting functions for PDFs."""
 
-import pylab
+import matplotlib.pyplot as plt
 import numpy
 
 # FIXME - make this return the figure object in the future, so several views
@@ -45,20 +45,19 @@ def plotPDFs(pairlist, labels=None, offset ='auto', rmin = None, rmax = None):
     labels = list(labels)
     labels.extend([""] * gap)
 
-    #pylab.clf()
-    #pylab.ioff()
     for idx, pair in enumerate(pairlist):
         r, gr = pair
-        pylab.plot(r, gr + idx * offset, label = labels[idx])
-    pylab.xlim(rmin, rmax)
+        plt.plot(r, gr + idx * offset, label = labels[idx])
+    plt.xlim(rmin, rmax)
 
     if gap == 0:
-        pylab.legend(loc = 0)
+        plt.legend(loc = 0)
 
-    pylab.xlabel("$r (\AA)$")
-    pylab.ylabel("$G (\AA^{-1})$")
 
-    pylab.show()
+    plt.xlabel("$r \mathrm{\AA}$")
+    plt.ylabel("$G \mathrm{\AA}^{-1}$")
+
+    plt.show()
     return
 
 def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
@@ -139,55 +138,54 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     scale = min(1, max(scale, 0.8))
     figsize = [13.5, 4.5]
     figsize[0] *=  scale
-    fig = pylab.figure(1, figsize = figsize)
+    fig = plt.figure(1, figsize = figsize)
     # Get the margins based on the figure size
     lm = 0.12 / scale
     bm = 0.20 / scale
     rm = 0.02 / scale
     tm = 0.15 / scale
-    axes = pylab.Axes(fig, [lm, bm, 1 - lm - rm, 1 - bm - tm])
+    axes = plt.Axes(fig, [lm, bm, 1 - lm - rm, 1 - bm - tm])
     fig.add_axes(axes)
-    pylab.minorticks_on()
+    plt.minorticks_on()
 
-    pylab.plot(rdat, grdat, label = labeldata, marker = 'o', markerfacecolor
+    plt.plot(rdat, grdat, label = labeldata, marker = 'o', markerfacecolor
             = 'white', markeredgecolor = 'blue', markersize = 7,
             markeredgewidth = 0.75)
-    pylab.plot(rfit, grfit, label = labelfit, linestyle = 'solid', linewidth =
+    plt.plot(rfit, grfit, label = labelfit, linestyle = 'solid', linewidth =
             2, color = 'red')
-    pylab.plot(rdat, offset*numpy.ones_like(diff), linestyle = '--', linewidth
+    plt.plot(rdat, offset*numpy.ones_like(diff), linestyle = '--', linewidth
             = 1, color = 'black', dashes = (15, 15), aa = False)
     diff += offset
-    pylab.plot(rdat, diff, label = labeldiff, linestyle = 'solid',
+    plt.plot(rdat, diff, label = labeldiff, linestyle = 'solid',
             linewidth = 1.5, color = 'green')
 
     if maglim is not None:
         # Add a line for the magnification cutoff
-        pylab.axvline(maglim, 0, 1, linestyle = '--', color = 'black',
+        plt.axvline(maglim, 0, 1, linestyle = '--', color = 'black',
                 linewidth = 1.5, dashes = (14, 7))
         # FIXME - look for a place to put the maglim
         xpos = (rvmax*0.85 + maglim) / 2 / (rvmax - rvmin)
         if xpos <= 0.9:
-            pylab.figtext(xpos, 0.7, "x%.1f"%mag, backgroundcolor='w')
+            plt.figtext(xpos, 0.7, "x%.1f"%mag, backgroundcolor='w')
 
     # Get a tight view
-    pylab.xlim(rvmin, rvmax)
+    plt.xlim(rvmin, rvmax)
     ymin = min(diff[sel])
     ymax = max(max(grdat[sel]), max(gtemp[sel]))
     yspan = ymax - ymin
-    # Give a small boarder to the plot
+    # Give a small border to the plot
     gap = 0.05 * yspan
     ymin -= gap
     ymax += gap
-    pylab.ylim(ymin, ymax)
+    plt.ylim(ymin, ymax)
 
     # Make labels and legends
-    pylab.xlabel("r $(\AA)$")
-    pylab.ylabel("G $(\AA^{-1})$")
-    #pylab.legend(loc = 0)
+    plt.xlabel("r $\mathrm{\AA}$")
+    plt.ylabel("G $(\mathrm{\AA}^{-1})$")
     if legend:
-        pylab.legend(bbox_to_anchor=(0.005, 1.02, 0.99, .10), loc=3,
+        plt.legend(bbox_to_anchor=(0.005, 1.02, 0.99, .10), loc=3,
                 ncol=3, mode="expand", borderaxespad=0)
-    if show: pylab.show()
+    if show: plt.show()
 
     return
 
@@ -217,17 +215,17 @@ def truncatePDFs(r, gr, rmin = None, rmax = None):
 
 def _configure():
     """Configure look and feel."""
-    import pylab
-    pylab.rc("font", size = 40)
-    pylab.rc("axes", linewidth = 2, labelsize = 30)
-    pylab.rc("xtick", labelsize = 25)
-    pylab.rc("xtick.major", size = 7)
-    pylab.rc("xtick.minor", size = 3)
-    pylab.rc("ytick", labelsize = 25)
-    pylab.rc("ytick.major", size = 7)
-    pylab.rc("ytick.minor", size = 3)
-    pylab.rc("legend", fontsize = 18)
-    pylab.rc("lines", markeredgewidth = 2) # thicker axes and symbols
+    import matplotlib.pyplot as plt
+    plt.rc("font", size = 40)
+    plt.rc("axes", linewidth = 2, labelsize = 30)
+    plt.rc("xtick", labelsize = 25)
+    plt.rc("xtick.major", size = 7)
+    plt.rc("xtick.minor", size = 3)
+    plt.rc("ytick", labelsize = 25)
+    plt.rc("ytick.major", size = 7)
+    plt.rc("ytick.minor", size = 3)
+    plt.rc("legend", fontsize = 18)
+    plt.rc("lines", markeredgewidth = 2) # thicker axes and symbols
     return
 
 def _findOffset(pairlist):
