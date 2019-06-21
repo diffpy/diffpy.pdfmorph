@@ -40,7 +40,7 @@ class TestRefine(unittest.TestCase):
 
         mscale = MorphScale(config)
         refiner = Refiner(mscale, self.xobj, self.yobj, self.xref, self.yref)
-        res = refiner.refine()
+        refiner.refine()
 
         xobj, yobj, xref, yref = mscale.xyallout
 
@@ -115,8 +115,8 @@ class TestRefineUC(unittest.TestCase):
 
         # Do this as two-stage fit. First refine amplitude parameters, and then
         # position parameters.
-        res = refiner.refine("scale", "smear")
-        res = refiner.refine("scale", "stretch", "smear")
+        refiner.refine("scale", "smear")
+        refiner.refine("scale", "stretch", "smear")
 
         xobj, yobj, xref, yref = chain.xyallout
         # We want the fit good to 1%. We will disregard the last bit of the

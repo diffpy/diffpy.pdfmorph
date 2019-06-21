@@ -272,7 +272,7 @@ def getPDFFromFile(fn):
     except IOError as errmsg:
         print("%s: %s" % (fn, errmsg), file=sys.stderr)
         sys.exit(1)
-    except ValueError as errmsg:
+    except ValueError:
         print("Cannot read %s" % fn, file=sys.stderr)
         sys.exit(1)
 
