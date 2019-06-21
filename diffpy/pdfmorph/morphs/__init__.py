@@ -37,7 +37,4 @@ morphs = [ MorphRGrid, MorphScale, MorphStretch, MorphXtalPDFtoRDF, MorphSmear,
         MorphXtalRDFtoPDF, MorphSphere, MorphSpheroid, MorphISphere,
         MorphISpheroid, MorphResolutionDamping, MorphShift]
 
-# obtain version information
-from diffpy.pdfmorph import __version__
-
 # End of file
