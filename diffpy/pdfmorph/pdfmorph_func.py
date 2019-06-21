@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 ##############################################################################
 #
@@ -40,16 +39,16 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
 
     Parameters
     ----------
-    xobj : ndarray
+    xobj : numpy.array
         An array of objective x values, i.e., those will be manipulated by
         morphing.
-    yobj : ndarray
+    yobj : numpy.array
         An array of objective y values, i.e., those will be manipulated by
         morphing.
-    xref : ndarray
+    xref : numpy.array
         An array of reference x values, i.e., those will be kept constant by
         morphing.
-    yobj : ndarray
+    yobj : numpy.array
         An array of reference y values, i.e., those will be kept constant by
         morphing.
     rmin : float, optional
@@ -95,6 +94,20 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
         normal rw value
     pcc : float
         pearson correlation coefficient
+
+    Examples
+    --------
+    # morphing (xobj, yobj) pair to (xref, yref) pair with scaling
+    from diffpy.pdfmorph import pdfmorph, default_config, plot_morph
+
+    morph_cfg = dict(default_config)
+    morph_cfg['scale'] = 1.01
+    rv = pdfmorph(xobj, yobj, xref, yref, **morph_cfg)
+    morph_chain, morphed_cfg, rw, pearson = rv
+
+    plot_morph(morph_chain)
+    print(morphed_cfg, rw)
+    ..
     """
     operation_dict = {}
     refpars = []
