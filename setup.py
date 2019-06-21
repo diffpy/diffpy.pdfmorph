@@ -12,7 +12,7 @@ from setuptools import setup, find_packages
 # define distribution
 setup(
     name="diffpy.pdfmorph",
-    version="1.0",
+    version='0.0.1',
     namespace_packages=['diffpy'],
     packages=find_packages(exclude=['tests', 'applications']),
     entry_points={

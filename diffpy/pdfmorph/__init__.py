@@ -19,6 +19,6 @@
 __id__ = "$Id$"
 
 # obtain version information
-__version__ = '1.0'
+__version__ = '0.0.1'
 
 # End of file
