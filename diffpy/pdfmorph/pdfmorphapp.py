@@ -269,7 +269,7 @@ def getPDFFromFile(fn):
     from diffpy.pdfmorph.tools import readPDF
     try:
         r, gr = readPDF(fn)
-    except IOError as (errno, errmsg):
+    except IOError as errmsg:
         print("%s: %s" % (fn, errmsg), file=sys.stderr)
         sys.exit(1)
     except ValueError as errmsg:

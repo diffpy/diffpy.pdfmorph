@@ -38,7 +38,7 @@ def plotPDFs(pairlist, labels=None, offset ='auto', rmin = None, rmax = None):
     """
     if labels is None:
         labels = []
-    if offset is 'auto':
+    if offset == 'auto':
         offset = _findOffset(pairlist)
 
     gap = len(pairlist) - len(labels)
