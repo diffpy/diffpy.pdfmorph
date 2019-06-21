@@ -22,5 +22,5 @@ __id__ = "$Id$"
 __version__ = '0.0.1'
 
 # top-level import
-from diffpy.pdfmorph.pdfmorph_func import pdfmorph, default_config, plot_morph
+from diffpy.pdfmorph.pdfmorph_api import pdfmorph, default_config, plot_morph
 # End of file
