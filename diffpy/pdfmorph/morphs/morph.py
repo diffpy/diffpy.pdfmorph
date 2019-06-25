@@ -159,13 +159,13 @@ class Morph(object):
 
 
     def plotInputs(self, xylabels=True):
-        '''Plot input arrays using pylab
+        '''Plot input arrays using matplotlib.pyplot
 
         xylabels -- flag for updating x and y axis labels
 
         Return a list of matplotlib line objects.
         '''
-        from pylab import plot, xlabel, ylabel
+        from matplotlib.pyplot import plot, xlabel, ylabel
         rv = plot(self.xrefin, self.yrefin, label = "reference")
         rv = plot(self.xobjin, self.yobjin, label = "objective")
         if xylabels:
@@ -175,7 +175,7 @@ class Morph(object):
 
 
     def plotOutputs(self, xylabels=True, **plotargs):
-        '''Plot output arrays using pylab
+        '''Plot output arrays using matplotlib.pyplot
 
         xylabels -- flag for updating x and y axis labels
         plotargs -- arguments passed to the pylab plot function. Note that
@@ -183,7 +183,7 @@ class Morph(object):
 
         Return a list of matplotlib line objects.
         '''
-        from pylab import plot, xlabel, ylabel
+        from matplotlib.pyplot import plot, xlabel, ylabel
         pargs = dict(plotargs)
         pargs.pop("label", None)
         rv = plot(self.xrefout, self.yrefout, label = "reference", **pargs)
