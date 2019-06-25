@@ -7,10 +7,9 @@ image target here
 
 PDFmorph
 ========================================================================
+# FIXME
 add description, sample below
 Code package for morphin' atomic pair distribution functions.
-
-PDFmorph is a user-friendly software package. [more info here]
 
 
 REQUIREMENTS
@@ -37,20 +36,8 @@ check for discrepancies
 * pytest-env         - pytest plugin that allows you to add environment
 variables
 
-We recommend to use 'Anaconda Python <https://ww.anaconda.com/download>'_
-which allows to conveniently install PDFmorph and all its software
-dependencies with a single command. For other Python distributions
-it is necessary to install the required software separately. As an
-example, on Ubuntu Linux some of the required software can be
-installed using ::
-
-     sudo apt-get install \
-         python-setuptools python-wxtools python-numpy \
-         python-matplotlib
-
-To install the remaining packages see the installation instructions
-at their respective web pages.
-
+# FIXME - add link for instructions
+If you can't use conda and need to build from the sources, instructions are [here].
 
 INSTALLATION
 ------------------------------------------------------------------------
@@ -61,8 +48,8 @@ The preferred method is to use Anaconda Python and install from the
      conda config --add channels diffpy
      conda install diffpy.pdfmorph
 
+# FIXME
 PDFmorph can then be started from a terminal...
-
 [insert more instructions here]
 
 With Anaconda, PDFmorph can be later upgratded to the latest released
@@ -100,6 +87,7 @@ CONTACTS
 
 For more information on PDFmorph, visit the project wep-page:
 
+# FIXME - make a page for the project
 [insert project page here, when it exists]
 
 or email Professor Simon Billinge at sb2896@columbia.edu
