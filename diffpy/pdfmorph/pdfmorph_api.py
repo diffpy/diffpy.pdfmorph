@@ -17,11 +17,8 @@ from collections import Iterable
 from diffpy.pdfmorph import morphs
 from diffpy.pdfmorph import refine as ref
 from diffpy.pdfmorph import tools
-
 import matplotlib.pyplot as plt
 
-_default_config = dict(scale=None, stretch=None, smear=None,
-                       baselineslope=None, qdamp=None)
 
 # map of operation dict
 # TODO: include morphing on psize
@@ -31,6 +28,8 @@ _morph_step_dict = dict(scale=morphs.MorphScale,
                                morphs.MorphSmear,
                                morphs.MorphXtalRDFtoPDF],
                         qdamp=morphs.MorphResolutionDamping)
+_default_config = dict(scale=None, stretch=None, smear=None,
+                       baselineslope=None, qdamp=None)
 
 
 def morph_default_config():
@@ -41,7 +40,6 @@ def morph_default_config():
     morph_default_config: dict
         A dictionary contains morph configuration
     """
-
     return dict(_default_config)
 
 
@@ -84,7 +82,7 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
         the morphing will be applied with parameter values specified in
         `morph_config`. Default to True.
     verbose : bool, optional
-        Option to print full result after morph. Default to True.
+        Option to print full result after morph. Default to False.
     kwargs : dict, optional
         A dictionary with morph parameters as keys and initial
         values of morph parameters as values. Currently supported morph
@@ -98,15 +96,21 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
 
     Returns
     -------
-    chain : diffpy.pdfmorph.morphs.morphchain.MorphChain
-        instance of morph chain. ``xobj, yobj, xref, yref = chain.xyallout``
-        will return morphed results
-    rv_cfg : dict
-        dictionary of refined parameters
-    rw : float
-        normal rw value
-    pcc : float
-        pearson correlation coefficient
+    morph_rv_dict : dict
+        A dictionary contains following key-value pairs:
+
+        - morph_chain : diffpy.pdfmorph.morphs.morphchain.MorphChain
+              The instance of processed morph chain.
+              Calling ``xobj, yobj, xref, yref = morph_chain.xyallout``
+              will conviniently retrun morphed data and reference data
+        - morphed_cfg : dict
+              A dictionary of refined morphing parameters
+        - rw : float
+              The agreement factor between morphed data and reference
+              data
+        - pcc : float
+              The pearson correlation coefficient between morphed 
+              data and referenced data
 
     Examples
     --------
@@ -115,12 +119,15 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
 
     morph_cfg = morph_default_config()
     morph_cfg['scale'] = 1.01
-    rv = pdfmorph(xobj, yobj, xref, yref, **morph_cfg)
-    morph_chain, morphed_cfg, rw, pearson = rv
+    morph_rv_dict = pdfmorph(xobj, yobj, xref, yref, **morph_cfg)
 
-    plot_morph(morph_chain)
-    print(morphed_cfg, rw)
-    ..
+    # plot morhing result
+    plot_morph(morph_rv_dict['morph_chain'])
+
+    # print morphing parameters, pearson correlation coefficient, Rw
+    print(morph_rv_dict['morphed_cfg'])
+    print(morph_rv_dict['pcc'])
+    print(morph_rv_dict['rw'])
     """
     operation_dict = {}
     refpars = []
@@ -194,21 +201,41 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
         output += "\n# Pearson = {:.6f}".format(pcc)
         print(output)
 
-    return chain, rv_cfg, rw, pcc
+    rv_dict = dict(morph_chain=chain, morphed_config=rv_cfg,
+                   rw=rw, pcc=pcc)
+    return rv_dict
 
 
-def plot_morph(chain, fig=None, **kwargs):
+def plot_morph(chain, ax=None, **kwargs):
+    """function to plot pdfmorph result from a morph chain
+
+    Parameters
+    ----------
+    chain: diffpy.pdfmorph.morphs.morphchain.MorphChain
+        An instance of processed morph chain.
+    ax: matplotlib.axes.Axes, optinal
+        An instance of Axes class to plot morphing result.
+        Default to the axes return by ``matplotlib.pyplot.gca()``
+    kwargs:
+        Additional keyword arguements will be passed 
+        to ``ax.plot(...**kwargs)``
+
+    Returns
+    -------
+    l_list: list
+        A list of ``matplotlib.lines.Line2D`` objects representing 
+        the plotted data.
+    """
+    if not ax:
+        ax = plt.gca()
     rfit, grfit = chain.xyobjout
     rdat, grdat = chain.xyrefout
-    if not fig:
-        fig, ax = plt.subplots(**kwargs)
-    else:
-        ax = fig.axes[0]
-    ax.plot(rfit, grfit, label='objective')
-    ax.plot(rdat, grdat, label='reference')
+    l_list = []
+    l_list.append(ax.plot(rfit, grfit, label='objective', **kwargs))
+    l_list.append(ax.plot(rdat, grdat, label='reference', **kwargs))
     ax.set_xlim([chain.config['rmin'], chain.config['rmax']])
     ax.legend()
     ax.set_xlabel(r'r ($\mathrm{\AA}$)')
     ax.set_ylabel(r'G ($\mathrm{\AA}^{-2}$)')
 
-    return fig
+    return l_list
