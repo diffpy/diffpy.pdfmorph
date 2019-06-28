@@ -44,9 +44,10 @@ def morph_default_config():
 
     return dict(_default_config)
 
+
 def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
              pearson=False, addpearson=False, fixed_operations=None,
-             refine=True, verbose=True, **kwargs):
+             refine=True, verbose=False, **kwargs):
     """function to perfom PDF morphing.
 
     Parameters
@@ -156,8 +157,6 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
             fixed_operations = [fixed_operations]
         for opt in fixed_operations:
             refpars.remove(opt)
-        print("== INFO: Following morphing steps are fixed ==:\n{}\n"
-              .format('\n'.join(fixed_operations)))
     # define refiner
     refiner = ref.Refiner(chain, xobj, yobj, xref, yref)
     if pearson:
@@ -186,6 +185,9 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     chain(xobj, yobj, xref, yref)
     # print output
     if verbose:
+        print("== INFO: Following steps are fixed during morphing ==:\n{}\n"
+              .format('\n'.join(fixed_operations)))
+        print("== INFO: Refined morph parameters ==:\n")
         output = "\n".join(["# {} = {:.6f}".format(k, v) for k, v in \
                 rv_cfg.items() if v is not None])
         output += "\n# Rw = {:.6f}".format(rw)
