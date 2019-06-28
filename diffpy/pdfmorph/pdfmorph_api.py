@@ -20,17 +20,29 @@ from diffpy.pdfmorph import tools
 
 import matplotlib.pyplot as plt
 
-default_config = dict(scale=None, stretch=None, smear=None,
-                      baselineslope=None, qdamp=None)
+_default_config = dict(scale=None, stretch=None, smear=None,
+                       baselineslope=None, qdamp=None)
 
 # map of operation dict
 # TODO: include morphing on psize
-morph_step_dict = dict(scale=morphs.MorphScale,
-                       stretch=morphs.MorphStretch,
-                       smear=[morphs.MorphXtalPDFtoRDF,
-                              morphs.MorphSmear,
-                              morphs.MorphXtalRDFtoPDF],
-                       qdamp=morphs.MorphResolutionDamping)
+_morph_step_dict = dict(scale=morphs.MorphScale,
+                        stretch=morphs.MorphStretch,
+                        smear=[morphs.MorphXtalPDFtoRDF,
+                               morphs.MorphSmear,
+                               morphs.MorphXtalRDFtoPDF],
+                        qdamp=morphs.MorphResolutionDamping)
+
+
+def morph_default_config():
+    """function to generate default morph configuration
+
+    Returns
+    -------
+    morph_default_config: dict
+        A dictionary contains morph configuration
+    """
+
+    return dict(_default_config)
 
 def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
              pearson=False, addpearson=False, fixed_operations=None,
@@ -98,9 +110,9 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     Examples
     --------
     # morphing (xobj, yobj) pair to (xref, yref) pair with scaling
-    from diffpy.pdfmorph import pdfmorph, default_config, plot_morph
+    from diffpy.pdfmorph import pdfmorph, morph_default_config, plot_morph
 
-    morph_cfg = dict(default_config)
+    morph_cfg = morph_default_config()
     morph_cfg['scale'] = 1.01
     rv = pdfmorph(xobj, yobj, xref, yref, **morph_cfg)
     morph_chain, morphed_cfg, rw, pearson = rv
