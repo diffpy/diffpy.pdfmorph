@@ -237,13 +237,12 @@ def plot_morph(chain, ax=None, **kwargs):
         A list of ``matplotlib.lines.Line2D`` objects representing 
         the plotted data.
     """
-    if not ax:
+    if ax is None:
         ax = plt.gca()
     rfit, grfit = chain.xyobjout
     rdat, grdat = chain.xyrefout
-    l_list = []
-    l_list.append(ax.plot(rfit, grfit, label='objective', **kwargs))
-    l_list.append(ax.plot(rdat, grdat, label='reference', **kwargs))
+    l_list = ax.plot(rfit, grfit, label='objective', **kwargs)
+    l_list += ax.plot(rdat, grdat, label='reference', **kwargs)
     ax.set_xlim([chain.config['rmin'], chain.config['rmax']])
     ax.legend()
     ax.set_xlabel(r'r ($\mathrm{\AA}$)')
