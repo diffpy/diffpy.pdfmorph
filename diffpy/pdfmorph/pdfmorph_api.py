@@ -142,13 +142,11 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     """
     operation_dict = {}
     refpars = []
-    # base config
-    rv_cfg = dict(default_config)
-    if kwargs:
-        rv_cfg.update(kwargs)
+    # input config
+    rv_cfg = dict(kwargs)
     # configure morph operations
     active_morphs = [k for k, v in rv_cfg.items() if (v is not None) and k in
-                     morph_step_dict]
+                     _morph_step_dict]
     rv_cfg['rmin'] = rmin
     rv_cfg['rmax'] = rmax
     rv_cfg['rstep'] = rstep
@@ -162,7 +160,7 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     chain.append(morphs.MorphRGrid())
     # configure morph chain
     for k in active_morphs:
-        morph_cls = morph_step_dict[k]
+        morph_cls = _morph_step_dict[k]
         if k == 'smear':
             [chain.append(el()) for el in morph_cls]
             refpars.append('baselineslope')
@@ -203,8 +201,10 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     chain(xobj, yobj, xref, yref)
     # print output
     if verbose:
-        print("== INFO: Following steps are fixed during morphing ==:\n{}\n"
-              .format('\n'.join(fixed_operations)))
+
+        if fixed_operations:
+            print("== INFO: Following steps are fixed during morphing ==:\n{}\n"
+                  .format('\n'.join(fixed_operations)))
         print("== INFO: Refined morph parameters ==:\n")
         output = "\n".join(["# {} = {:.6f}".format(k, v) for k, v in \
                 rv_cfg.items() if v is not None])
