@@ -32,15 +32,27 @@ _default_config = dict(scale=None, stretch=None, smear=None,
                        baselineslope=None, qdamp=None)
 
 
-def morph_default_config():
+def morph_default_config(**kwargs):
     """function to generate default morph configuration
+
+    Parameters
+    ----------
+    kwargs
+        extra keyword arguments passed to the default moprph config
 
     Returns
     -------
     morph_default_config: dict
-        A dictionary contains morph configuration
+        A dictionary of morph configuration
+
+    Examples
+    --------
+    morph_cfg = morph_default_config(scale=1.01)
     """
-    return dict(_default_config)
+    rv = dict(_default_config)
+    rv.update(**kwargs)
+
+    return rv
 
 
 def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
@@ -117,8 +129,7 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     # morphing (xobj, yobj) pair to (xref, yref) pair with scaling
     from diffpy.pdfmorph import pdfmorph, morph_default_config, plot_morph
 
-    morph_cfg = morph_default_config()
-    morph_cfg['scale'] = 1.01
+    morph_cfg = morph_default_config(scale=1.01)
     morph_rv_dict = pdfmorph(xobj, yobj, xref, yref, **morph_cfg)
 
     # plot morhing result
