@@ -50,6 +50,11 @@ def morph_default_config(**kwargs):
     morph_cfg = morph_default_config(scale=1.01)
     """
     rv = dict(_default_config)
+    # protect against foreign keys
+    for k in kwargs.keys():
+        if k not in rv:
+            e = f'operation: {k} is not currently supported!'
+            raise ValueError(e)
     rv.update(**kwargs)
 
     return rv
