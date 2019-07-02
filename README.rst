@@ -53,7 +53,7 @@ The preferred method is to use Anaconda Python and install from the
 PDFmorph can then be started from a terminal...
 [insert more instructions here]
 
-With Anaconda, PDFmorph can be later upgratded to the latest released
+With Anaconda, PDFmorph can be later upgraded to the latest released
 version using ::
 
      conda update diffpy.pdfmorph
