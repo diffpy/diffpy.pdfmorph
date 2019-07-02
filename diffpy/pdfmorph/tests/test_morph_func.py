@@ -3,6 +3,31 @@ import numpy as np
 from diffpy.pdfmorph import pdfmorph, morph_default_config
 from diffpy.pdfmorph.tests.test_morphstretch import heaviside
 
+
+def test_morphfunc_verbose():
+    lb, ub = 1, 2
+    xref = np.arange(0.01, 5, 0.01)
+    yref = heaviside(xref, lb, ub)
+    # expand 30%
+    stretch = 0.3
+    xobj = xref.copy()
+    yobj = heaviside(xref, lb * (1 + stretch), ub * (1 + stretch))
+    cfg = morph_default_config(stretch=0.1) # off init
+    morph_rv = pdfmorph(xobj, yobj, xref, yref, verbose=True, **cfg)
+
+def test_fixed_morph_with_morphfunc():
+    lb, ub = 1, 2
+    xref = np.arange(0.01, 5, 0.01)
+    yref = heaviside(xref, lb, ub)
+    # expand 30%
+    stretch = 0.3
+    xobj = xref.copy()
+    yobj = heaviside(xref, lb * (1 + stretch), ub * (1 + stretch))
+    cfg = morph_default_config(stretch=0.1) # off init
+    cfg['scale'] = 30
+    morph_rv = pdfmorph(xobj, yobj, xref, yref, verbose=True,
+                        fixed_operations=['scale'], **cfg)
+
 def test_stretch_with_morphfunc():
     # use the same setup as test_moprhchain
     lb, ub = 1, 2
