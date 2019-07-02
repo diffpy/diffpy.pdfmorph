@@ -4,20 +4,63 @@ from diffpy.pdfmorph import pdfmorph, morph_default_config
 from diffpy.pdfmorph.tests.test_morphstretch import heaviside
 
 def test_stretch_with_morphfunc():
-    #    # use the same setup as test_moprhchain
+    # use the same setup as test_moprhchain
     lb, ub = 1, 2
     xref = np.arange(0.01, 5, 0.01)
     yref = heaviside(xref, lb, ub)
-    # stretch 30% 
+    # expand 30%
     stretch = 0.3
     xobj = xref.copy()
     yobj = heaviside(xref, lb * (1 + stretch), ub * (1 + stretch))
     cfg = morph_default_config(stretch=0.1) # off init
     morph_rv = pdfmorph(xobj, yobj, xref, yref, **cfg)
     morphed_cfg = morph_rv['morphed_config']
-    # test morphed result
-    assert np.allclose(stretch, abs(morphed_cfg['stretch']), 1) 
-    # assert residual
+    # verified they are morphable
     x1, y1, x0, y0 = morph_rv['morph_chain'].xyallout
     assert np.allclose(x0, x1)
     assert np.allclose(y0, y1)
+    # verify morphed param
+    # note: because interpolation, the value might be off by 0.5
+    # negative sign as we are compress the gref
+    assert np.allclose(-stretch, morphed_cfg['stretch'], atol=1e-1)
+
+
+def test_scale_with_morphfunc():
+    lb, ub = 1, 2
+    xref = np.arange(0.01, 5, 0.01)
+    yref = heaviside(xref, lb, ub)
+    # scale 300%
+    scale = 3
+    xobj = xref.copy()
+    yobj = yref.copy()
+    yobj *= scale
+    cfg = morph_default_config(scale=1.5) # off init
+    morph_rv = pdfmorph(xobj, yobj, xref, yref, **cfg)
+    morphed_cfg = morph_rv['morphed_config']
+    # verified they are morphable
+    x1, y1, x0, y0 = morph_rv['morph_chain'].xyallout
+    assert np.allclose(x0, x1)
+    assert np.allclose(y0, y1)
+    # verify morphed param
+    assert np.allclose(scale, 1/morphed_cfg['scale'], atol=1e-1)
+
+
+def test_smear_with_morph_func():
+    # gaussian func
+    sigma0 = 0.1
+    smear = 0.15
+    sigbroad = (sigma0**2 + smear**2)**0.5
+    r0 = 7 * np.pi / 22.0 * 2
+    xref = np.arange(0.01, 5, 0.01)
+    yref = np.exp(-0.5 * ((xref-r0)/sigbroad)**2)
+    xobj = xref.copy()
+    yobj = np.exp(-0.5 * ((xobj-r0)/sigma0)**2)
+    cfg = morph_default_config(smear=0.1, scale=1.1, stretch=0.1) # off init
+    morph_rv = pdfmorph(xobj, yobj, xref, yref, **cfg)
+    morphed_cfg = morph_rv['morphed_config']
+    # verified they are morphable
+    x1, y1, x0, y0 = morph_rv['morph_chain'].xyallout
+    assert np.allclose(x0, x1)
+    assert np.allclose(y0, y1, atol=1e-3) # numerical error -> 1e-4
+    # verify morphed param
+    assert np.allclose(smear, morphed_cfg['smear'], atol=1e-1)
