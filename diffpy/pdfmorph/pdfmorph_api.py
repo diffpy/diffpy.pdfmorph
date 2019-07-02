@@ -13,7 +13,7 @@
 #
 ##############################################################################
 
-from collections import Iterable
+from collections.abc import Iterable
 from diffpy.pdfmorph import morphs
 from diffpy.pdfmorph import refine as ref
 from diffpy.pdfmorph import tools
@@ -86,8 +86,8 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     rstep : float, optional
         A value to specify rstep of morph operations.
     pearson: Bool, optional
-        Option to include Pearson coefficient as a minimizing target 
-        during morphing. Default to False.
+        Option to include Pearson coefficient as a minimizing target
+         during morphing. Default to False.
     addpearson: Bool, optional
         Option to include **both** Pearson coefficient and Rw as
         minimizing targets during morphing. Default to False.
@@ -126,8 +126,8 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
               The agreement factor between morphed data and reference
               data
         - pcc : float
-              The pearson correlation coefficient between morphed 
-              data and referenced data
+              The pearson correlation coefficient between morphed
+               data and referenced data
 
     Examples
     --------
@@ -208,13 +208,13 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     if verbose:
 
         if fixed_operations:
-            print("== INFO: Following steps are fixed during morphing ==:\n{}\n"
-                  .format('\n'.join(fixed_operations)))
+            print("== INFO: Following steps are fixed during morphing ==:\n")
+            print('\n'.join(fixed_operations))
         print("== INFO: Refined morph parameters ==:\n")
-        output = "\n".join(["# {} = {:.6f}".format(k, v) for k, v in \
+        output = "\n".join(["# %s = %f" % (k, v) for k, v in \
                 rv_cfg.items() if v is not None])
-        output += "\n# Rw = {:.6f}".format(rw)
-        output += "\n# Pearson = {:.6f}".format(pcc)
+        output += "\n# Rw = %f" % rw
+        output += "\n# Pearson = %f" % pcc
         print(output)
 
     rv_dict = dict(morph_chain=chain, morphed_config=rv_cfg,
@@ -233,14 +233,14 @@ def plot_morph(chain, ax=None, **kwargs):
         An instance of Axes class to plot morphing result.
         Default to the axes return by ``matplotlib.pyplot.gca()``
     kwargs:
-        Additional keyword arguements will be passed 
-        to ``ax.plot(...**kwargs)``
+        Additional keyword arguements will be passed
+         to ``ax.plot(...**kwargs)``
 
     Returns
     -------
     l_list: list
-        A list of ``matplotlib.lines.Line2D`` objects representing 
-        the plotted data.
+        A list of ``matplotlib.lines.Line2D`` objects representing
+         the plotted data.
     """
     if ax is None:
         ax = plt.gca()
