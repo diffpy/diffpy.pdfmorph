@@ -13,7 +13,13 @@
 #
 ##############################################################################
 
-from collections.abc import Iterable
+
+import sys
+if sys.version_info.major < 3:
+    # old import for py2.7
+    from collections import Iterable
+else:
+    from collections.abc import Iterable
 from diffpy.pdfmorph import morphs
 from diffpy.pdfmorph import refine as ref
 from diffpy.pdfmorph import tools
