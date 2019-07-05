@@ -53,7 +53,7 @@ def morph_default_config(**kwargs):
     # protect against foreign keys
     for k in kwargs.keys():
         if k not in rv:
-            e = f'operation: {k} is not currently supported!'
+            e = 'operation: %s is not currently supported!' % k
             raise ValueError(e)
     rv.update(**kwargs)
 
