@@ -53,13 +53,25 @@ PDFmorph is an application which makes use of the Command Line Interface to
 run. If you are unfamiliar with the CLI, consult online resources on how to get 
 started with it on your machine.
 
-It is recommended that you use `Anaconda Python <https://www.anaconda.com/distribution/`_ to conveniently install PDFmorph and its software dependencies with a few concise commands.
+It is recommended that you use `Anaconda Python <https://www.anaconda.com/distribution/>`_ to conveniently install PDFmorph and its software dependencies with a few concise commands.
 
 Once you've downloaded Anaconda Python, you can install from the
 "conda-forge" channel of Anaconda packages ::
 
      conda config --add channels conda-forge
      conda install diffpy.pdfmorph
+
+If you don't use Anaconda or prefer to install from sources, make sure the required
+software is all in place and run ::
+	
+	python setup.py install
+
+By default the files are installed to standard system directories, which may require
+the use of ``sudo`` for write privileges. If administrator (root) access is not
+available, see the output from ``python setup.py install --help`` for options to 
+install as a regular user to user-writable locations. Note that installation to
+non-standard directories may require adjustments to the PATH and PYTHONPATH 
+environment variables.
 
 To ensure the installation worked, activate the relevant conda environment and 
 type ::
@@ -68,6 +80,9 @@ type ::
 
 If installed correctly, this command should return PDFmorph's current version
 number.
+
+PDFmorph can then be started from a terminal ("Anaconda Prompt" on Windows) by
+executing the ``pdfmorph`` program.
 
 With Anaconda, PDFmorph can be later upgraded to the latest released
 version using ::
@@ -100,6 +115,7 @@ rather than copied to a system directory, use ::
 CONTACTS
 ------------------------------------------------------------------------
 
+# FIXME - add link to diffpy.org/products/pdfmorph.html when that exists
 For more information on PDFmorph, visit the `PDFmorph project web-page. <https://github.com/diffpy/diffpy.github.io/blob/source/products/pdfmorph.rst/>`_
 
 or email Professor Simon Billinge at sb2896@columbia.edu
