@@ -43,8 +43,16 @@ that are used by PDFmorph and its components.
 * SciPy              - library for highly technical Python computing
 * diffpy.utils       - shared helper utilities for wx GUI, https://github.com/diffpy/diffpy.utils
 
-# FIXME - add link for instructions
-If you can't use conda and need to build from the sources, instructions are [here].
+It is recommended that you use `Anaconda Python <https://www.anaconda.com/distribution/>`_ to conveniently install PDFmorph and its software dependencies 
+with a few concise commands. For example, on Ubuntu Linux some of the required
+software can be installed using ::
+
+	sudo apt-get install \
+	python-setuptools python-wxtools python-numpy \ 
+	python-matplotlib
+
+To install the remaining packages, see installation instructions at their
+respective web-pages.
 
 INSTALLATION
 ------------------------------------------------------------------------
@@ -53,10 +61,8 @@ PDFmorph is an application which makes use of the Command Line Interface to
 run. If you are unfamiliar with the CLI, consult online resources on how to get 
 started with it on your machine.
 
-It is recommended that you use `Anaconda Python <https://www.anaconda.com/distribution/>`_ to conveniently install PDFmorph and its software dependencies with a few concise commands.
-
-Once you've downloaded Anaconda Python, you can install from the
-"conda-forge" channel of Anaconda packages ::
+If you're using Anaconda Python, you can install from the "conda-forge" 
+channel of Anaconda packages ::
 
      conda config --add channels conda-forge
      conda install diffpy.pdfmorph
