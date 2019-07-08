@@ -9,9 +9,9 @@ FIXME - testing correctness of these links
 PDFmorph
 ========================================================================
 # FIXME
-add description, sample below
-Code package for morphing atomic pair distribution functions.
-
+PDFmorph is a Python software package designed to increase the insight
+researchers can get into spectra collected for atomic pair distribution 
+functions.
 
 REQUIREMENTS
 ------------------------------------------------------------------------
