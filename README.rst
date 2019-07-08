@@ -104,5 +104,5 @@ or email Professor Simon Billinge at sb2896@columbia.edu
 LICENSE
 ------------------------------------------------------------------------
 
-For full license and copyright information, check `here
-<https://github.com/diffpy/diffpy.pdfmorph/blob/master/LICENSE.txt`_. 
+For full license and copyright information, check here_.
+.. _here: https://github.com/diffpy/diffpy.pdfmorph/blob/master/LICENSE.txt 
