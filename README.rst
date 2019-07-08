@@ -8,7 +8,7 @@ FIXME - testing correctness of these links
 
 PDFmorph
 ========================================================================
-# FIXME
+# FIXME - include uses, unique features
 PDFmorph is a Python software package designed to increase the insight
 researchers can get into spectra collected for atomic pair distribution 
 functions.
@@ -31,6 +31,14 @@ If you can't use conda and need to build from the sources, instructions are [her
 INSTALLATION
 ------------------------------------------------------------------------
 
+PDFmorph is an application which makes use of the Command Line Interface to
+run. If you are unfamiliar with the CLI, consult online resources on how to get 
+started with it on your machine.
+
+It is recommended that you use Anaconda Python to run this application; to do so,
+first make sure that you have installed it from Anaconda distribution here:
+https://www.anaconda.com/distribution/.
+
 The preferred method is to use Anaconda Python and install from the
 "diffpy" channel of Anaconda packages ::
 
@@ -38,18 +46,36 @@ The preferred method is to use Anaconda Python and install from the
      conda install diffpy.pdfmorph
 
 # FIXME
-PDFmorph can then be started from a terminal...
-[insert more instructions here]
+To ensure the installation worked, activate the relevant conda environment and 
+type ::
+
+	pdfmorph --version
+
+If installed correctly, this command should return PDFmorph's current version
+number.
 
 With Anaconda, PDFmorph can be later upgraded to the latest released
 version using ::
 
      conda update diffpy.pdfmorph
 
+#FIXME - easy_install?
 With other Python distributions the program can be upgraded to
 the latest version as follows ::
 
      easy_install --upgrade diffpy.pdfmorph
+
+# FIXME - make sure information is correct here
+Once installed, PDFmorph can be utilized by running the following command::
+
+	pdfmorph <source filename> <target filename>
+
+Where <source filename> is the PDF function you wish to compare and
+<target filename> is the file you want PDFmorph to return.
+
+# FIXME - add reference to online instrucitons
+For more information on how to use PDFmorph, please consult online documentation
+[here].
 
 
 DEVELOPMENT
