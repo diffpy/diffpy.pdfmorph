@@ -53,11 +53,9 @@ PDFmorph is an application which makes use of the Command Line Interface to
 run. If you are unfamiliar with the CLI, consult online resources on how to get 
 started with it on your machine.
 
-It is recommended that you use Anaconda Python to run this application; to do so,
-first make sure that you have installed it from Anaconda distribution here:
-https://www.anaconda.com/distribution/.
+It is recommended that you use `Anaconda Python <https://www.anaconda.com/distribution/`_ to conveniently install PDFmorph and its software dependencies with a few concise commands.
 
-The preferred method is to use Anaconda Python and install from the
+Once you've downloaded Anaconda Python, you can install from the
 "conda-forge" channel of Anaconda packages ::
 
      conda config --add channels conda-forge
@@ -80,14 +78,6 @@ With other Python distributions the program can be upgraded to
 the latest version as follows ::
 
      easy_install --upgrade diffpy.pdfmorph
-
-# FIXME - make sure information is correct here
-Once installed, PDFmorph can be utilized by running the following command::
-
-	pdfmorph <source filename> <target filename>
-
-Where <source filename> is the PDF function you wish to compare and
-<target filename> is the file you want PDFmorph to return.
 
 # FIXME - add reference to online instrucitons once merged
 For more information on how to use PDFmorph, please consult online documentation
