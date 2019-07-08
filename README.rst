@@ -22,8 +22,7 @@ that are used by PDFmorph and its components.
 * NumPy              - library for scientific computing with Python
 * matplotlib         - Python 2D plotting library
 * SciPy              - library for highly technical Python computing
-* diffpy.utils       - shared helper utilities for wx GUI, 
-https://github.com/diffpy/diffpy.utils
+* diffpy.utils       - shared helper utilities for wx GUI, https://github.com/diffpy/diffpy.utils
 
 # FIXME - add link for instructions
 If you can't use conda and need to build from the sources, instructions are [here].
