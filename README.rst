@@ -63,7 +63,6 @@ The preferred method is to use Anaconda Python and install from the
      conda config --add channels conda-forge
      conda install diffpy.pdfmorph
 
-# FIXME
 To ensure the installation worked, activate the relevant conda environment and 
 type ::
 
@@ -77,7 +76,6 @@ version using ::
 
      conda update diffpy.pdfmorph
 
-#FIXME - easy_install?
 With other Python distributions the program can be upgraded to
 the latest version as follows ::
 
