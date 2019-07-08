@@ -78,10 +78,10 @@ or email Professor Simon Billinge at sb2896@columbia.edu
 
 LICENSE
 ------------------------------------------------------------------------
-This program is part of the DiffPy and DANSE open-source projects at Columbia
+This program is part of the DiffPy open-source projects at Columbia
 University and is available subject to the conditions and terms laid out below.
 
-Copyright © 2009-2010, Trustees of Columbia University in the City of New York,
+Copyright © 2009-2019, Trustees of Columbia University in the City of New York,
 all rights reserved.
 
 For more information please visit the diffpy web-page at http://diffpy.org or
