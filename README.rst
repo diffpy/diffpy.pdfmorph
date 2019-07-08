@@ -89,7 +89,7 @@ Once installed, PDFmorph can be utilized by running the following command::
 Where <source filename> is the PDF function you wish to compare and
 <target filename> is the file you want PDFmorph to return.
 
-# FIXME - add reference to online instrucitons
+# FIXME - add reference to online instrucitons once merged
 For more information on how to use PDFmorph, please consult online documentation
 [here].
 
@@ -110,10 +110,7 @@ rather than copied to a system directory, use ::
 CONTACTS
 ------------------------------------------------------------------------
 
-For more information on PDFmorph, visit the project wep-page:
-
-# FIXME - make a page for the project
-[insert project page here, when it exists]
+For more information on PDFmorph, visit the `PDFmorph project web-page. <https://github.com/diffpy/diffpy.github.io/blob/source/products/pdfmorph.rst/>`_
 
 or email Professor Simon Billinge at sb2896@columbia.edu
 
