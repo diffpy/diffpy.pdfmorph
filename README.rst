@@ -1,4 +1,5 @@
 FIXME - testing correctness of these links
+
 .. image:: https://travis-ci.org/diffpy/diffpy.pdfmorph.svg?branch=master
    :target: https://travis-ci.org/diffpy/diffpy.pdfmorph
 
