@@ -8,6 +8,7 @@
 
 PDFmorph
 ========================================================================
+
 PDFmorph is a Python software package designed to increase the insight
 researchers can obtain from measured atomic pair distribution functions (PDFs) 
 in a model independent way. The program was designed to help a researcher 
