@@ -31,7 +31,7 @@ target PDFs, then plot them on top of each other with the difference plotted bel
 There are also a few other morphing transformations in the program.
 
 Finally, we note that PDFmorph should work on other spectra that are not PDFs,
-though it has not been extensively texted beyond the PDF.
+though it has not been extensively tested beyond the PDF.
 
 REQUIREMENTS
 ------------------------------------------------------------------------
