@@ -27,8 +27,16 @@ PDFs, though it has not been extensively tested beyond the PDF.
 
 For more information on PDFmorph, please consult the documentation.
 
+
+LICENSE
+------------------------------------------------------------------------
+
+This software is subject to license and copyright restrictions listed
+`here. <https://github.com/diffpy/diffpy.pdfmorph/blob/master/LICENSE.txt/>`_
+
+
 REQUIREMENTS
------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 The PDFmorph application has a Command Line interface. If you are 
 unfamiliar with the terminal or windows command prompt, it is recommended
@@ -43,20 +51,34 @@ that are used by PDFmorph and its components.
 * SciPy              - library for highly technical Python computing
 * diffpy.utils       - `shared helper utilities <https://github.com/diffpy/diffpy.utils/>`_ for wx GUI
 
-It is recommended that you use `Anaconda Python <https://www.anaconda.com/distribution/>`_ to conveniently 
-install PDFmorph and its software dependencies with a few concise 
-commands. For example, on Ubuntu Linux some of the required software 
-can be installed using ::
-
-	sudo apt-get install \
-	python-setuptools python-wxtools python-numpy \ 
-	python-matplotlib
-
-To install the remaining packages, see installation instructions at 
+To install these packages, please see installation instructions at 
 their respective web-pages.
+
 
 INSTALLATION
 ------------------------------------------------------------------------
+
+To create and activate a conda environment to use this software, run 
+the following command from the command line ::
+	
+	conda create -n pdfmorph_env python=3
+	source activate pdfmorph_env
+
+If you're using Windows, replace ``source activate pdfmorph`` with ::
+	
+	activate pdfmorph_env
+
+When you are finished with the session, exit the environment by running :: 
+
+	source deactivate pdfmorph_env
+
+or ::
+
+	deactivate pdfmorph_env
+
+If you use this conda environment, make sure to run the ``source activate 
+pdfmorph_env`` or ``activate pdfmorph_env`` commands from your command 
+line before every session using the applicaiton.
 
 If you're using Anaconda Python, you can install from the "conda-forge" 
 channel of Anaconda packages ::
@@ -64,29 +86,8 @@ channel of Anaconda packages ::
      conda config --add channels conda-forge
      conda install diffpy.pdfmorph
 
-If you don't use Anaconda or prefer to install from sources, make sure 
-the required software is all in place and run ::
-	
-	python setup.py install
-
-By default the files are installed to standard system directories, 
-which may require the use of ``sudo`` for write privileges. If 
-administrator (root) access is not available, see the output from 
-``python setup.py install --help`` for options to install as a regular 
-user to user-writable locations. Note that installation to non-standard 
-directories may require adjustments to the PATH and PYTHONPATH 
-environment variables.
-
-To ensure the installation worked, activate the relevant conda 
-environment and type ::
-
-	pdfmorph --version
-
-If installed correctly, this command should return PDFmorph's current 
-version number.
-
-PDFmorph can then be started from a terminal ("Anaconda Prompt" on 
-Windows) by executing the ``pdfmorph`` program.
+If you don't use Anaconda or prefer to install from sources, please 
+consult online documentation.
 
 With Anaconda, PDFmorph can be later upgraded to the latest released
 version using ::
@@ -98,8 +99,25 @@ the latest version as follows ::
 
      easy_install --upgrade diffpy.pdfmorph
 
-For more information on how to use PDFmorph, please consult its online 
-documentation.
+
+USING PDFmorph
+------------------------------------------------------------------------
+
+For detailed instructions and full tutorial, consult online documentation.
+
+Once the required software, including PDFmorph is all installed, open
+up a terminal and check installation has worked properly by running ::
+
+	source activate pdfmorph_env
+	pdfmorph -h			#get some helpful information
+	pdfmorph --version
+
+If installed correctly, this last command should return the latest 
+version of PDFmorph. To begin using PDFmorph, run a command like ::
+
+	pdfmorph <target PDF file> <morphed PDF file>
+
+to see PDFmorph in action.
 
 
 DEVELOPMENT
@@ -121,8 +139,3 @@ CONTACTS
 For more information on PDFmorph, visit the `PDFmorph project web-page, <https://github.com/diffpy/diffpy.github.io/blob/source/products/pdfmorph.rst/>`_
 or email Professor Simon Billinge at sb2896@columbia.edu
 
-
-LICENSE
-------------------------------------------------------------------------
-
-For full license and copyright information, check `here. <https://github.com/diffpy/diffpy.pdfmorph/blob/master/LICENSE.txt/>`_ 
