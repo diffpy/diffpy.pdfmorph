@@ -126,8 +126,11 @@ version of PDFmorph. To begin using PDFmorph, run a command like ::
 
 	pdfmorph <target PDF file> <morphed PDF file>
 
-where either PDF file is a text file with a .cgr extension that contains
-PDF data, such as produced by ``PDFgetX2``, ``PDFgetX3``, or ``PDFgui``.
+where both PDFs file are text files which contain PDF data, such as those
+produced by ``PDFgetX2``, ``PDFgetX3``, or ``PDFgui``. Though some file
+extensions other than .cgr, but with the same content structure, have
+been shown to work with PDFmorph, it is recommended to stick with .cgr 
+files such as those in the tutorial.
 
 Enjoy!
 
