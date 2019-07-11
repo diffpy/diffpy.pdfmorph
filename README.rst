@@ -89,11 +89,17 @@ For your future sessions with the application: Make sure to run the
 ``source activate pdfmorph_env`` or ``activate pdfmorph_env`` commands 
 from your command line beforehand to ensure access to the software.
 
-Once in your desired conda environment, you can install from the 
-"conda-forge" channel of Anaconda packages ::
+Once in your desired conda environment, you can install from either the
+"diffpy" or "conda-forge" channels of Anaconda packages by running 
+either ::
 
-     conda config --add channels conda-forge
-     conda install diffpy.pdfmorph
+	conda config --add channels diffpy
+	conda install diffpy.pdfmorph
+
+or ::
+
+	conda config --add channels conda-forge
+	conda install diffpy.pdfmorph
 
 If you don't use Anaconda or prefer to install from sources, please 
 consult online documentation.
