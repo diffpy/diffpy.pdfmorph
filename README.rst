@@ -9,23 +9,32 @@
 PDFmorph
 ========================================================================
 
-PDFmorph is a Python software package designed to increase the insight
+PDFmorph is a Python software package designed to increase the insight 
 researchers can obtain from measured atomic pair distribution functions 
 (PDFs) in a model-independent way. The program was designed to help a 
-researcher  answer the question: "has my material undergone a phase 
-transition between these two measurements?"
+researcher answer the question: Has my material undergone a phase 
+transition between these two measurements?
 
-When given two PDFs to compare, PDFmorph attempts to correct for benign 
-effects like thermal expansion and increased thermal motion before 
-"morphing" one PDF to a selected "target" (usually, the higher-temperature
-PDF). After "stretching", "smearing", and "scaling" the PDF, PDF will
-find the best fit between the morphed and target PDFs and plot them on 
-top of each other with the difference curve plotted below.
+One approach is to compare the two PDFs in a plot and view the difference 
+curve underneath. However, significant signal can be seen in the 
+difference curve from benign effects such as thermal expansion (peak 
+shifts) and increased thermal motion (peak broadening) or a change in 
+scale due to differences in incident flux, for example. PDFmorph will 
+do its best to correct for these benign effects before computing and 
+plotting the difference curve. One measured PDF (typically that collected
+under higher temperature) is identified as the target PDF and the second 
+PDF is then morphed by "stretching" (chaning the r-axis to simulate a 
+uniform lattice expansion), "smearing" (broadening peaks through a 
+uniform convolution to simulate increased thermal motion), and "scaling" 
+(self-explanatory). PDFmorph will vary the amplitude of the morphing 
+transformations to obtain the best fit between the morphed and the target 
+PDFs, then plot them on top of each other with the difference plotted 
+below.
+
+There are also a few other morphing transformations in the program.
 
 Finally, we note that PDFmorph should work on other spectra that are not 
 PDFs, though it has not been extensively tested beyond the PDF.
-
-For more information on PDFmorph, please consult the documentation.
 
 
 LICENSE
@@ -38,10 +47,10 @@ This software is subject to license and copyright restrictions listed
 REQUIREMENTS
 ------------------------------------------------------------------------
 
-The PDFmorph application has a Command Line interface. If you are 
-unfamiliar with the terminal or windows command prompt, it is recommended
-that you consult online resources and become somewhat familiar before
-using PDFmorph.
+PDFmorph is currently run from the command line, which requires opening
+and typing into a terminal window or Windows command prompt. It is 
+recommended that you consult online resources and become somewhat 
+familiar before using PDFmorph.
 
 PDFmorph requires Python 3 and several third party libraries 
 that are used by PDFmorph and its components.
@@ -76,12 +85,12 @@ or ::
 
 	deactivate pdfmorph_env
 
-If you use this conda environment, make sure to run the ``source activate 
-pdfmorph_env`` or ``activate pdfmorph_env`` commands from your command 
-line before every session using the applicaiton.
+For your future sessions with the application: Make sure to run the 
+``source activate pdfmorph_env`` or ``activate pdfmorph_env`` commands 
+from your command line beforehand to ensure access to the software.
 
-If you're using Anaconda Python, you can install from the "conda-forge" 
-channel of Anaconda packages ::
+Once in your desired conda environment, you can install from the 
+"conda-forge" channel of Anaconda packages ::
 
      conda config --add channels conda-forge
      conda install diffpy.pdfmorph
@@ -117,13 +126,16 @@ version of PDFmorph. To begin using PDFmorph, run a command like ::
 
 	pdfmorph <target PDF file> <morphed PDF file>
 
-to see PDFmorph in action.
+where either PDF file is a text file with a .cgr extension that contains
+PDF data, such as produced by ``PDFgetX2``, ``PDFgetX3``, or ``PDFgui``.
+
+Enjoy!
 
 
 DEVELOPMENT
 ------------------------------------------------------------------------
 
-PDFmorph is an open-source software available in a git repository at
+PDFmorph is an open-source software project on Github:
 https://github.com/diffpy/diffpy.pdfmorph.
 
 Feel free to fork the project and contribute! To install PDFmorph
