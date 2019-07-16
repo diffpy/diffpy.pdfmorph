@@ -68,7 +68,7 @@ installation procedure described below.
 INSTALLATION
 ------------------------------------------------------------------------
 
-We recommend installing the software using conda. if you have anaconda
+We recommend installing the software using conda. If you have anaconda
 or mini-conda installed on your computer, you can proceed directly to
 the instructions below. If not, we recommend that you install mini-
 conda and test that it is working by opening a terminal and typing
