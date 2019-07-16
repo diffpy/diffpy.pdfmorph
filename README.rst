@@ -12,8 +12,8 @@ PDFmorph
 PDFmorph is a Python software package designed to increase the insight 
 researchers can obtain from measured atomic pair distribution functions 
 (PDFs) in a model-independent way. The program was designed to help a 
-researcher answer the question: Has my material undergone a phase 
-transition between these two measurements?
+researcher answer the question: "Has my material undergone a phase 
+transition between these two measurements?"
 
 One approach is to compare the two PDFs in a plot and view the difference 
 curve underneath. However, significant signal can be seen in the 
