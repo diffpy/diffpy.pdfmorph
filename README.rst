@@ -141,8 +141,7 @@ where both PDFs file are text files which contain PDF data, such as ``.gr``
 or ``.cgr`` files that are produced by ``PDFgetX2``, ``PDFgetX3``, 
 or ``PDFgui``. Though some file extensions other than ``.gr`` or ``.cgr``, 
 but with the same content structure, have been shown to work with 
-PDFmorph, it is recommended to stick with ``.cgr`` files such as those 
-in the tutorial.
+PDFmorph, it is recommended to stick with ``.gr`` files.
 
 Enjoy!
 
