@@ -22,7 +22,7 @@ shifts) and increased thermal motion (peak broadening) or a change in
 scale due to differences in incident flux, for example. PDFmorph will 
 do its best to correct for these benign effects before computing and 
 plotting the difference curve. One measured PDF (typically that collected
-under higher temperature) is identified as the target PDF and the second 
+at higher temperature) is identified as the target PDF and the second 
 PDF is then morphed by "stretching" (chaning the r-axis to simulate a 
 uniform lattice expansion), "smearing" (broadening peaks through a 
 uniform convolution to simulate increased thermal motion), and "scaling" 
@@ -52,38 +52,42 @@ and typing into a terminal window or Windows command prompt. It is
 recommended that you consult online resources and become somewhat 
 familiar before using PDFmorph.
 
-PDFmorph requires Python 3 and several third party libraries 
-that are used by PDFmorph and its components.
+PDFmorph can be run with Python 2.7 and Python 3.5 or higher. We 
+recommend using the Python 3 version. It makes use of several third party
+libraries that you'll need to run the app and its components.
 
 * NumPy              - library for scientific computing with Python
 * matplotlib         - Python 2D plotting library
 * SciPy              - library for highly technical Python computing
 * diffpy.utils       - `shared helper utilities <https://github.com/diffpy/diffpy.utils/>`_ for wx GUI
 
-To install these packages, please see installation instructions at 
-their respective web-pages.
+These dependencies will be installed automatically if you use the conda
+installation procedure described below.
 
 
 INSTALLATION
 ------------------------------------------------------------------------
 
+We recommend installing the software using conda. if you have anaconda
+or mini-conda installed on your computer, you can proceed directly to
+the instructions below. If not, we recommend that you install mini-
+conda and test that it is working by opening a terminal and typing
+``conda``.
+ 
 To create and activate a conda environment to use this software, run 
 the following command from the command line ::
 	
 	conda create -n pdfmorph_env python=3
 	source activate pdfmorph_env
 
-If you're using Windows, replace ``source activate pdfmorph`` with ::
-	
-	activate pdfmorph_env
+If you're using Windows, replace ``source activate pdfmorph`` with 
+``activate pdfmorph_env``.
 
 When you are finished with the session, exit the environment by running :: 
 
 	source deactivate pdfmorph_env
 
-or ::
-
-	deactivate pdfmorph_env
+or, on Windows, ``deactivate pdfmorph_env``.
 
 For your future sessions with the application: Make sure to run the 
 ``source activate pdfmorph_env`` or ``activate pdfmorph_env`` commands 
@@ -101,10 +105,10 @@ or ::
 	conda config --add channels conda-forge
 	conda install diffpy.pdfmorph
 
-If you don't use Anaconda or prefer to install from sources, please 
+If you don't use conda or prefer to install from sources, please 
 consult online documentation.
 
-With Anaconda, PDFmorph can be later upgraded to the latest released
+With conda, PDFmorph can be later upgraded to the latest released
 version using ::
 
      conda update diffpy.pdfmorph
@@ -123,20 +127,22 @@ For detailed instructions and full tutorial, consult online documentation.
 Once the required software, including PDFmorph is all installed, open
 up a terminal and check installation has worked properly by running ::
 
-	source activate pdfmorph_env
-	pdfmorph -h			#get some helpful information
+	source activate pdfmorph_env      #if the environment isn't already active
+	pdfmorph -h			  #get some helpful information
 	pdfmorph --version
 
-If installed correctly, this last command should return the latest 
-version of PDFmorph. To begin using PDFmorph, run a command like ::
+If installed correctly, this last command should return the version 
+of PDFmorph that you have installed on your system. To begin using 
+PDFmorph, run a command like ::
 
 	pdfmorph <target PDF file> <morphed PDF file>
 
-where both PDFs file are text files which contain PDF data, such as those
-produced by ``PDFgetX2``, ``PDFgetX3``, or ``PDFgui``. Though some file
-extensions other than .cgr, but with the same content structure, have
-been shown to work with PDFmorph, it is recommended to stick with .cgr 
-files such as those in the tutorial.
+where both PDFs file are text files which contain PDF data, such as ``.gr``
+or ``.cgr`` files that are produced by ``PDFgetX2``, ``PDFgetX3``, 
+or ``PDFgui``. Though some file extensions other than ``.gr`` or ``.cgr``, 
+but with the same content structure, have been shown to work with 
+PDFmorph, it is recommended to stick with ``.cgr`` files such as those 
+in the tutorial.
 
 Enjoy!
 
