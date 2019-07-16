@@ -84,11 +84,14 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     
     """
     if labels is None:
-        labels = []
+        labels = [2]
+        labeldata = None
+        labelfit = None
+    else:
+        labeldata = labels[1]
+        labelfit = labels[0]
     rfit, grfit = pairlist[0]
     rdat, grdat = pairlist[1]
-    labeldata = labels[1]
-    labelfit = labels[0]
 
     # View min and max
     rvmin = max(rfit[0], rdat[0])
