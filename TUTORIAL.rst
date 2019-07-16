@@ -20,8 +20,6 @@ Once you have two PDF files, run the command ::
 and observe. PDFmorph should pop up a graph of your PDF data "morphed"
 together, with a difference curve underneath.
 
-#FIXME - add image
-
 To see the difference curve working, run ::
 
 	pdfmorph <testfile 1> <testfile 1>
@@ -50,8 +48,6 @@ For example, running the command ::
 
 will scale testfile 1 by a factor of 0.5 and will smear its peaks with a
 Gaussian of width 0.5.
-
-#FIXME - add image
 
 Using the list provided by running ``pdfmorph --help``, you should now 
 be able to "morph" your PDFs in a number of highly customizable ways.
