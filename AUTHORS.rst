@@ -2,7 +2,7 @@ Authors
 =======
 
 Pavol Juhas, Christopher L. Farrow, Christopher James Wright, 
-Timothy Liu, Simon J.L. Billinge
+Timothy Liu, S. Matthew Román, Simon J.L. Billinge
 
 Contributors
 ------------
