@@ -1,7 +1,7 @@
 Authors
 =======
 
-Pavol Juhas, Christopher L. Farrow, Christopher James Wright, 
+Christopher L. Farrow, Christopher James Wright, Pavol Juhas,
 Chia-Hao (Timothy) Liu, S. Matthew Román, Simon J.L. Billinge
 
 Contributors
