@@ -228,15 +228,18 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
 
 
 def plot_morph(chain, ax=None, **kwargs):
-    """function to plot pdfmorph result from a morph chain
+    """Plot the morphed PDF and the target PDF of a morphing operation.
+
+    Open a new figure unless a specific axis is provided for plotting.
 
     Parameters
     ----------
     chain: diffpy.pdfmorph.morphs.morphchain.MorphChain
         An instance of processed morph chain.
     ax: matplotlib.axes.Axes, optinal
-        An instance of Axes class to plot morphing result.
-        Default to the axes return by ``matplotlib.pyplot.gca()``
+        An instance of Axes class to plot the morphing result.
+        If ax is None, instances of new Figure and Axes will
+         be created. Default to None.
     kwargs:
         Additional keyword arguements will be passed
          to ``ax.plot(...**kwargs)``
@@ -248,7 +251,7 @@ def plot_morph(chain, ax=None, **kwargs):
          the plotted data.
     """
     if ax is None:
-        ax = plt.gca()
+        fig, ax = plt.subplots()
     rfit, grfit = chain.xyobjout
     rdat, grdat = chain.xyrefout
     l_list = ax.plot(rfit, grfit, label='objective', **kwargs)
