@@ -44,7 +44,7 @@ def morph_default_config(**kwargs):
     Parameters
     ----------
     kwargs
-        extra keyword arguments passed to the default moprph config
+        extra keyword arguments passed to the default morph config
 
     Returns
     -------
@@ -67,7 +67,7 @@ def morph_default_config(**kwargs):
 
 
 def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
-             pearson=False, addpearson=False, fixed_operations=None,
+             pearson=False, add_pearson=False, fixed_operations=None,
              refine=True, verbose=False, **kwargs):
     """function to perfom PDF morphing.
 
@@ -94,7 +94,7 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     pearson: Bool, optional
         Option to include Pearson coefficient as a minimizing target
          during morphing. Default to False.
-    addpearson: Bool, optional
+    add_pearson: Bool, optional
         Option to include **both** Pearson coefficient and Rw as
         minimizing targets during morphing. Default to False.
     fixed_operations : list, optional
@@ -188,7 +188,7 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     refiner = ref.Refiner(chain, xobj, yobj, xref, yref)
     if pearson:
         refiner.residual = refiner._pearson
-    if addpearson:
+    if add_pearson:
        refiner.residual = refiner._addpearson
     # execute morphing
     if refpars and refine:
@@ -212,7 +212,6 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     chain(xobj, yobj, xref, yref)
     # print output
     if verbose:
-
         if fixed_operations:
             print("== INFO: Following steps are fixed during morphing ==:\n")
             print('\n'.join(fixed_operations))
