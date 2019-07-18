@@ -12,8 +12,13 @@ from setuptools import setup, find_packages
 
 
 MYDIR = os.path.dirname(os.path.abspath(__file__))
+
+with open(os.path.join(MYDIR, 'requirements/run.txt')) as fp:
+    requirements = [line.strip() for line in fp]
+
 with open(os.path.join(MYDIR, 'README.rst')) as fp:
     long_description = fp.read()
+
 
 # define distribution
 setup(
@@ -27,7 +32,7 @@ setup(
         ],
     },
     test_suite='tests',
-    install_requires=[],
+    install_requires=requirements,
     author='Simon J.L. Billinge',
     author_email='sb2896@columbia.edu',
     maintainer='FIXME Chris Farrow',
