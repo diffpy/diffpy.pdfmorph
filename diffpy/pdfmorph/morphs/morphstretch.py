@@ -17,9 +17,6 @@
 """class MorphStretch -- stretch the objective.
 """
 
-# module version
-__id__ = "$Id$"
-
 
 import numpy
 from diffpy.pdfmorph.morphs.morph import *

@@ -17,9 +17,6 @@
 """class MorphRGrid -- put objective and reference on desired grid.
 """
 
-# module version
-__id__ = "$Id$"
-
 
 import numpy
 from diffpy.pdfmorph.morphs.morph import *
