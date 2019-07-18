@@ -46,11 +46,3 @@ PDFmorph.log
     :members:
     :undoc-members:
     :show-inheritance:
-
-PDFmorph.version
-================
-
-.. automodules:: diffpy.pdfmorph.version
-    :members:
-    :undoc-members:
-    :show-inheritance:

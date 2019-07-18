@@ -10,8 +10,9 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import sys
+import os
+sys.path.insert(0, os.path.abspath('../..'))
 
 
 # -- Project information -----------------------------------------------------
@@ -31,7 +32,8 @@ release = '0.1.0'
 # ones.
 import sphinx_rtd_theme
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 
-	'sphinx.ext.todo', 'sphinx.ext.viewcode']
+	'sphinx.ext.todo', 'sphinx.ext.viewcode', 
+	'sphinx.ext.intersphinx', 'm2r']
 napoleon_google_docstring = False
 napoleon_use_param = False
 napoleon_use_ivar = False
@@ -40,7 +42,6 @@ napoleon_use_ivar = False
 templates_path = ['_templates']
 
 from jinja2 import Template, Environment, FileSystemLoader
-import os
 
 source_suffix = '.rst'
 
