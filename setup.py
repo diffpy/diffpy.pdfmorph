@@ -7,7 +7,13 @@
 Packages:   diffpy.pdfmorph
 """
 
+import os
 from setuptools import setup, find_packages
+
+
+MYDIR = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(MYDIR, 'README.rst')) as fp:
+    long_description = fp.read()
 
 # define distribution
 setup(
@@ -28,6 +34,8 @@ setup(
     maintainer_email='FIXME clf2121@columbia.edu',
     url='https://github.com/diffpy/diffpy.pdfmorph',
     description="Tools for manipulating and comparing PDF profiles.",
+    long_description = long_description,
+    long_description_content_type = 'text/x-rst',
     license='BSD',
     keywords="diffpy PDF",
 )
