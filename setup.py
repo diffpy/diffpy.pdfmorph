@@ -27,7 +27,6 @@ setup(
     maintainer='Chris Farrow',
     maintainer_email='clf2121@columbia.edu',
     url='http://www.diffpy.org/',
-    download_url='http://www.diffpy.org/packages/',
     description="Tools for manipulating and comparing PDF profiles.",
     license='BSD',
     keywords="diffpy PDF",
