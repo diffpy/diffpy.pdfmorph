@@ -29,7 +29,7 @@ install:
   - conda install --yes --file requirements/build.txt
   - conda install pip
   - pip install -r requirements/pip.txt
-  - python setup.py install
+  - pip install --no-deps .
   - git clean -xfd
 
 script:
