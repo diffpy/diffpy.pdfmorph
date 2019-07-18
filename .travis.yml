@@ -1,4 +1,4 @@
-language: python
+language: generic
 sudo: false
 
 cache:
@@ -6,11 +6,11 @@ cache:
     - $HOME/.cache/pip
     - $HOME/.cache/matplotlib
 
-python:
-  - 2.7
-  - 3.5
-  - 3.6
-  - 3.7
+env:
+  - MY_PYTHON_VERSION=2.7
+  - MY_PYTHON_VERSION=3.5
+  - MY_PYTHON_VERSION=3.6
+  - MY_PYTHON_VERSION=3.7
 
 before_install:
   - "export MPLBACKEND=agg"
@@ -24,7 +24,7 @@ before_install:
 
 install:
   - export GIT_FULL_HASH=`git rev-parse HEAD`
-  - conda create --yes -n testenv python=$TRAVIS_PYTHON_VERSION
+  - conda create --yes -n testenv python=$MY_PYTHON_VERSION
   - source activate testenv
   - conda install --yes --file requirements/build.txt
   - conda install pip
@@ -40,7 +40,7 @@ script:
   - coverage report -m
   - codecov
 #  - |
-#    if [ $TRAVIS_PYTHON_VERSION = "3.6" ]; then
+#    if [ $MY_PYTHON_VERSION = "3.6" ]; then
 #      conda install --yes --file requirements/docs.txt
 #      cd doc
 #      make html
