@@ -44,9 +44,9 @@ class TestMorphRGrid(unittest.TestCase):
                  }
         morph = MorphRGrid(config)
         xyallout = morph(self.xobj, self.yobj, self.xref, self.yref)
-        self.assertAlmostEquals(config["rmin"], morph.rmin)
-        self.assertAlmostEquals(config["rmax"], morph.rmax)
-        self.assertAlmostEquals(config["rstep"], morph.rstep)
+        self.assertAlmostEqual(config["rmin"], morph.rmin)
+        self.assertAlmostEqual(config["rmax"], morph.rmax)
+        self.assertAlmostEqual(config["rstep"], morph.rstep)
         self._runTests(xyallout, morph)
         return
 
@@ -61,9 +61,9 @@ class TestMorphRGrid(unittest.TestCase):
                  }
         morph = MorphRGrid(config)
         xyallout = morph(self.xobj, self.yobj, self.xref, self.yref)
-        self.assertAlmostEquals(config["rmin"], morph.rmin)
-        self.assertAlmostEquals(5, morph.rmax)
-        self.assertAlmostEquals(config["rstep"], morph.rstep)
+        self.assertAlmostEqual(config["rmin"], morph.rmin)
+        self.assertAlmostEqual(5, morph.rmax)
+        self.assertAlmostEqual(config["rstep"], morph.rstep)
         self._runTests(xyallout, morph)
         return
 
@@ -78,9 +78,9 @@ class TestMorphRGrid(unittest.TestCase):
                  }
         morph = MorphRGrid(config)
         xyallout = morph(self.xobj, self.yobj, self.xref, self.yref)
-        self.assertAlmostEquals(1.0, morph.rmin)
-        self.assertAlmostEquals(config["rmax"], morph.rmax)
-        self.assertAlmostEquals(config["rstep"], morph.rstep)
+        self.assertAlmostEqual(1.0, morph.rmin)
+        self.assertAlmostEqual(config["rmax"], morph.rmax)
+        self.assertAlmostEqual(config["rstep"], morph.rstep)
         self._runTests(xyallout, morph)
         return
 
@@ -95,9 +95,9 @@ class TestMorphRGrid(unittest.TestCase):
                  }
         morph = MorphRGrid(config)
         xyallout = morph(self.xobj, self.yobj, self.xref, self.yref)
-        self.assertAlmostEquals(config["rmin"], morph.rmin)
-        self.assertAlmostEquals(config["rmax"], morph.rmax)
-        self.assertAlmostEquals(0.01, morph.rstep)
+        self.assertAlmostEqual(config["rmin"], morph.rmin)
+        self.assertAlmostEqual(config["rmax"], morph.rmax)
+        self.assertAlmostEqual(0.01, morph.rstep)
         self._runTests(xyallout, morph)
         return
 

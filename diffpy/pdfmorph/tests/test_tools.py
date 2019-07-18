@@ -40,7 +40,7 @@ class TestTools(unittest.TestCase):
         import random
         x = random.random()
         scale = tools.estimateScale(self.yobj, x * self.yobj)
-        self.assertAlmostEquals(x, scale)
+        self.assertAlmostEqual(x, scale)
         return
 
 
