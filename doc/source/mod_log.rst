@@ -1,5 +1,5 @@
 diffpy.pdfmorph.log
-############
+###################
 
 .. automodule:: diffpy.pdfmorph.log
     :members:

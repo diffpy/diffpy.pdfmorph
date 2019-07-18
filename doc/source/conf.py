@@ -92,26 +92,3 @@ epub_publisher = author
 epub_copyright = copyright
 
 epub_exclude_files = ['search.html']
-
-print('rendering templates')
-templated_files = os.listdir(os.path.join(os.path.dirname(__file__),
-				'_templates'))
-ctx = {'collection_env': 'collection-2019-0.1-pdfmorph',
-	'analysis_env': 'analysis-2019-0.1-pdfmorph',
-	'bs_proxy_config': '5577 5578',
-	'analysis_session_cmd': 'setup_analysis',
-	'start_analysis': 'start_analysis()',
-	'start_analysis_func': 'start_analysis',
-	'setup_analysis': 'setup_analysis',
-	'len': len,
-	'list': list,
-	}
-env = Environment(loader=FileSystemLoader([
-	'_templates',
-	os.path.join(os.path.dirname(__file__), '_templates'),
-	]))
-for tname in templated_files:
-	template = env.get_template(tname)
-	result = template.render(ctx)
-	with open(os.path.join(os.path.dirname(__file__), os.path.splitext(tname)[0] + '.rst'), 'wt') as f:
-		f.write(result)
