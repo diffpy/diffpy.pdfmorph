@@ -43,6 +43,23 @@ setup(
     long_description_content_type = 'text/x-rst',
     license='BSD',
     keywords="diffpy PDF",
+    classifiers = [
+        # List of possible values at
+        # http://pypi.python.org/pypi?:action=list_classifiers
+        'Development Status :: 4 - Beta',
+        'Environment :: Console',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX',
+        'Operating System :: Unix',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Topic :: Scientific/Engineering :: Chemistry',
+        'Topic :: Scientific/Engineering :: Physics',
+    ],
 )
 
 # End of file
