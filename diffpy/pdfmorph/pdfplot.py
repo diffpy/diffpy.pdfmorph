@@ -53,10 +53,8 @@ def plotPDFs(pairlist, labels=None, offset ='auto', rmin = None, rmax = None):
     if gap == 0:
         plt.legend(loc = 0)
 
-
     plt.xlabel(r"$r (\mathrm{\AA})$")
     plt.ylabel(r"$G (\mathrm{\AA}^{-1})$")
-
     plt.show()
     return
 
