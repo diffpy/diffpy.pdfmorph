@@ -39,8 +39,8 @@ Authors
 
 ``PDFmorph`` is developed by members of the Billinge Group at 
 Columbia University and Brookhaven National Laboratory including 
-Pavol Juhás, Christopher L. Farrow, Christopher Wright, Chia-Hao 
-(Timothy Liu), S. Matthew Román, and Simon J. L. Billinge. 
+Christopher L. Farrow, Christopher James Wright, Pavol Juhás, Chia-Hao
+(Timothy) Liu, S. Matthew Román, and Simon J. L. Billinge.
 
 For a detailed list of contributors, check `here 
 <https://github.com/diffpy/diffpy.pdfmorph/graphs/contributors>`_.
