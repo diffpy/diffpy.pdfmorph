@@ -49,32 +49,41 @@ PDFmorph Example
 		  is no difference)
 
 		* The red curve is the taget PDF, and the blue circles
-		  is the morphed PDF; this will become clearer with the 
-		  next example.
+		  represent the morphed PDF; this will become clearer 
+		  with the next example.
 
-Once you have two PDF files, run the command ::
+	5. Now, using the files "ni_qmax25_e17.5_p5.0.cgr" as our target
+	   and "ni_qmax25_psize30.cgr" as our morphed PDF (available 
+	   from the same source as above), run the following to see the 
+	   program's "morphing" capabilities ::
 
-	pdfmorph <testfile 1> <testfile 2>
+		pdfmorph ni_qmax25_e17.5_p5.0.cgr ni_qmax25_psize30.cgr
 
-and observe. PDFmorph should pop up a graph of your PDF data "morphed"
-together, with a difference curve underneath.
+	   This should produce an image like this :: 
 
-To see the difference curve working, run ::
+		.. figure:: doc/images/morph_ex2.png
+			:align: center
 
-	pdfmorph <testfile 1> <testfile 1>
+	   Note how the difference curve is now showing the difference
+	   between the two PDFs, after the program has "morphed" the 
+	   second PDF to the target PDF.
 
-and see the difference curve completely flattened. 
+	6. Now, try using your own data! Be sure to list the higher
+	   temperature PDF as the target and the lower temperature 
+	   PDF as the morphed pdf. Once you've selected your files, run ::
 
+		pdfmorph <targetPDF> <morphedPDF>
 
 Additional PDFmorph Features
 ----------------------------
 
-Finally, see that by running ::
+Now that you've seen the capabilities of PDFmorph at its base level, 
+see how you can modify the behavior of the program by running ::
 
 	pdfmorph --help
 
-a list of additional modifications that you can run in your PDFmorph
-program is generated. 
+This will generate an additional list of changes that you can make
+and values that you can provide the program.
 
 You can add any of these "options" by placing them before your two 
 filenames. ::
@@ -83,10 +92,15 @@ filenames. ::
 
 For example, running the command ::
 
-	pdfmorph --scale=0.5 --smear=0.5 <testfile 1> <testfile 2>
+	pdfmorph --scale=0.5 --smear=0.5 <targetPDF> <morphedPDF>
 
-will scale testfile 1 by a factor of 0.5 and will smear its peaks with a
+will scale targetPDF by a factor of 0.5 and will smear its peaks with a
 Gaussian of width 0.5.
+
+When the program fits these parameters without user input, it decides 
+their values based on internal algorithmic calculations. When the user 
+inputs these values, it overrides the "choice" that the program would 
+make.
 
 Using the list provided by running ``pdfmorph --help``, you should now 
 be able to "morph" your PDFs in a number of highly customizable ways.
