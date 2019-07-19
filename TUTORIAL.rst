@@ -1,5 +1,5 @@
 PDFmorph Tutorial
-=================
+#################
 
 Welcome! This will be a quick tutorial to accquaint users with PDFmorph
 and some of what it can do. 
@@ -8,10 +8,49 @@ As we described in the README and installation instructions, please make
 sure that you are familiar with working with your command line terminal
 before using this application.
 
-After all of the necessary software is installed, activate your PDFmorph-
-equipped conda environment and change into a directory containing at
-least two PDF files. If you need some test files to help you get started,
-check `here<https://github.com/diffpy/diffpy.pdfmorph/tree/master/tests/testdata>`_.
+Before you've started this tutorial, please ensure that you've installed
+all necessary software and dependencies.
+
+PDFmorph Example
+----------------
+
+	1. Open your Terminal or Command Prompt.
+
+	2. It it's not active already, activate your PDFmorph-equipped 
+	   conda environment by typing in ::
+	
+		source activate <pdfmorph_env>
+
+	   on Linux or ``activate <pdfmorph_env>`` on Windows.
+
+		* If you need to list your available conda environments,
+		  run the command ``conda info --envs`` or 
+		  ``conda env list``
+
+	3. Change directories with the ``cd`` command to a directory
+	   containing PDF files. For instance, I will use the file
+	   "ni_qmax25.cgr", found `here<https://github.com/diffpy/diffpy.pdfmorph/tree/master/tests/testdata>`_,
+	   so I will run ``cd ~/diffpy.pdfmorph/diffpy/pdfmorph/tests/testdata``
+
+	4. Using this file for an example (you can download it from the
+	   link above!), run the following command ::
+
+		pdfmorph ni_qmax25.cgr ni_qmax25.cgr
+
+	   This should produce an image like this ::
+
+		.. figure:: doc/images/morph_ex1.png
+			:align: center
+
+	   A few things to note:
+
+		* The green line (the difference curve) is flat because
+		  in this example, we used the same PDF twice (so, there
+		  is no difference)
+
+		* The red curve is the taget PDF, and the blue circles
+		  is the morphed PDF; this will become clearer with the 
+		  next example.
 
 Once you have two PDF files, run the command ::
 
