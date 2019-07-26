@@ -62,12 +62,12 @@ Basic PDFmorph Workflow
         in a flat green line underneath them.
 
     5. Now, we will see PDFmorph run with two different PDFs and no
-        morphing. Type the following command into your command line ::
+       morphing. Type the following command into your command line ::
 
             pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr
 
-        Without morphing, the difference Rw = 0.407. This indicates that
-        the two PDFs vary drastically.
+       Without morphing, the difference Rw = 0.407. This indicates that
+       the two PDFs vary drastically.
 
             * While running the ``pdfmorph`` command, it is important
               to remember that the first PDF file argument you provide
@@ -77,34 +77,34 @@ Basic PDFmorph Workflow
               acts as the model and does not get morphed. Hereinafter,
               we will refer to the first PDF argument as the "objective"
               and the second as the "reference", as the PDFmorph display
-             does.
+              does.
 
     6. Now, we will start the morphing process, which requires us to
-        provide initial guesses for our scaling factor, Gaussian smear,
+       provide initial guesses for our scaling factor, Gaussian smear,
        and stretch, separately. We will start with the scaling factor.
        Begin by typing the command ::
 
             pdfmorph --scale=2 -a darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr
 
-        Now, the difference Rw = 1.457, a significant increase from our
-        value previously. We must modify our initial value for the
-        scaling factor and do so until we see a reduction in the
-        difference Rw from the unmorphed value. Type ::
+       Now, the difference Rw = 1.457, a significant increase from our
+       value previously. We must modify our initial value for the
+       scaling factor and do so until we see a reduction in the
+       difference Rw from the unmorphed value. Type ::
 
             pdfmorph --scale=0.9 -a darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr
 
-        The difference Rw is now 0.351, lower than our unmorphed
-        example's value. To see PDFmorph optimize the scale factor,
-        simply drop ``-a`` from the command and type ::
+       The difference Rw is now 0.351, lower than our unmorphed
+       example's value. To see PDFmorph optimize the scale factor,
+       simply drop ``-a`` from the command and type ::
 
             pdfmorph --scale=0.9 darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr
 
-        PDFmorph, given a reasonable initial guess, will use find the
-        optimal value for each morphing feature. Here, we see that
-        PDFmorph displays ``scale = 0.799025`` in the command prompt,
-        meaning that it has found this to be the most optimal value for
-        the scale factor. The difference Rw = 0.330, indicating a
-        better fit than our reasonable initial guess.
+       PDFmorph, given a reasonable initial guess, will use find the
+       optimal value for each morphing feature. Here, we see that
+       PDFmorph displays ``scale = 0.799025`` in the command prompt,
+       meaning that it has found this to be the most optimal value for
+       the scale factor. The difference Rw = 0.330, indicating a
+       better fit than our reasonable initial guess.
 
             * It is the choice of the user whether or not to run values
               before removing ``-a`` when analyzing data with PDFmorph.
@@ -116,29 +116,29 @@ Basic PDFmorph Workflow
               for convergence.
 
     7. Now, we will examine the Gaussian smearing factor. We provide an
-        initial guess by typing ::
+       initial guess by typing ::
 
             pdfmorph --scale=0.8 --smear=0.5 -a darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr
 
-        And viewing the results. We've tailored our scale factor to be
-        close to the value given by PDFmorph, but see that the difference
-        Rw has increased substantially due to our smear value. One
-        approach, as described above, is to remove the ``-a`` from the
-        above command and run it again.
+       And viewing the results. We've tailored our scale factor to be
+       close to the value given by PDFmorph, but see that the difference
+       Rw has increased substantially due to our smear value. One
+       approach, as described above, is to remove the ``-a`` from the
+       above command and run it again.
 
             * Note: The warnings that the Terminal/Command Prompt
               displays are largely numerical in nature and do not
               indicate a physically irrelevant guess. These are somewhat
               superficial and in most cases can be ignored.
 
-        We see that this has had hardly any effect on our PDF. To see
-        an effect, we restrict the ``rmin`` and ``rmax`` values to
-        reflect relevant data range by typing ::
+       We see that this has had hardly any effect on our PDF. To see
+       an effect, we restrict the ``rmin`` and ``rmax`` values to
+       reflect relevant data range by typing ::
 
             pdfmorph --scale=0.8 --smear=0.5 --rmin=1.5 --rmax=30 darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr
 
-        Now, we see that the difference Rw = 0.204 and that the optimized
-        ``smear=-0.084138``.
+       Now, we see that the difference Rw = 0.204 and that the optimized
+       ``smear=-0.084138``.
 
             * We restricted the r values because some of the Gaussian
               smear effects are only visible in a fixed r range. We
@@ -146,31 +146,31 @@ Basic PDFmorph Workflow
               data was that was not exponentially decayed by
               instrumental shortcomings.
 
-        We are getting closer to an acceptably close fit to our data!
+       We are getting closer to an acceptably close fit to our data!
 
     8. Finally, we will examine the stretch factor. Provide an intial
-        guess by typing ::
+       guess by typing ::
 
             pdfmorph --scale=0.8 --smear=-0.08 --stretch=0.5 --rmin=1.5 --rmax=30 -a darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr
 
-        And noting that the difference has increased. Before continuing,
-        see if you can see which direction (higher or lower) our initial
-        estimate for the stretch factor needs to go and then removing
-        the ``-a`` to check optimized value!
+       And noting that the difference has increased. Before continuing,
+       see if you can see which direction (higher or lower) our initial
+       estimate for the stretch factor needs to go and then removing
+       the ``-a`` to check optimized value!
 
-        If you cannot, type ::
+       If you cannot, type ::
 
             pdfmorph --scale=0.8 --smear=-0.08 --stretch=0.005 --rmin=1.5 --rmax=30 -a darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr
 
-        to observe decreased difference and then remove ``-a`` to see
-        the optimized ``--stretch=0.001762``. We have now reached
-        the optimal fit for our PDF!
+       to observe decreased difference and then remove ``-a`` to see
+       the optimized ``--stretch=0.001762``. We have now reached
+       the optimal fit for our PDF!
 
     9. Now, try it on your own! If you have personally collected or
-        otherwise readily available PDF data, try this process to see if
-        you can morph your PDFs to one another. Many of the parameters
-        provided in this tutorial are unique to it, so be cautious about
-        your choices and made sure that they remain physically relevant.
+       otherwise readily available PDF data, try this process to see if
+       you can morph your PDFs to one another. Many of the parameters
+       provided in this tutorial are unique to it, so be cautious about
+       your choices and made sure that they remain physically relevant.
 
 Enjoy the software!
 
