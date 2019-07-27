@@ -96,7 +96,7 @@ diffpy.pdfmorph.morphs.morphsmear module
 diffpy.pdfmorph.morphs.morphstretch module
 ==========================================
 
-.. automodules:: diffpy.pdfmorph.morphs.morphstretch
+.. automodule:: diffpy.pdfmorph.morphs.morphstretch
    :members:
    :undoc-members:
    :show-inheritance:

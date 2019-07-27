@@ -18,10 +18,8 @@ sys.path.insert(0, os.path.abspath('../..'))
 # -- Project information -----------------------------------------------------
 
 project = 'PDFmorph'
-copyright = '2009-2019, Trustees of Columbia University in the City of 
-New York, all rights reserved.'
-author = 'Chris Farrow, Christopher J. Wright, Pavol Juhás, Chia-Hao 
-(Timothy) Liu, S. Matthew Román, Simon J.L. Billinge'
+copyright = '2009-2019, Trustees of Columbia University in the City of New York, all rights reserved.'
+author = 'Chris Farrow, Christopher J. Wright, Pavol Juhás, Chia-Hao (Timothy) Liu, S. Matthew Román, Simon J.L. Billinge'
 
 # The full version, including alpha/beta/rc tags
 release = '0.1.0'
