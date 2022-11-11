@@ -17,9 +17,6 @@
 """Tools used in morphs and morph chains.
 """
 
-# module version
-__id__ = "$Id$"
-
 
 import numpy
 

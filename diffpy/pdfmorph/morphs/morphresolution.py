@@ -17,8 +17,6 @@
 """class MorphResolutionDamping -- apply resolution broadening to the objective
 """
 
-# module version
-__id__ = "$Id$"
 
 import numpy
 

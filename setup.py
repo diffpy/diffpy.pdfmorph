@@ -7,7 +7,18 @@
 Packages:   diffpy.pdfmorph
 """
 
+import os
 from setuptools import setup, find_packages
+
+
+MYDIR = os.path.dirname(os.path.abspath(__file__))
+
+with open(os.path.join(MYDIR, 'requirements/run.txt')) as fp:
+    requirements = [line.strip() for line in fp]
+
+with open(os.path.join(MYDIR, 'README.rst')) as fp:
+    long_description = fp.read()
+
 
 # define distribution
 setup(
@@ -21,16 +32,35 @@ setup(
         ],
     },
     test_suite='tests',
-    install_requires=[],
+    install_requires=requirements,
     author='Simon J.L. Billinge',
     author_email='sb2896@columbia.edu',
-    maintainer='Chris Farrow',
-    maintainer_email='clf2121@columbia.edu',
-    url='http://www.diffpy.org/',
-    download_url='http://www.diffpy.org/packages/',
+    maintainer='Simon J.L. Billinge',
+    maintainer_email='sb2896@columbia.edu',
+    url='https://github.com/diffpy/diffpy.pdfmorph',
     description="Tools for manipulating and comparing PDF profiles.",
+    long_description = long_description,
+    long_description_content_type = 'text/x-rst',
     license='BSD',
     keywords="diffpy PDF",
+    classifiers = [
+        # List of possible values at
+        # http://pypi.python.org/pypi?:action=list_classifiers
+        'Development Status :: 4 - Beta',
+        'Environment :: Console',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX',
+        'Operating System :: Unix',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Topic :: Scientific/Engineering :: Chemistry',
+        'Topic :: Scientific/Engineering :: Physics',
+    ],
 )
 
 # End of file

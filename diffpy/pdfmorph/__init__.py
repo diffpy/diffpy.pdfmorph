@@ -16,8 +16,6 @@
 """Tools for manipulating and comparing PDFs.
 """
 
-__id__ = "$Id$"
-
 # obtain version information
 __version__ = '0.0.1'
 

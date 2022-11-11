@@ -20,9 +20,6 @@ Logger instances:
 plog -- logger instance for normal operation
 """
 
-# module version
-__id__ = "$Id$"
-
 import logging
 
 # logging configuration

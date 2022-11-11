@@ -16,8 +16,6 @@
 """MorphChain -- Chain of morphs executed in order.
 """
 
-# module version
-__id__ = "$Id$"
 
 class MorphChain(list):
     '''Class for chaining morphs together.

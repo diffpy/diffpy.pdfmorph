@@ -3,8 +3,6 @@
 """Unit tests for tools.py
 """
 
-# version
-__id__ = '$Id$'
 
 import os
 import unittest

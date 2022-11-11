@@ -17,8 +17,6 @@
 """Morph -- base class for defining a morph.
 """
 
-# module version
-__id__ = "$Id$"
 
 LABEL_RA = 'r (A)'     # r-grid
 LABEL_GR = 'G (1/A^2)' # PDF G(r)

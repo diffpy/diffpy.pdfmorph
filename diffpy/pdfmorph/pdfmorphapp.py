@@ -26,7 +26,6 @@ import diffpy.pdfmorph.pdfplot as pdfplot
 import diffpy.pdfmorph.morphs as morphs
 import diffpy.pdfmorph.refine as refine
 
-__id__ = "$Id$"
 
 def createOptionParser():
 

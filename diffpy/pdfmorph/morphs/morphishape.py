@@ -18,8 +18,6 @@
 class MorphISpheroid -- apply inverse spheroidal shape function 
 """
 
-# module version
-__id__ = "$Id$"
 
 from diffpy.pdfmorph.morphs.morph import *
 from diffpy.pdfmorph.morphs.morphshape import _sphericalCF, _spheroidalCF

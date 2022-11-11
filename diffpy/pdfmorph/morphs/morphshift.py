@@ -17,8 +17,6 @@
 """class MorphShift -- shift the objective
 """
 
-# module version
-__id__ = "$Id$"
 
 from diffpy.pdfmorph.morphs.morph import *
 import numpy

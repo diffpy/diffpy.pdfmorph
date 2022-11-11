@@ -18,8 +18,6 @@
 class MorphSpheroid -- apply a spheroidal shape function to the objective
 """
 
-# module version
-__id__ = "$Id$"
 
 import numpy
 from numpy import sqrt

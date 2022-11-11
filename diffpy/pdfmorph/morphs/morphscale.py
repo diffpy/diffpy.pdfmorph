@@ -17,8 +17,6 @@
 """class MorphScale -- scale the objective
 """
 
-# module version
-__id__ = "$Id$"
 
 from diffpy.pdfmorph.morphs.morph import *
 
