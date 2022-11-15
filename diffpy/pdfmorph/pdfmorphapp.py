@@ -95,7 +95,7 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
     group.add_option('-n', '--noplot', action="store_false", dest="plot",
             help="Do not show the plot.")
     group.add_option('--pmin', type="float",
-            help="Minimum r-value to plot. Defaults to RMIN.")
+            help="Minimum r-value to . Defaults to RMIN.") #deleted plot
     group.add_option('--pmax', type="float",
             help="Maximum r-value to plot. Defaults to RMAX.")
     group.add_option('--maglim', type="float",
