@@ -77,7 +77,7 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     rw          --  Rw value to display on the plot, if any.
     legend      --  Display the legend (default True).
 
-    The second PDF will be shown as blue circles below and the first as a red
+    The second PDF will be shown as red circles below and the first as a blue
     line.  The difference curve will be in green and offset for clarity.
     
     """
@@ -150,10 +150,10 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     plt.minorticks_on()
 
     plt.plot(rdat, grdat, label = labeldata, marker = 'o', markerfacecolor
-            = 'white', markeredgecolor = 'blue', markersize = 7,
+            = 'white', markeredgecolor = 'red', markersize = 7,
             markeredgewidth = 0.75)
     plt.plot(rfit, grfit, label = labelfit, linestyle = 'solid', linewidth =
-            2, color = 'red')
+            2, color = 'blue')
     plt.plot(rdat, offset*numpy.ones_like(diff), linestyle = '--', linewidth
             = 1, color = 'black', dashes = (15, 15), aa = False)
     diff += offset
