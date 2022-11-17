@@ -90,5 +90,7 @@ ENV/
 
 # pycharm
 .idea/
+# Mac
+.DS_Store
 # Rever
 rever/

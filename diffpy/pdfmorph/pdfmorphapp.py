@@ -58,7 +58,8 @@ minimizing the residual.""")
     group = optparse.OptionGroup(parser, "Manipulations",
             """These options select the manipulations that are to be applied to
 the PDF from FILE1. The passed values will be refined unless specifically
-excluded with the -a or -x options.""")
+excluded with the -a or -x options. If no option is specified, the PDFs from FILE1 and FILE2 will
+be plotted without any manipulations.""")
     parser.add_option_group(group)
     group.add_option('-a', '--apply', action="store_false", dest="refine",
             help="Apply manipulations but do not refine.")
