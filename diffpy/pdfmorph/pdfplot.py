@@ -15,6 +15,7 @@
 """Collection of plotting functions for PDFs."""
 
 import matplotlib.pyplot as plt
+from bg_mpl_stylesheet.bg_mpl_stylesheet import bg_mpl_style
 import numpy
 
 # FIXME - make this return the figure object in the future, so several views
@@ -60,6 +61,7 @@ def plotPDFs(pairlist, labels=None, offset ='auto', rmin = None, rmax = None):
 
 def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
                 maglim = None, mag = 5, rw = None, legend = True):
+    plt.style.use(bg_mpl_style)
     """Plot two PDFs on top of each other and difference curve.
 
     pairlist    --  iterable of (r, gr) pairs to plot
@@ -77,7 +79,7 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     rw          --  Rw value to display on the plot, if any.
     legend      --  Display the legend (default True).
 
-    The second PDF will be shown as blue circles below and the first as a red
+    The second PDF will be shown as red circles below and the first as a blue
     line.  The difference curve will be in green and offset for clarity.
     
     """
@@ -149,16 +151,15 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     fig.add_axes(axes)
     plt.minorticks_on()
 
-    plt.plot(rdat, grdat, label = labeldata, marker = 'o', markerfacecolor
-            = 'white', markeredgecolor = 'blue', markersize = 7,
-            markeredgewidth = 0.75)
+    plt.plot(rdat, grdat, label = labeldata, linestyle = 'solid', linewidth =
+            2.5, color = 'red')
     plt.plot(rfit, grfit, label = labelfit, linestyle = 'solid', linewidth =
-            2, color = 'red')
+            2.5, color = 'blue')
     plt.plot(rdat, offset*numpy.ones_like(diff), linestyle = '--', linewidth
             = 1, color = 'black', dashes = (15, 15), aa = False)
     diff += offset
     plt.plot(rdat, diff, label = labeldiff, linestyle = 'solid',
-            linewidth = 1.5, color = 'green')
+            linewidth = 2.5, color = 'green')
 
     if maglim is not None:
         # Add a line for the magnification cutoff
