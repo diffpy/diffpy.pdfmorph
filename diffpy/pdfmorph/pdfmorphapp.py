@@ -255,7 +255,6 @@ def main():
     if opts.plot:
         pairlist = [chain.xyobjout, chain.xyrefout]
         labels = [pargs[0], pargs[1]]
-        print(pargs[0], pargs[1])
         # Plot extent defaults to calculation extent
         pmin = opts.pmin if opts.pmin is not None else opts.rmin
         pmax = opts.pmax if opts.pmax is not None else opts.rmax
