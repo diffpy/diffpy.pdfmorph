@@ -26,6 +26,8 @@ import diffpy.pdfmorph.pdfplot as pdfplot
 import diffpy.pdfmorph.morphs as morphs
 import diffpy.pdfmorph.refine as refine
 
+from bg_mpl_stylesheet.bg_mpl_stylesheet import bg_mpl_style
+import matplotlib as plt
 
 def createOptionParser():
 
@@ -114,6 +116,7 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
     return parser
 
 def main():
+    plt.style.use(bg_mpl_style)
     parser = createOptionParser()
     (opts, pargs) = parser.parse_args()
 
