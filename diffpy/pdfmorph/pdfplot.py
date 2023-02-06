@@ -53,8 +53,8 @@ def plotPDFs(pairlist, labels=None, offset ='auto', rmin = None, rmax = None):
         plt.plot(r, gr + idx * offset, label = labels(fit))
     plt.xlim(rmin, rmax)
 
-    #if gap == 0:
-    #    plt.legend(loc = 0)
+    if gap == 0:
+        plt.legend(loc = 0)
 
     plt.legend()
     plt.xlabel(r"$r (\mathrm{\AA})$")
@@ -133,9 +133,6 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     ymax = max(diff[sel])
     offset = -1.1*(ymax - ymin)
 
-    # Set up the plot
-    #_configure()
-
     # Scale the x-limit based on the r-extent of the signal. This gives a nice
     # density of PDF peaks.
     rlim = rvmax - rvmin
@@ -154,16 +151,12 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     fig.add_axes(axes)
     plt.minorticks_on()
 
-    plt.plot(rdat, grdat, label = labeldata) #, marker = 'o', markerfacecolor
-    #        = 'white', markeredgecolor = 'blue', markersize = 7,
-    #        markeredgewidth = 0.75)
-    plt.plot(rfit, grfit, label = labelfit) #, linestyle = 'solid', linewidth =
-    #        2, color = 'red')
-    plt.plot(rdat, offset*numpy.ones_like(diff), color = 'black') #, linestyle = '--', linewidth
-    #        = 1, color = 'black', dashes = (15, 15), aa = False)
+    plt.plot(rdat, grdat, label = labeldata)
+    plt.plot(rfit, grfit, label = labelfit)
+    plt.plot(rdat, offset*numpy.ones_like(diff), color = 'black')
+
     diff += offset
-    plt.plot(rdat, diff, label = labeldiff) #, linestyle = 'solid',
-    #        linewidth = 1.5, color = 'green')
+    plt.plot(rdat, diff, label = labeldiff)
 
     if maglim is not None:
         # Add a line for the magnification cutoff
@@ -218,21 +211,6 @@ def truncatePDFs(r, gr, rmin = None, rmax = None):
         r = r[sel]
 
     return r, gr
-
-#def _configure():
-#    """Configure look and feel."""
-#    import matplotlib.pyplot as plt
-#    plt.rc("font") #, size = 40)
-#    plt.rc("axes") #, linewidth = 2, labelsize = 30)
-#    plt.rc("xtick") #, labelsize = 25)
-#    plt.rc("xtick.major") #, size = 7)
-#    plt.rc("xtick.minor") #, size = 3)
-#    plt.rc("ytick") #, labelsize = 25)
-#    plt.rc("ytick.major") #, size = 7)
-#    plt.rc("ytick.minor") #, size = 3)
-#    plt.rc("legend") #, fontsize = 18)
-#    plt.rc("lines") #, markeredgewidth = 2) # thicker axes and symbols
-#    return
 
 def _findOffset(pairlist):
     """Find an optimal offset between PDFs."""
