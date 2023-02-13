@@ -27,6 +27,6 @@ if __name__ == '__main__':
         warnings.simplefilter("default")
         # also affect subprocesses
         os.environ["PYTHONWARNINGS"] = "default"
-    from diffpy.structure.tests import test
+    from diffpy.pdfmorph.tests import test
     # produce zero exit code for a successful test
     sys.exit(not test().wasSuccessful())
