@@ -50,6 +50,4 @@ jobs:
         run: |
           cd ./diffpy/pdfmorph
           conda activate test
-          cd ./diffpy/pdfmorph
-          conda activate test
           pytest tests
