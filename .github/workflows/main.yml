@@ -21,7 +21,7 @@ jobs:
           repository: diffpy/diffpy.pdfmorph
           # for bookkeeping have diffpy.pdfmorph at the same level as everything else in the
           # directory tree
-          path: diffpy.pdfmorph
+          path: .
 
       - name: initialize miniconda
         # this uses a marketplace action that sets up miniconda in a way that makes
@@ -32,7 +32,7 @@ jobs:
           # environment.yml file is needed by this action.  Because I don't want
           # maintain this but rather maintain the requirements files it just has
           # basic things in it like conda and pip
-          environment-file: diffpy.pdfmorph/environment.yml
+          environment-file: ./environment.yml
           python-version: 3
           auto-activate-base: false
 
@@ -40,7 +40,7 @@ jobs:
         shell: bash -l {0}
         run: |
           conda config --set always_yes yes --set changeps1 no
-          cd diffpy.pdfmorph
+          conda config --add channels conda-forge
           conda install --file requirements/run.txt
           pip install .
 
@@ -49,4 +49,5 @@ jobs:
         run: |
           cd diffpy.pdfmorph/diffpy/pdfmorph
           conda activate test
+          cd ./diffpy/pdfmorph
           pytest tests

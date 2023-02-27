@@ -2,4 +2,3 @@ numpy
 scipy
 diffpy.utils
 matplotlib
-bg-mpl-stylesheets
