@@ -47,7 +47,7 @@ jobs:
       - name: Validate pdfmorph
         shell: bash -l {0}
         run: |
-          cd diffpy.pdfmorph/diffpy/pdfmorph
+          cd ./diffpy/pdfmorph
           conda activate test
           cd ./diffpy/pdfmorph
           pytest tests
