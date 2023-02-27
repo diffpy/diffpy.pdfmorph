@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  miniconda:
+    name: Miniconda ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+        matrix:
+            os: ["ubuntu-latest"]
+    steps:
+      - name: check out diffpy.pdfmorph
+        uses: actions/checkout@v3
+        with:
+          repository: diffpy/diffpy.pdfmorph
+          # for bookkeeping have diffpy.pdfmorph at the same level as everything else in the
+          # directory tree
+          path: diffpy.pdfmorph
+
+      - name: initialize miniconda
+        # this uses a marketplace action that sets up miniconda in a way that makes
+        # it easier to use.  I tried setting it up without this and it was a pain
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: test
+          # environment.yml file is needed by this action.  Because I don't want
+          # maintain this but rather maintain the requirements files it just has
+          # basic things in it like conda and pip
+          environment-file: diffpy.pdfmorph/environment.yml
+          python-version: 3
+          auto-activate-base: false
+
+      - name: install pdfmorph requirements
+        shell: bash -l {0}
+        run: |
+          conda config --set always_yes yes --set changeps1 no
+          cd diffpy.pdfmorph
+          conda install --file requirements/run.txt
+          pip install .
+
+      - name: Validate pdfmorph
+        shell: bash -l {0}
+        run: |
+          cd diffpy.pdfmorph/diffpy/pdfmorph
+          conda activate test
+          pytest tests
