@@ -24,6 +24,7 @@ from diffpy.pdfmorph.morphs.morph import *
 # roundoff tolerance for selecting bounds on arrays.
 epsilon = 1e-8
 
+
 class MorphRGrid(Morph):
     '''Resample to specified r-grid.
 
@@ -40,7 +41,7 @@ class MorphRGrid(Morph):
     If any of these is not defined or outside the bounds of the input arrays,
     then it will be taken to be the most inclusive value from the input arrays.
     These modified values will be stored as the above attributes.
-    
+
     '''
 
     # Define input output types
@@ -71,5 +72,6 @@ class MorphRGrid(Morph):
         self.xrefout = self.xobjout.copy()
         self.yrefout = numpy.interp(self.xrefout, self.xrefin, self.yrefin)
         return self.xyallout
+
 
 # End of class MorphRGrid

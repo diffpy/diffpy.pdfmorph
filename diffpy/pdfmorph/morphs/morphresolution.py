@@ -22,6 +22,7 @@ import numpy
 
 from diffpy.pdfmorph.morphs.morph import *
 
+
 class MorphResolutionDamping(Morph):
     '''Apply resolution damping and broadening to the objective.
 
@@ -44,9 +45,9 @@ class MorphResolutionDamping(Morph):
     def morph(self, xobj, yobj, xref, yref):
         """Apply a resolution damping."""
         Morph.morph(self, xobj, yobj, xref, yref)
-        b = numpy.exp(-0.5 * (self.xobjin*self.qdamp)**2)
+        b = numpy.exp(-0.5 * (self.xobjin * self.qdamp) ** 2)
         self.yobjout *= b
         return self.xyallout
 
-# End of class MorphResolutionDamping
 
+# End of class MorphResolutionDamping

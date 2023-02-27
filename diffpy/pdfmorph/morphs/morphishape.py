@@ -22,6 +22,7 @@ class MorphISpheroid -- apply inverse spheroidal shape function
 from diffpy.pdfmorph.morphs.morph import *
 from diffpy.pdfmorph.morphs.morphshape import _sphericalCF, _spheroidalCF
 
+
 class MorphISphere(Morph):
     '''Apply inverse spherical characteristic function to the objective
 
@@ -47,7 +48,9 @@ class MorphISphere(Morph):
         self.yobjout[f == 0] = 0
         return self.xyallout
 
+
 # End of class MorphISphere
+
 
 class MorphISpheroid(Morph):
     '''Apply inverse spherical characteristic function to the objective
@@ -74,5 +77,6 @@ class MorphISpheroid(Morph):
         self.yobjout /= f
         self.yobjout[f == 0] == 0
         return self.xyallout
+
 
 # End of class MorphSpheroid

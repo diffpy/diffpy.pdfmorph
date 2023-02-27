@@ -18,9 +18,10 @@
 """
 
 
-LABEL_RA = 'r (A)'     # r-grid
-LABEL_GR = 'G (1/A^2)' # PDF G(r)
-LABEL_RR = 'R (1/A)'   # RDF R(r)
+LABEL_RA = 'r (A)'  # r-grid
+LABEL_GR = 'G (1/A^2)'  # PDF G(r)
+LABEL_RR = 'R (1/A)'  # RDF R(r)
+
 
 class Morph(object):
     '''Base class for implementing a morph on an objective given a reference.
@@ -75,17 +76,26 @@ class Morph(object):
 
     # Properties
 
-    xyobjin = property(lambda self: (self.xobjin, self.yobjin),
-            doc='Return a tuple of objective input arrays')
-    xyobjout = property(lambda self: (self.xobjout, self.yobjout),
-            doc='Return a tuple of objective output arrays')
-    xyrefin = property(lambda self: (self.xrefin, self.yrefin),
-            doc='Return a tuple of reference input arrays')
-    xyrefout = property(lambda self: (self.xrefout, self.yrefout),
-            doc='Return a tuple of reference output arrays')
-    xyallout = property(lambda self: 
-            (self.xobjout, self.yobjout, self.xrefout, self.yrefout), 
-            doc='Return a tuple of all output arrays')
+    xyobjin = property(
+        lambda self: (self.xobjin, self.yobjin),
+        doc='Return a tuple of objective input arrays',
+    )
+    xyobjout = property(
+        lambda self: (self.xobjout, self.yobjout),
+        doc='Return a tuple of objective output arrays',
+    )
+    xyrefin = property(
+        lambda self: (self.xrefin, self.yrefin),
+        doc='Return a tuple of reference input arrays',
+    )
+    xyrefout = property(
+        lambda self: (self.xrefout, self.yrefout),
+        doc='Return a tuple of reference output arrays',
+    )
+    xyallout = property(
+        lambda self: (self.xobjout, self.yobjout, self.xrefout, self.yrefout),
+        doc='Return a tuple of all output arrays',
+    )
 
     def __init__(self, config=None):
         '''Create a default Morph instance.
@@ -106,7 +116,6 @@ class Morph(object):
         # process arguments
         self.applyConfig(config)
         return
-
 
     def morph(self, xobj, yobj, xref, yref):
         '''Morph arrays objective or reference.
@@ -130,12 +139,9 @@ class Morph(object):
         self.checkConfig()
         return self.xyallout
 
-
     def __call__(self, xobj, yobj, xref, yref):
-        '''Alias for morph.
-        '''
+        '''Alias for morph.'''
         return self.morph(xobj, yobj, xref, yref)
-
 
     def applyConfig(self, config):
         '''Process any configuration data from a dictionary.
@@ -147,14 +153,12 @@ class Morph(object):
         self.config = config
         return
 
-
     def checkConfig(self):
         '''Verify data in self.config.  No action by default.
 
         To be overridden in a derived class.
         '''
         return
-
 
     def plotInputs(self, xylabels=True):
         '''Plot input arrays using matplotlib.pyplot
@@ -164,13 +168,13 @@ class Morph(object):
         Return a list of matplotlib line objects.
         '''
         from matplotlib.pyplot import plot, xlabel, ylabel
-        rv = plot(self.xrefin, self.yrefin, label = "reference")
-        rv = plot(self.xobjin, self.yobjin, label = "objective")
+
+        rv = plot(self.xrefin, self.yrefin, label="reference")
+        rv = plot(self.xobjin, self.yobjin, label="objective")
         if xylabels:
             xlabel(self.xinlabel)
             ylabel(self.yinlabel)
         return rv
-
 
     def plotOutputs(self, xylabels=True, **plotargs):
         '''Plot output arrays using matplotlib.pyplot
@@ -182,15 +186,15 @@ class Morph(object):
         Return a list of matplotlib line objects.
         '''
         from matplotlib.pyplot import plot, xlabel, ylabel
+
         pargs = dict(plotargs)
         pargs.pop("label", None)
-        rv = plot(self.xrefout, self.yrefout, label = "reference", **pargs)
-        rv = plot(self.xobjout, self.yobjout, label = "objective", **pargs)
+        rv = plot(self.xrefout, self.yrefout, label="reference", **pargs)
+        rv = plot(self.xobjout, self.yobjout, label="objective", **pargs)
         if xylabels:
             xlabel(self.xoutlabel)
             ylabel(self.youtlabel)
         return rv
-
 
     def __getattr__(self, name):
         '''Obtain the value from self.config, when normal lookup fails.
@@ -206,7 +210,6 @@ class Morph(object):
             emsg = 'Object has no attribute %r' % name
             raise AttributeError(emsg)
 
-
     def __setattr__(self, name, val):
         '''Set configuration variables to config.
 
@@ -220,5 +223,5 @@ class Morph(object):
             object.__setattr__(self, name, val)
         return
 
-# End class Morph
 
+# End class Morph

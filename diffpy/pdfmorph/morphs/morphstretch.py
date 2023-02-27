@@ -21,6 +21,7 @@
 import numpy
 from diffpy.pdfmorph.morphs.morph import *
 
+
 class MorphStretch(Morph):
     '''Smear the objective function.
 
@@ -50,5 +51,6 @@ class MorphStretch(Morph):
         r = self.xobjin / (1.0 + self.stretch)
         self.yobjout = numpy.interp(r, self.xobjin, self.yobjin)
         return self.xyallout
+
 
 # End of class MorphSmear

@@ -20,6 +20,7 @@
 
 from diffpy.pdfmorph.morphs.morph import *
 
+
 class MorphScale(Morph):
     '''Scale the objective.
 
@@ -44,5 +45,6 @@ class MorphScale(Morph):
         Morph.morph(self, xobj, yobj, xref, yref)
         self.yobjout *= self.scale
         return self.xyallout
+
 
 # End of class MorphScale

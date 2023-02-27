@@ -13,8 +13,8 @@ tests_dir = os.path.dirname(os.path.abspath(thisfile))
 
 from diffpy.pdfmorph.morphs.morphstretch import MorphStretch
 
-class TestMorphStretch(unittest.TestCase):
 
+class TestMorphStretch(unittest.TestCase):
     def setUp(self):
         self.xobj = numpy.arange(0.01, 5, 0.01)
         # A step function between 2 and 3
@@ -24,14 +24,12 @@ class TestMorphStretch(unittest.TestCase):
         return
 
     def test_morph(self):
-        """check MorphStretch.morph()
-        """
+        """check MorphStretch.morph()"""
         morph = MorphStretch()
 
         # Stretch by 50%
         morph.stretch = 0.5
-        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref,
-                self.yref)
+        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref, self.yref)
 
         # Reference should be unchanged
         self.assertTrue(numpy.allclose(self.yref, yref))
@@ -46,8 +44,7 @@ class TestMorphStretch(unittest.TestCase):
 
         # Stretch by -10%
         morph.stretch = -0.1
-        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref,
-                self.yref)
+        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref, self.yref)
 
         # Reference should be unchanged
         self.assertTrue(numpy.allclose(self.yref, yref))
@@ -61,7 +58,9 @@ class TestMorphStretch(unittest.TestCase):
         self.assertTrue(res < 1)
         return
 
+
 # End of class TestMorphSmear
+
 
 def heaviside(x, lb, ub):
     """The Heaviside function."""

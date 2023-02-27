@@ -15,8 +15,8 @@ from diffpy.pdfmorph.morphs.morphchain import MorphChain
 from diffpy.pdfmorph.morphs.morphscale import MorphScale
 from diffpy.pdfmorph.morphs.morphrgrid import MorphRGrid
 
-class TestMorphChain(unittest.TestCase):
 
+class TestMorphChain(unittest.TestCase):
     def setUp(self):
         self.xobj = numpy.arange(0.01, 5, 0.01)
         self.yobj = numpy.ones_like(self.xobj)
@@ -26,22 +26,20 @@ class TestMorphChain(unittest.TestCase):
         return
 
     def test_morph(self):
-        """check MorphChain.morph()
-        """
+        """check MorphChain.morph()"""
         # Define the morphs
         config = {
-                "rmin" : 1,
-                "rmax" : 6,
-                "rstep" : 0.1,
-                "scale" : 3.0,
-                }
+            "rmin": 1,
+            "rmax": 6,
+            "rstep": 0.1,
+            "scale": 3.0,
+        }
 
         mgrid = MorphRGrid()
         mscale = MorphScale()
         chain = MorphChain(config, mgrid, mscale)
 
-        xobj, yobj, xref, yref = chain(self.xobj, self.yobj, self.xref,
-                self.yref)
+        xobj, yobj, xref, yref = chain(self.xobj, self.yobj, self.xref, self.yref)
 
         self.assertTrue((xobj == xref).all())
         self.assertAlmostEqual(xobj[0], 1.0)
@@ -52,6 +50,7 @@ class TestMorphChain(unittest.TestCase):
         self.assertAlmostEqual(xobj[1] - xobj[0], mgrid.rstep)
         self.assertTrue(numpy.allclose(yobj, yref))
         return
+
 
 # End of class TestMorphChain
 

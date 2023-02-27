@@ -13,8 +13,8 @@ tests_dir = os.path.dirname(os.path.abspath(thisfile))
 
 from diffpy.pdfmorph.morphs.morphscale import MorphScale
 
-class TestMorphScale(unittest.TestCase):
 
+class TestMorphScale(unittest.TestCase):
     def setUp(self):
         self.xobj = numpy.arange(0.01, 5, 0.01)
         self.yobj = numpy.ones_like(self.xobj)
@@ -23,17 +23,16 @@ class TestMorphScale(unittest.TestCase):
         return
 
     def test_morph(self):
-        """check MorphScale.morph()
-        """
-        config = {"scale" : 2.0}
+        """check MorphScale.morph()"""
+        config = {"scale": 2.0}
         morph = MorphScale(config)
 
-        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref,
-                self.yref)
+        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref, self.yref)
 
         self.assertTrue(numpy.allclose(2 * self.yobj, yobj))
         self.assertTrue(numpy.allclose(self.yref, yref))
         return
+
 
 # End of class TestMorphScale
 

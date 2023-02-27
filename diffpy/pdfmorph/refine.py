@@ -23,6 +23,7 @@ from numpy import exp, dot, ones_like, concatenate
 
 # Map of scipy minimizer names to the method that uses them
 
+
 class Refiner(object):
     """Class for refining a Morph or MorphChain.
 
@@ -64,8 +65,9 @@ class Refiner(object):
     def _residual(self, pvals):
         """Standard vector residual."""
         self._updateChain(pvals)
-        _xobj, _yobj, _xref, _yref = self.chain(self.xobj, self.yobj,
-                self.xref, self.yref)
+        _xobj, _yobj, _xref, _yref = self.chain(
+            self.xobj, self.yobj, self.xref, self.yref
+        )
         rvec = _yref - _yobj
         return rvec
 
@@ -77,8 +79,9 @@ class Refiner(object):
         largest.
         """
         self._updateChain(pvals)
-        _xobj, _yobj, _xref, _yref = self.chain(self.xobj, self.yobj,
-                self.xref, self.yref)
+        _xobj, _yobj, _xref, _yref = self.chain(
+            self.xobj, self.yobj, self.xref, self.yref
+        )
         pcc, pval = pearsonr(_yobj, _yref)
         return ones_like(_xobj) * exp(-pcc)
 
@@ -116,9 +119,9 @@ class Refiner(object):
             return 0.0
 
         initial = [config[p] for p in self.pars]
-        out = leastsq(self.residual, initial, full_output = 1)
+        out = leastsq(self.residual, initial, full_output=1)
         fvec = out[2]["fvec"]
-        if out[4] not in (1,2,3,4):
+        if out[4] not in (1, 2, 3, 4):
             mesg = out[3]
             raise ValueError(mesg)
 
@@ -129,7 +132,6 @@ class Refiner(object):
         self.chain.config.update(zip(self.pars, vals))
 
         return dot(fvec, fvec)
-
 
 
 # End class Refiner

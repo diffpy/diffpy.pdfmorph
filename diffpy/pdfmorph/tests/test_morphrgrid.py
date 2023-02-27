@@ -13,9 +13,9 @@ tests_dir = os.path.dirname(os.path.abspath(thisfile))
 
 from diffpy.pdfmorph.morphs.morphrgrid import MorphRGrid
 
+
 ##############################################################################
 class TestMorphRGrid(unittest.TestCase):
-
     def setUp(self):
         self.xobj = numpy.arange(0, 10, 0.01)
         self.yobj = self.xobj.copy()
@@ -33,13 +33,13 @@ class TestMorphRGrid(unittest.TestCase):
         return
 
     def testRangeInBounds(self):
-        """Selected range is within input bounds
-        """
+        """Selected range is within input bounds"""
 
-        config = {  "rmin"  : 1.0,
-                    "rmax"  : 2.0,
-                    "rstep" : 0.1,
-                 }
+        config = {
+            "rmin": 1.0,
+            "rmax": 2.0,
+            "rstep": 0.1,
+        }
         morph = MorphRGrid(config)
         xyallout = morph(self.xobj, self.yobj, self.xref, self.yref)
         self.assertAlmostEqual(config["rmin"], morph.rmin)
@@ -48,15 +48,14 @@ class TestMorphRGrid(unittest.TestCase):
         self._runTests(xyallout, morph)
         return
 
-
     def testRmaxOut(self):
-        """Selected rmax is outside of input bounds
-        """
+        """Selected rmax is outside of input bounds"""
 
-        config = {  "rmin"  : 1.0,
-                    "rmax"  : 15.0,
-                    "rstep" : 0.1,
-                 }
+        config = {
+            "rmin": 1.0,
+            "rmax": 15.0,
+            "rstep": 0.1,
+        }
         morph = MorphRGrid(config)
         xyallout = morph(self.xobj, self.yobj, self.xref, self.yref)
         self.assertAlmostEqual(config["rmin"], morph.rmin)
@@ -65,15 +64,14 @@ class TestMorphRGrid(unittest.TestCase):
         self._runTests(xyallout, morph)
         return
 
-
     def testRminOut(self):
-        """Selected rmin is outside of input bounds
-        """
+        """Selected rmin is outside of input bounds"""
 
-        config = {  "rmin"  : 0.0,
-                    "rmax"  : 2.0,
-                    "rstep" : 0.01,
-                 }
+        config = {
+            "rmin": 0.0,
+            "rmax": 2.0,
+            "rstep": 0.01,
+        }
         morph = MorphRGrid(config)
         xyallout = morph(self.xobj, self.yobj, self.xref, self.yref)
         self.assertAlmostEqual(1.0, morph.rmin)
@@ -82,15 +80,14 @@ class TestMorphRGrid(unittest.TestCase):
         self._runTests(xyallout, morph)
         return
 
-
     def testRstepOut(self):
-        """Selected rstep is outside of input bounds
-        """
+        """Selected rstep is outside of input bounds"""
 
-        config = {  "rmin"  : 1.0,
-                    "rmax"  : 2.0,
-                    "rstep" : 0.001,
-                 }
+        config = {
+            "rmin": 1.0,
+            "rmax": 2.0,
+            "rstep": 0.001,
+        }
         morph = MorphRGrid(config)
         xyallout = morph(self.xobj, self.yobj, self.xref, self.yref)
         self.assertAlmostEqual(config["rmin"], morph.rmin)

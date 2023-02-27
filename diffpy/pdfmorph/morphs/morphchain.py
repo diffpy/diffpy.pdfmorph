@@ -52,48 +52,38 @@ class MorphChain(list):
 
     '''
 
-    xobjin = property(
-            lambda self: None if len(self) == 0 else self[0].xobjin)
-    yobjin = property(
-            lambda self: None if len(self) == 0 else self[0].yobjin)
-    xrefin = property(
-            lambda self: None if len(self) == 0 else self[0].xrefin)
-    yrefin = property(
-            lambda self: None if len(self) == 0 else self[0].yrefin)
-    xobjout = property(
-            lambda self: None if len(self) == 0 else self[-1].xobjout)
-    yobjout = property(
-            lambda self: None if len(self) == 0 else self[-1].yobjout)
-    xrefout = property(
-            lambda self: None if len(self) == 0 else self[-1].xrefout)
-    yrefout = property(
-            lambda self: None if len(self) == 0 else self[-1].yrefout)
-    xyobjin = property(
-            lambda self: (None, None) if len(self) == 0 else self[0].xyobjin)
+    xobjin = property(lambda self: None if len(self) == 0 else self[0].xobjin)
+    yobjin = property(lambda self: None if len(self) == 0 else self[0].yobjin)
+    xrefin = property(lambda self: None if len(self) == 0 else self[0].xrefin)
+    yrefin = property(lambda self: None if len(self) == 0 else self[0].yrefin)
+    xobjout = property(lambda self: None if len(self) == 0 else self[-1].xobjout)
+    yobjout = property(lambda self: None if len(self) == 0 else self[-1].yobjout)
+    xrefout = property(lambda self: None if len(self) == 0 else self[-1].xrefout)
+    yrefout = property(lambda self: None if len(self) == 0 else self[-1].yrefout)
+    xyobjin = property(lambda self: (None, None) if len(self) == 0 else self[0].xyobjin)
     xyobjout = property(
-            lambda self: (None, None) if len(self) == 0 else self[-1].xyobjout)
-    xyrefin = property(
-            lambda self: (None, None) if len(self) == 0 else self[0].xyrefin)
+        lambda self: (None, None) if len(self) == 0 else self[-1].xyobjout
+    )
+    xyrefin = property(lambda self: (None, None) if len(self) == 0 else self[0].xyrefin)
     xyrefout = property(
-            lambda self: (None, None) if len(self) == 0 else self[-1].xyrefout)
+        lambda self: (None, None) if len(self) == 0 else self[-1].xyrefout
+    )
     xyallout = property(
-            lambda self: (None, None, None, None) if len(self) == 0 \
-                    else self[-1].xyallout)
+        lambda self: (None, None, None, None) if len(self) == 0 else self[-1].xyallout
+    )
     parnames = property(lambda self: set(p for m in self for p in m.parnames))
-
 
     def __init__(self, config, *args):
         """Initialize the configuration.
 
         config      --  Configuration dictionary.
-        
+
         Additional arguments are morphs that will extend the queue of morphs.
 
         """
         self.config = config
         self.extend(args)
         return
-
 
     def morph(self, xobj, yobj, xref, yref):
         '''Apply the chain of morphs to the input data.
@@ -112,12 +102,9 @@ class MorphChain(list):
             xyall = morph(*xyall)
         return xyall
 
-
     def __call__(self, xobj, yobj, xref, yref):
-        '''Alias for morph.
-        '''
+        '''Alias for morph.'''
         return self.morph(xobj, yobj, xref, yref)
-
 
     def __getattr__(self, name):
         '''Obtain the value from self.config, when normal lookup fails.
@@ -132,7 +119,6 @@ class MorphChain(list):
         else:
             emsg = 'Object has no attribute %r' % name
             raise AttributeError(emsg)
-
 
     def __setattr__(self, name, val):
         '''Set configuration variables to config.
@@ -149,4 +135,3 @@ class MorphChain(list):
 
 
 # End class MorphChain
-

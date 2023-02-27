@@ -31,8 +31,19 @@ from diffpy.pdfmorph.morphs.morphsmear import MorphSmear
 from diffpy.pdfmorph.morphs.morphstretch import MorphStretch
 
 # List of morphs
-morphs = [ MorphRGrid, MorphScale, MorphStretch, MorphXtalPDFtoRDF, MorphSmear,
-        MorphXtalRDFtoPDF, MorphSphere, MorphSpheroid, MorphISphere,
-        MorphISpheroid, MorphResolutionDamping, MorphShift]
+morphs = [
+    MorphRGrid,
+    MorphScale,
+    MorphStretch,
+    MorphXtalPDFtoRDF,
+    MorphSmear,
+    MorphXtalRDFtoPDF,
+    MorphSphere,
+    MorphSpheroid,
+    MorphISphere,
+    MorphISpheroid,
+    MorphResolutionDamping,
+    MorphShift,
+]
 
 # End of file
