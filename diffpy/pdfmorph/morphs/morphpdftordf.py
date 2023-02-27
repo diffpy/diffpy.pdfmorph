@@ -20,6 +20,7 @@
 
 from diffpy.pdfmorph.morphs.morph import *
 
+
 class MorphXtalPDFtoRDF(Morph):
     '''Morph crystal PDFs to RDFs.
 
@@ -52,5 +53,6 @@ class MorphXtalPDFtoRDF(Morph):
         refbaseline = self.baselineslope * self.xrefin
         self.yrefout = self.xrefin * (self.yrefin - refbaseline)
         return self.xyallout
+
 
 # End of class MorphXtalPDFtoRDF

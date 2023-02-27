@@ -21,6 +21,7 @@
 from diffpy.pdfmorph.morphs.morph import *
 import numpy
 
+
 class MorphShift(Morph):
     '''Shift the objective.
 
@@ -49,5 +50,6 @@ class MorphShift(Morph):
         self.yobjout = numpy.interp(r, self.xobjin, self.yobjin)
         self.yobjout += self.vshift
         return self.xyallout
+
 
 # End of class MorphShift

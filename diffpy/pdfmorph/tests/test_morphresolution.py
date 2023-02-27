@@ -13,27 +13,26 @@ testdata_dir = os.path.join(tests_dir, 'testdata')
 
 from diffpy.pdfmorph.morphs.morphresolution import MorphResolutionDamping
 
-class TestMorphScale(unittest.TestCase):
 
+class TestMorphScale(unittest.TestCase):
     def setUp(self):
         objfile = os.path.join(testdata_dir, "ni_qmax25.cgr")
-        self.xobj, self.yobj = numpy.loadtxt(objfile, unpack = True)
+        self.xobj, self.yobj = numpy.loadtxt(objfile, unpack=True)
         reffile = os.path.join(testdata_dir, "ni_qmax25_qdamp0.01.cgr")
-        self.xref, self.yref = numpy.loadtxt(reffile, unpack = True)
+        self.xref, self.yref = numpy.loadtxt(reffile, unpack=True)
         return
 
     def test_morph(self):
-        """check MorphScale.morph()
-        """
-        config = {"qdamp" : 0.01}
+        """check MorphScale.morph()"""
+        config = {"qdamp": 0.01}
         morph = MorphResolutionDamping(config)
 
-        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref,
-                self.yref)
+        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref, self.yref)
 
         self.assertTrue(numpy.allclose(self.yref, yref))
         self.assertTrue(numpy.allclose(yobj, yref))
         return
+
 
 # End of class TestMorphScale
 

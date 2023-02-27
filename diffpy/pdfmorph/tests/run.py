@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 ##############################################################################
 #
@@ -21,12 +20,15 @@ python -m diffpy.structure.tests.run
 
 if __name__ == '__main__':
     import sys
+
     # show warnings by default
     if not sys.warnoptions:
         import os, warnings
+
         warnings.simplefilter("default")
         # also affect subprocesses
         os.environ["PYTHONWARNINGS"] = "default"
     from diffpy.pdfmorph.tests import test
+
     # produce zero exit code for a successful test
     sys.exit(not test().wasSuccessful())
