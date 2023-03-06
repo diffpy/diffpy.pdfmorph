@@ -17,7 +17,7 @@
 """
 
 from scipy.optimize import leastsq
-from scipy.stats.stats import pearsonr
+from scipy.stats import pearsonr
 from numpy import exp, dot, ones_like, concatenate
 
 
