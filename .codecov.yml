@@ -3,7 +3,6 @@
 #comment: false
 
 codecov:
-#  token: e4687712-c255-42db-9be3-70261ff6f089
   notify:
     require_ci_to_pass: no
 
