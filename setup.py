@@ -13,8 +13,8 @@ from setuptools import setup, find_packages
 
 MYDIR = os.path.dirname(os.path.abspath(__file__))
 
-with open(os.path.join(MYDIR, 'requirements/run.txt')) as fp:
-    requirements = [line.strip() for line in fp]
+# with open(os.path.join(MYDIR, 'requirements/run.txt')) as fp:
+#     requirements = [line.strip() for line in fp]
 
 with open(os.path.join(MYDIR, 'README.rst')) as fp:
     long_description = fp.read()
@@ -32,7 +32,7 @@ setup(
         ],
     },
     test_suite='tests',
-    install_requires=requirements,
+    # install_requires=requirements,
     author='Simon J.L. Billinge',
     author_email='sb2896@columbia.edu',
     maintainer='Simon J.L. Billinge',
@@ -54,10 +54,10 @@ setup(
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
         'Operating System :: Unix',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Topic :: Scientific/Engineering :: Chemistry',
         'Topic :: Scientific/Engineering :: Physics',
     ],

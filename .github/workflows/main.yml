@@ -41,6 +41,7 @@ jobs:
         run: |
           conda config --set always_yes yes --set changeps1 no
           conda config --add channels conda-forge
+          conda activate test
           conda install --file requirements/run.txt
           conda install --file requirements/test.txt
           pip install .
@@ -48,6 +49,8 @@ jobs:
       - name: Validate pdfmorph
         shell: bash -l {0}
         run: |
-          cd ./diffpy/pdfmorph
           conda activate test
-          pytest tests
+          coverage run run_tests.py
+          coverage report -m
+          codecov
+
