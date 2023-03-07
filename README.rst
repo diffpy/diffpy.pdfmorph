@@ -97,7 +97,7 @@ Once in your desired conda environment, you can install from either the
 "diffpy" or "conda-forge" channels of Anaconda packages by running 
 either ::
 
-	conda config --add channels diffpy
+	conda config --add channels conda-forge
 	conda install diffpy.pdfmorph
 
 or ::
