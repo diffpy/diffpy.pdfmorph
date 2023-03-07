@@ -32,7 +32,7 @@ setup(
         ],
     },
     test_suite='tests',
-    install_requires=requirements,
+    # install_requires=requirements,
     author='Simon J.L. Billinge',
     author_email='sb2896@columbia.edu',
     maintainer='Simon J.L. Billinge',
