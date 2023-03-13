@@ -319,7 +319,7 @@ def main():
 
     items = list(config.items())
     items.sort()
-    output = "\n Optimized morphing parameters:"
+    output = "\nOptimized morphing parameters:\n"
     output += "\n".join("# %s = %f" % i for i in items)
     output += "\n# Rw = %f" % rw
     output += "\n# Pearson = %f" % pcc
