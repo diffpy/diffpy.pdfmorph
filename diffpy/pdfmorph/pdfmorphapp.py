@@ -311,15 +311,15 @@ def main():
     chain[0] = morphs.Morph()
     chain(xobj, yobj, xref, yref)
 
-    morphs_in = "\nInput morphing parameters:"
-    morphs_in += f"\n scale = {scale_in}"
-    morphs_in += f"\n stretch = {stretch_in}"
-    morphs_in += f"\n smear = {smear_in}"
+    morphs_in = "\n# Input morphing parameters:"
+    morphs_in += f"\n# scale = {scale_in}"
+    morphs_in += f"\n# stretch = {stretch_in}"
+    morphs_in += f"\n# smear = {smear_in}"
     print(morphs_in)
 
     items = list(config.items())
     items.sort()
-    output = "\nOptimized morphing parameters:\n"
+    output = "\n# Optimized morphing parameters:\n"
     output += "\n".join("# %s = %f" % i for i in items)
     output += "\n# Rw = %f" % rw
     output += "\n# Pearson = %f" % pcc
