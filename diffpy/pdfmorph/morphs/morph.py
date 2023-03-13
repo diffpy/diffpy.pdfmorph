@@ -47,10 +47,12 @@ class Morph(object):
     Instance attributes:
 
     config      -- dictionary that contains all configuration variables
+    "Objective" is the 1st input file, displayed in red
     xobjin      -- last objective input x data
     yobjin      -- last objective input y data
     xobjout     -- last objective result x data
     yobjout     -- last objective result y data
+    "Reference: is the 2nd input file, displayed in blue
     xrefin      -- last reference input x data
     yrefin      -- last reference input y data
     xrefout     -- last reference result x data
@@ -120,8 +122,8 @@ class Morph(object):
     def morph(self, xobj, yobj, xref, yref):
         '''Morph arrays objective or reference.
 
-        xobj, yobj  --  Objective arrays.
-        xref, yref  --  Reference arrays.
+        xobj, yobj  --  Objective arrays (input 1).
+        xref, yref  --  Reference arrays (input 2).
 
         Identity operation.  This method should be overloaded in a derived
         class.

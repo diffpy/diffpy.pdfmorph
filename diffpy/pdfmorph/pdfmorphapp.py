@@ -325,8 +325,8 @@ def main():
         outfile.close()
 
     if opts.plot:
-        pairlist = [chain.xyobjout, chain.xyrefout]
-        labels = ["objective", "reference"]
+        pairlist = [chain.xyrefout, chain.xyobjout]
+        labels = [pargs[1], pargs[0]]
         # Plot extent defaults to calculation extent
         pmin = opts.pmin if opts.pmin is not None else opts.rmin
         pmax = opts.pmax if opts.pmax is not None else opts.rmax
