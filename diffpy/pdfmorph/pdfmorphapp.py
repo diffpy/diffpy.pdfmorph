@@ -199,6 +199,9 @@ def main():
     xref, yref = getPDFFromFile(pargs[1])
 
     # Get configuration values
+    scale_in = 'None'
+    stretch_in = 'None'
+    smear_in = 'None'
     config = {}
     config["rmin"] = opts.rmin
     config["rmax"] = opts.rmax
@@ -215,16 +218,19 @@ def main():
 
     ## Scale
     if opts.scale is not None:
+        scale_in = opts.scale
         chain.append(morphs.MorphScale())
         config["scale"] = opts.scale
         refpars.append("scale")
     ## Stretch
     if opts.stretch is not None:
+        stretch_in = opts.stretch
         chain.append(morphs.MorphStretch())
         config["stretch"] = opts.stretch
         refpars.append("stretch")
     ## Smear
     if opts.smear is not None:
+        smear_in = opts.smear
         chain.append(morphs.MorphXtalPDFtoRDF())
         chain.append(morphs.MorphSmear())
         chain.append(morphs.MorphXtalRDFtoPDF())
@@ -305,9 +311,16 @@ def main():
     chain[0] = morphs.Morph()
     chain(xobj, yobj, xref, yref)
 
+    morphs_in = "\nInput morphing parameters:"
+    morphs_in += f"\n scale = {scale_in}"
+    morphs_in += f"\n stretch = {stretch_in}"
+    morphs_in += f"\n smear = {smear_in}"
+    print(morphs_in)
+
     items = list(config.items())
     items.sort()
-    output = "\n".join("# %s = %f" % i for i in items)
+    output = "\n Optimized morphing parameters:"
+    output += "\n".join("# %s = %f" % i for i in items)
     output += "\n# Rw = %f" % rw
     output += "\n# Pearson = %f" % pcc
     print(output)
@@ -315,6 +328,7 @@ def main():
         header = "# PDF created by pdfmorph\n"
         header += "# from %s\n" % os.path.abspath(pargs[0])
 
+        header += morphs_in
         header += output
         if opts.savefile == "-":
             outfile = sys.stdout
