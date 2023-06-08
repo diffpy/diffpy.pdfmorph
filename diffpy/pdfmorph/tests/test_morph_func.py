@@ -1,4 +1,6 @@
-import pytest
+#!/usr/bin/env python
+
+
 import numpy as np
 from diffpy.pdfmorph import pdfmorph, morph_default_config
 from diffpy.pdfmorph.tests.test_morphstretch import heaviside

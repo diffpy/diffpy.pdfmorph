@@ -14,7 +14,7 @@
 ##############################################################################
 
 """Convenience module for executing all unit tests with
-python -m diffpy.structure.tests.run
+python -m diffpy.morphs.tests.run
 """
 
 
