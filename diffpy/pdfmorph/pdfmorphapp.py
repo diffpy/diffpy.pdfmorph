@@ -355,14 +355,13 @@ def main():
                 print(save_fail_message)
                 parser.custom_error(str(e))
 
-        if outfile:
-            print(header, file=outfile)
-            numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
-            outfile.close()
+        print(header, file=outfile)
+        numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
+        outfile.close()
 
-            if not save_stdout:
-                save_message = "\n# Morph saved to " + os.path.abspath(outfile.name)
-                print(save_message)
+        if not save_stdout:
+            save_message = "\n# Morph saved to " + os.path.abspath(outfile.name)
+            print(save_message)
 
     if opts.plot:
         pairlist = [chain.xyobjout, chain.xyrefout]
