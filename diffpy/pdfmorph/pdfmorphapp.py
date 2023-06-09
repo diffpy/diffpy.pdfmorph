@@ -30,7 +30,19 @@ import diffpy.pdfmorph.refine as refine
 def createOptionParser():
     import optparse
 
-    parser = optparse.OptionParser(
+    class CustomParser(optparse.OptionParser):
+        def __init__(self, *args, **kwargs):
+            super(CustomParser, self).__init__(*args, **kwargs)
+
+        def custom_error(self, msg):
+            """custom_error(msg : string)
+
+            Print a message incorporating 'msg' to stderr and exit.
+            Does not print usage.
+            """
+            self.exit(2, "%s: error: %s\n" % (self.get_prog_name(), msg))
+
+    parser = CustomParser(
         usage='\n'.join(
             [
                 "%prog [options] FILE1 FILE2",
@@ -208,7 +220,7 @@ def main():
     config["rstep"] = None
     if opts.rmin is not None and opts.rmax is not None and opts.rmax <= opts.rmin:
         e = "rmin must be less than rmax"
-        parser.error(e)
+        parser.custom_error(e)
 
     # Set up the morphs
     chain = morphs.MorphChain(config)
@@ -295,12 +307,12 @@ def main():
                 refiner.refine(*rptemp)
             refiner.refine(*refpars)
         except ValueError as e:
-            parser.error(str(e))
+            parser.custom_error(str(e))
     elif "smear" in refpars and opts.baselineslope is None:
         try:
             refiner.refine("baselineslope", baselineslope=-0.5)
         except ValueError as e:
-            parser.error(str(e))
+            parser.custom_error(str(e))
     else:
         chain(xobj, yobj, xref, yref)
 
@@ -328,15 +340,29 @@ def main():
         header = "# PDF created by pdfmorph\n"
         header += "# from %s\n" % os.path.abspath(pargs[0])
 
+        save_stdout = False
         header += morphs_in
         header += output
+        outfile = None
         if opts.savefile == "-":
             outfile = sys.stdout
+            save_stdout = True
         else:
-            outfile = open(opts.savefile, 'w')
-        print(header, file=outfile)
-        numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
-        outfile.close()
+            try:
+                outfile = open(opts.savefile, 'w')
+            except FileNotFoundError as e:
+                save_fail_message = "\nUnable to save to designated location"
+                print(save_fail_message)
+                parser.custom_error(str(e))
+
+        if outfile:
+            print(header, file=outfile)
+            numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
+            outfile.close()
+
+            if not save_stdout:
+                save_message = "\n# Morph saved to " + os.path.abspath(outfile.name)
+                print(save_message)
 
     if opts.plot:
         pairlist = [chain.xyobjout, chain.xyrefout]
