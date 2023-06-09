@@ -342,14 +342,12 @@ def main():
         header = "# PDF created by pdfmorph\n"
         header += f"# from {path_name}\n"
 
-        save_stdout = False
         header += morphs_in
         header += output
 
         # Print to stdout
         if opts.savefile == "-":
             outfile = sys.stdout
-            save_stdout = True
             print(header, file=outfile)
             numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
             # Do not close stdout
