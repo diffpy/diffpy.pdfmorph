@@ -18,6 +18,7 @@ from __future__ import print_function
 import sys
 import os
 import os.path
+from pathlib import Path
 
 import numpy
 from diffpy.pdfmorph import __version__
@@ -61,7 +62,7 @@ def createOptionParser():
         '--save',
         metavar="FILE",
         dest="savefile",
-        help="Save manipulated PDF from FILE1 to FILE.",
+        help="Save manipulated PDF from FILE1 to FILE. Use \'-\' for stdout.",
     )
     parser.add_option(
         '--rmin', type="float", help="Minimum r-value to use for PDF comparisons."
@@ -332,36 +333,42 @@ def main():
     items = list(config.items())
     items.sort()
     output = "\n# Optimized morphing parameters:\n"
-    output += "\n".join("# %s = %f" % i for i in items)
-    output += "\n# Rw = %f" % rw
-    output += "\n# Pearson = %f" % pcc
+    output += "\n".join(f"# {i[0]} = {i[1]:.6f}" for i in items)
+    output += f"\n# Rw = {rw:.6f}"
+    output += f"\n# Pearson = {pcc:.6f}"
     print(output)
     if opts.savefile is not None:
+        path_name = Path(pargs[0]).absolute()
         header = "# PDF created by pdfmorph\n"
-        header += "# from %s\n" % os.path.abspath(pargs[0])
+        header += f"# from {path_name}\n"
 
         save_stdout = False
         header += morphs_in
         header += output
-        outfile = None
+
+        # Print to stdout
         if opts.savefile == "-":
             outfile = sys.stdout
             save_stdout = True
+            print(header, file=outfile)
+            numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
+            # Do not close stdout
+
+        # Save to file
         else:
             try:
-                outfile = open(opts.savefile, 'w')
+                with open(opts.savefile, 'w') as outfile:
+                    print(header, file=outfile)
+                    numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
+                    outfile.close()  # Close written file
+
+                    path_name = Path(outfile.name).absolute()
+                    save_message = f"\n# Morph saved to {path_name}"
+                    print(save_message)
             except FileNotFoundError as e:
                 save_fail_message = "\nUnable to save to designated location"
                 print(save_fail_message)
                 parser.custom_error(str(e))
-
-        print(header, file=outfile)
-        numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
-        outfile.close()
-
-        if not save_stdout:
-            save_message = "\n# Morph saved to " + os.path.abspath(outfile.name)
-            print(save_message)
 
     if opts.plot:
         pairlist = [chain.xyobjout, chain.xyrefout]
