@@ -51,7 +51,7 @@ def plotPDFs(pairlist, labels=None, offset='auto', rmin=None, rmax=None):
 
     for idx, pair in enumerate(pairlist):
         r, gr = pair
-        plt.plot(r, gr + idx * offset, label=labels(fit))
+        plt.plot(r, gr + idx * offset, label=labels[idx])
     plt.xlim(rmin, rmax)
 
     if gap == 0:

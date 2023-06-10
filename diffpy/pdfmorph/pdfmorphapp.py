@@ -18,6 +18,7 @@ from __future__ import print_function
 import sys
 import os
 import os.path
+from pathlib import Path
 
 import numpy
 from diffpy.pdfmorph import __version__
@@ -30,7 +31,19 @@ import diffpy.pdfmorph.refine as refine
 def createOptionParser():
     import optparse
 
-    parser = optparse.OptionParser(
+    class CustomParser(optparse.OptionParser):
+        def __init__(self, *args, **kwargs):
+            super(CustomParser, self).__init__(*args, **kwargs)
+
+        def custom_error(self, msg):
+            """custom_error(msg : string)
+
+            Print a message incorporating 'msg' to stderr and exit.
+            Does not print usage.
+            """
+            self.exit(2, "%s: error: %s\n" % (self.get_prog_name(), msg))
+
+    parser = CustomParser(
         usage='\n'.join(
             [
                 "%prog [options] FILE1 FILE2",
@@ -49,7 +62,7 @@ def createOptionParser():
         '--save',
         metavar="FILE",
         dest="savefile",
-        help="Save manipulated PDF from FILE1 to FILE.",
+        help="Save manipulated PDF from FILE1 to FILE. Use \'-\' for stdout.",
     )
     parser.add_option(
         '--rmin', type="float", help="Minimum r-value to use for PDF comparisons."
@@ -208,7 +221,7 @@ def main():
     config["rstep"] = None
     if opts.rmin is not None and opts.rmax is not None and opts.rmax <= opts.rmin:
         e = "rmin must be less than rmax"
-        parser.error(e)
+        parser.custom_error(e)
 
     # Set up the morphs
     chain = morphs.MorphChain(config)
@@ -295,12 +308,12 @@ def main():
                 refiner.refine(*rptemp)
             refiner.refine(*refpars)
         except ValueError as e:
-            parser.error(str(e))
+            parser.custom_error(str(e))
     elif "smear" in refpars and opts.baselineslope is None:
         try:
             refiner.refine("baselineslope", baselineslope=-0.5)
         except ValueError as e:
-            parser.error(str(e))
+            parser.custom_error(str(e))
     else:
         chain(xobj, yobj, xref, yref)
 
@@ -320,23 +333,40 @@ def main():
     items = list(config.items())
     items.sort()
     output = "\n# Optimized morphing parameters:\n"
-    output += "\n".join("# %s = %f" % i for i in items)
-    output += "\n# Rw = %f" % rw
-    output += "\n# Pearson = %f" % pcc
+    output += "\n".join(f"# {i[0]} = {i[1]:.6f}" for i in items)
+    output += f"\n# Rw = {rw:.6f}"
+    output += f"\n# Pearson = {pcc:.6f}"
     print(output)
     if opts.savefile is not None:
+        path_name = Path(pargs[0]).absolute()
         header = "# PDF created by pdfmorph\n"
-        header += "# from %s\n" % os.path.abspath(pargs[0])
+        header += f"# from {path_name}\n"
 
         header += morphs_in
         header += output
+
+        # Print to stdout
         if opts.savefile == "-":
             outfile = sys.stdout
+            print(header, file=outfile)
+            numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
+            # Do not close stdout
+
+        # Save to file
         else:
-            outfile = open(opts.savefile, 'w')
-        print(header, file=outfile)
-        numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
-        outfile.close()
+            try:
+                with open(opts.savefile, 'w') as outfile:
+                    print(header, file=outfile)
+                    numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
+                    outfile.close()  # Close written file
+
+                    path_name = Path(outfile.name).absolute()
+                    save_message = f"\n# Morph saved to {path_name}"
+                    print(save_message)
+            except FileNotFoundError as e:
+                save_fail_message = "\nUnable to save to designated location"
+                print(save_fail_message)
+                parser.custom_error(str(e))
 
     if opts.plot:
         pairlist = [chain.xyobjout, chain.xyrefout]
