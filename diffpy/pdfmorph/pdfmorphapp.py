@@ -35,6 +35,7 @@ def createOptionParser():
             [
                 "%prog [options] FILE1 FILE2",
                 "Manipulate and compare PDFs.",
+                "Use --help for help.",
             ]
         ),
         epilog="Please report bugs to diffpy-dev@googlegroups.com.",
