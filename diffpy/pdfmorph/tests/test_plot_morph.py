@@ -4,7 +4,7 @@
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from diffpy.pdfmorph import pdfmorph, morph_default_config, plot_morph
+from diffpy.pdfmorph.pdfmorph_api import pdfmorph, morph_default_config, plot_morph
 from diffpy.pdfmorph.tests.test_morphstretch import heaviside
 
 

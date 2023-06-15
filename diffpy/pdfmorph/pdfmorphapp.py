@@ -28,7 +28,7 @@ import diffpy.pdfmorph.morphs as morphs
 import diffpy.pdfmorph.refine as refine
 
 
-def createOptionParser():
+def create_option_parser():
     import optparse
 
     class CustomParser(optparse.OptionParser):
@@ -190,6 +190,9 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
     group.add_option(
         '--mag', type="float", help="Magnify plot curves beyond MAGLIM by MAG."
     )
+    group.add_option(
+        '--lwidth', type="float", help="Line thickness of plotted curves."
+    )
 
     # Defaults
     parser.set_defaults(plot=True)
@@ -197,12 +200,13 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
     parser.set_defaults(pearson=False)
     parser.set_defaults(addpearson=False)
     parser.set_defaults(mag=5)
+    parser.set_defaults(lwidth=1.5)
 
     return parser
 
 
 def main():
-    parser = createOptionParser()
+    parser = create_option_parser()
     (opts, pargs) = parser.parse_args()
 
     if len(pargs) != 2:
@@ -254,31 +258,39 @@ def main():
         if opts.baselineslope is None:
             refpars.append("baselineslope")
             config["baselineslope"] = -0.5
+
+    def nn_value(val, name):
+        if val < 0:
+            negative_value_warning = f"\n# Negative value for {name} given. Using absolute value instead."
+            print(negative_value_warning)
+            return -val
+        return val
+
     ## Size
     radii = [opts.radius, opts.pradius]
     nrad = 2 - radii.count(None)
     if nrad == 1:
         radii.remove(None)
-        config["radius"] = radii[0]
+        config["radius"] = nn_value(radii[0], "radius or pradius")
         chain.append(morphs.MorphSphere())
         refpars.append("radius")
     elif nrad == 2:
-        config["radius"] = radii[0]
+        config["radius"] = nn_value(radii[0], "radius")
         refpars.append("radius")
-        config["pradius"] = radii[1]
+        config["pradius"] = nn_value(radii[1], "pradius")
         refpars.append("pradius")
         chain.append(morphs.MorphSpheroid())
     iradii = [opts.iradius, opts.ipradius]
     inrad = 2 - iradii.count(None)
     if inrad == 1:
         iradii.remove(None)
-        config["iradius"] = iradii[0]
+        config["iradius"] = nn_value(iradii[0], "iradius or ipradius")
         chain.append(morphs.MorphISphere())
         refpars.append("iradius")
     elif inrad == 2:
-        config["iradius"] = iradii[0]
+        config["iradius"] = nn_value(iradii[0], "iradius")
         refpars.append("iradius")
-        config["ipradius"] = iradii[1]
+        config["ipradius"] = nn_value(iradii[1], "ipradius")
         refpars.append("ipradius")
         chain.append(morphs.MorphISpheroid())
 
@@ -298,7 +310,7 @@ def main():
     if opts.pearson:
         refiner.residual = refiner._pearson
     if opts.addpearson:
-        refiner.residual = refiner._addpearson
+        refiner.residual = refiner._add_pearson
     if opts.refine and refpars:
         try:
             # This works better when we adjust scale and smear first.
@@ -320,7 +332,7 @@ def main():
 
     # Get Rw for the morph range
     rw = tools.getRw(chain)
-    pcc = tools.getPearson(chain)
+    pcc = tools.get_pearson(chain)
     # Replace the MorphRGrid with Morph identity
     chain[0] = morphs.Morph()
     chain(xobj, yobj, xref, yref)
@@ -377,8 +389,9 @@ def main():
         pmax = opts.pmax if opts.pmax is not None else opts.rmax
         maglim = opts.maglim
         mag = opts.mag
+        l_width = opts.lwidth
         pdfplot.comparePDFs(
-            pairlist, labels, rmin=pmin, rmax=pmax, maglim=maglim, mag=mag, rw=rw
+            pairlist, labels, rmin=pmin, rmax=pmax, maglim=maglim, mag=mag, rw=rw, l_width=l_width
         )
 
     return

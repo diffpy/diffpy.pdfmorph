@@ -43,7 +43,7 @@ def plotPDFs(pairlist, labels=None, offset='auto', rmin=None, rmax=None):
     if labels is None:
         labels = []
     if offset == 'auto':
-        offset = _findOffset(pairlist)
+        offset = _find_offset(pairlist)
 
     gap = len(pairlist) - len(labels)
     labels = list(labels)
@@ -74,6 +74,7 @@ def comparePDFs(
     mag=5,
     rw=None,
     legend=True,
+    l_width=1.5,
 ):
     """Plot two PDFs on top of each other and difference curve.
 
@@ -96,7 +97,6 @@ def comparePDFs(
     line.  The difference curve will be in green and offset for clarity.
 
     """
-
     if labels is None:
         labels = [2]
         labeldata = None
@@ -111,7 +111,7 @@ def comparePDFs(
     rvmin = max(rfit[0], rdat[0])
     rvmin = rmin or rvmin
     rvmax = min(rfit[-1], rdat[-1])
-    rvmax = rmax or rfit[-1]
+    rvmax = rmax or rvmax
 
     gap = 2 - len(labels)
     labels = list(labels)
@@ -162,12 +162,12 @@ def comparePDFs(
     fig.add_axes(axes)
     plt.minorticks_on()
 
-    plt.plot(rdat, grdat, label=labeldata)
-    plt.plot(rfit, grfit, label=labelfit)
-    plt.plot(rdat, offset * numpy.ones_like(diff), color='black')
+    plt.plot(rdat, grdat, linewidth=l_width, label=labeldata)
+    plt.plot(rfit, grfit, linewidth=l_width, label=labelfit)
+    plt.plot(rdat, offset * numpy.ones_like(diff), linewidth=3, color='black')
 
     diff += offset
-    plt.plot(rdat, diff, label=labeldiff)
+    plt.plot(rdat, diff, linewidth=l_width, label=labeldiff)
 
     if maglim is not None:
         # Add a line for the magnification cutoff
@@ -232,7 +232,7 @@ def truncatePDFs(r, gr, rmin=None, rmax=None):
     return r, gr
 
 
-def _findOffset(pairlist):
+def _find_offset(pairlist):
     """Find an optimal offset between PDFs."""
     maxlist = [max(p[1]) for p in pairlist]
     minlist = [min(p[1]) for p in pairlist]
