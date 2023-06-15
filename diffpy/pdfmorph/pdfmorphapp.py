@@ -258,39 +258,31 @@ def main():
         if opts.baselineslope is None:
             refpars.append("baselineslope")
             config["baselineslope"] = -0.5
-
-    def nn_value(val, name):
-        if val < 0:
-            negative_value_warning = f"\n# Negative value for {name} given. Using absolute value instead."
-            print(negative_value_warning)
-            return -val
-        return val
-
     ## Size
     radii = [opts.radius, opts.pradius]
     nrad = 2 - radii.count(None)
     if nrad == 1:
         radii.remove(None)
-        config["radius"] = nn_value(radii[0], "radius or pradius")
+        config["radius"] = tools.nn_value(radii[0], "radius or pradius")
         chain.append(morphs.MorphSphere())
         refpars.append("radius")
     elif nrad == 2:
-        config["radius"] = nn_value(radii[0], "radius")
+        config["radius"] = tools.nn_value(radii[0], "radius")
         refpars.append("radius")
-        config["pradius"] = nn_value(radii[1], "pradius")
+        config["pradius"] = tools.nn_value(radii[1], "pradius")
         refpars.append("pradius")
         chain.append(morphs.MorphSpheroid())
     iradii = [opts.iradius, opts.ipradius]
     inrad = 2 - iradii.count(None)
     if inrad == 1:
         iradii.remove(None)
-        config["iradius"] = nn_value(iradii[0], "iradius or ipradius")
+        config["iradius"] = tools.nn_value(iradii[0], "iradius or ipradius")
         chain.append(morphs.MorphISphere())
         refpars.append("iradius")
     elif inrad == 2:
-        config["iradius"] = nn_value(iradii[0], "iradius")
+        config["iradius"] = tools.nn_value(iradii[0], "iradius")
         refpars.append("iradius")
-        config["ipradius"] = nn_value(iradii[1], "ipradius")
+        config["ipradius"] = tools.nn_value(iradii[1], "ipradius")
         refpars.append("ipradius")
         chain.append(morphs.MorphISpheroid())
 

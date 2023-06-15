@@ -110,3 +110,12 @@ def readPDF(fname):
     if len(rv) >= 2:
         return rv[:2]
     return (None, None)
+
+
+def nn_value(val, name):
+    # Convenience function for ensuring certain non-negative inputs
+    if val < 0:
+        negative_value_warning = f"\n# Negative value for {name} given. Using absolute value instead."
+        print(negative_value_warning)
+        return -val
+    return val
