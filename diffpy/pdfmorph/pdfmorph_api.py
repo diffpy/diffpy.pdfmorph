@@ -152,7 +152,7 @@ def pdfmorph(
     Examples
     --------
     # morphing (xobj, yobj) pair to (xref, yref) pair with scaling
-    from diffpy.pdfmorph import pdfmorph, morph_default_config, plot_morph
+    from diffpy.pdfmorph.pdfmorph_api import pdfmorph, morph_default_config, plot_morph
 
     morph_cfg = morph_default_config(scale=1.01)
     morph_rv_dict = pdfmorph(xobj, yobj, xref, yref, **morph_cfg)
@@ -203,7 +203,7 @@ def pdfmorph(
     if pearson:
         refiner.residual = refiner._pearson
     if add_pearson:
-        refiner.residual = refiner._addpearson
+        refiner.residual = refiner._add_pearson
     # execute morphing
     if refpars and refine:
         # This works better when we adjust scale and smear first.
@@ -220,7 +220,7 @@ def pdfmorph(
 
     # summary
     rw = tools.getRw(chain)
-    pcc = tools.getPearson(chain)
+    pcc = tools.get_pearson(chain)
     # restore rgrid
     chain[0] = morphs.Morph()
     chain(xobj, yobj, xref, yref)

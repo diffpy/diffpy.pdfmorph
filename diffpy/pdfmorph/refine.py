@@ -56,7 +56,7 @@ class Refiner(object):
         self.residual = self._residual
         return
 
-    def _updateChain(self, pvals):
+    def _update_chain(self, pvals):
         """Update the parameters in the chain."""
         pairs = zip(self.pars, pvals)
         self.chain.config.update(pairs)
@@ -64,7 +64,7 @@ class Refiner(object):
 
     def _residual(self, pvals):
         """Standard vector residual."""
-        self._updateChain(pvals)
+        self._update_chain(pvals)
         _xobj, _yobj, _xref, _yref = self.chain(
             self.xobj, self.yobj, self.xref, self.yref
         )
@@ -78,14 +78,14 @@ class Refiner(object):
         We seek to minimize this, which occurrs when the correlation is the
         largest.
         """
-        self._updateChain(pvals)
+        self._update_chain(pvals)
         _xobj, _yobj, _xref, _yref = self.chain(
             self.xobj, self.yobj, self.xref, self.yref
         )
         pcc, pval = pearsonr(_yobj, _yref)
         return ones_like(_xobj) * exp(-pcc)
 
-    def _addpearson(self, pvals):
+    def _add_pearson(self, pvals):
         """Refine both the pearson and residual."""
         res1 = self._residual(pvals)
         res2 = self._pearson(pvals)

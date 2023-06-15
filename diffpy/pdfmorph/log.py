@@ -26,7 +26,7 @@ import logging
 plog = logging.getLogger('diffpy.pdfmorph')
 
 
-def setVerbosity(vb):
+def set_verbosity(vb):
     '''Set verbosity of the pdfmorph logger.
 
     vb   -- integer or one of ('debug', 'info', 'warning', 'error') strings

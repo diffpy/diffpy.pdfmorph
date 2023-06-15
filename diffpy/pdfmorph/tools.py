@@ -88,7 +88,7 @@ def getRw(chain):
     return rw
 
 
-def getPearson(chain):
+def get_pearson(chain):
     from scipy.stats import pearsonr
 
     xobj, yobj, xref, yref = chain.xyallout
