@@ -268,8 +268,8 @@ def plot_morph(chain, ax=None, **kwargs):
         fig, ax = plt.subplots()
     rfit, grfit = chain.xy_morph_out
     rdat, grdat = chain.xy_target_out
-    l_list = ax.plot(rfit, grfit, label='***MORPH***', **kwargs)
-    l_list += ax.plot(rdat, grdat, label='***TARGET***', **kwargs)
+    l_list = ax.plot(rfit, grfit, label='morph', **kwargs)
+    l_list += ax.plot(rdat, grdat, label='target', **kwargs)
     ax.set_xlim([chain.config['rmin'], chain.config['rmax']])
     ax.legend()
     ax.set_xlabel(r'r ($\mathrm{\AA}$)')

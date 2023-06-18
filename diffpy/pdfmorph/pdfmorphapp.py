@@ -179,6 +179,24 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
         help="Do not show the plot.",
     )
     group.add_option(
+        '--usefilenames',
+        action="store_true",
+        dest="usefilenames",
+        help="Use the file names as labels on plot."
+    )
+    group.add_option(
+        '--mlabel',
+        metavar="MLABEL",
+        dest="mlabel",
+        help="Set label for morphed data to MLABEL on plot. Ignored if using file names as labels.",
+    )
+    group.add_option(
+        '--tlabel',
+        metavar="TLABEL",
+        dest="tlabel",
+        help="Set label for target data to TLABEL on plot. Ignored if using file names as labels.",
+    )
+    group.add_option(
         '--pmin', type="float", help="Minimum r-value to plot. Defaults to RMIN."
     )
     group.add_option(
@@ -375,7 +393,14 @@ def main():
 
     if opts.plot:
         pairlist = [chain.xy_morph_out, chain.xy_target_out]
-        labels = ["***MORPH***", "***TARGET***"]
+        labels = ["morph", "target"]  # Default label names
+        if opts.usefilenames:
+            labels = [pargs[0], pargs[1]]
+        else:
+            if opts.mlabel is not None:
+                labels[0] = opts.mlabel
+            if opts.tlabel is not None:
+                labels[1] = opts.tlabel
         # Plot extent defaults to calculation extent
         pmin = opts.pmin if opts.pmin is not None else opts.rmin
         pmax = opts.pmax if opts.pmax is not None else opts.rmax

@@ -163,14 +163,14 @@ class Morph(object):
     def plotInputs(self, xylabels=True):
         '''Plot input arrays using matplotlib.pyplot
 
-        xylabels -- flag for updating x and y axis labels
+        xylabels -- flag for updating x and y axes labels
 
         Return a list of matplotlib line objects.
         '''
         from matplotlib.pyplot import plot, xlabel, ylabel
 
-        rv = plot(self.x_target_in, self.y_target_in, label="***TARGET***")
-        rv = plot(self.x_morph_in, self.y_morph_in, label="***MORPH***")
+        rv = plot(self.x_target_in, self.y_target_in, label="target")
+        rv = plot(self.x_morph_in, self.y_morph_in, label="morph")
         if xylabels:
             xlabel(self.xinlabel)
             ylabel(self.yinlabel)
@@ -179,7 +179,7 @@ class Morph(object):
     def plotOutputs(self, xylabels=True, **plotargs):
         '''Plot output arrays using matplotlib.pyplot
 
-        xylabels -- flag for updating x and y axis labels
+        xylabels -- flag for updating x and y axes labels
         plotargs -- arguments passed to the pylab plot function. Note that
                     "label" will be ignored.
 
@@ -189,8 +189,8 @@ class Morph(object):
 
         pargs = dict(plotargs)
         pargs.pop("label", None)
-        rv = plot(self.x_target_out, self.y_target_out, label="***TARGET***", **pargs)
-        rv = plot(self.x_morph_out, self.y_morph_out, label="***MORPH***", **pargs)
+        rv = plot(self.x_target_out, self.y_target_out, label="target", **pargs)
+        rv = plot(self.x_morph_out, self.y_morph_out, label="morph", **pargs)
         if xylabels:
             xlabel(self.xoutlabel)
             ylabel(self.youtlabel)
