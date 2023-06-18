@@ -14,7 +14,7 @@
 ##############################################################################
 
 
-"""class MorphRGrid -- put objective and reference on desired grid.
+"""class MorphRGrid -- put morph and target on desired grid.
 """
 
 
@@ -28,7 +28,7 @@ epsilon = 1e-8
 class MorphRGrid(Morph):
     '''Resample to specified r-grid.
 
-    This resamples both the objective and reference arrays to be on the
+    This resamples both the morph and target arrays to be on the
     specified grid.
 
     Configuration variables:
@@ -52,14 +52,14 @@ class MorphRGrid(Morph):
     youtlabel = LABEL_GR
     parnames = ["rmin", "rmax", "rstep"]
 
-    def morph(self, xobj, yobj, xref, yref):
+    def morph(self, x_morph, y_morph, x_target, y_target):
         """Resample arrays onto specified grid."""
-        Morph.morph(self, xobj, yobj, xref, yref)
-        rmininc = max(self.xrefin[0], self.xobjin[0])
-        rstepref = self.xrefin[1] - self.xrefin[0]
-        rstepobj = self.xobjin[1] - self.xobjin[0]
-        rstepinc = max(rstepref, rstepobj)
-        rmaxinc = min(self.xrefin[-1] + rstepref, self.xobjin[-1] + rstepobj)
+        Morph.morph(self, x_morph, y_morph, x_target, y_target)
+        rmininc = max(self.x_target_in[0], self.x_morph_in[0])
+        r_step_target = self.x_target_in[1] - self.x_target_in[0]
+        r_step_morph = self.x_morph_in[1] - self.x_morph_in[0]
+        rstepinc = max(r_step_target, r_step_morph)
+        rmaxinc = min(self.x_target_in[-1] + r_step_target, self.x_morph_in[-1] + r_step_morph)
         if self.rmin is None or self.rmin < rmininc:
             self.rmin = rmininc
         if self.rmax is None or self.rmax > rmaxinc:
@@ -67,10 +67,10 @@ class MorphRGrid(Morph):
         if self.rstep is None or self.rstep < rstepinc:
             self.rstep = rstepinc
         # Make sure that rmax is exclusive
-        self.xobjout = numpy.arange(self.rmin, self.rmax - epsilon, self.rstep)
-        self.yobjout = numpy.interp(self.xobjout, self.xobjin, self.yobjin)
-        self.xrefout = self.xobjout.copy()
-        self.yrefout = numpy.interp(self.xrefout, self.xrefin, self.yrefin)
+        self.x_morph_out = numpy.arange(self.rmin, self.rmax - epsilon, self.rstep)
+        self.y_morph_out = numpy.interp(self.x_morph_out, self.x_morph_in, self.y_morph_in)
+        self.x_target_out = self.x_morph_out.copy()
+        self.y_target_out = numpy.interp(self.x_target_out, self.x_target_in, self.y_target_in)
         return self.xyallout
 
 

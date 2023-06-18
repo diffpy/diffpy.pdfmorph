@@ -24,7 +24,7 @@ from diffpy.pdfmorph.morphs.morphshape import _sphericalCF, _spheroidalCF
 
 
 class MorphISphere(Morph):
-    '''Apply inverse spherical characteristic function to the objective
+    '''Apply inverse spherical characteristic function to the morph
 
     Configuration variables:
 
@@ -33,19 +33,19 @@ class MorphISphere(Morph):
     '''
 
     # Define input output types
-    summary = 'Apply inverse spherical characteristic function to objective'
+    summary = 'Apply inverse spherical characteristic function to morph'
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_GR
     parnames = ["iradius"]
 
-    def morph(self, xobj, yobj, xref, yref):
+    def morph(self, x_morph, y_morph, x_target, y_target):
         """Apply a scale factor."""
-        Morph.morph(self, xobj, yobj, xref, yref)
-        f = _sphericalCF(xobj, 2 * self.iradius)
-        self.yobjout /= f
-        self.yobjout[f == 0] = 0
+        Morph.morph(self, x_morph, y_morph, x_target, y_target)
+        f = _sphericalCF(x_morph, 2 * self.iradius)
+        self.y_morph_out /= f
+        self.y_morph_out[f == 0] = 0
         return self.xyallout
 
 
@@ -53,7 +53,7 @@ class MorphISphere(Morph):
 
 
 class MorphISpheroid(Morph):
-    '''Apply inverse spherical characteristic function to the objective
+    '''Apply inverse spherical characteristic function to the morph
 
     Configuration variables:
 
@@ -63,19 +63,19 @@ class MorphISpheroid(Morph):
     '''
 
     # Define input output types
-    summary = 'Apply inverse spheroidal characteristic function to objective'
+    summary = 'Apply inverse spheroidal characteristic function to morph'
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_GR
     parnames = ["iradius", "ipradius"]
 
-    def morph(self, xobj, yobj, xref, yref):
+    def morph(self, x_morph, y_morph, x_target, y_target):
         """Apply a scale factor."""
-        Morph.morph(self, xobj, yobj, xref, yref)
-        f = _spheroidalCF(xobj, self.iradius, self.ipradius)
-        self.yobjout /= f
-        self.yobjout[f == 0] == 0
+        Morph.morph(self, x_morph, y_morph, x_target, y_target)
+        f = _spheroidalCF(x_morph, self.iradius, self.ipradius)
+        self.y_morph_out[f != 0] /= f  # Divide non-zero entries
+        self.y_morph_out[f == 0] = 0  # Set zero entries to zero
         return self.xyallout
 
 

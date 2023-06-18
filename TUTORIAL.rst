@@ -75,8 +75,8 @@ Basic PDFmorph Workflow
               will get morphed, while the second PDF file argument you
               provide (here, ``darkSub_rh20_C_44.gr``) is the PDF which
               acts as the model and does not get morphed. Hereinafter,
-              we will refer to the first PDF argument as the "objective"
-              and the second as the "reference", as the PDFmorph display
+              we will refer to the first PDF argument as the "morph"
+              and the second as the "target", as the PDFmorph display
               does.
 
     6. Now, we will start the morphing process, which requires us to

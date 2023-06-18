@@ -179,6 +179,24 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
         help="Do not show the plot.",
     )
     group.add_option(
+        '--usefilenames',
+        action="store_true",
+        dest="usefilenames",
+        help="Use the file names as labels on plot."
+    )
+    group.add_option(
+        '--mlabel',
+        metavar="MLABEL",
+        dest="mlabel",
+        help="Set label for morphed data to MLABEL on plot. Ignored if using file names as labels.",
+    )
+    group.add_option(
+        '--tlabel',
+        metavar="TLABEL",
+        dest="tlabel",
+        help="Set label for target data to TLABEL on plot. Ignored if using file names as labels.",
+    )
+    group.add_option(
         '--pmin', type="float", help="Minimum r-value to plot. Defaults to RMIN."
     )
     group.add_option(
@@ -213,8 +231,8 @@ def main():
         parser.error("You must supply FILE1 and FILE2")
 
     # Get the PDFs
-    xobj, yobj = getPDFFromFile(pargs[0])
-    xref, yref = getPDFFromFile(pargs[1])
+    x_morph, y_morph = getPDFFromFile(pargs[0])
+    x_target, y_target = getPDFFromFile(pargs[1])
 
     # Get configuration values
     scale_in = 'None'
@@ -258,39 +276,31 @@ def main():
         if opts.baselineslope is None:
             refpars.append("baselineslope")
             config["baselineslope"] = -0.5
-
-    def nn_value(val, name):
-        if val < 0:
-            negative_value_warning = f"\n# Negative value for {name} given. Using absolute value instead."
-            print(negative_value_warning)
-            return -val
-        return val
-
     ## Size
     radii = [opts.radius, opts.pradius]
     nrad = 2 - radii.count(None)
     if nrad == 1:
         radii.remove(None)
-        config["radius"] = nn_value(radii[0], "radius or pradius")
+        config["radius"] = tools.nn_value(radii[0], "radius or pradius")
         chain.append(morphs.MorphSphere())
         refpars.append("radius")
     elif nrad == 2:
-        config["radius"] = nn_value(radii[0], "radius")
+        config["radius"] = tools.nn_value(radii[0], "radius")
         refpars.append("radius")
-        config["pradius"] = nn_value(radii[1], "pradius")
+        config["pradius"] = tools.nn_value(radii[1], "pradius")
         refpars.append("pradius")
         chain.append(morphs.MorphSpheroid())
     iradii = [opts.iradius, opts.ipradius]
     inrad = 2 - iradii.count(None)
     if inrad == 1:
         iradii.remove(None)
-        config["iradius"] = nn_value(iradii[0], "iradius or ipradius")
+        config["iradius"] = tools.nn_value(iradii[0], "iradius or ipradius")
         chain.append(morphs.MorphISphere())
         refpars.append("iradius")
     elif inrad == 2:
-        config["iradius"] = nn_value(iradii[0], "iradius")
+        config["iradius"] = tools.nn_value(iradii[0], "iradius")
         refpars.append("iradius")
-        config["ipradius"] = nn_value(iradii[1], "ipradius")
+        config["ipradius"] = tools.nn_value(iradii[1], "ipradius")
         refpars.append("ipradius")
         chain.append(morphs.MorphISpheroid())
 
@@ -306,7 +316,7 @@ def main():
         refpars = list(refpars)
 
     # Refine or execute the morph
-    refiner = refine.Refiner(chain, xobj, yobj, xref, yref)
+    refiner = refine.Refiner(chain, x_morph, y_morph, x_target, y_target)
     if opts.pearson:
         refiner.residual = refiner._pearson
     if opts.addpearson:
@@ -328,14 +338,14 @@ def main():
         except ValueError as e:
             parser.custom_error(str(e))
     else:
-        chain(xobj, yobj, xref, yref)
+        chain(x_morph, y_morph, x_target, y_target)
 
     # Get Rw for the morph range
     rw = tools.getRw(chain)
     pcc = tools.get_pearson(chain)
     # Replace the MorphRGrid with Morph identity
     chain[0] = morphs.Morph()
-    chain(xobj, yobj, xref, yref)
+    chain(x_morph, y_morph, x_target, y_target)
 
     morphs_in = "\n# Input morphing parameters:"
     morphs_in += f"\n# scale = {scale_in}"
@@ -362,7 +372,7 @@ def main():
         if opts.savefile == "-":
             outfile = sys.stdout
             print(header, file=outfile)
-            numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
+            numpy.savetxt(outfile, numpy.transpose([chain.x_morph_out, chain.y_morph_out]))
             # Do not close stdout
 
         # Save to file
@@ -370,7 +380,7 @@ def main():
             try:
                 with open(opts.savefile, 'w') as outfile:
                     print(header, file=outfile)
-                    numpy.savetxt(outfile, numpy.transpose([chain.xobjout, chain.yobjout]))
+                    numpy.savetxt(outfile, numpy.transpose([chain.x_morph_out, chain.y_morph_out]))
                     outfile.close()  # Close written file
 
                     path_name = Path(outfile.name).absolute()
@@ -382,8 +392,15 @@ def main():
                 parser.custom_error(str(e))
 
     if opts.plot:
-        pairlist = [chain.xyobjout, chain.xyrefout]
-        labels = ["objective", "reference"]
+        pairlist = [chain.xy_morph_out, chain.xy_target_out]
+        labels = ["morph", "target"]  # Default label names
+        if opts.usefilenames:
+            labels = [pargs[0], pargs[1]]
+        else:
+            if opts.mlabel is not None:
+                labels[0] = opts.mlabel
+            if opts.tlabel is not None:
+                labels[1] = opts.tlabel
         # Plot extent defaults to calculation extent
         pmin = opts.pmin if opts.pmin is not None else opts.rmin
         pmax = opts.pmax if opts.pmax is not None else opts.rmax

@@ -69,10 +69,10 @@ def morph_default_config(**kwargs):
 
 
 def pdfmorph(
-    xobj,
-    yobj,
-    xref,
-    yref,
+    x_morph,
+    y_morph,
+    x_target,
+    y_target,
     rmin=None,
     rmax=None,
     rstep=None,
@@ -87,17 +87,17 @@ def pdfmorph(
 
     Parameters
     ----------
-    xobj : numpy.array
-        An array of objective x values, i.e., those will be manipulated by
+    x_morph : numpy.array
+        An array of morphed x values, i.e., those will be manipulated by
         morphing.
-    yobj : numpy.array
-        An array of objective y values, i.e., those will be manipulated by
+    y_morph : numpy.array
+        An array of morphed y values, i.e., those will be manipulated by
         morphing.
-    xref : numpy.array
-        An array of reference x values, i.e., those will be kept constant by
+    x_target : numpy.array
+        An array of target x values, i.e., those will be kept constant by
         morphing.
-    yobj : numpy.array
-        An array of reference y values, i.e., those will be kept constant by
+    y_morph : numpy.array
+        An array of target y values, i.e., those will be kept constant by
         morphing.
     rmin : float, optional
         A value to specify lower r-limit of morph operations.
@@ -138,7 +138,7 @@ def pdfmorph(
 
         - morph_chain : diffpy.pdfmorph.morphs.morphchain.MorphChain
               The instance of processed morph chain.
-              Calling ``xobj, yobj, xref, yref = morph_chain.xyallout``
+              Calling ``x_morph, y_morph, x_target, y_target = morph_chain.xyallout``
               will conviniently retrun morphed data and reference data
         - morphed_cfg : dict
               A dictionary of refined morphing parameters
@@ -151,11 +151,11 @@ def pdfmorph(
 
     Examples
     --------
-    # morphing (xobj, yobj) pair to (xref, yref) pair with scaling
+    # morphing (x_morph, y_morph) pair to (x_target, y_target) pair with scaling
     from diffpy.pdfmorph.pdfmorph_api import pdfmorph, morph_default_config, plot_morph
 
     morph_cfg = morph_default_config(scale=1.01)
-    morph_rv_dict = pdfmorph(xobj, yobj, xref, yref, **morph_cfg)
+    morph_rv_dict = pdfmorph(x_morph, y_morph, x_target, y_target, **morph_cfg)
 
     # plot morhing result
     plot_morph(morph_rv_dict['morph_chain'])
@@ -199,7 +199,7 @@ def pdfmorph(
         for opt in fixed_operations:
             refpars.remove(opt)
     # define refiner
-    refiner = ref.Refiner(chain, xobj, yobj, xref, yref)
+    refiner = ref.Refiner(chain, x_morph, y_morph, x_target, y_target)
     if pearson:
         refiner.residual = refiner._pearson
     if add_pearson:
@@ -216,14 +216,14 @@ def pdfmorph(
         refiner.refine(*refpars)
     else:
         # no operation if refine=False or refpars is empty list
-        chain(xobj, yobj, xref, yref)
+        chain(x_morph, y_morph, x_target, y_target)
 
     # summary
     rw = tools.getRw(chain)
     pcc = tools.get_pearson(chain)
     # restore rgrid
     chain[0] = morphs.Morph()
-    chain(xobj, yobj, xref, yref)
+    chain(x_morph, y_morph, x_target, y_target)
     # print output
     if verbose:
         if fixed_operations:
@@ -266,10 +266,10 @@ def plot_morph(chain, ax=None, **kwargs):
     """
     if ax is None:
         fig, ax = plt.subplots()
-    rfit, grfit = chain.xyobjout
-    rdat, grdat = chain.xyrefout
-    l_list = ax.plot(rfit, grfit, label='objective', **kwargs)
-    l_list += ax.plot(rdat, grdat, label='reference', **kwargs)
+    rfit, grfit = chain.xy_morph_out
+    rdat, grdat = chain.xy_target_out
+    l_list = ax.plot(rfit, grfit, label='morph', **kwargs)
+    l_list += ax.plot(rdat, grdat, label='target', **kwargs)
     ax.set_xlim([chain.config['rmin'], chain.config['rmax']])
     ax.legend()
     ax.set_xlabel(r'r ($\mathrm{\AA}$)')

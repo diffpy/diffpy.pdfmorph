@@ -16,10 +16,10 @@ from diffpy.pdfmorph.morphs.morphrdftopdf import MorphXtalRDFtoPDF
 
 class TestMorphXtalRDFtoPDF(unittest.TestCase):
     def setUp(self):
-        self.xobj = numpy.arange(0.01, 5, 0.01)
-        self.yobj = numpy.exp(-0.5 * (self.xobj - 1.0) ** 2)
-        self.xref = numpy.arange(0.01, 5, 0.01)
-        self.yref = numpy.exp(-0.5 * (self.xobj - 2.0) ** 2)
+        self.x_morph = numpy.arange(0.01, 5, 0.01)
+        self.y_morph = numpy.exp(-0.5 * (self.x_morph - 1.0) ** 2)
+        self.x_target = numpy.arange(0.01, 5, 0.01)
+        self.y_target = numpy.exp(-0.5 * (self.x_morph - 2.0) ** 2)
         return
 
     def test_morph(self):
@@ -27,12 +27,12 @@ class TestMorphXtalRDFtoPDF(unittest.TestCase):
         config = {"baselineslope": -1.0}
         morph = MorphXtalRDFtoPDF(config)
 
-        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref, self.yref)
+        x_morph, y_morph, x_target, y_target = morph(self.x_morph, self.y_morph, self.x_target, self.y_target)
 
-        rdf1 = numpy.exp(-0.5 * (xobj - 1.0) ** 2) / xobj - xobj
-        rdf2 = numpy.exp(-0.5 * (xref - 2.0) ** 2) / xref - xref
-        self.assertTrue(numpy.allclose(rdf1, yobj))
-        self.assertTrue(numpy.allclose(rdf2, yref))
+        rdf1 = numpy.exp(-0.5 * (x_morph - 1.0) ** 2) / x_morph - x_morph
+        rdf2 = numpy.exp(-0.5 * (x_target - 2.0) ** 2) / x_target - x_target
+        self.assertTrue(numpy.allclose(rdf1, y_morph))
+        self.assertTrue(numpy.allclose(rdf2, y_target))
         return
 
 

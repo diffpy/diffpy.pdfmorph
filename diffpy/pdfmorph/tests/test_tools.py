@@ -19,14 +19,14 @@ import diffpy.pdfmorph.tools as tools
 ##############################################################################
 class TestTools(unittest.TestCase):
     def setUp(self):
-        objfile = os.path.join(testdata_dir, "nickel_ss0.01.cgr")
-        self.xobj, self.yobj = numpy.loadtxt(objfile, unpack=True)
+        morph_file = os.path.join(testdata_dir, "nickel_ss0.01.cgr")
+        self.x_morph, self.y_morph = numpy.loadtxt(morph_file, unpack=True)
         self.rho0 = 0.0917132
         return
 
     def test_estimateBaselineSlope(self):
         """check estimateBaselineSlope() using calculated data"""
-        slope = tools.estimateBaselineSlope(self.xobj, self.yobj)
+        slope = tools.estimateBaselineSlope(self.x_morph, self.y_morph)
         slopecalc = -4 * numpy.pi * self.rho0
         self.assertTrue(numpy.allclose(slopecalc, slope, 1e-2))
         return
@@ -36,7 +36,7 @@ class TestTools(unittest.TestCase):
         import random
 
         x = random.random()
-        scale = tools.estimateScale(self.yobj, x * self.yobj)
+        scale = tools.estimateScale(self.y_morph, x * self.y_morph)
         self.assertAlmostEqual(x, scale)
         return
 

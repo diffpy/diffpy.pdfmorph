@@ -24,7 +24,7 @@ from diffpy.pdfmorph.morphs.morph import *
 class MorphXtalPDFtoRDF(Morph):
     '''Morph crystal PDFs to RDFs.
 
-    This morphs both the objective and the reference.
+    This morphs both the morph data and the target data.
 
     Configuration variables:
 
@@ -38,20 +38,20 @@ class MorphXtalPDFtoRDF(Morph):
     '''
 
     # Define input output types
-    summary = 'Turn the PDF into the RDF for both the objective and reference'
+    summary = 'Turn the PDF into the RDF for both the morph and target'
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_RR
     parnames = ["baselineslope"]
 
-    def morph(self, xobj, yobj, xref, yref):
+    def morph(self, x_morph, y_morph, x_target, y_target):
         """Morph to the RDF."""
-        Morph.morph(self, xobj, yobj, xref, yref)
-        objbaseline = self.baselineslope * self.xobjin
-        self.yobjout = self.xobjin * (self.yobjin - objbaseline)
-        refbaseline = self.baselineslope * self.xrefin
-        self.yrefout = self.xrefin * (self.yrefin - refbaseline)
+        Morph.morph(self, x_morph, y_morph, x_target, y_target)
+        morph_baseline = self.baselineslope * self.x_morph_in
+        self.y_morph_out = self.x_morph_in * (self.y_morph_in - morph_baseline)
+        target_baseline = self.baselineslope * self.x_target_in
+        self.y_target_out = self.x_target_in * (self.y_target_in - target_baseline)
         return self.xyallout
 
 

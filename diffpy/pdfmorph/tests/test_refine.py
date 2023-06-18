@@ -22,10 +22,10 @@ from diffpy.pdfmorph.refine import Refiner
 
 class TestRefine(unittest.TestCase):
     def setUp(self):
-        self.xobj = numpy.arange(0.01, 5, 0.01)
-        self.yobj = numpy.ones_like(self.xobj)
-        self.xref = numpy.arange(0.01, 5, 0.01)
-        self.yref = 3 * numpy.ones_like(self.xref)
+        self.x_morph = numpy.arange(0.01, 5, 0.01)
+        self.y_morph = numpy.ones_like(self.x_morph)
+        self.x_target = numpy.arange(0.01, 5, 0.01)
+        self.y_target = 3 * numpy.ones_like(self.x_target)
         return
 
     def test_refine_morph(self):
@@ -36,21 +36,21 @@ class TestRefine(unittest.TestCase):
         }
 
         mscale = MorphScale(config)
-        refiner = Refiner(mscale, self.xobj, self.yobj, self.xref, self.yref)
+        refiner = Refiner(mscale, self.x_morph, self.y_morph, self.x_target, self.y_target)
         refiner.refine()
 
-        xobj, yobj, xref, yref = mscale.xyallout
+        x_morph, y_morph, x_target, y_target = mscale.xyallout
 
-        self.assertTrue((xobj == xref).all())
-        self.assertTrue(numpy.allclose(yobj, yref))
+        self.assertTrue((x_morph == x_target).all())
+        self.assertTrue(numpy.allclose(y_morph, y_target))
         self.assertAlmostEqual(config["scale"], 3.0)
         return
 
     def test_refine_chain(self):
         """refine a chain"""
         # Give this some texture
-        self.yobj[30:] = 5
-        self.yref[33:] = 15
+        self.y_morph[30:] = 5
+        self.y_target[33:] = 15
 
         # Define the morphs
         config = {"scale": 1.0, "stretch": 0.0}
@@ -59,15 +59,15 @@ class TestRefine(unittest.TestCase):
         mstretch = MorphStretch(config)
         chain = MorphChain(config, mscale, mstretch)
 
-        refiner = Refiner(chain, self.xobj, self.yobj, self.xref, self.yref)
+        refiner = Refiner(chain, self.x_morph, self.y_morph, self.x_target, self.y_target)
         res = refiner.refine()
 
-        # Compare the objective to the reference. Note that due to
+        # Compare the morph to the target. Note that due to
         # interpolation, there will be issues at the boundary of the step
         # function.
-        xobj, yobj, xref, yref = chain.xyallout
+        x_morph, y_morph, x_target, y_target = chain.xyallout
         err = 15.0 * 2
-        res = sum(numpy.fabs(yref - yobj))
+        res = sum(numpy.fabs(y_target - y_morph))
         self.assertTrue(res < err)
         self.assertAlmostEqual(chain.scale, 3, 2)
         self.assertAlmostEqual(chain.stretch, 0.1, 2)
@@ -79,11 +79,11 @@ class TestRefine(unittest.TestCase):
 
 class TestRefineUC(unittest.TestCase):
     def setUp(self):
-        objfile = os.path.join(testdata_dir, "nickel_ss0.01.cgr")
-        self.xobj, self.yobj = numpy.loadtxt(objfile, unpack=True, skiprows=8)
-        reffile = os.path.join(testdata_dir, "nickel_ss0.02_eps0.002.cgr")
-        self.xref, self.yref = numpy.loadtxt(reffile, unpack=True, skiprows=8)
-        self.yref *= 1.5
+        morph_file = os.path.join(testdata_dir, "nickel_ss0.01.cgr")
+        self.x_morph, self.y_morph = numpy.loadtxt(morph_file, unpack=True, skiprows=8)
+        target_file = os.path.join(testdata_dir, "nickel_ss0.02_eps0.002.cgr")
+        self.x_target, self.y_target = numpy.loadtxt(target_file, unpack=True, skiprows=8)
+        self.y_target *= 1.5
         return
 
     def test_refine(self):
@@ -103,19 +103,19 @@ class TestRefineUC(unittest.TestCase):
         chain.append(MorphSmear())
         chain.append(MorphXtalRDFtoPDF())
 
-        refiner = Refiner(chain, self.xobj, self.yobj, self.xref, self.yref)
+        refiner = Refiner(chain, self.x_morph, self.y_morph, self.x_target, self.y_target)
 
         # Do this as two-stage fit. First refine amplitude parameters, and then
         # position parameters.
         refiner.refine("scale", "smear")
         refiner.refine("scale", "stretch", "smear")
 
-        xobj, yobj, xref, yref = chain.xyallout
+        x_morph, y_morph, x_target, y_target = chain.xyallout
         # We want the fit good to 1%. We will disregard the last bit of the
         # fit, since we know we have unavoidable edge effects there.
-        sel = xobj < 9.5
-        yrsel = yref[sel]
-        diff = yrsel - yobj[sel]
+        sel = x_morph < 9.5
+        yrsel = y_target[sel]
+        diff = yrsel - y_morph[sel]
         rw = (numpy.dot(diff, diff) / numpy.dot(yrsel, yrsel)) ** 0.5
         self.assertTrue(rw < 0.01)
         return

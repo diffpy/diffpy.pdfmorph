@@ -33,40 +33,39 @@ class MorphChain(list):
     Properties:
 
     These return tuples of None if there are no morphs.
-    xobjin      -- last objective input x data
-    yobjin      -- last objective input y data
-    xobjout     -- last objective result x data
-    yobjout     -- last objective result y data
-    xrefin      -- last reference input x data
-    yrefin      -- last reference input y data
-    xrefout     -- last reference result x data
-    yrefout     -- last reference result y data
-    xyobjin     -- tuple of (xobjin, yobjin) from first morph
-    xyobjout    -- tuple of (xobjout, yobjout) from last morph
-    xyrefin     -- tuple of (xrefin, yrefin) from first morph
-    xyrefout    -- tuple of (xrefout, yrefout) from last morph
-    xyallout    -- tuple of (xobjout, yobjout, xrefout, yrefout) from last
-                   morph
+    x_morph_in          -- last morph input x data
+    y_morph_in          -- last morph input y data
+    x_morph_out         -- last morph result x data
+    y_morph_out         -- last morph result y data
+    x_target_in         -- last target input x data
+    y_target_in         -- last target input y data
+    x_target_out        -- last target result x data
+    y_target_out        -- last target result y data
+    xy_morph_in         -- tuple of (x_morph_in, y_morph_in) from first morph
+    xy_morph_out        -- tuple of (x_morph_out, y_morph_out) from last morph
+    xy_target_in        -- tuple of (x_target_in, y_target_in) from first morph
+    xy_target_out       -- tuple of (x_target_out, y_target_out) from last morph
+    xyallout            -- tuple of (x_morph_out, y_morph_out, x_target_out, y_target_out) from last morph
 
     parnames    -- Names of parameters collected from morphs (Read only).
 
     '''
 
-    xobjin = property(lambda self: None if len(self) == 0 else self[0].xobjin)
-    yobjin = property(lambda self: None if len(self) == 0 else self[0].yobjin)
-    xrefin = property(lambda self: None if len(self) == 0 else self[0].xrefin)
-    yrefin = property(lambda self: None if len(self) == 0 else self[0].yrefin)
-    xobjout = property(lambda self: None if len(self) == 0 else self[-1].xobjout)
-    yobjout = property(lambda self: None if len(self) == 0 else self[-1].yobjout)
-    xrefout = property(lambda self: None if len(self) == 0 else self[-1].xrefout)
-    yrefout = property(lambda self: None if len(self) == 0 else self[-1].yrefout)
-    xyobjin = property(lambda self: (None, None) if len(self) == 0 else self[0].xyobjin)
-    xyobjout = property(
-        lambda self: (None, None) if len(self) == 0 else self[-1].xyobjout
+    x_morph_in = property(lambda self: None if len(self) == 0 else self[0].x_morph_in)
+    y_morph_in = property(lambda self: None if len(self) == 0 else self[0].y_morph_in)
+    x_target_in = property(lambda self: None if len(self) == 0 else self[0].x_target_in)
+    y_target_in = property(lambda self: None if len(self) == 0 else self[0].y_target_in)
+    x_morph_out = property(lambda self: None if len(self) == 0 else self[-1].x_morph_out)
+    y_morph_out = property(lambda self: None if len(self) == 0 else self[-1].y_morph_out)
+    x_target_out = property(lambda self: None if len(self) == 0 else self[-1].x_target_out)
+    y_target_out = property(lambda self: None if len(self) == 0 else self[-1].y_target_out)
+    xy_morph_in = property(lambda self: (None, None) if len(self) == 0 else self[0].xy_morph_in)
+    xy_morph_out = property(
+        lambda self: (None, None) if len(self) == 0 else self[-1].xy_morph_out
     )
-    xyrefin = property(lambda self: (None, None) if len(self) == 0 else self[0].xyrefin)
-    xyrefout = property(
-        lambda self: (None, None) if len(self) == 0 else self[-1].xyrefout
+    xy_target_in = property(lambda self: (None, None) if len(self) == 0 else self[0].xy_target_in)
+    xy_target_out = property(
+        lambda self: (None, None) if len(self) == 0 else self[-1].xy_target_out
     )
     xyallout = property(
         lambda self: (None, None, None, None) if len(self) == 0 else self[-1].xyallout
@@ -85,26 +84,26 @@ class MorphChain(list):
         self.extend(args)
         return
 
-    def morph(self, xobj, yobj, xref, yref):
+    def morph(self, x_morph, y_morph, x_target, y_target):
         '''Apply the chain of morphs to the input data.
 
         Note that config may be altered by the morphs.
 
-        xobj, yobj  --  Objective arrays.
-        xref, yref  --  Reference arrays.
+        x_morph, y_morph  --  Morphed arrays.
+        x_target, y_target  --  Target arrays.
 
-        Return a tuple of numpy arrays (xobjout, yobjout, xrefout, yrefout)
+        Return a tuple of numpy arrays (x_morph_out, y_morph_out, x_target_out, y_target_out)
 
         '''
-        xyall = (xobj, yobj, xref, yref)
+        xyall = (x_morph, y_morph, x_target, y_target)
         for morph in self:
             morph.applyConfig(self.config)
             xyall = morph(*xyall)
         return xyall
 
-    def __call__(self, xobj, yobj, xref, yref):
+    def __call__(self, x_morph, y_morph, x_target, y_target):
         '''Alias for morph.'''
-        return self.morph(xobj, yobj, xref, yref)
+        return self.morph(x_morph, y_morph, x_target, y_target)
 
     def __getattr__(self, name):
         '''Obtain the value from self.config, when normal lookup fails.

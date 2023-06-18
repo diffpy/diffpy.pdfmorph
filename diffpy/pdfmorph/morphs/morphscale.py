@@ -14,7 +14,7 @@
 ##############################################################################
 
 
-"""class MorphScale -- scale the objective
+"""class MorphScale -- scale the morph data
 """
 
 
@@ -22,28 +22,28 @@ from diffpy.pdfmorph.morphs.morph import *
 
 
 class MorphScale(Morph):
-    '''Scale the objective.
+    '''Scale the morph.
 
-    This scales the objective.
+    This scales the morph.
 
     Configuration variables:
 
-    scale   --  The scale to apply to yrefin.
+    scale   --  The scale to apply to y_target_in.
 
     '''
 
     # Define input output types
-    summary = 'Scale objective by specified amount'
+    summary = 'Scale morph by specified amount'
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_GR
     parnames = ["scale"]
 
-    def morph(self, xobj, yobj, xref, yref):
+    def morph(self, x_morph, y_morph, x_target, y_target):
         """Apply a scale factor."""
-        Morph.morph(self, xobj, yobj, xref, yref)
-        self.yobjout *= self.scale
+        Morph.morph(self, x_morph, y_morph, x_target, y_target)
+        self.y_morph_out *= self.scale
         return self.xyallout
 
 
