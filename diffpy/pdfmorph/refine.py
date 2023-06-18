@@ -32,26 +32,26 @@ class Refiner(object):
     Attributes:
 
     chain       --  The Morph or MorphChain to refine
-    xobj, yobj  --  Objective arrays.
-    xref, yref  --  Reference arrays.
+    x_morph, y_morph  --  Morphed arrays.
+    x_target, y_target  --  Target arrays.
     pars        --  List of names of parameters to be refined.
     residual    --  The residual function to optimize. Default _residual. Can
                     be assigned to other functions.
 
     """
 
-    def __init__(self, chain, xobj, yobj, xref, yref):
+    def __init__(self, chain, x_morph, y_morph, x_target, y_target):
         """Initialize the arrays.
 
         chain       --  The Morph or MorphChain to refine
-        xobj, yobj  --  Objective arrays.
-        xref, yref  --  Reference arrays.
+        x_morph, y_morph  --  Morphed arrays.
+        x_target, y_target  --  Target arrays.
         """
         self.chain = chain
-        self.xobj = xobj
-        self.yobj = yobj
-        self.xref = xref
-        self.yref = yref
+        self.x_morph = x_morph
+        self.y_morph = y_morph
+        self.x_target = x_target
+        self.y_target = y_target
         self.pars = []
         self.residual = self._residual
         return
@@ -65,10 +65,10 @@ class Refiner(object):
     def _residual(self, pvals):
         """Standard vector residual."""
         self._update_chain(pvals)
-        _xobj, _yobj, _xref, _yref = self.chain(
-            self.xobj, self.yobj, self.xref, self.yref
+        _x_morph, _y_morph, _x_target, _y_target = self.chain(
+            self.x_morph, self.y_morph, self.x_target, self.y_target
         )
-        rvec = _yref - _yobj
+        rvec = _y_target - _y_morph
         return rvec
 
     def _pearson(self, pvals):
@@ -79,11 +79,11 @@ class Refiner(object):
         largest.
         """
         self._update_chain(pvals)
-        _xobj, _yobj, _xref, _yref = self.chain(
-            self.xobj, self.yobj, self.xref, self.yref
+        _x_morph, _y_morph, _x_target, _y_target = self.chain(
+            self.x_morph, self.y_morph, self.x_target, self.y_target
         )
-        pcc, pval = pearsonr(_yobj, _yref)
-        return ones_like(_xobj) * exp(-pcc)
+        pcc, pval = pearsonr(_y_morph, _y_target)
+        return ones_like(_x_morph) * exp(-pcc)
 
     def _add_pearson(self, pvals):
         """Refine both the pearson and residual."""

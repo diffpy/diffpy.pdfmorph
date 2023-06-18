@@ -14,7 +14,7 @@
 ##############################################################################
 
 
-"""class MorphSmear -- smear the objective.
+"""class MorphSmear -- smear the morph.
 """
 
 
@@ -23,36 +23,36 @@ from diffpy.pdfmorph.morphs.morph import *
 
 
 class MorphSmear(Morph):
-    '''Smear the objective function.
+    '''Smear the morph function.
 
-    This smears (broadens) the peaks of the objective.  Note that this operates
+    This smears (broadens) the peaks of the morph.  Note that this operates
     on the RDF. Inputs are not automatically converted to the RDF.
 
     Configuration variables:
 
-    smear   --  The smear factor to apply to yobjin.
+    smear   --  The smear factor to apply to y_morph_in.
 
     '''
 
     # Define input output types
-    summary = 'Smear objective by desired amount'
+    summary = 'Smear morph by desired amount'
     xinlabel = LABEL_RA
     yinlabel = LABEL_RR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_RR
     parnames = ["smear"]
 
-    def morph(self, xobj, yobj, xref, yref):
+    def morph(self, x_morph, y_morph, x_target, y_target):
         """Resample arrays onto specified grid."""
-        Morph.morph(self, xobj, yobj, xref, yref)
+        Morph.morph(self, x_morph, y_morph, x_target, y_target)
 
         if self.smear == 0:
             return self.xyallout
 
         # The Gaussian to convolute with. No need to normalize, we'll do that
         # later.
-        r = self.xobjin
-        rr = self.yobjin
+        r = self.x_morph_in
+        rr = self.y_morph_in
         r0 = r[len(r) // 2]
         gaussian = numpy.exp(-0.5 * ((r - r0) / self.smear) ** 2)
 
@@ -74,7 +74,7 @@ class MorphSmear(Morph):
         # Normalize so that the integrated magnitude of the RDF doesn't change.
         rrbroad /= sum(gaussian)
 
-        self.yobjout = rrbroad
+        self.y_morph_out = rrbroad
 
         return self.xyallout
 

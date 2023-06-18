@@ -24,11 +24,11 @@ LABEL_RR = 'R (1/A)'  # RDF R(r)
 
 
 class Morph(object):
-    '''Base class for implementing a morph on an objective given a reference.
+    '''Base class for implementing a morph given a target.
 
     Adapted from diffpy.pdfgetx to include two sets of arrays that get passed
-    through. In most cases, the objective is modified by a morph, but it is
-    acceptable for morph the reference as well, such as to change the range of
+    through. In most cases, only the morph is modified, but it is
+    acceptable for morph the target as well, such as to change the range of
     the array.
 
     Note that attributes are taken from config when not found locally. The
@@ -47,22 +47,22 @@ class Morph(object):
     Instance attributes:
 
     config      -- dictionary that contains all configuration variables
-    xobjin      -- last objective input x data
-    yobjin      -- last objective input y data
-    xobjout     -- last objective result x data
-    yobjout     -- last objective result y data
-    xrefin      -- last reference input x data
-    yrefin      -- last reference input y data
-    xrefout     -- last reference result x data
-    yrefout     -- last reference result y data
+    x_morph_in      -- last morph input x data
+    y_morph_in      -- last morph input y data
+    x_morph_out     -- last morph result x data
+    y_morph_out     -- last morph result y data
+    x_target_in      -- last target input x data
+    y_target_in      -- last target input y data
+    x_target_out     -- last target result x data
+    y_target_out     -- last target result y data
 
     Properties:
 
-    xyobjin     -- tuple of (xobjin, yobjin)
-    xyobjout    -- tuple of (xobjout, yobjout)
-    xyrefin     -- tuple of (xrefin, yrefin)
-    xyrefout    -- tuple of (xrefout, yrefout)
-    xyallout    -- tuple of (xobjout, yobjout, xrefout, yrefout)
+    xy_morph_in     -- tuple of (x_morph_in, y_morph_in)
+    xy_morph_out    -- tuple of (x_morph_out, y_morph_out)
+    xy_target_in     -- tuple of (x_target_in, y_target_in)
+    xy_target_out    -- tuple of (x_target_out, y_target_out)
+    xyallout    -- tuple of (x_morph_out, y_morph_out, x_target_out, y_target_out)
     '''
 
     # Class variables
@@ -76,24 +76,24 @@ class Morph(object):
 
     # Properties
 
-    xyobjin = property(
-        lambda self: (self.xobjin, self.yobjin),
-        doc='Return a tuple of objective input arrays',
+    xy_morph_in = property(
+        lambda self: (self.x_morph_in, self.y_morph_in),
+        doc='Return a tuple of morph input arrays',
     )
-    xyobjout = property(
-        lambda self: (self.xobjout, self.yobjout),
-        doc='Return a tuple of objective output arrays',
+    xy_morph_out = property(
+        lambda self: (self.x_morph_out, self.y_morph_out),
+        doc='Return a tuple of morph output arrays',
     )
-    xyrefin = property(
-        lambda self: (self.xrefin, self.yrefin),
-        doc='Return a tuple of reference input arrays',
+    xy_target_in = property(
+        lambda self: (self.x_target_in, self.y_target_in),
+        doc='Return a tuple of target input arrays',
     )
-    xyrefout = property(
-        lambda self: (self.xrefout, self.yrefout),
-        doc='Return a tuple of reference output arrays',
+    xy_target_out = property(
+        lambda self: (self.x_target_out, self.y_target_out),
+        doc='Return a tuple of target output arrays',
     )
     xyallout = property(
-        lambda self: (self.xobjout, self.yobjout, self.xrefout, self.yrefout),
+        lambda self: (self.x_morph_out, self.y_morph_out, self.x_target_out, self.y_target_out),
         doc='Return a tuple of all output arrays',
     )
 
@@ -105,43 +105,43 @@ class Morph(object):
         # declare empty attributes
         if config is None:
             config = {}
-        self.xobjin = None
-        self.yobjin = None
-        self.xobjout = None
-        self.yobjout = None
-        self.xrefin = None
-        self.yrefin = None
-        self.xrefout = None
-        self.yrefout = None
+        self.x_morph_in = None
+        self.y_morph_in = None
+        self.x_morph_out = None
+        self.y_morph_out = None
+        self.x_target_in = None
+        self.y_target_in = None
+        self.x_target_out = None
+        self.y_target_out = None
         # process arguments
         self.applyConfig(config)
         return
 
-    def morph(self, xobj, yobj, xref, yref):
-        '''Morph arrays objective or reference.
+    def morph(self, x_morph, y_morph, x_target, y_target):
+        '''Morph arrays morphed or target.
 
-        xobj, yobj  --  Objective arrays.
-        xref, yref  --  Reference arrays.
+        x_morph, y_morph  --  Morphed arrays.
+        x_target, y_target  --  Target arrays.
 
         Identity operation.  This method should be overloaded in a derived
         class.
 
-        Return a tuple of numpy arrays (xobjout, yobjout, xrefout, yrefout)
+        Return a tuple of numpy arrays (x_morph_out, y_morph_out, x_target_out, y_target_out)
         '''
-        self.xobjin = xobj
-        self.yobjin = yobj
-        self.xrefin = xref
-        self.yrefin = yref
-        self.xobjout = xobj.copy()
-        self.yobjout = yobj.copy()
-        self.xrefout = xref.copy()
-        self.yrefout = yref.copy()
+        self.x_morph_in = x_morph
+        self.y_morph_in = y_morph
+        self.x_target_in = x_target
+        self.y_target_in = y_target
+        self.x_morph_out = x_morph.copy()
+        self.y_morph_out = y_morph.copy()
+        self.x_target_out = x_target.copy()
+        self.y_target_out = y_target.copy()
         self.checkConfig()
         return self.xyallout
 
-    def __call__(self, xobj, yobj, xref, yref):
+    def __call__(self, x_morph, y_morph, x_target, y_target):
         '''Alias for morph.'''
-        return self.morph(xobj, yobj, xref, yref)
+        return self.morph(x_morph, y_morph, x_target, y_target)
 
     def applyConfig(self, config):
         '''Process any configuration data from a dictionary.
@@ -169,8 +169,8 @@ class Morph(object):
         '''
         from matplotlib.pyplot import plot, xlabel, ylabel
 
-        rv = plot(self.xrefin, self.yrefin, label="reference")
-        rv = plot(self.xobjin, self.yobjin, label="objective")
+        rv = plot(self.x_target_in, self.y_target_in, label="***TARGET***")
+        rv = plot(self.x_morph_in, self.y_morph_in, label="***MORPH***")
         if xylabels:
             xlabel(self.xinlabel)
             ylabel(self.yinlabel)
@@ -189,8 +189,8 @@ class Morph(object):
 
         pargs = dict(plotargs)
         pargs.pop("label", None)
-        rv = plot(self.xrefout, self.yrefout, label="reference", **pargs)
-        rv = plot(self.xobjout, self.yobjout, label="objective", **pargs)
+        rv = plot(self.x_target_out, self.y_target_out, label="***TARGET***", **pargs)
+        rv = plot(self.x_morph_out, self.y_morph_out, label="***MORPH***", **pargs)
         if xylabels:
             xlabel(self.xoutlabel)
             ylabel(self.youtlabel)

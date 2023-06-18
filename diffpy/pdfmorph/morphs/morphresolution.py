@@ -14,7 +14,7 @@
 ##############################################################################
 
 
-"""class MorphResolutionDamping -- apply resolution broadening to the objective
+"""class MorphResolutionDamping -- apply resolution broadening to the morph
 """
 
 
@@ -24,7 +24,7 @@ from diffpy.pdfmorph.morphs.morph import *
 
 
 class MorphResolutionDamping(Morph):
-    '''Apply resolution damping and broadening to the objective.
+    '''Apply resolution damping and broadening to the morph.
 
     Configuration variables:
 
@@ -35,18 +35,18 @@ class MorphResolutionDamping(Morph):
     '''
 
     # Define input output types
-    summary = 'Apply resolution damping to the objective'
+    summary = 'Apply resolution damping to the morph'
     xinlabel = LABEL_RA
     yinlabel = LABEL_RR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_RR
     parnames = ["qdamp"]
 
-    def morph(self, xobj, yobj, xref, yref):
+    def morph(self, x_morph, y_morph, x_target, y_target):
         """Apply a resolution damping."""
-        Morph.morph(self, xobj, yobj, xref, yref)
-        b = numpy.exp(-0.5 * (self.xobjin * self.qdamp) ** 2)
-        self.yobjout *= b
+        Morph.morph(self, x_morph, y_morph, x_target, y_target)
+        b = numpy.exp(-0.5 * (self.x_morph_in * self.qdamp) ** 2)
+        self.y_morph_out *= b
         return self.xyallout
 
 

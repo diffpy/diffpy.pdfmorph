@@ -16,10 +16,10 @@ from diffpy.pdfmorph.morphs.morphresolution import MorphResolutionDamping
 
 class TestMorphScale(unittest.TestCase):
     def setUp(self):
-        objfile = os.path.join(testdata_dir, "ni_qmax25.cgr")
-        self.xobj, self.yobj = numpy.loadtxt(objfile, unpack=True)
-        reffile = os.path.join(testdata_dir, "ni_qmax25_qdamp0.01.cgr")
-        self.xref, self.yref = numpy.loadtxt(reffile, unpack=True)
+        morph_file = os.path.join(testdata_dir, "ni_qmax25.cgr")
+        self.x_morph, self.y_morph = numpy.loadtxt(morph_file, unpack=True)
+        target_file = os.path.join(testdata_dir, "ni_qmax25_qdamp0.01.cgr")
+        self.x_target, self.y_target = numpy.loadtxt(target_file, unpack=True)
         return
 
     def test_morph(self):
@@ -27,10 +27,10 @@ class TestMorphScale(unittest.TestCase):
         config = {"qdamp": 0.01}
         morph = MorphResolutionDamping(config)
 
-        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref, self.yref)
+        x_morph, y_morph, x_target, y_target = morph(self.x_morph, self.y_morph, self.x_target, self.y_target)
 
-        self.assertTrue(numpy.allclose(self.yref, yref))
-        self.assertTrue(numpy.allclose(yobj, yref))
+        self.assertTrue(numpy.allclose(self.y_target, y_target))
+        self.assertTrue(numpy.allclose(y_morph, y_target))
         return
 
 

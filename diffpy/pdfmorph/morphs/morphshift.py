@@ -14,7 +14,7 @@
 ##############################################################################
 
 
-"""class MorphShift -- shift the objective
+"""class MorphShift -- shift the morph
 """
 
 
@@ -23,12 +23,12 @@ import numpy
 
 
 class MorphShift(Morph):
-    '''Shift the objective.
+    '''Shift the morph.
 
     Configuration variables:
 
-    vshift  --  The vertical shift to apply to yrefin.
-    hshift  --  The horizontal shift to apply to yrefin.
+    vshift  --  The vertical shift to apply to the morph.
+    hshift  --  The horizontal shift to apply to the morph.
 
     Note that a horizontal shift may cause edge effects, since the morph does
     not know what lies beyond the edge of the signals.
@@ -36,19 +36,19 @@ class MorphShift(Morph):
     '''
 
     # Define input output types
-    summary = 'Shift objective by specified amount'
+    summary = 'Shift morph by specified amount'
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_GR
     parnames = ["hshift", "vshift"]
 
-    def morph(self, xobj, yobj, xref, yref):
+    def morph(self, x_morph, y_morph, x_target, y_target):
         """Apply the shifts."""
-        Morph.morph(self, xobj, yobj, xref, yref)
-        r = self.xobjin - self.hshift
-        self.yobjout = numpy.interp(r, self.xobjin, self.yobjin)
-        self.yobjout += self.vshift
+        Morph.morph(self, x_morph, y_morph, x_target, y_target)
+        r = self.x_morph_in - self.hshift
+        self.y_morph_out = numpy.interp(r, self.x_morph_in, self.y_morph_in)
+        self.y_morph_out += self.vshift
         return self.xyallout
 
 

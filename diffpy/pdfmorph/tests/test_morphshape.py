@@ -16,10 +16,10 @@ from diffpy.pdfmorph.morphs.morphshape import MorphSphere, MorphSpheroid
 
 class TestMorphSphere(unittest.TestCase):
     def setUp(self):
-        objfile = os.path.join(testdata_dir, "ni_qmax25.cgr")
-        self.xobj, self.yobj = numpy.loadtxt(objfile, unpack=True)
-        reffile = os.path.join(testdata_dir, "ni_qmax25_psize30.cgr")
-        self.xref, self.yref = numpy.loadtxt(reffile, unpack=True)
+        morph_file = os.path.join(testdata_dir, "ni_qmax25.cgr")
+        self.x_morph, self.y_morph = numpy.loadtxt(morph_file, unpack=True)
+        target_file = os.path.join(testdata_dir, "ni_qmax25_psize30.cgr")
+        self.x_target, self.y_target = numpy.loadtxt(target_file, unpack=True)
         return
 
     def test_morph(self):
@@ -27,10 +27,10 @@ class TestMorphSphere(unittest.TestCase):
         config = {"radius": 17.5}
         morph = MorphSphere(config)
 
-        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref, self.yref)
+        x_morph, y_morph, x_target, y_target = morph(self.x_morph, self.y_morph, self.x_target, self.y_target)
 
-        self.assertTrue(numpy.allclose(self.yref, yref))
-        self.assertTrue(numpy.allclose(yobj, yref))
+        self.assertTrue(numpy.allclose(self.y_target, y_target))
+        self.assertTrue(numpy.allclose(y_morph, y_target))
         return
 
 
@@ -39,10 +39,10 @@ class TestMorphSphere(unittest.TestCase):
 
 class TestMorphSpheroid(unittest.TestCase):
     def setUp(self):
-        objfile = os.path.join(testdata_dir, "ni_qmax25.cgr")
-        self.xobj, self.yobj = numpy.loadtxt(objfile, unpack=True)
-        reffile = os.path.join(testdata_dir, "ni_qmax25_e17.5_p5.0.cgr")
-        self.xref, self.yref = numpy.loadtxt(reffile, unpack=True)
+        morph_file = os.path.join(testdata_dir, "ni_qmax25.cgr")
+        self.x_morph, self.y_morph = numpy.loadtxt(morph_file, unpack=True)
+        target_file = os.path.join(testdata_dir, "ni_qmax25_e17.5_p5.0.cgr")
+        self.x_target, self.y_target = numpy.loadtxt(target_file, unpack=True)
         return
 
     def test_morph(self):
@@ -53,10 +53,10 @@ class TestMorphSpheroid(unittest.TestCase):
         }
         morph = MorphSpheroid(config)
 
-        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref, self.yref)
+        x_morph, y_morph, x_target, y_target = morph(self.x_morph, self.y_morph, self.x_target, self.y_target)
 
-        self.assertTrue(numpy.allclose(self.yref, yref))
-        self.assertTrue(numpy.allclose(yobj, yref))
+        self.assertTrue(numpy.allclose(self.y_target, y_target))
+        self.assertTrue(numpy.allclose(y_morph, y_target))
         return
 
 

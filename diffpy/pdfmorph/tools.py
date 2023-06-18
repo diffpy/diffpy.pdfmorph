@@ -21,10 +21,10 @@
 import numpy
 
 
-def estimateScale(yobjin, yrefin):
-    """Set the scale that best matches the objective to the reference."""
+def estimateScale(y_morph_in, y_target_in):
+    """Set the scale that best matches the morph to the target."""
     dot = numpy.dot
-    scale = dot(yobjin, yrefin) / dot(yobjin, yobjin)
+    scale = dot(y_morph_in, y_target_in) / dot(y_morph_in, y_morph_in)
     return scale
 
 
@@ -80,10 +80,10 @@ def estimateBaselineSlope(r, gr, rmin=None, rmax=None):
 def getRw(chain):
     """Get Rw from the outputs of a morph or chain."""
     # Make sure we put these on the proper grid
-    xobj, yobj, xref, yref = chain.xyallout
-    diff = yref - yobj
+    x_morph, y_morph, x_target, y_target = chain.xyallout
+    diff = y_target - y_morph
     rw = numpy.dot(diff, diff)
-    rw /= numpy.dot(yref, yref)
+    rw /= numpy.dot(y_target, y_target)
     rw = rw**0.5
     return rw
 
@@ -91,8 +91,8 @@ def getRw(chain):
 def get_pearson(chain):
     from scipy.stats import pearsonr
 
-    xobj, yobj, xref, yref = chain.xyallout
-    pcc, pval = pearsonr(yobj, yref)
+    x_morph, y_morph, x_target, y_target = chain.xyallout
+    pcc, pval = pearsonr(y_morph, y_target)
     return pcc
 
 

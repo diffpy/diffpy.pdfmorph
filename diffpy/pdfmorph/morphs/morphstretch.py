@@ -14,7 +14,7 @@
 ##############################################################################
 
 
-"""class MorphStretch -- stretch the objective.
+"""class MorphStretch -- stretch the morph.
 """
 
 
@@ -23,33 +23,33 @@ from diffpy.pdfmorph.morphs.morph import *
 
 
 class MorphStretch(Morph):
-    '''Smear the objective function.
+    '''Smear the morph function.
 
-    This stretches (broadens) the objective.
+    This stretches (broadens) the morph.
 
     Configuration variables:
 
-    stretch --  The stretch factor to apply to yobjin. This is applied such
+    stretch --  The stretch factor to apply to y_morph_in. This is applied such
                 that a feature at r is moved to r * (1 + stretch).
 
     '''
 
     # Define input output types
-    summary = 'Stretch objective by desired amount'
+    summary = 'Stretch morph by desired amount'
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_GR
     parnames = ["stretch"]
 
-    def morph(self, xobj, yobj, xref, yref):
+    def morph(self, x_morph, y_morph, x_target, y_target):
         """Resample arrays onto specified grid."""
-        Morph.morph(self, xobj, yobj, xref, yref)
+        Morph.morph(self, x_morph, y_morph, x_target, y_target)
         if self.stretch == 0:
             return self.xyallout
 
-        r = self.xobjin / (1.0 + self.stretch)
-        self.yobjout = numpy.interp(r, self.xobjin, self.yobjin)
+        r = self.x_morph_in / (1.0 + self.stretch)
+        self.y_morph_out = numpy.interp(r, self.x_morph_in, self.y_morph_in)
         return self.xyallout
 
 

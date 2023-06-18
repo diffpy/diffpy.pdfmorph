@@ -14,8 +14,8 @@
 ##############################################################################
 
 
-"""class MorphSphere -- apply a spherical shape function to the objective
-class MorphSpheroid -- apply a spheroidal shape function to the objective
+"""class MorphSphere -- apply a spherical shape function to the morph
+class MorphSpheroid -- apply a spheroidal shape function to the morph
 """
 
 
@@ -28,7 +28,7 @@ from diffpy.pdfmorph.morphs.morph import *
 
 
 class MorphSphere(Morph):
-    '''Apply a spherical characteristic function to the objective
+    '''Apply a spherical characteristic function to the morph
 
     Configuration variables:
 
@@ -37,18 +37,18 @@ class MorphSphere(Morph):
     '''
 
     # Define input output types
-    summary = 'Apply spherical characteristic function to objective'
+    summary = 'Apply spherical characteristic function to morph'
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_GR
     parnames = ["radius"]
 
-    def morph(self, xobj, yobj, xref, yref):
+    def morph(self, x_morph, y_morph, x_target, y_target):
         """Apply a scale factor."""
-        Morph.morph(self, xobj, yobj, xref, yref)
-        f = _sphericalCF(xobj, 2 * self.radius)
-        self.yobjout *= f
+        Morph.morph(self, x_morph, y_morph, x_target, y_target)
+        f = _sphericalCF(x_morph, 2 * self.radius)
+        self.y_morph_out *= f
         return self.xyallout
 
 
@@ -56,7 +56,7 @@ class MorphSphere(Morph):
 
 
 class MorphSpheroid(Morph):
-    '''Apply a spherical characteristic function to the objective
+    '''Apply a spherical characteristic function to the morph
 
     Configuration variables:
 
@@ -66,18 +66,18 @@ class MorphSpheroid(Morph):
     '''
 
     # Define input output types
-    summary = 'Apply spheroidal characteristic function to objective'
+    summary = 'Apply spheroidal characteristic function to morph'
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
     youtlabel = LABEL_GR
     parnames = ["radius", "pradius"]
 
-    def morph(self, xobj, yobj, xref, yref):
+    def morph(self, x_morph, y_morph, x_target, y_target):
         """Apply a scale factor."""
-        Morph.morph(self, xobj, yobj, xref, yref)
-        f = _spheroidalCF(xobj, self.radius, self.pradius)
-        self.yobjout *= f
+        Morph.morph(self, x_morph, y_morph, x_target, y_target)
+        f = _spheroidalCF(x_morph, self.radius, self.pradius)
+        self.y_morph_out *= f
         return self.xyallout
 
 
