@@ -74,8 +74,8 @@ class MorphISpheroid(Morph):
         """Apply a scale factor."""
         Morph.morph(self, x_morph, y_morph, x_target, y_target)
         f = _spheroidalCF(x_morph, self.iradius, self.ipradius)
-        self.y_morph_out[f != 0] /= f  # Divide non-zero entries
-        self.y_morph_out[f == 0] = 0  # Set zero entries to zero
+        self.y_morph_out /= f
+        self.y_morph_out[f == 0] = 0
         return self.xyallout
 
 

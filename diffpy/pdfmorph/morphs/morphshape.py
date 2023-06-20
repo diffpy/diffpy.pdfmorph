@@ -98,7 +98,7 @@ def _sphericalCF(r, psize):
     if psize > 0:
         x = r / psize
         g = 1.0 - 1.5 * x + 0.5 * x * x * x
-        g[x > 1] = 0
+        g[x > 1] = 0  # Assume zero atomic density outside particle
         f += g
     return f
 
@@ -144,11 +144,11 @@ def _spheroidalCF2(r, psize, axrat):
     d2 = d * d
     v2 = v * v
 
-    if v == 1:
+    if v == 1:  # Sphere
         return _sphericalCF(r, psize)
 
     rx = r
-    if v < 1:
+    if v < 1:  # Prolate spheroid
         r = rx[rx <= v * psize]
         r2 = r * r
         f1 = (
@@ -179,7 +179,7 @@ def _spheroidalCF2(r, psize, axrat):
 
         f = numpy.concatenate((f1, f2, f3))
 
-    elif v > 1:
+    elif v > 1:  # Oblate spheroid
         r = rx[rx <= psize]
         r2 = r * r
         f1 = (
