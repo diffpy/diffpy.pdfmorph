@@ -15,8 +15,8 @@ from diffpy.pdfmorph.morphs.morphchain import MorphChain
 from diffpy.pdfmorph.morphs.morphscale import MorphScale
 from diffpy.pdfmorph.morphs.morphstretch import MorphStretch
 from diffpy.pdfmorph.morphs.morphsmear import MorphSmear
-from diffpy.pdfmorph.morphs.morphpdftordf import MorphXtalPDFtoRDF
-from diffpy.pdfmorph.morphs.morphrdftopdf import MorphXtalRDFtoPDF
+from diffpy.pdfmorph.morph_helpers.transformpdftordf import TransformXtalPDFtoRDF
+from diffpy.pdfmorph.morph_helpers.transformrdftopdf import TransformXtalRDFtoPDF
 from diffpy.pdfmorph.refine import Refiner
 
 
@@ -99,9 +99,9 @@ class TestRefineUC(unittest.TestCase):
         chain = MorphChain(config)
         chain.append(MorphScale())
         chain.append(MorphStretch())
-        chain.append(MorphXtalPDFtoRDF())
+        chain.append(TransformXtalPDFtoRDF())
         chain.append(MorphSmear())
-        chain.append(MorphXtalRDFtoPDF())
+        chain.append(TransformXtalRDFtoPDF())
 
         refiner = Refiner(chain, self.x_morph, self.y_morph, self.x_target, self.y_target)
 

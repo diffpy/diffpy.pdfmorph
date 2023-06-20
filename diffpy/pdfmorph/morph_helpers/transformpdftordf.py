@@ -14,17 +14,17 @@
 ##############################################################################
 
 
-"""class MorphXtalRDFtoPDF -- Morph crystal RDFs to PDFs.
+"""class TransformXtalPDFtoRDF -- Transform crystal PDFs to RDFs.
 """
 
 
 from diffpy.pdfmorph.morphs.morph import *
 
 
-class MorphXtalRDFtoPDF(Morph):
-    '''Morph crystal RDFs to PDFs.
+class TransformXtalPDFtoRDF(Morph):
+    '''Transform crystal PDFs to RDFs.
 
-    This morphs both the morph data and the target data.
+    Converts both morph data and target data PDFs to RDFs.
 
     Configuration variables:
 
@@ -33,30 +33,26 @@ class MorphXtalRDFtoPDF(Morph):
                         is the density of the crystalline sample.
 
     With s = baselineslope,
-    G(r) = R(r) / r + r * s
+    R(r) = r * (G(r) - r * s)
 
     '''
 
     # Define input output types
     summary = 'Turn the PDF into the RDF for both the morph and target'
     xinlabel = LABEL_RA
-    yinlabel = LABEL_RR
+    yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
-    youtlabel = LABEL_GR
+    youtlabel = LABEL_RR
     parnames = ["baselineslope"]
 
     def morph(self, x_morph, y_morph, x_target, y_target):
-        """Morph to the PDF."""
+        """Return corresponding RDF given PDF."""
         Morph.morph(self, x_morph, y_morph, x_target, y_target)
         morph_baseline = self.baselineslope * self.x_morph_in
+        self.y_morph_out = self.x_morph_in * (self.y_morph_in - morph_baseline)
         target_baseline = self.baselineslope * self.x_target_in
-        self.y_target_out = self.y_target_in / self.x_target_in + target_baseline
-        if self.x_target_in[0] == 0:
-            self.y_target_out[0] = 0
-        self.y_morph_out = self.y_morph_in / self.x_morph_in + morph_baseline
-        if self.x_morph_in[0] == 0:
-            self.y_morph_out[0] = 0
+        self.y_target_out = self.x_target_in * (self.y_target_in - target_baseline)
         return self.xyallout
 
 
-# End of class MorphScale
+# End of class TransformXtalPDFtoRDF

@@ -25,6 +25,7 @@ from diffpy.pdfmorph import __version__
 import diffpy.pdfmorph.tools as tools
 import diffpy.pdfmorph.pdfplot as pdfplot
 import diffpy.pdfmorph.morphs as morphs
+import diffpy.pdfmorph.morph_helpers as helpers
 import diffpy.pdfmorph.refine as refine
 
 
@@ -267,9 +268,9 @@ def main():
     ## Smear
     if opts.smear is not None:
         smear_in = opts.smear
-        chain.append(morphs.MorphXtalPDFtoRDF())
+        chain.append(helpers.TransformXtalPDFtoRDF())
         chain.append(morphs.MorphSmear())
-        chain.append(morphs.MorphXtalRDFtoPDF())
+        chain.append(helpers.TransformXtalRDFtoPDF())
         refpars.append("smear")
         config["smear"] = opts.smear
         config["baselineslope"] = opts.baselineslope
