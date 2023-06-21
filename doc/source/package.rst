@@ -10,6 +10,7 @@ Submodules
     :titlesonly:
 
     morphs
+    morph_helpers
     mod_pdfplot
     mod_refine
     mod_tools

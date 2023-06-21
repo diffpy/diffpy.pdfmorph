@@ -28,23 +28,6 @@ diffpy.pdfmorph.morphs.morphishape module
     :undoc-members:
     :show-inheritance:
 
-
-diffpy.pdfmorph.morphs.morphpdftordf module
-===========================================
-
-.. automodule:: diffpy.pdfmorph.morphs.morphpdftordf
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-diffpy.pdfmorph.morphs.morphrdftopdf module
-===========================================
-
-.. automodule:: diffpy.pdfmorph.morphs.morphrdftopdf
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 diffpy.pdfmorph.morphs.morphresolution module
 =============================================
 

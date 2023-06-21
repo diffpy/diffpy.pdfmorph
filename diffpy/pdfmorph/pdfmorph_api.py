@@ -21,7 +21,7 @@ if sys.version_info.major < 3:
     from collections import Iterable
 else:
     from collections.abc import Iterable
-from diffpy.pdfmorph import morphs
+from diffpy.pdfmorph import morphs, morph_helpers
 from diffpy.pdfmorph import refine as ref
 from diffpy.pdfmorph import tools
 import matplotlib.pyplot as plt
@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 _morph_step_dict = dict(
     scale=morphs.MorphScale,
     stretch=morphs.MorphStretch,
-    smear=[morphs.MorphXtalPDFtoRDF, morphs.MorphSmear, morphs.MorphXtalRDFtoPDF],
+    smear=[morph_helpers.TransformXtalPDFtoRDF, morphs.MorphSmear, morph_helpers.TransformXtalRDFtoPDF],
     qdamp=morphs.MorphResolutionDamping,
 )
 _default_config = dict(

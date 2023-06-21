@@ -19,8 +19,6 @@
 
 from diffpy.pdfmorph.morphs.morph import Morph
 from diffpy.pdfmorph.morphs.morphchain import MorphChain
-from diffpy.pdfmorph.morphs.morphpdftordf import MorphXtalPDFtoRDF
-from diffpy.pdfmorph.morphs.morphrdftopdf import MorphXtalRDFtoPDF
 from diffpy.pdfmorph.morphs.morphresolution import MorphResolutionDamping
 from diffpy.pdfmorph.morphs.morphrgrid import MorphRGrid
 from diffpy.pdfmorph.morphs.morphscale import MorphScale
@@ -35,9 +33,7 @@ morphs = [
     MorphRGrid,
     MorphScale,
     MorphStretch,
-    MorphXtalPDFtoRDF,
     MorphSmear,
-    MorphXtalRDFtoPDF,
     MorphSphere,
     MorphSpheroid,
     MorphISphere,

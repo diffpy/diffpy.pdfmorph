@@ -47,10 +47,18 @@ class TestMorphSpheroid(unittest.TestCase):
 
     def test_morph(self):
         """check MorphSphere.morph()"""
-        config = {
+        config_oblate = {
             "radius": 17.5,
             "pradius": 5.0,
         }
+        # FIXME: add test data for prolate spheroids and spheres
+        configs = [config_oblate]
+
+        for config in configs:
+            self.shape_test_helper(config)
+        return
+
+    def shape_test_helper(self, config):
         morph = MorphSpheroid(config)
 
         x_morph, y_morph, x_target, y_target = morph(self.x_morph, self.y_morph, self.x_target, self.y_target)

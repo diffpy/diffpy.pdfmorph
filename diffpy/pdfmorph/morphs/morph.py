@@ -27,9 +27,7 @@ class Morph(object):
     '''Base class for implementing a morph given a target.
 
     Adapted from diffpy.pdfgetx to include two sets of arrays that get passed
-    through. In most cases, only the morph is modified, but it is
-    acceptable for morph the target as well, such as to change the range of
-    the array.
+    through.
 
     Note that attributes are taken from config when not found locally. The
     morph may modify the config dictionary. This is the means by which to
