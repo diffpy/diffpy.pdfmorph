@@ -21,6 +21,7 @@ class MorphISpheroid -- apply inverse spheroidal shape function
 
 from diffpy.pdfmorph.morphs.morph import *
 from diffpy.pdfmorph.morphs.morphshape import _sphericalCF, _spheroidalCF
+import numpy
 
 
 class MorphISphere(Morph):
@@ -44,7 +45,8 @@ class MorphISphere(Morph):
         """Apply a scale factor."""
         Morph.morph(self, x_morph, y_morph, x_target, y_target)
         f = _sphericalCF(x_morph, 2 * self.iradius)
-        self.y_morph_out /= f
+        with numpy.errstate(divide='ignore', invalid='ignore'):
+            self.y_morph_out /= f
         self.y_morph_out[f == 0] = 0
         return self.xyallout
 
@@ -74,7 +76,8 @@ class MorphISpheroid(Morph):
         """Apply a scale factor."""
         Morph.morph(self, x_morph, y_morph, x_target, y_target)
         f = _spheroidalCF(x_morph, self.iradius, self.ipradius)
-        self.y_morph_out /= f
+        with numpy.errstate(divide='ignore', invalid='ignore'):
+            self.y_morph_out /= f
         self.y_morph_out[f == 0] = 0
         return self.xyallout
 
