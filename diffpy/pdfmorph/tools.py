@@ -14,8 +14,7 @@
 ##############################################################################
 
 
-"""Tools used in morphs and morph chains.
-"""
+"""Tools used in morphs and morph chains."""
 
 
 import numpy
@@ -31,18 +30,14 @@ def estimateScale(y_morph_in, y_target_in):
 def estimateBaselineSlope(r, gr, rmin=None, rmax=None):
     """Estimate the slope of the linear baseline of a PDF.
 
-    This fits a the equation slope*r through the bottom of the PDF.
+    This fits an equation of the form slope*r through the bottom of the PDF.
 
-    r       --  The r-grid used for the PDF.
-    gr      --  The PDF over the r-grid.
-    rmin    --  The minimum r-value to consider. If this is None (default)
-                is None, then the minimum of r is used.
-    rmax    --  The maximum r-value to consider. If this is None (default)
-                is None, then the maximum of r is used.
+    :param r: The r-grid used for the PDF.
+    :param gr: The PDF over the r-grid.
+    :param rmin: The minimum r-value to consider. If this is None (default) is None, then the minimum of r is used.
+    :param rmax: The maximum r-value to consider. If this is None (default) is None, then the maximum of r is used.
 
-    Returns the slope of baseline. If the PDF is scaled properly, this is equal
-    to -4*pi*rho0.
-
+    :return: Returns the slope of baseline. If the PDF is scaled properly, this is equal to -4*pi*rho0.
     """
     from scipy.optimize import leastsq
     from numpy import dot
@@ -99,10 +94,9 @@ def get_pearson(chain):
 def readPDF(fname):
     """Reads an .gr file, loads r and G(r) vectors.
 
-    fname -- name of the file we want to read.
+    :param fname: name of the file we want to read.
 
-    Returns r and gr arrays.
-
+    :return: Returns r and gr arrays.
     """
     from diffpy.utils.parsers import loadData
 

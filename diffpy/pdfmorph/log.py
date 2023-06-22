@@ -29,9 +29,9 @@ plog = logging.getLogger('diffpy.pdfmorph')
 def set_verbosity(vb):
     '''Set verbosity of the pdfmorph logger.
 
-    vb   -- integer or one of ('debug', 'info', 'warning', 'error') strings
+    :param vb: integer or one of ('debug', 'info', 'warning', 'error') strings.
 
-    No return value.
+    :return: No return value.
     '''
     try:
         if type(vb) is str:
