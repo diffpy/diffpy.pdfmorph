@@ -19,7 +19,7 @@ class TestMorphSphere(unittest.TestCase):
     def setUp(self):
         morph_file = os.path.join(testdata_dir, "ni_qmax25.cgr")
         self.x_morph, self.y_morph = numpy.loadtxt(morph_file, unpack=True)
-        target_file = os.path.join(testdata_dir, "ni_qmax25_psize30.cgr")
+        target_file = os.path.join(testdata_dir, "ni_qmax25_psize35.cgr")
         self.x_target, self.y_target = numpy.loadtxt(target_file, unpack=True)
         return
 
@@ -51,7 +51,7 @@ class TestMorphSpheroid(unittest.TestCase):
     # Files used for testing
     flag_inverse = 0  # Indicates whether we are testing MorphSpheroid or MorphISpheroid
     testfiles = [
-        ["ni_qmax25.cgr", "ni_qmax25_psize30.cgr"],  # Sphere
+        ["ni_qmax25.cgr", "ni_qmax25_psize35.cgr"],  # Sphere
         ["ni_qmax25.cgr", "ni_qmax25_e17.5_p5.0.cgr"],  # Oblate spheroid
     ]
     testfile = []  # Initialize testfile array
