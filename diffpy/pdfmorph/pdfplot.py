@@ -80,7 +80,7 @@ def comparePDFs(
     :param show: Show the plot (default True).
     :param maglim: Point after which to magnify the signal by mag. If None (default), no magnification will take
         place.
-    :param mag: Magnification factor (default 5)
+    :param mag: Magnification factor (default 5).
     :param rw: Rw value to display on the plot, if any.
     :param legend: Display the legend (default True).
 

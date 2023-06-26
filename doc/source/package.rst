@@ -11,10 +11,19 @@ Submodules
 
     morphs
     morph_helpers
+    mod_pdfmorph_api
     mod_pdfplot
     mod_refine
     mod_tools
     mod_log
+
+PDFmorph.pdfmorph_api
+================
+
+.. automodule:: diffpy.pdfmorph.pdfmorph_api
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 PDFmorph.pdfplot
 ================

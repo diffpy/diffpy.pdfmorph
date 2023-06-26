@@ -55,7 +55,9 @@ def morph_default_config(**kwargs):
 
     Examples
     --------
-    morph_cfg = morph_default_config(scale=1.01)
+    .. code-block:: python
+
+        morph_cfg = morph_default_config(scale=1.01)
     """
     rv = dict(_default_config)
     # protect against foreign keys
@@ -107,7 +109,7 @@ def pdfmorph(
         A value to specify rstep of morph operations.
     pearson: Bool, optional
         Option to include Pearson coefficient as a minimizing target
-         during morphing. Default to False.
+        during morphing. Default to False.
     add_pearson: Bool, optional
         Option to include **both** Pearson coefficient and Rw as
         minimizing targets during morphing. Default to False.
@@ -146,24 +148,32 @@ def pdfmorph(
               The agreement factor between morphed data and reference
               data
         - pcc : float
-              The pearson correlation coefficient between morphed
-               data and referenced data
+              The pearson correlation coefficient between morphed data and
+              referenced data
 
     Examples
     --------
-    # morphing (x_morph, y_morph) pair to (x_target, y_target) pair with scaling
-    from diffpy.pdfmorph.pdfmorph_api import pdfmorph, morph_default_config, plot_morph
+    morphing (x_morph, y_morph) pair to (x_target, y_target) pair with scaling
+        .. code-block:: python
 
-    morph_cfg = morph_default_config(scale=1.01)
-    morph_rv_dict = pdfmorph(x_morph, y_morph, x_target, y_target, **morph_cfg)
+            from diffpy.pdfmorph.pdfmorph_api import pdfmorph, morph_default_config, plot_morph
+            morph_cfg = morph_default_config(scale=1.01)
+            morph_rv_dict = pdfmorph(x_morph, y_morph, x_target, y_target, **morph_cfg)
 
-    # plot morhing result
-    plot_morph(morph_rv_dict['morph_chain'])
 
-    # print morphing parameters, pearson correlation coefficient, Rw
-    print(morph_rv_dict['morphed_cfg'])
-    print(morph_rv_dict['pcc'])
-    print(morph_rv_dict['rw'])
+    plot morphing result
+        .. code-block:: python
+
+            plot_morph(morph_rv_dict['morph_chain'])
+
+
+    print morphing parameters, pearson correlation coefficient, Rw
+        .. code-block:: python
+
+            print(morph_rv_dict['morphed_cfg'])
+            print(morph_rv_dict['pcc'])
+            print(morph_rv_dict['rw'])
+
     """
     operation_dict = {}
     refpars = []
@@ -253,16 +263,16 @@ def plot_morph(chain, ax=None, **kwargs):
     ax: matplotlib.axes.Axes, optinal
         An instance of Axes class to plot the morphing result.
         If ax is None, instances of new Figure and Axes will
-         be created. Default to None.
+        be created. Default to None.
     kwargs:
         Additional keyword arguements will be passed
-         to ``ax.plot(...**kwargs)``
+        to ``ax.plot(...**kwargs)``
 
     Returns
     -------
     l_list: list
         A list of ``matplotlib.lines.Line2D`` objects representing
-         the plotted data.
+        the plotted data.
     """
     if ax is None:
         fig, ax = plt.subplots()
