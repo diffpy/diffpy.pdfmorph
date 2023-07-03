@@ -14,7 +14,7 @@ Before you've started this tutorial, please ensure that you've installed
 all necessary software and dependencies.
 
 Basic PDFmorph Workflow
------------------------
+=======================
 
     1. Open your Terminal or Command Prompt.
 
@@ -179,11 +179,20 @@ Enjoy the software!
 .. Additional PDFmorph Functionality/Exploration
 .. ---------------------------------------------
 
-.. TODO include undoped PDF example, phase changed PDFs, and nano/non-nano PDFs
+.. TODO include undoped PDF example, phase changed PDFs
 
+Extras
+======
+
+Morph Shape
+-----------
+
+
+Morphing Across a Directory
+---------------------------
 
 Bug Reports
------------
+===========
 
 Please enjoy using our software! If you come accross any bugs in the
 application, please report them to diffpy-dev@googlegroups.com.

@@ -47,7 +47,11 @@ Christopher L. Farrow, Christopher J. Wright, Pavol Juhás, Chia-Hao
 For a detailed list of contributors, check `here 
 <https://github.com/diffpy/diffpy.pdfmorph/graphs/contributors>`_.
 
-To get started, please go to :ref:`quick_start`
+..
+    Add user manual.
+
+To get started, please go to :ref:`quick_start`. The same information can be found on the user
+available in both PDF and HTML formats.
 
 .. toctree::
    :maxdepth: 3
