@@ -18,7 +18,7 @@ Submodules
     mod_log
 
 PDFmorph.pdfmorph_api
-================
+=====================
 
 .. automodule:: diffpy.pdfmorph.pdfmorph_api
     :members:

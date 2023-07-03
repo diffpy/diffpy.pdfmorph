@@ -20,7 +20,7 @@ scale due to differences in incident flux, for example. ``PDFmorph`` will
 do its best to correct for these benign effects before computing and 
 plotting the difference curve. One measured PDF (typically that 
 collected under higher temperature) is identified as the target PDF and 
-the second PDF is then morphed by "stretching" (changing the r-axis to
+another PDF is then morphed by "stretching" (changing the r-axis to
 simulate a uniform lattice expansion), "smearing" (broadening peaks 
 through a uniform convolution to simulate increased thermal motion), and 
 "scaling" (self-explanatory). PDFmorph will vary the amplitude of the 

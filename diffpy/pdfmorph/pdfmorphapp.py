@@ -243,9 +243,13 @@ def main():
     config["rmin"] = opts.rmin
     config["rmax"] = opts.rmax
     config["rstep"] = None
-    if opts.rmin is not None and opts.rmax is not None and opts.rmax <= opts.rmin:
-        e = "rmin must be less than rmax"
-        parser.custom_error(e)
+    if opts.rmin is not None and opts.rmax is not None:
+        if opts.rmax <= opts.rmin:
+            e = "rmin must be less than rmax"
+            parser.custom_error(e)
+        if opts.rmax < 0 or opts.rmin < 0:
+            e = "rmin and rmax cannot be negative"
+            parser.custom_error(e)
 
     # Set up the morphs
     chain = morphs.MorphChain(config)
@@ -273,7 +277,6 @@ def main():
         chain.append(helpers.TransformXtalRDFtoPDF())
         refpars.append("smear")
         config["smear"] = opts.smear
-        config["baselineslope"] = opts.baselineslope
         if opts.baselineslope is None:
             refpars.append("baselineslope")
             config["baselineslope"] = -0.5

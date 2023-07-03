@@ -179,17 +179,72 @@ Enjoy the software!
 .. Additional PDFmorph Functionality/Exploration
 .. ---------------------------------------------
 
-.. TODO include undoped PDF example, phase changed PDFs
+.. TODO include undoped PDF example
 
-Extras
-======
+Extra Tutorials
+===============
+PDFmorph has some more functionalities not showcased in the basic workflow above.
+Tutorials for these are included in this section.
+You can download the files for these additional tutorials :download:`here <../../tutorial/additionalData.zip>`.
 
-Morph Shape
------------
+Nanoparticle Shape Effects
+--------------------------
+A nanoparticle's finite size and shape can affect the shape of its PDF.
+We can use PDFmorph to morph a bulk material PDF to simulate these shape effects.
+Currently, the supported nanoparticle shapes include: spheres and spheroids.
 
+* Within the ``additionalData`` directory, ``cd`` into the ``morphshape`` subdirectory.
+* Inside, you will find a sample Ni bulk material PDF ``Ni_bulk.gr``.
+  This PDF is from `"Atomic Pair Distribution Function Analysis: A primer" <https://github.com/Billingegroup/pdfttp_data/>`_.
+* There are also multiple ``.cgr`` files with calculated Ni nanoparticles of various shapes..
+    * Spherical Shape
+        1. The ``Ni_nano_sphere.cgr`` file contains a generated spherical nanoparticle with unknown radius.
+           First, let us plot ``Ni_blk.gr`` against ``Ni_nano_sphere.cgr`` ::
 
-Morphing Across a Directory
----------------------------
+               pdfmorph Ni_bulk.gr Ni_nano_sphere.cgr
+
+           Despite the two being the same material, the Rw is quite large.
+           To reduce the Rw, we will apply spherical shape effects onto the PDF.
+           However, in order to do so, we first need the radius of the spherical nanoparticle.
+        2. To get the radius, we can first observe a plot of ``Ni_nano_sphere.cgr`` ::
+
+               pdfmorph Ni_nano_sphere.cgr Ni_nano_sphere.cgr
+
+        3. Nanoparticles tend to have broader peaks at r-values larger than the particle size,
+           corresponding to the much weaker correlations between molecules.
+           On our plot, beyond r=22.5, peaks are too broad to be visible,
+           indicating our particle size to be about 22.4.
+           The approximate radius of a sphere would be half of that, or 11.2.
+        4. Now, we are ready to perform a morph applying spherical effects. To do so, we use the ``--radius`` parameter ::
+
+               pdfmorph Ni_bulk.gr Ni_nano_sphere.cgr --radius=11.2 -a
+
+        5. We can see that the Rw value has decreased from before. Run without the ``-a`` tag to refine ::
+
+               pdfmorph Ni_bulk.gr Ni_nano_sphere.cgr --radius=11.2
+
+        6. After refining, we see the actual radius of the nanoparticle was closer to 12.
+    * Spheroidal Shape
+        1. The ``Ni_nano_spheroid.cgr`` file contains a calculated spheroidal Ni nanoparticle.
+           Again, we can begin by plotting the bulk material against our nanoparticle ::
+
+               pdfmorph Ni_bulk.gr Ni_nano_spheroid.cgr
+
+        2. Inside the ``Ni_nano_spheroid.cgr`` file, we are given that the equatorial radius is 12 and polar radius is 6.
+           This is enough information to define our spheroid. To apply spheroid shape effects onto our bulk, run ::
+
+               pdfmorph Ni_bulk.gr Ni_nano_spheroid.cgr --radius=12 --pradius=6 -a
+
+           Note that the equitorial radius corresponds to the ``--radius`` parameter and polar radius to ``--pradius``.
+        3. Remove the ``-a`` tag to refine.
+
+There is also support for morphing from a nanoparticle to a bulk. When applying the inverse morphs,
+it is recommended to set ``--rmax=psize`` where ``psize`` is the longest diameter of the nanoparticle.
+
+Use ``pdfmorph --help`` for more information.
+
+Performing a Sequence of Morphs
+-------------------------------
 
 Bug Reports
 ===========
