@@ -194,9 +194,12 @@ We can use PDFmorph to morph a bulk material PDF to simulate these shape effects
 Currently, the supported nanoparticle shapes include: spheres and spheroids.
 
 * Within the ``additionalData`` directory, ``cd`` into the ``morphshape`` subdirectory.
-* Inside, you will find a sample Ni bulk material PDF ``Ni_bulk.gr``.
+  Inside, you will find a sample Ni bulk material PDF ``Ni_bulk.gr``.
   This PDF is from `"Atomic Pair Distribution Function Analysis: A primer" <https://github.com/Billingegroup/pdfttp_data/>`_.
-* There are also multiple ``.cgr`` files with calculated Ni nanoparticles of various shapes..
+  There are also multiple ``.cgr`` files with calculated Ni nanoparticle PDFs.
+
+* Let us apply various shape effect morphs on the bulk material to reproduce these calculated PDFs.
+
     * Spherical Shape
         1. The ``Ni_nano_sphere.cgr`` file contains a generated spherical nanoparticle with unknown radius.
            First, let us plot ``Ni_blk.gr`` against ``Ni_nano_sphere.cgr`` ::
@@ -219,7 +222,7 @@ Currently, the supported nanoparticle shapes include: spheres and spheroids.
 
                pdfmorph Ni_bulk.gr Ni_nano_sphere.cgr --radius=11.2 -a
 
-        5. We can see that the Rw value has decreased from before. Run without the ``-a`` tag to refine ::
+        5. We can see that the Rw value has significantly decreased from before. Run without the ``-a`` tag to refine ::
 
                pdfmorph Ni_bulk.gr Ni_nano_sphere.cgr --radius=11.2
 
