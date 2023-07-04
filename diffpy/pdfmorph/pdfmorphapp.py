@@ -16,8 +16,6 @@
 from __future__ import print_function
 
 import sys
-import os
-import os.path
 from pathlib import Path
 
 import numpy
@@ -31,6 +29,7 @@ import diffpy.pdfmorph.refine as refine
 
 def create_option_parser():
     import optparse
+    prog_short = sys.argv[0].replace("\\", "/").split("/")[-1]  # Program name, compatible w/ all OS paths
 
     class CustomParser(optparse.OptionParser):
         def __init__(self, *args, **kwargs):
@@ -62,9 +61,17 @@ def create_option_parser():
     parser.add_option(
         '-s',
         '--save',
-        metavar="FILE",
+        metavar="SFILE",
         dest="savefile",
-        help="Save manipulated PDF from FILE1 to FILE. Use \'-\' for stdout.",
+        help="Save manipulated PDF from FILE1 to SFILE. Use \'-\' for stdout.",
+    )
+    parser.add_option(
+        '--sequence',
+        dest="sequence",
+        action="store_true",
+        help=f"""Changes usage to \'{prog_short} [options] FILE DIRECTORY\'. FILE
+will be morphed with each file in DIRECTORY as target.
+Save and plots options disabled when this option is enabled.""",
     )
     parser.add_option(
         '--rmin', type="float", help="Minimum r-value to use for PDF comparisons."
@@ -214,6 +221,7 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
     )
 
     # Defaults
+    parser.set_defaults(sequence=False)
     parser.set_defaults(plot=True)
     parser.set_defaults(refine=True)
     parser.set_defaults(pearson=False)
@@ -227,9 +235,62 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
 def main():
     parser = create_option_parser()
     (opts, pargs) = parser.parse_args()
+    if opts.sequence:
+        opts.plot = False  # Disable plotting
+        opts.savefile = None  # Disable saving
+        multiple_morphs(parser, opts, pargs, stdout_flag=True)
+    else:
+        single_morph(parser, opts, pargs, stdout_flag=True)
 
-    if len(pargs) != 2:
-        parser.error("You must supply FILE1 and FILE2")
+
+def multiple_morphs(parser, opts, pargs, stdout_flag):
+    # Custom error messages since usage is distinct when --sequence tag is applied
+    if len(pargs) < 2:
+        parser.custom_error("You must supply FILE and DIRECTORY. Go to --help for usage.")
+    elif len(pargs) > 2:
+        parser.custom_error("Too many arguments. Go to --help for usage.")
+
+    # Parse paths
+    morph_file = Path(pargs[0])
+    if not morph_file.is_file():
+        parser.custom_error(f"{morph_file} is not a file. Go to --help for usage.")
+    target_directory = Path(pargs[1])
+    if not target_directory.is_dir():
+        parser.custom_error(f"{target_directory} is not a directory. Go to --help for usage.")
+
+    # Morph morph_file against all other files in target_directory
+    results = []
+    for target_file in target_directory.iterdir():
+        # Only morph morph_file against different files in target_directory
+        if target_file.is_file and morph_file != target_file:
+            results.append([
+                target_file.name,
+                single_morph(parser, opts, [morph_file, target_file], stdout_flag=False),
+            ])
+
+    # Input parameters used for every morph
+    inputs = "\n# Input morphing parameters:"
+    inputs += f"\n# scale = {opts.scale}"
+    inputs += f"\n# stretch = {opts.stretch}"
+    inputs += f"\n# smear = {opts.smear}"
+
+    print(inputs)
+
+    # Results from each morph
+    for entry in results:
+        outputs = f"\n# Target: {entry[0]}\n"
+        outputs += "# Optimized morphing parameters:\n"
+        outputs += "\n".join(f"# {i[0]} = {i[1]:.6f}" for i in entry[1])
+        print(outputs)
+
+    return results
+
+
+def single_morph(parser, opts, pargs, stdout_flag):
+    if len(pargs) < 2:
+        parser.error("You must supply FILE1 and FILE2.")
+    elif len(pargs) > 2:
+        parser.error("Too many arguments.")
 
     # Get the PDFs
     x_morph, y_morph = getPDFFromFile(pargs[0])
@@ -352,15 +413,23 @@ def main():
     morphs_in += f"\n# scale = {scale_in}"
     morphs_in += f"\n# stretch = {stretch_in}"
     morphs_in += f"\n# smear = {smear_in}"
-    print(morphs_in)
 
-    items = list(config.items())
-    items.sort()
+    # Output morph parameters
+    morph_results = list(config.items())
+    morph_results.sort()
+
+    # Ensure Rw, Pearson last two outputs
+    morph_results.append(("Rw", rw))
+    morph_results.append(("Pearson", pcc))
+
     output = "\n# Optimized morphing parameters:\n"
-    output += "\n".join(f"# {i[0]} = {i[1]:.6f}" for i in items)
-    output += f"\n# Rw = {rw:.6f}"
-    output += f"\n# Pearson = {pcc:.6f}"
-    print(output)
+    output += "\n".join(f"# {i[0]} = {i[1]:.6f}" for i in morph_results)
+
+    # No stdout output when running morph sequence
+    if stdout_flag:
+        print(morphs_in)
+        print(output)
+
     if opts.savefile is not None:
         path_name = Path(pargs[0]).absolute()
         header = "# PDF created by pdfmorph\n"
@@ -412,7 +481,7 @@ def main():
             pairlist, labels, rmin=pmin, rmax=pmax, maglim=maglim, mag=mag, rw=rw, l_width=l_width
         )
 
-    return
+    return morph_results
 
 
 def getPDFFromFile(fn):
