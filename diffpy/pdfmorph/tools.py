@@ -122,11 +122,12 @@ def nn_value(val, name):
 
 
 def temperature_sort(filenames):
-    # Sort files (in list filenames) ending in _#K.gr/_#K.cgr by # rather than alphabetical
+    # Sort files (whose paths are contained in filenames) ending in _###K.gr/_###K.cgr by ###
     for idx in range(len(filenames)):
-        s_index = filenames[idx].rfind("_")  # Start of temperature value
-        e_index = filenames[idx].rfind("K")  # End of temperature value
-        temp = float(filenames[s_index + 1, e_index])
+        filename = filenames[idx].name
+        s_index = filename.rfind("_")  # Start of temperature value
+        e_index = filename.rfind("K")  # End of temperature value
+        temp = float(filename[s_index + 1: e_index])
         filenames[idx] = [filenames[idx], temp]
     filenames.sort(key=lambda entry: entry[1])
     return [entry[0] for entry in filenames]

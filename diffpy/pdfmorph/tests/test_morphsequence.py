@@ -14,8 +14,8 @@ testsequence_dir = tests_dir.joinpath("testdata").joinpath("testsequence")
 class TestMorphSequence(unittest.TestCase):
     def setUp(self):
         self.parser = create_option_parser()
-        filenames = ["174K.gr", "180K.gr", "186K.gr", "192K.gr", "198K.gr", "204K.gr", "210K.gr"]
-        (self.opts, pargs) = self.parser.parse_args(["--scale", "1", "--stretch", "0", "-n"])
+        filenames = ["g_174K.gr", "f_180K.gr", "e_186K.gr", "d_192K.gr", "c_198K.gr", "b_204K.gr", "a_210K.gr"]
+        (self.opts, pargs) = self.parser.parse_args(["--scale", "1", "--stretch", "0", "-n", "--temperature"])
         self.testfiles = []
         for filename in filenames:
             self.testfiles.append(testsequence_dir.joinpath(filename))
