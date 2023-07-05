@@ -40,6 +40,12 @@ class TestTools(unittest.TestCase):
         self.assertAlmostEqual(x, scale)
         return
 
+    def test_nn_value(self):
+        pass
+
+    def test_temperature_sort(self):
+        pass
+
 
 # End of class TestRoutines
 

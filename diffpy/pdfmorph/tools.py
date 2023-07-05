@@ -119,3 +119,14 @@ def nn_value(val, name):
         print(negative_value_warning)
         return -val
     return val
+
+
+def temperature_sort(filenames):
+    # Sort files (in list filenames) ending in _#K.gr/_#K.cgr by # rather than alphabetical
+    for idx in range(len(filenames)):
+        s_index = filenames[idx].rfind("_")  # Start of temperature value
+        e_index = filenames[idx].rfind("K")  # End of temperature value
+        temp = float(filenames[s_index + 1, e_index])
+        filenames[idx] = [filenames[idx], temp]
+    filenames.sort(key=lambda entry: entry[1])
+    return [entry[0] for entry in filenames]

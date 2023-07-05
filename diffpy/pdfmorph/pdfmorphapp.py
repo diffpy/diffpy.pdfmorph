@@ -19,7 +19,7 @@ import sys
 from pathlib import Path
 
 import numpy
-from diffpy.pdfmorph import __version__
+from diffpy.pdfmorph.version import __version__
 import diffpy.pdfmorph.tools as tools
 import diffpy.pdfmorph.pdfplot as pdfplot
 import diffpy.pdfmorph.morphs as morphs
@@ -29,7 +29,7 @@ import diffpy.pdfmorph.refine as refine
 
 def create_option_parser():
     import optparse
-    prog_short = sys.argv[0].replace("\\", "/").split("/")[-1]  # Program name, compatible w/ all OS paths
+    prog_short = Path(sys.argv[0]).name  # Program name, compatible w/ all OS paths
 
     class CustomParser(optparse.OptionParser):
         def __init__(self, *args, **kwargs):
@@ -71,7 +71,17 @@ def create_option_parser():
         action="store_true",
         help=f"""Changes usage to \'{prog_short} [options] FILE DIRECTORY\'. FILE
 will be morphed with each file in DIRECTORY as target.
-Save and plots options disabled when this option is enabled.""",
+Files in directory are sorted by alphabetical order unless
+--temperature is enabled. Plotting and saving are disabled
+when this option is enabled.""",
+    )
+    parser.add_option(
+        '--temperature',
+        dest="temperature_sort",
+        action="store_true",
+        help="""Used with --sequence to sort files in DIRECTORY by temperature.
+File names in DIRECTORY should end in _#K.gr or _#K.cgr
+to use this option.""",
     )
     parser.add_option(
         '--rmin', type="float", help="Minimum r-value to use for PDF comparisons."
@@ -187,12 +197,6 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
         help="Do not show the plot.",
     )
     group.add_option(
-        '--usefilenames',
-        action="store_true",
-        dest="usefilenames",
-        help="Use the file names as labels on plot."
-    )
-    group.add_option(
         '--mlabel',
         metavar="MLABEL",
         dest="mlabel",
@@ -258,9 +262,18 @@ def multiple_morphs(parser, opts, pargs, stdout_flag):
     if not target_directory.is_dir():
         parser.custom_error(f"{target_directory} is not a directory. Go to --help for usage.")
 
+    # Sort files in directory
+    target_list = list(target_directory.iterdir())
+    if opts.temperature_sort:
+        # Sort by temperature
+        target_list = tools.temperature_sort(target_list)
+    else:
+        # Default is alphabetical sort
+        target_list.sort()
+
     # Morph morph_file against all other files in target_directory
     results = []
-    for target_file in target_directory.iterdir():
+    for target_file in target_list:
         # Only morph morph_file against different files in target_directory
         if target_file.is_file and morph_file != target_file:
             results.append([
@@ -268,20 +281,22 @@ def multiple_morphs(parser, opts, pargs, stdout_flag):
                 single_morph(parser, opts, [morph_file, target_file], stdout_flag=False),
             ])
 
-    # Input parameters used for every morph
-    inputs = "\n# Input morphing parameters:"
-    inputs += f"\n# scale = {opts.scale}"
-    inputs += f"\n# stretch = {opts.stretch}"
-    inputs += f"\n# smear = {opts.smear}"
+    # If print enabled
+    if stdout_flag:
+        # Input parameters used for every morph
+        inputs = "\n# Input morphing parameters:"
+        inputs += f"\n# scale = {opts.scale}"
+        inputs += f"\n# stretch = {opts.stretch}"
+        inputs += f"\n# smear = {opts.smear}"
 
-    print(inputs)
+        print(inputs)
 
-    # Results from each morph
-    for entry in results:
-        outputs = f"\n# Target: {entry[0]}\n"
-        outputs += "# Optimized morphing parameters:\n"
-        outputs += "\n".join(f"# {i[0]} = {i[1]:.6f}" for i in entry[1])
-        print(outputs)
+        # Results from each morph
+        for entry in results:
+            outputs = f"\n# Target: {entry[0]}\n"
+            outputs += "# Optimized morphing parameters:\n"
+            outputs += "\n".join(f"# {i[0]} = {i[1]:.6f}" for i in entry[1])
+            print(outputs)
 
     return results
 
@@ -463,14 +478,14 @@ def single_morph(parser, opts, pargs, stdout_flag):
 
     if opts.plot:
         pairlist = [chain.xy_morph_out, chain.xy_target_out]
-        labels = ["morph", "target"]  # Default label names
-        if opts.usefilenames:
-            labels = [pargs[0], pargs[1]]
-        else:
-            if opts.mlabel is not None:
-                labels[0] = opts.mlabel
-            if opts.tlabel is not None:
-                labels[1] = opts.tlabel
+        labels = [pargs[0], pargs[1]]  # Default is to use file names
+
+        # If user chooses labels
+        if opts.mlabel is not None:
+            labels[0] = opts.mlabel
+        if opts.tlabel is not None:
+            labels[1] = opts.tlabel
+
         # Plot extent defaults to calculation extent
         pmin = opts.pmin if opts.pmin is not None else opts.rmin
         pmax = opts.pmax if opts.pmax is not None else opts.rmax
