@@ -80,7 +80,7 @@ a Rw plot and table respectively.""",
         dest="temp",
         action="store_true",
         help="""Used with --sequence to sort files in DIRECTORY by temperature.
-File names in DIRECTORY should end in _#K.gr or _#K.cgr
+File names in DIRECTORY should end in _#K.gr or _#K.cgr (where # is a float)
 to use this option.""",
     )
     parser.add_option(
@@ -267,7 +267,7 @@ def multiple_morphs(parser, opts, pargs, stdout_flag):
         try:
             target_list = tools.temperature_sort(target_list)
         except ValueError:
-            parser.custom_error("All file names in directory must end in _###K.gr or _###K.cgr to use "
+            parser.custom_error("All file names in directory must end in _#K.gr or _#K.cgr (where # is a float) to use "
                                 "the --temperature option.")
     else:
         # Default is alphabetical sort

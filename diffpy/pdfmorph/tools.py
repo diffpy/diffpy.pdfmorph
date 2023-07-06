@@ -116,7 +116,7 @@ def nn_value(val, name):
 
 
 def temperature_sort(filepaths):
-    """Sort a list of files by temperatures encoded in their name. Files should all end in _###K.gr or _###K.cgr."""
+    """Sort a list of files by temperatures encoded in their name. Files should all end in _#K.gr or _#K.cgr."""
 
     # Get temperature from file names
     filenames = []
@@ -124,7 +124,7 @@ def temperature_sort(filepaths):
         filenames.append(path.name)
     temps = extract_temperatures(filenames)
 
-    # Sort files (whose paths are contained in filenames) ending in _###K.gr/_###K.cgr by ###
+    # Sort files (whose paths are contained in filenames) ending in _#K.gr or _#K.cgr by #
     for idx in range(len(filepaths)):
         filepaths[idx] = [filepaths[idx], temps[idx]]
     filepaths.sort(key=lambda entry: entry[1])

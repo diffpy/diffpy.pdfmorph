@@ -224,7 +224,7 @@ def plot_rws(target_labels, rws, temp_flag=False):
     else:
         file_names = target_labels
         # Ensure file names do not crowd
-        bar_size = 5
+        bar_size = 1
         max_len = bar_size
         for name in file_names:
             max_len = max(max_len, len(name))
