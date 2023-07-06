@@ -107,9 +107,36 @@ def readPDF(fname):
 
 
 def nn_value(val, name):
-    # Convenience function for ensuring certain non-negative inputs
+    """Convenience function for ensuring certain non-negative inputs."""
     if val < 0:
         negative_value_warning = f"\n# Negative value for {name} given. Using absolute value instead."
         print(negative_value_warning)
         return -val
     return val
+
+
+def temperature_sort(filepaths):
+    """Sort a list of files by temperatures encoded in their name. Files should all end in _###K.gr or _###K.cgr."""
+
+    # Get temperature from file names
+    filenames = []
+    for path in filepaths:
+        filenames.append(path.name)
+    temps = extract_temperatures(filenames)
+
+    # Sort files (whose paths are contained in filenames) ending in _###K.gr/_###K.cgr by ###
+    for idx in range(len(filepaths)):
+        filepaths[idx] = [filepaths[idx], temps[idx]]
+    filepaths.sort(key=lambda entry: entry[1])
+    return [entry[0] for entry in filepaths]
+
+
+def extract_temperatures(filenames):
+    """Convenience function to extract temperatures from file names."""
+
+    temps = []
+    for name in filenames:
+        s_index = name.rfind("_")  # Start of temperature value
+        e_index = name.rfind("K")  # End of temperature value
+        temps.append(float(name[s_index + 1: e_index]))
+    return temps

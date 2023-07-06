@@ -8,10 +8,13 @@ import os
 import unittest
 import numpy
 
+from pathlib import Path
+
 # useful variables
 thisfile = locals().get('__file__', 'file.py')
 tests_dir = os.path.dirname(os.path.abspath(thisfile))
 testdata_dir = os.path.join(tests_dir, 'testdata')
+testsequence_dir = os.path.join(testdata_dir, 'testsequence')
 
 import diffpy.pdfmorph.tools as tools
 
@@ -39,6 +42,44 @@ class TestTools(unittest.TestCase):
         scale = tools.estimateScale(self.y_morph, x * self.y_morph)
         self.assertAlmostEqual(x, scale)
         return
+
+    def test_nn_value(self):
+        import random
+
+        # Values with 6 and 7 decimals (limit of assertAlmostEqual)
+        test_values = [10.0000001, 10.00000001, 0.9999999, 0.99999999]
+
+        # Random values
+        for i in range(100):
+            test_values.append(random.uniform(0, 65535))
+
+        # Check positive and negative
+        for value in test_values:
+            self.assertAlmostEqual(tools.nn_value(value, name=None), abs(value))
+            self.assertAlmostEqual(tools.nn_value(-value, name=None), abs(-value))
+
+    def test_temperature_sort(self):
+        sequence_files = [*os.listdir(testsequence_dir)]
+
+        # Fisher-Yates randomization
+        import random
+        length = len(sequence_files)
+        for i in range(length - 1, 0, -1):
+            j = random.randint(0, i)
+            sequence_files[i], sequence_files[j] = sequence_files[j], sequence_files[i]
+
+        # Prepare and run through temperature_sort
+        path_sequence = []
+        for file in sequence_files:
+            path_sequence.append(Path(file))
+        sorted_path_sequence = tools.temperature_sort(path_sequence)
+        sorted_sequence = []
+        for path in sorted_path_sequence:
+            sorted_sequence.append(path.name)
+
+        # Temperature sort should produce same result as alphanumerical if leading character is removed
+        sequence_files.sort(key=lambda entry: entry[2:])
+        assert sequence_files == sorted_sequence
 
 
 # End of class TestRoutines
