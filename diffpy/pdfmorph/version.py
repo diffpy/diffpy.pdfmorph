@@ -13,8 +13,7 @@
 #
 ##############################################################################
 
-"""Definition of __version__ and __date__ for diffpy.pdfmorph.
-"""
+"""Definition of __version__ and __date__ for diffpy.pdfmorph."""
 
 
 # obtain version information

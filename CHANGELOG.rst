@@ -5,8 +5,8 @@ Release Notes
 .. current developments
 
 v0.0.1
-====================
+------
 
-**Changed:**
+**Added:**
 
-* Fixed rever GH address
+* INSERT SYNOPSIS

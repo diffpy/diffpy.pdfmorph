@@ -14,28 +14,23 @@
 ##############################################################################
 
 
-"""class TransformXtalPDFtoRDF -- Transform crystal PDFs to RDFs.
-"""
+"""Transform crystal PDFs to RDFs."""
 
 
 from diffpy.pdfmorph.morphs.morph import *
 
 
 class TransformXtalPDFtoRDF(Morph):
-    '''Transform crystal PDFs to RDFs.
-
-    Converts both morph data and target data PDFs to RDFs.
+    """Converts both morph data and target data PDFs to RDFs.
 
     Configuration variables:
 
-    baselineslope   --  The slope of the PDF baseline.  With the perfect scale,
-                        the baseline slope is equal to -4*pi*rho0, where rho0
-                        is the density of the crystalline sample.
+    :param baselineslope: The slope of the PDF baseline. With the perfect scale, the baseline slope is equal to
+        :math:`-4\\pi\\rho_0`, where :math:`\\rho_0` is the density of the crystalline sample.
 
-    With s = baselineslope,
-    R(r) = r * (G(r) - r * s)
+    With :math:`s` being the baselineslope, :math:`R(r) = r * (G(r) - rs)`.
 
-    '''
+    """
 
     # Define input output types
     summary = 'Turn the PDF into the RDF for both the morph and target'
