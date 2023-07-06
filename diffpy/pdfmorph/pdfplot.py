@@ -15,6 +15,7 @@
 """Collection of plotting functions for PDFs."""
 
 import matplotlib.pyplot as plt
+import diffpy.pdfmorph.tools as tools
 from bg_mpl_stylesheet.bg_mpl_stylesheet import bg_mpl_style
 import numpy
 
@@ -203,6 +204,52 @@ def comparePDFs(
         )
     if show:
         plt.show()
+
+    return
+
+
+def plot_rws(target_labels, rws, temp_flag=False):
+    """
+    Plot Rw values for multiple morphs.
+    :param target_labels: Names (or temperatures if --temperature is enabled) of each file acting as target for the morph.
+    :type target_labels: list
+    :param rws: Contains the Rw values corresponding to each file.
+    :type rws: list
+    :param temp_flag: When True, temperature is extracted from file names in target_files. Then, a line chart of
+    Rw versus temperature is made. Otherwise (default), it plots a bar chart of Rw values per file.
+    :type temp_flag: bool
+    """
+
+    # If we can extract temperature data
+    if temp_flag:
+        temps = target_labels
+
+        # Plot Rw vs Temperature
+        plt.plot(temps, rws, linestyle='-', marker='o')
+        plt.ylabel(r"$R_w$")
+        plt.xlabel(r"Temperature ($K$)")
+        plt.minorticks_on()
+
+    # Create bar chart for each file
+    else:
+        file_names = target_labels
+        # Ensure file names do not crowd
+        bar_size = 5
+        max_len = bar_size
+        for name in file_names:
+            max_len = max(max_len, len(name))
+        angle = numpy.arccos(bar_size / max_len)
+        angle *= 180 / numpy.pi  # Convert to degrees
+        plt.xticks(rotation=angle)
+
+        # Plot Rw for each file
+        plt.bar(file_names, rws)
+        plt.ylabel(r"$R_w$")
+        plt.xlabel(r"Target File")
+
+    # Show plot
+    plt.tight_layout()
+    plt.show()
 
     return
 

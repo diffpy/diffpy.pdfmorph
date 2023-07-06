@@ -71,13 +71,13 @@ def create_option_parser():
         action="store_true",
         help=f"""Changes usage to \'{prog_short} [options] FILE DIRECTORY\'. FILE
 will be morphed with each file in DIRECTORY as target.
-Files in directory are sorted by alphabetical order unless
---temperature is enabled. Plotting and saving are disabled
-when this option is enabled.""",
+Files in DIRECTORY are sorted by alphabetical order unless
+--temperature is enabled. Plotting and saving options are for
+a Rw plot and table respectively.""",
     )
     parser.add_option(
         '--temperature',
-        dest="temperature_sort",
+        dest="temp",
         action="store_true",
         help="""Used with --sequence to sort files in DIRECTORY by temperature.
 File names in DIRECTORY should end in _#K.gr or _#K.cgr
@@ -240,8 +240,6 @@ def main():
     parser = create_option_parser()
     (opts, pargs) = parser.parse_args()
     if opts.sequence:
-        opts.plot = False  # Disable plotting
-        opts.savefile = None  # Disable saving
         multiple_morphs(parser, opts, pargs, stdout_flag=True)
     else:
         single_morph(parser, opts, pargs, stdout_flag=True)
@@ -264,32 +262,48 @@ def multiple_morphs(parser, opts, pargs, stdout_flag):
 
     # Sort files in directory
     target_list = list(target_directory.iterdir())
-    if opts.temperature_sort:
+    if opts.temp:
         # Sort by temperature
-        target_list = tools.temperature_sort(target_list)
+        try:
+            target_list = tools.temperature_sort(target_list)
+        except ValueError:
+            parser.custom_error("All file names in directory must end in _###K.gr or _###K.cgr to use "
+                                "the --temperature option.")
     else:
         # Default is alphabetical sort
         target_list.sort()
 
+    # Disable single morph plotting and saving
+    plot_opt = opts.plot
+    opts.plot = False
+    save_opt = opts.savefile
+    opts.savefile = None
+
+    # Do not morph morph_file against itself if it is in the same directory
+    if morph_file in target_list:
+        target_list.remove(morph_file)
+
     # Morph morph_file against all other files in target_directory
     results = []
     for target_file in target_list:
-        # Only morph morph_file against different files in target_directory
-        if target_file.is_file and morph_file != target_file:
+        if target_file.is_file:
             results.append([
                 target_file.name,
                 single_morph(parser, opts, [morph_file, target_file], stdout_flag=False),
             ])
 
+    # Input parameters used for every morph
+    inputs = [None, None]
+    inputs[0] = f"# Morphed file: {morph_file.name}"
+    inputs[1] = "\n# Input morphing parameters:"
+    inputs[1] += f"\n# scale = {opts.scale}"
+    inputs[1] += f"\n# stretch = {opts.stretch}"
+    inputs[1] += f"\n# smear = {opts.smear}"
+
     # If print enabled
     if stdout_flag:
-        # Input parameters used for every morph
-        inputs = "\n# Input morphing parameters:"
-        inputs += f"\n# scale = {opts.scale}"
-        inputs += f"\n# stretch = {opts.stretch}"
-        inputs += f"\n# smear = {opts.smear}"
-
-        print(inputs)
+        # Separated for saving
+        print(f"\n{inputs[0]}{inputs[1]}")
 
         # Results from each morph
         for entry in results:
@@ -297,6 +311,49 @@ def multiple_morphs(parser, opts, pargs, stdout_flag):
             outputs += "# Optimized morphing parameters:\n"
             outputs += "\n".join(f"# {i[0]} = {i[1]:.6f}" for i in entry[1])
             print(outputs)
+
+    rws = []
+    target_labels = []
+    results_length = len(results)
+    for entry in results:
+        if opts.temp:
+            name = entry[0]
+            target_labels.append(tools.extract_temperatures([name])[0])
+        else:
+            target_labels.append(entry[0])
+        for item in entry[1]:
+            if item[0] == "Rw":
+                rws.append(item[1])
+
+    if save_opt is not None:
+        # Save table of Rw values
+        try:
+            with open(save_opt, 'w') as outfile:
+                # Header
+                print(f"{inputs[0]}\n{inputs[1]}", file=outfile)
+                if opts.temp:
+                    print(f"\n# L T(K) Rw", file=outfile)
+                else:
+                    print(f"\n# L Target Rw", file=outfile)
+
+                # Table
+                for idx in range(results_length):
+                    print(f"{target_labels[idx]} {rws[idx]}", file=outfile)
+                outfile.close()
+
+                # Output to stdout
+                path_name = Path(outfile.name).absolute()
+                save_message = f"\n# Rw table saved to {path_name}"
+                print(save_message)
+
+        # Save failed
+        except FileNotFoundError as e:
+            save_fail_message = "\nUnable to save to designated location"
+            print(save_fail_message)
+            parser.custom_error(str(e))
+
+    if plot_opt:
+        pdfplot.plot_rws(target_labels, rws, opts.temp)
 
     return results
 
