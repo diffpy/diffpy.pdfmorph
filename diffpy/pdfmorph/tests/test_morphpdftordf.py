@@ -2,7 +2,7 @@
 
 
 import os
-import unittest
+import pytest
 
 import numpy
 
@@ -14,15 +14,16 @@ tests_dir = os.path.dirname(os.path.abspath(thisfile))
 from diffpy.pdfmorph.morph_helpers.transformpdftordf import TransformXtalPDFtoRDF
 
 
-class TestTransformXtalPDFtoRDF(unittest.TestCase):
-    def setUp(self):
+class TestTransformXtalPDFtoRDF:
+    @pytest.fixture
+    def setup(self):
         self.x_morph = numpy.arange(0.01, 5, 0.01)
         self.y_morph = numpy.exp(-0.5 * (self.x_morph - 1.0) ** 2) / self.x_morph - self.x_morph
         self.x_target = numpy.arange(0.01, 5, 0.01)
         self.y_target = numpy.exp(-0.5 * (self.x_morph - 2.0) ** 2) / self.x_morph - self.x_morph
         return
 
-    def test_transform(self):
+    def test_transform(self, setup):
         """check TransformXtalPDFtoRDF.morph()"""
         config = {"baselineslope": -1.0}
         transform = TransformXtalPDFtoRDF(config)
@@ -31,14 +32,14 @@ class TestTransformXtalPDFtoRDF(unittest.TestCase):
 
         rdf1 = numpy.exp(-0.5 * (x_morph - 1.0) ** 2)
         rdf2 = numpy.exp(-0.5 * (x_target - 2.0) ** 2)
-        self.assertTrue(numpy.allclose(rdf1, y_morph))
-        self.assertTrue(numpy.allclose(rdf2, y_target))
+        assert numpy.allclose(rdf1, y_morph)
+        assert numpy.allclose(rdf2, y_target)
         return
 
 
 # End of class TestTransformXtalPDFtoRDF
 
 if __name__ == '__main__':
-    unittest.main()
+    TestTransformXtalPDFtoRDF()
 
 # End of file

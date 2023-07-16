@@ -2,7 +2,7 @@
 
 
 import os
-import unittest
+import pytest
 
 import numpy
 
@@ -14,29 +14,30 @@ testdata_dir = os.path.join(tests_dir, 'testdata')
 from diffpy.pdfmorph.morphs.morphresolution import MorphResolutionDamping
 
 
-class TestMorphScale(unittest.TestCase):
-    def setUp(self):
+class TestMorphScale:
+    @pytest.fixture
+    def setup(self):
         morph_file = os.path.join(testdata_dir, "ni_qmax25.cgr")
         self.x_morph, self.y_morph = numpy.loadtxt(morph_file, unpack=True)
         target_file = os.path.join(testdata_dir, "ni_qmax25_qdamp0.01.cgr")
         self.x_target, self.y_target = numpy.loadtxt(target_file, unpack=True)
         return
 
-    def test_morph(self):
+    def test_morph(self, setup):
         """check MorphScale.morph()"""
         config = {"qdamp": 0.01}
         morph = MorphResolutionDamping(config)
 
         x_morph, y_morph, x_target, y_target = morph(self.x_morph, self.y_morph, self.x_target, self.y_target)
 
-        self.assertTrue(numpy.allclose(self.y_target, y_target))
-        self.assertTrue(numpy.allclose(y_morph, y_target))
+        assert numpy.allclose(self.y_target, y_target)
+        assert numpy.allclose(y_morph, y_target)
         return
 
 
 # End of class TestMorphScale
 
 if __name__ == '__main__':
-    unittest.main()
+    TestMorphScale()
 
 # End of file
