@@ -122,6 +122,16 @@ def nn_value(val, name):
     return val
 
 
+def deserialize(serial_file):
+    """Call deserialize_data from diffpy.utils.
+
+    serial_file -- name of file to deserialize.
+
+    Return a Dictonary of data read from serial file.
+    """
+    return parsers.deserialize_data(serial_file)
+
+
 def field_sort(filepaths: list, field, reverse=False, serfile=None, get_field_values=False):
     """Sort a list of files by a field stored in header information.
     All files must contain this header information.

@@ -61,16 +61,28 @@ def create_option_parser():
     parser.add_option(
         '-s',
         '--save',
-        metavar="SFILE",
-        dest="savefile",
-        help="Save manipulated PDF from FILE1 to SFILE. Use \'-\' for stdout.",
+        metavar="SLOC",
+        dest="saveloc",
+        help="""Save the manipulated PDF to a file SLOC. Use \'-\' for stdout.
+When --multiple is enabled, each manipulated PDF is saved to a directory SLOC.
+Names for each manipulated PDF can be specified using --snf.""",
+    )
+    parser.add_option(
+        '--snf',
+        '--save-names-file',
+        metavar="SNFILE",
+        dest="snfile",
+        help="""Used only when -s and --multiple are enabled.
+Specify names for each manipulated PDF when saving (see -s) using a serial file
+SNFILE. Each target PDF should be an entry in SFILE with a key save_morph_as
+whose value specifies the name to save the manipulated PDF as.""",
     )
     parser.add_option(
         '-v',
         '--verbose',
         dest="verbose",
         action="store_true",
-        help="Print additional header details to savefile.",
+        help="Print additional header details to saved files.",
     )
     parser.add_option(
         '--multiple',
@@ -79,8 +91,8 @@ def create_option_parser():
         help=f"""Changes usage to \'{prog_short} [options] FILE DIRECTORY\'. FILE
 will be morphed with each file in DIRECTORY as target.
 Files in DIRECTORY are sorted by alphabetical order unless a field is
-specified by --sort-by. Plotting and saving options are for
-a Rw plot and table respectively.""",
+specified by --sort-by. See -s and Plot Options for how saving and
+plotting change when this option is enabled.""",
     )
     parser.add_option(
         '--sort-by',
@@ -205,7 +217,10 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
 
     # Plot Options
     group = optparse.OptionGroup(
-        parser, "Plot Options", """These options control plotting."""
+        parser, "Plot Options", """These options control plotting.
+The manipulated and target PDFs will be plotted against each other with a
+difference curve below. When --multiple is enabled, a plot of Rw values for
+each file will be shown instead."""
     )
     parser.add_option_group(group)
     group.add_option(
@@ -213,7 +228,7 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
         '--noplot',
         action="store_false",
         dest="plot",
-        help="Do not show the plot.",
+        help="""Do not show a plot.""",
     )
     group.add_option(
         '--mlabel',
@@ -398,7 +413,7 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
     if stdout_flag:
         print(f"{morphs_in}\n{morphs_out}\n")
 
-    if opts.savefile is not None:
+    if opts.saveloc is not None:
         path_name = Path(pargs[0]).resolve().as_posix()
         header = "# PDF created by pdfmorph\n"
         header += f"# from {path_name}"
@@ -407,8 +422,9 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
 
         # Save to file
         try:
-            if opts.savefile != "-":
-                with open(opts.savefile, 'w') as outfile:
+            if opts.saveloc != "-":
+                save_file_name = Path(opts.saveloc).resolve().as_posix()
+                with open(opts.saveloc, 'w') as outfile:
                     # Print out a header (more if verbose)
                     print(header, file=outfile)
                     if opts.verbose:
@@ -418,12 +434,10 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
                     print("\n# Labels: [r] [gr]", file=outfile)
                     numpy.savetxt(outfile, numpy.transpose([chain.x_morph_out, chain.y_morph_out]))
 
-                    # Indicate where data was saved to
-                    path_name = Path(outfile.name).resolve().as_posix()
-
-                    # Indicate successful save to terminal
-                    save_message = f"# Morph saved to {path_name}"
-                    print(save_message)
+                    if stdout_flag:
+                        # Indicate successful save to terminal
+                        save_message = f"# Morph saved to {save_file_name}\n"
+                        print(save_message)
 
             else:
                 # Just print table with label if save is to stdout
@@ -500,19 +514,51 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
         # Default is alphabetical sort
         target_list.sort(reverse=opts.reverse)
 
-    # Disable single morph plotting and saving
+    # Disable single morph plotting
     plot_opt = opts.plot
     opts.plot = False
-    save_opt = opts.savefile
-    opts.savefile = None
+
+    # Manage saving
+    save_opt = opts.saveloc
+    save_names = {}
+    save_morphs_here = ""
+    if save_opt is not None:
+        try:
+            # Make directory to save files in if it does not already exist
+            Path(save_opt).mkdir(parents=True, exist_ok=True)
+
+            # Morphs will be saved in the subdirectory "Morphs"
+            save_morphs_here = Path(save_opt).joinpath("Morphs")
+            save_morphs_here.mkdir(exist_ok=True)
+
+            # Get names for the saved morphs
+            if opts.snfile is not None:
+                # Names should be stored properly in opts.snfile
+                save_names = tools.deserialize(opts.snfile)
+            # Default naming scheme
+            else:
+                for target_file in target_list:
+                    save_names.update({target_file.name: {"save_morph_as":
+                                                          f"Morph_with_Target_{target_file.stem}.cgr"}})
+
+        # Save failed
+        except FileNotFoundError as e:
+            save_fail_message = "\nUnable to create directory"
+            print(save_fail_message)
+            parser.custom_error(str(e))
 
     # Morph morph_file against all other files in target_directory
     results = {}
     for target_file in target_list:
         if target_file.is_file:
+            # Set the save file destination to be a file within the SLOC directory
+            if save_opt is not None:
+                opts.saveloc = Path(save_morphs_here).joinpath(save_names.get(target_file.name).get("save_morph_as"))
+            # Perform a morph of morph_file against target_file
+            pargs = [morph_file, target_file]
             results.update({
                 target_file.name:
-                single_morph(parser, opts, [morph_file, target_file], stdout_flag=False),
+                    single_morph(parser, opts, pargs, stdout_flag=False),
             })
 
     # Parse rws
@@ -541,50 +587,52 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
     inputs[1] += f"\n# scale = {opts.scale}"
     inputs[1] += f"\n# stretch = {opts.stretch}"
     inputs[1] += f"\n# smear = {opts.smear}"
+    input_header = f"{inputs[0]}{inputs[1]}\n"
 
-    # If print enabled
-    if stdout_flag:
-        # Inputs for the morph
-        print(f"\n{inputs[0]}{inputs[1]}")
-        # Verbose to get output for every morph
-        if opts.verbose:
-            # Print output for every morph (information repeated in a succint table below)
-            for key in results.keys():
-                outputs = f"\n# Target: {key}\n"
-                outputs += "# Optimized morphing parameters:\n"
-                outputs += "\n".join(f"# {param} = {results[key][param]:.6f}" for param in results[key].keys())
-                print(outputs)
-        # Print table labels
-        labels = "\n# Labels: [Target]"
+    # Verbose to get output for every morph
+    verbose_header = ""
+    if opts.verbose:
+        # Output for every morph (information repeated in a succint table below)
+        for key in results.keys():
+            outputs = f"\n# Target: {key}\n"
+            outputs += "# Optimized morphing parameters:\n"
+            outputs += "\n".join(f"# {param} = {results[key][param]:.6f}" for param in results[key].keys())
+            verbose_header += f"{outputs}\n"
+
+    # Table labels
+    labels = "\n# Labels: [Target]"
+    if field is not None:
+        labels += f" [{field}]"
+    for param in [["Scale", scales], ["Stretch", stretches], ["Smear", smears]]:
+        if len(param[1]) > 0:
+            labels += f" [{param[0]}]"
+    labels += " [Pearson] [Rw]\n"
+
+    # Corresponding table
+    table = ""
+    for idx in range(results_length):
+        row = f"{file_names[idx]}"
         if field is not None:
-            labels += f" [{field}]"
-        for param in [["Scale", scales], ["Stretch", stretches], ["Smear", smears]]:
-            if len(param[1]) > 0:
-                labels += f" [{param}]"
-        labels += " [Pearson] [Rw]"
-        print(labels)
+            row += f" {field_list[idx]}"
+        for param in [scales, stretches, smears]:
+            if len(param) > idx:
+                row += f" {param[idx]:0.6f}"
+        row += f" {pearsons[idx]:0.6f} {rws[idx]:0.6f}"
+        table += f"{row}\n"
 
-        # Print corresponding table
-        for idx in range(results_length):
-            row = f"{file_names[idx]}"
-            if field is not None:
-                row += f" {field_list[idx]}"
-            for param in [scales, stretches, smears]:
-                if len(param) > idx:
-                    row += f" {param[idx]}"
-            row += f" {pearsons[idx]} {rws[idx]}"
-            print(row)
+    # Print only if print requested
+    if stdout_flag:
+        print(f"\n{input_header}{verbose_header}{labels}{table}")
 
-    if save_opt is not None:
-        # FIXME: Add save option for multiple morphs that saves all morphs to a directory
-        try:
-            pass
-        # Save failed
-        except FileNotFoundError as e:
-            save_fail_message = "\nUnable to save to designated location"
-            print(save_fail_message)
-            parser.custom_error(str(e))
+    # Also save the table as a csv in the SLOC directory if -s enabled
+    if save_opt:
+        reference_table = Path(save_opt).joinpath("Morph_Reference_Table.csv")
+        with open(reference_table, 'w') as reference:
+            print(f"{input_header}{verbose_header}{labels}{table}", file=reference)
+            save_message = f"# Morphs saved to the directory {save_morphs_here.resolve().as_posix()}\n"
+            print(save_message)
 
+    # Plot the rw table if requested
     if plot_opt:
         if field_list is not None:
             pdfplot.plot_rws(field_list, rws, field)
