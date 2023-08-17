@@ -6,6 +6,7 @@
 
 import os
 import unittest
+import pytest
 import numpy
 
 from pathlib import Path
@@ -58,28 +59,57 @@ class TestTools(unittest.TestCase):
             self.assertAlmostEqual(tools.nn_value(value, name=None), abs(value))
             self.assertAlmostEqual(tools.nn_value(-value, name=None), abs(-value))
 
-    def test_temperature_sort(self):
+    def test_field_sort(self):
         sequence_files = [*os.listdir(testsequence_dir)]
+        absolute_sf = []
+        for file in sequence_files:
+            absolute_sf.append(os.path.join(testsequence_dir, file))
 
         # Fisher-Yates randomization
         import random
-        length = len(sequence_files)
+        length = len(absolute_sf)
         for i in range(length - 1, 0, -1):
             j = random.randint(0, i)
-            sequence_files[i], sequence_files[j] = sequence_files[j], sequence_files[i]
+            absolute_sf[i], absolute_sf[j] = absolute_sf[j], absolute_sf[i]
 
-        # Prepare and run through temperature_sort
+        # Prepare and run through field_sort by temperature
         path_sequence = []
-        for file in sequence_files:
-            path_sequence.append(Path(file))
-        sorted_path_sequence = tools.temperature_sort(path_sequence)
+        for file in absolute_sf:
+            path_sequence.append(Path(file).absolute())
+        sorted_path_sequence, fvs = tools.field_sort(path_sequence, "temperature", get_field_values=True)
         sorted_sequence = []
         for path in sorted_path_sequence:
+            print(path)
             sorted_sequence.append(path.name)
 
         # Temperature sort should produce same result as alphanumerical if leading character is removed
         sequence_files.sort(key=lambda entry: entry[2:])
         assert sequence_files == sorted_sequence
+
+        # Check temperatures are correct
+        assert fvs == [174, 180, 186, 192, 198, 204, 210]
+
+        # Now reverse the sort
+        reversed_path_sequence = tools.field_sort(path_sequence, "temperature", reverse=True)
+        reversed_sequence = []
+        for path in reversed_path_sequence:
+            reversed_sequence.append(path.name)
+
+        # Reversed sort should match alphanumerical sort
+        sequence_files.sort()
+        assert sequence_files == reversed_sequence
+
+        # Check we get the same sequence when we load header information from a serial file
+        serial_file = os.path.join(testdata_dir, "testsequence_serialfile.json")
+        metadata_path_sequence = tools.field_sort(path_sequence, "temperature", serfile=serial_file, reverse=True)
+        metadata_sequence = []
+        for path in metadata_path_sequence:
+            metadata_sequence.append(path.name)
+        assert sequence_files == metadata_sequence
+
+        # Check error thrown when field does not exist
+        with pytest.raises(KeyError):
+            tools.field_sort(path_sequence, "non_existing_field")
 
 
 # End of class TestRoutines

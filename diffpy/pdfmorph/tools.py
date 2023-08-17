@@ -19,6 +19,7 @@
 
 
 import numpy
+import diffpy.utils.parsers as parsers
 
 
 def estimateScale(y_morph_in, y_target_in):
@@ -121,28 +122,62 @@ def nn_value(val, name):
     return val
 
 
-def temperature_sort(filepaths):
-    """Sort a list of files by temperatures encoded in their name. Files should all end in _###K.gr or _###K.cgr."""
+def field_sort(filepaths: list, field, reverse=False, serfile=None, get_field_values=False):
+    """Sort a list of files by a field stored in header information.
+    All files must contain this header information.
 
-    # Get temperature from file names
-    filenames = []
-    for path in filepaths:
-        filenames.append(path.name)
-    temps = extract_temperatures(filenames)
+    filepaths           -- List of paths to files that we want to sort.
+    field               -- the field we want to sort by. Not case-sensitive.
+    reverse             -- sort in reverse alphabetical/numerical order.
+    serfile             -- path to a serial file with field information for each file.
+    get_field_values    -- Boolean indicating whether to also return a List of field values (default False).
+                           This List of field values is parallel to the sorted list of filepaths with items
+                           in the same position corresponding to each other.
 
-    # Sort files (whose paths are contained in filenames) ending in _###K.gr/_###K.cgr by ###
-    for idx in range(len(filepaths)):
-        filepaths[idx] = [filepaths[idx], temps[idx]]
-    filepaths.sort(key=lambda entry: entry[1])
-    return [entry[0] for entry in filepaths]
+    Return sorted List of paths. When get_fv is true, also return an associated field list.
+    """
+
+    # Get the field from each file
+    files_field_values = []
+    if serfile is None:
+        for path in filepaths:
+            fhd = parsers.loadData(path, headers=True)
+            files_field_values.append([path, case_insensitive_dictionary_search(field, fhd)])
+    else:
+        # deserialize the serial file
+        des_dict = parsers.deserialize_data(serfile)
+
+        # get names of each file to search the serial file
+        import pathlib
+        for path in filepaths:
+            name = pathlib.Path(path).name
+            fv = case_insensitive_dictionary_search(field, des_dict.get(name))
+            files_field_values.append([path, fv])
+
+    # Sort files by field, reverse if reverse flag true
+    try:
+        files_field_values.sort(key=lambda entry: entry[1], reverse=reverse)
+    # Raised if fields for any file are missing
+    except (ValueError, TypeError) as e:
+        raise KeyError("Field missing.")
+    if get_field_values:
+        return [pair[0] for pair in files_field_values], [pair[1] for pair in files_field_values]
+    else:
+        return [pair[0] for pair in files_field_values]
 
 
-def extract_temperatures(filenames):
-    """Convenience function to extract temperatures from file names."""
+def case_insensitive_dictionary_search(key: str, dictionary: dict):
+    """Search for key in dictionary ignoring case.
 
-    temps = []
-    for name in filenames:
-        s_index = name.rfind("_")  # Start of temperature value
-        e_index = name.rfind("K")  # End of temperature value
-        temps.append(float(name[s_index + 1: e_index]))
-    return temps
+    :param key:
+    :param dictionary:
+
+    Returns corresponding value if key is in dictionary. None otherwise.
+    """
+
+    for ci_key in dictionary.keys():
+        if key.lower() == ci_key.lower():
+            key = ci_key
+            break
+
+    return dictionary.get(key)

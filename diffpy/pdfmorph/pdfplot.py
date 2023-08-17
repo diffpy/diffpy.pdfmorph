@@ -208,44 +208,67 @@ def comparePDFs(
     return
 
 
-def plot_rws(target_labels, rws, temp_flag=False):
+def plot_rws(target_labels, rws, field=None):
     """
     Plot Rw values for multiple morphs.
-    :param target_labels: Names (or temperatures if --temperature is enabled) of each file acting as target for the morph.
+    :param target_labels: Names (or field if --sort-by given) of each file acting as target for the morph.
     :type target_labels: list
     :param rws: Contains the Rw values corresponding to each file.
     :type rws: list
-    :param temp_flag: When True, temperature is extracted from file names in target_files. Then, a line chart of
-    Rw versus temperature is made. Otherwise (default), it plots a bar chart of Rw values per file.
-    :type temp_flag: bool
+    :param field: When not None and entries in field are numerical, a line chart of Rw versus field is made.
+                  When None (default) or values are non-numerical, it plots a bar chart of Rw values per file.
+    :type field: list or None
     """
 
-    # If we can extract temperature data
-    if temp_flag:
-        temps = target_labels
+    # ensure all entries in target_labels are distinct for plotting
+    unique_labels = set()
+    for idx in range(len(target_labels)):
+        item = target_labels[idx]
+        # if repeat found, add additional label
+        if item in unique_labels:
+            counter = 1
+            new_name = f"{item} ({counter})"
+            while new_name in unique_labels:
+                counter += 1
+                new_name = f"{item} ({counter})"
+            item = new_name
+            target_labels[idx] = item
+        unique_labels.update({item})
 
+    # Check if numerical field
+    numerical = True
+    if field is None:
+        numerical = False
+    else:
+        for item in target_labels:
+            if type(item) is not float:
+                numerical = False
+
+    if numerical:
         # Plot Rw vs Temperature
-        plt.plot(temps, rws, linestyle='-', marker='o')
+        plt.plot(target_labels, rws, linestyle='-', marker='o')
         plt.ylabel(r"$R_w$")
-        plt.xlabel(r"Temperature ($K$)")
+        plt.xlabel(rf"{field}")
         plt.minorticks_on()
 
     # Create bar chart for each file
     else:
-        file_names = target_labels
         # Ensure file names do not crowd
-        bar_size = 5
+        bar_size = 1  # FIXME: depends on resolution
         max_len = bar_size
-        for name in file_names:
-            max_len = max(max_len, len(name))
+        for item in target_labels:
+            max_len = max(max_len, len(item))
         angle = numpy.arccos(bar_size / max_len)
         angle *= 180 / numpy.pi  # Convert to degrees
         plt.xticks(rotation=angle)
 
         # Plot Rw for each file
-        plt.bar(file_names, rws)
+        plt.bar(target_labels, rws)
         plt.ylabel(r"$R_w$")
-        plt.xlabel(r"Target File")
+        if field is None:
+            plt.xlabel(r"Target File")
+        else:
+            plt.xlabel(rf"{field}")
 
     # Show plot
     plt.tight_layout()

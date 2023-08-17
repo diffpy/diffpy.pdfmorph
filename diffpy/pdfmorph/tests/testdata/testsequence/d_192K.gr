@@ -1,5 +1,6 @@
 # xPDFsuite Configuration #
 [PDF]
+temperature = 192
 wavelength = 0.1
 dataformat = QA
 inputfile = x0_20171023-035354__192.0K_001.chi

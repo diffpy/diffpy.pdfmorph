@@ -46,6 +46,13 @@ jobs:
           conda install --file requirements/test.txt
           pip install .
 
+      # redownload diffpy.utils pre 3.2.0 release, use https since public repo
+      - name: install diffpy.utils
+        shell: bash -l {0}
+        run: |
+          git clone https://github.com/diffpy/diffpy.utils.git
+          pip install ./diffpy.utils
+
       - name: Validate pdfmorph
         shell: bash -l {0}
         run: |
@@ -53,4 +60,3 @@ jobs:
           coverage run run_tests.py
           coverage report -m
           codecov
-

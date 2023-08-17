@@ -66,22 +66,41 @@ def create_option_parser():
         help="Save manipulated PDF from FILE1 to SFILE. Use \'-\' for stdout.",
     )
     parser.add_option(
-        '--sequence',
-        dest="sequence",
+        '-v',
+        '--verbose',
+        dest="verbose",
+        action="store_true",
+        help="Print additional header details to savefile.",
+    )
+    parser.add_option(
+        '--multiple',
+        dest="multiple",
         action="store_true",
         help=f"""Changes usage to \'{prog_short} [options] FILE DIRECTORY\'. FILE
 will be morphed with each file in DIRECTORY as target.
-Files in DIRECTORY are sorted by alphabetical order unless
---temperature is enabled. Plotting and saving options are for
+Files in DIRECTORY are sorted by alphabetical order unless a field is
+specified by --sort-by. Plotting and saving options are for
 a Rw plot and table respectively.""",
     )
     parser.add_option(
-        '--temperature',
-        dest="temp",
+        '--sort-by',
+        metavar="FIELD",
+        dest="field",
+        help="""Used with --multiple to sort files in DIRECTORY by FIELD from lowest to highest.
+FIELD must be included in the header of all the PDF files.""",
+    )
+    parser.add_option(
+        '--reverse',
+        dest="reverse",
         action="store_true",
-        help="""Used with --sequence to sort files in DIRECTORY by temperature.
-File names in DIRECTORY should end in _#K.gr or _#K.cgr
-to use this option.""",
+        help="""Sort from highest to lowest instead.""",
+    )
+    parser.add_option(
+        '--serial-file',
+        metavar="SERFILE",
+        dest="serfile",
+        help="""Look for FIELD in a serial file instead.
+Must specify name of serial file SERFILE.""",
     )
     parser.add_option(
         '--rmin', type="float", help="Minimum r-value to use for PDF comparisons."
@@ -225,7 +244,8 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
     )
 
     # Defaults
-    parser.set_defaults(sequence=False)
+    parser.set_defaults(multiple=False)
+    parser.set_defaults(reverse=False)
     parser.set_defaults(plot=True)
     parser.set_defaults(refine=True)
     parser.set_defaults(pearson=False)
@@ -236,129 +256,7 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
     return parser
 
 
-def main():
-    parser = create_option_parser()
-    (opts, pargs) = parser.parse_args()
-    if opts.sequence:
-        multiple_morphs(parser, opts, pargs, stdout_flag=True)
-    else:
-        single_morph(parser, opts, pargs, stdout_flag=True)
-
-
-def multiple_morphs(parser, opts, pargs, stdout_flag):
-    # Custom error messages since usage is distinct when --sequence tag is applied
-    if len(pargs) < 2:
-        parser.custom_error("You must supply FILE and DIRECTORY. Go to --help for usage.")
-    elif len(pargs) > 2:
-        parser.custom_error("Too many arguments. Go to --help for usage.")
-
-    # Parse paths
-    morph_file = Path(pargs[0])
-    if not morph_file.is_file():
-        parser.custom_error(f"{morph_file} is not a file. Go to --help for usage.")
-    target_directory = Path(pargs[1])
-    if not target_directory.is_dir():
-        parser.custom_error(f"{target_directory} is not a directory. Go to --help for usage.")
-
-    # Sort files in directory
-    target_list = list(target_directory.iterdir())
-    if opts.temp:
-        # Sort by temperature
-        try:
-            target_list = tools.temperature_sort(target_list)
-        except ValueError:
-            parser.custom_error("All file names in directory must end in _###K.gr or _###K.cgr to use "
-                                "the --temperature option.")
-    else:
-        # Default is alphabetical sort
-        target_list.sort()
-
-    # Disable single morph plotting and saving
-    plot_opt = opts.plot
-    opts.plot = False
-    save_opt = opts.savefile
-    opts.savefile = None
-
-    # Do not morph morph_file against itself if it is in the same directory
-    if morph_file in target_list:
-        target_list.remove(morph_file)
-
-    # Morph morph_file against all other files in target_directory
-    results = []
-    for target_file in target_list:
-        if target_file.is_file:
-            results.append([
-                target_file.name,
-                single_morph(parser, opts, [morph_file, target_file], stdout_flag=False),
-            ])
-
-    # Input parameters used for every morph
-    inputs = [None, None]
-    inputs[0] = f"# Morphed file: {morph_file.name}"
-    inputs[1] = "\n# Input morphing parameters:"
-    inputs[1] += f"\n# scale = {opts.scale}"
-    inputs[1] += f"\n# stretch = {opts.stretch}"
-    inputs[1] += f"\n# smear = {opts.smear}"
-
-    # If print enabled
-    if stdout_flag:
-        # Separated for saving
-        print(f"\n{inputs[0]}{inputs[1]}")
-
-        # Results from each morph
-        for entry in results:
-            outputs = f"\n# Target: {entry[0]}\n"
-            outputs += "# Optimized morphing parameters:\n"
-            outputs += "\n".join(f"# {i[0]} = {i[1]:.6f}" for i in entry[1])
-            print(outputs)
-
-    rws = []
-    target_labels = []
-    results_length = len(results)
-    for entry in results:
-        if opts.temp:
-            name = entry[0]
-            target_labels.append(tools.extract_temperatures([name])[0])
-        else:
-            target_labels.append(entry[0])
-        for item in entry[1]:
-            if item[0] == "Rw":
-                rws.append(item[1])
-
-    if save_opt is not None:
-        # Save table of Rw values
-        try:
-            with open(save_opt, 'w') as outfile:
-                # Header
-                print(f"{inputs[0]}\n{inputs[1]}", file=outfile)
-                if opts.temp:
-                    print(f"\n# L T(K) Rw", file=outfile)
-                else:
-                    print(f"\n# L Target Rw", file=outfile)
-
-                # Table
-                for idx in range(results_length):
-                    print(f"{target_labels[idx]} {rws[idx]}", file=outfile)
-                outfile.close()
-
-                # Output to stdout
-                path_name = Path(outfile.name).absolute()
-                save_message = f"\n# Rw table saved to {path_name}"
-                print(save_message)
-
-        # Save failed
-        except FileNotFoundError as e:
-            save_fail_message = "\nUnable to save to designated location"
-            print(save_fail_message)
-            parser.custom_error(str(e))
-
-    if plot_opt:
-        pdfplot.plot_rws(target_labels, rws, opts.temp)
-
-    return results
-
-
-def single_morph(parser, opts, pargs, stdout_flag):
+def single_morph(parser, opts, pargs, stdout_flag=True):
     if len(pargs) < 2:
         parser.error("You must supply FILE1 and FILE2.")
     elif len(pargs) > 2:
@@ -484,54 +382,57 @@ def single_morph(parser, opts, pargs, stdout_flag):
     morphs_in = "\n# Input morphing parameters:"
     morphs_in += f"\n# scale = {scale_in}"
     morphs_in += f"\n# stretch = {stretch_in}"
-    morphs_in += f"\n# smear = {smear_in}"
+    morphs_in += f"\n# smear = {smear_in}\n"
 
     # Output morph parameters
-    morph_results = list(config.items())
-    morph_results.sort()
+    morph_results = dict(config.items())
 
     # Ensure Rw, Pearson last two outputs
-    morph_results.append(("Rw", rw))
-    morph_results.append(("Pearson", pcc))
+    morph_results.update({"Rw": rw})
+    morph_results.update({"Pearson": pcc})
 
-    output = "\n# Optimized morphing parameters:\n"
-    output += "\n".join(f"# {i[0]} = {i[1]:.6f}" for i in morph_results)
+    morphs_out = "# Optimized morphing parameters:\n"
+    morphs_out += "\n".join(f"# {key} = {morph_results[key]:.6f}" for key in morph_results.keys())
 
-    # No stdout output when running morph sequence
+    # No stdout output when running morph multiple
     if stdout_flag:
-        print(morphs_in)
-        print(output)
+        print(f"{morphs_in}\n{morphs_out}\n")
 
     if opts.savefile is not None:
-        path_name = Path(pargs[0]).absolute()
+        path_name = Path(pargs[0]).resolve().as_posix()
         header = "# PDF created by pdfmorph\n"
-        header += f"# from {path_name}\n"
+        header += f"# from {path_name}"
 
-        header += morphs_in
-        header += output
-
-        # Print to stdout
-        if opts.savefile == "-":
-            outfile = sys.stdout
-            print(header, file=outfile)
-            numpy.savetxt(outfile, numpy.transpose([chain.x_morph_out, chain.y_morph_out]))
-            # Do not close stdout
+        header_verbose = f"{morphs_in}\n{morphs_out}"
 
         # Save to file
-        else:
-            try:
+        try:
+            if opts.savefile != "-":
                 with open(opts.savefile, 'w') as outfile:
+                    # Print out a header (more if verbose)
                     print(header, file=outfile)
-                    numpy.savetxt(outfile, numpy.transpose([chain.x_morph_out, chain.y_morph_out]))
-                    outfile.close()  # Close written file
+                    if opts.verbose:
+                        print(header_verbose, file=outfile)
 
-                    path_name = Path(outfile.name).absolute()
-                    save_message = f"\n# Morph saved to {path_name}"
+                    # Print table with label
+                    print("\n# Labels: [r] [gr]", file=outfile)
+                    numpy.savetxt(outfile, numpy.transpose([chain.x_morph_out, chain.y_morph_out]))
+
+                    # Indicate where data was saved to
+                    path_name = Path(outfile.name).resolve().as_posix()
+
+                    # Indicate successful save to terminal
+                    save_message = f"# Morph saved to {path_name}"
                     print(save_message)
-            except FileNotFoundError as e:
-                save_fail_message = "\nUnable to save to designated location"
-                print(save_fail_message)
-                parser.custom_error(str(e))
+
+            else:
+                # Just print table with label if save is to stdout
+                print("# Labels: [r] [gr]")
+                numpy.savetxt(sys.stdout, numpy.transpose([chain.x_morph_out, chain.y_morph_out]))
+        except FileNotFoundError as e:
+            save_fail_message = "Unable to save to designated location."
+            print(save_fail_message)
+            parser.custom_error(str(e))
 
     if opts.plot:
         pairlist = [chain.xy_morph_out, chain.xy_target_out]
@@ -556,6 +457,143 @@ def single_morph(parser, opts, pargs, stdout_flag):
     return morph_results
 
 
+def multiple_morphs(parser, opts, pargs, stdout_flag=True):
+    # Custom error messages since usage is distinct when --multiple tag is applied
+    if len(pargs) < 2:
+        parser.custom_error("You must supply FILE and DIRECTORY. Go to --help for usage.")
+    elif len(pargs) > 2:
+        parser.custom_error("Too many arguments. Go to --help for usage.")
+
+    # Parse paths
+    morph_file = Path(pargs[0])
+    if not morph_file.is_file():
+        parser.custom_error(f"{morph_file} is not a file. Go to --help for usage.")
+    target_directory = Path(pargs[1])
+    if not target_directory.is_dir():
+        parser.custom_error(f"{target_directory} is not a directory. Go to --help for usage.")
+
+    # Do not morph morph_file against itself if it is in the same directory
+    target_list = list(target_directory.iterdir())
+    if morph_file in target_list:
+        target_list.remove(morph_file)
+
+    # Format field name for printing and plotting
+    field = None
+    if opts.field is not None:
+        field_words = opts.field.split()
+        field = ""
+        for word in field_words:
+            field += f"{word[0].upper()}{word[1:].lower()}"
+    field_list = None
+
+    # Sort files in directory by some field
+    if field is not None:
+        try:
+            target_list, field_list = tools.field_sort(target_list, field, opts.reverse, opts.serfile,
+                                                       get_field_values=True)
+        except KeyError:
+            if opts.serfile is not None:
+                parser.custom_error("The requested field was not found in the metadata file.")
+            else:
+                parser.custom_error("The requested field is missing from a PDF file header.")
+    else:
+        # Default is alphabetical sort
+        target_list.sort(reverse=opts.reverse)
+
+    # Disable single morph plotting and saving
+    plot_opt = opts.plot
+    opts.plot = False
+    save_opt = opts.savefile
+    opts.savefile = None
+
+    # Morph morph_file against all other files in target_directory
+    results = {}
+    for target_file in target_list:
+        if target_file.is_file:
+            results.update({
+                target_file.name:
+                single_morph(parser, opts, [morph_file, target_file], stdout_flag=False),
+            })
+
+    # Parse rws
+    file_names = []
+    rws = []
+    pearsons = []
+    scales = []
+    stretches = []
+    smears = []
+    results_length = len(results.keys())
+    for key in results.keys():
+        file_names.append(key)
+        rws.append(results[key]["Rw"])
+        pearsons.append(results[key]["Pearson"])
+        if "scale" in results[key]:
+            scales.append(results[key]["scale"])
+        if "stretch" in results[key]:
+            stretches.append(results[key]["stretch"])
+        if "smear" in results[key]:
+            smears.append(results[key]["smear"])
+
+    # Input parameters used for every morph
+    inputs = [None, None]
+    inputs[0] = f"# Morphed file: {morph_file.name}"
+    inputs[1] = "\n# Input morphing parameters:"
+    inputs[1] += f"\n# scale = {opts.scale}"
+    inputs[1] += f"\n# stretch = {opts.stretch}"
+    inputs[1] += f"\n# smear = {opts.smear}"
+
+    # If print enabled
+    if stdout_flag:
+        # Inputs for the morph
+        print(f"\n{inputs[0]}{inputs[1]}")
+        # Verbose to get output for every morph
+        if opts.verbose:
+            # Print output for every morph (information repeated in a succint table below)
+            for key in results.keys():
+                outputs = f"\n# Target: {key}\n"
+                outputs += "# Optimized morphing parameters:\n"
+                outputs += "\n".join(f"# {param} = {results[key][param]:.6f}" for param in results[key].keys())
+                print(outputs)
+        # Print table labels
+        labels = "\n# Labels: [Target]"
+        if field is not None:
+            labels += f" [{field}]"
+        for param in [["Scale", scales], ["Stretch", stretches], ["Smear", smears]]:
+            if len(param[1]) > 0:
+                labels += f" [{param}]"
+        labels += " [Pearson] [Rw]"
+        print(labels)
+
+        # Print corresponding table
+        for idx in range(results_length):
+            row = f"{file_names[idx]}"
+            if field is not None:
+                row += f" {field_list[idx]}"
+            for param in [scales, stretches, smears]:
+                if len(param) > idx:
+                    row += f" {param[idx]}"
+            row += f" {pearsons[idx]} {rws[idx]}"
+            print(row)
+
+    if save_opt is not None:
+        # FIXME: Add save option for multiple morphs that saves all morphs to a directory
+        try:
+            pass
+        # Save failed
+        except FileNotFoundError as e:
+            save_fail_message = "\nUnable to save to designated location"
+            print(save_fail_message)
+            parser.custom_error(str(e))
+
+    if plot_opt:
+        if field_list is not None:
+            pdfplot.plot_rws(field_list, rws, field)
+        else:
+            pdfplot.plot_rws(file_names, rws)
+
+    return results
+
+
 def getPDFFromFile(fn):
     from diffpy.pdfmorph.tools import readPDF
 
@@ -569,6 +607,15 @@ def getPDFFromFile(fn):
         sys.exit(1)
 
     return r, gr
+
+
+def main():
+    parser = create_option_parser()
+    (opts, pargs) = parser.parse_args()
+    if opts.multiple:
+        multiple_morphs(parser, opts, pargs, stdout_flag=True)
+    else:
+        single_morph(parser, opts, pargs, stdout_flag=True)
 
 
 if __name__ == "__main__":
