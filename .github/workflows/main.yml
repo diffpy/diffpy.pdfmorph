@@ -50,9 +50,13 @@ jobs:
       - name: install diffpy.utils
         shell: bash -l {0}
         run: |
-          git clone https://github.com/Sparks29032/diffpy.utils.notests.git
+          git clone https://github.com/diffpy/diffpy.utils.git
+          cd diffpy.utils
+          rm run_tests.py
+          rm -r conda-recipe
+          rm -r src/diffpy/utils/tests
           conda activate test
-          pip install ./diffpy.utils.notests
+          pip install .
 
       - name: Validate pdfmorph
         shell: bash -l {0}
