@@ -18,6 +18,7 @@
 """
 
 
+import numpy
 from diffpy.pdfmorph.morphs.morph import *
 
 
@@ -50,12 +51,12 @@ class TransformXtalRDFtoPDF(Morph):
         Morph.morph(self, x_morph, y_morph, x_target, y_target)
         morph_baseline = self.baselineslope * self.x_morph_in
         target_baseline = self.baselineslope * self.x_target_in
-        self.y_target_out = self.y_target_in / self.x_target_in + target_baseline
-        if self.x_target_in[0] == 0:
-            self.y_target_out[0] = 0
-        self.y_morph_out = self.y_morph_in / self.x_morph_in + morph_baseline
-        if self.x_morph_in[0] == 0:
-            self.y_morph_out[0] = 0
+        with numpy.errstate(divide='ignore', invalid='ignore'):
+            self.y_target_out = self.y_target_in / self.x_target_in + target_baseline
+        self.y_target_out[self.x_target_in == 0] = 0
+        with numpy.errstate(divide='ignore', invalid='ignore'):
+            self.y_morph_out = self.y_morph_in / self.x_morph_in + morph_baseline
+        self.y_morph_out[self.x_target_in == 0] = 0
         return self.xyallout
 
 
