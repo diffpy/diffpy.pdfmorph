@@ -132,6 +132,23 @@ def deserialize(serial_file):
     return parsers.deserialize_data(serial_file)
 
 
+def case_insensitive_dictionary_search(key: str, dictionary: dict):
+    """Search for key in dictionary ignoring case.
+
+    :param key:
+    :param dictionary:
+
+    Returns corresponding value if key is in dictionary. None otherwise.
+    """
+
+    for ci_key in dictionary.keys():
+        if key.lower() == ci_key.lower():
+            key = ci_key
+            break
+
+    return dictionary.get(key)
+
+
 def field_sort(filepaths: list, field, reverse=False, serfile=None, get_field_values=False):
     """Sort a list of files by a field stored in header information.
     All files must contain this header information.
@@ -176,18 +193,30 @@ def field_sort(filepaths: list, field, reverse=False, serfile=None, get_field_va
         return [pair[0] for pair in files_field_values]
 
 
-def case_insensitive_dictionary_search(key: str, dictionary: dict):
-    """Search for key in dictionary ignoring case.
+def get_values_from_dictionary_collection(dictionary_collection: iter, target_key):
+    """In an (iterable) collection of dictionaries, search for a target key in each dictionary.
+    Return a list of all found values corresponding to that key.
 
-    :param key:
-    :param dictionary:
+    :param dictionary_collection:   The collection of dictionaries to search through.
+    :param target_key:              The key to search for in each dictionary. For each dictionary
+                                    in dictionary_collection that has that key, the corresponding
+                                    value is appended to a List called values.
 
-    Returns corresponding value if key is in dictionary. None otherwise.
+    :return: Returns the List of found values.
     """
 
-    for ci_key in dictionary.keys():
-        if key.lower() == ci_key.lower():
-            key = ci_key
-            break
+    # Store all values corresponding to the target_key into this list
+    values = []
 
-    return dictionary.get(key)
+    # Handle dictionary-type iterable
+    if type(dictionary_collection) is dict:
+        # Assume the dictionaries are stored in the values and keys indicate names of the dictionaries
+        dictionary_collection = dictionary_collection.values()
+    # All other type iterables are handled the same way as a list
+
+    # Perform the (case-insensitive) search
+    for entry in dictionary_collection:
+        search_result = case_insensitive_dictionary_search(target_key, entry)
+        if search_result is not None:
+            values.append(search_result)
+    return values

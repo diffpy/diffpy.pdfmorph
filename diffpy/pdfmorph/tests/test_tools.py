@@ -112,6 +112,28 @@ class TestTools:
         with pytest.raises(KeyError):
             tools.field_sort(path_sequence, "non_existing_field")
 
+    def test_get_values_from_dictionary_collection(self):
+        # Four dictionaries
+        dict1 = {"target": "this"}
+        dict2 = {"target": "forms", "false": "this"}
+        dict3 = {"false target": "does", "target": "a"}
+        dict4 = {"target": "sentence", "target2": "not"}
+
+        # Target sentence
+        target_list = ["this", "forms", "a", "sentence"]
+
+        # Various iterable collections of dictionaries
+        # No sets since dictionaries are not hashable
+        d_type = {"d1": dict1, "d2": dict2, "d3": dict3, "d4": dict4}
+        l_type = [dict1, dict2, dict3, dict4]
+        t_type = (dict1, dict2, dict3, dict4)
+        npa_type = numpy.array(l_type)
+        all_types = [d_type, l_type, t_type, npa_type]
+
+        # Check get_values_from_dictionary_collection output gives target
+        for collection_type in all_types:
+            assert tools.get_values_from_dictionary_collection(collection_type, target_key="target") == target_list
+
 
 # End of class TestTools
 

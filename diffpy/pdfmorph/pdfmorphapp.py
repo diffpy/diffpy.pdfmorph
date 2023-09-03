@@ -61,21 +61,23 @@ def create_option_parser():
     parser.add_option(
         '-s',
         '--save',
-        metavar="SLOC",
+        metavar="NAME",
         dest="saveloc",
-        help="""Save the manipulated PDF to a file SLOC. Use \'-\' for stdout.
-When --multiple is enabled, each manipulated PDF is saved to a directory SLOC.
-Names for each manipulated PDF can be specified using --snf.""",
+        help="""Save the manipulated PDF to a file named NAME. Use \'-\' for stdout.
+When --multiple is enabled, save each manipulated PDF as a file in a directory named NAME;
+you can specify names for each saved PDF file using --save-names-file.""",
     )
     parser.add_option(
         '--snf',
         '--save-names-file',
-        metavar="SNFILE",
+        metavar="NAMESFILE",
         dest="snfile",
-        help="""Used only when -s and --multiple are enabled.
+        help="""Used only when both -s and --multiple are enabled.
 Specify names for each manipulated PDF when saving (see -s) using a serial file
-SNFILE. Each target PDF should be an entry in SFILE with a key save_morph_as
-whose value specifies the name to save the manipulated PDF as.""",
+NAMESFILE. The format of NAMESFILE should be as follows: each target PDF
+is an entry in NAMESFILE. For each entry, there should be a key 'save_morph_as'
+whose value specifies the name to save the manipulated PDF as.
+(See sample names files in the pdfmorph tutorial).""",
     )
     parser.add_option(
         '-v',
@@ -109,10 +111,10 @@ FIELD must be included in the header of all the PDF files.""",
     )
     parser.add_option(
         '--serial-file',
-        metavar="SERFILE",
+        metavar="SERIAL",
         dest="serfile",
         help="""Look for FIELD in a serial file instead.
-Must specify name of serial file SERFILE.""",
+Must specify name of serial file SERIAL.""",
     )
     parser.add_option(
         '--rmin', type="float", help="Minimum r-value to use for PDF comparisons."
@@ -275,7 +277,7 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
     if len(pargs) < 2:
         parser.error("You must supply FILE1 and FILE2.")
     elif len(pargs) > 2:
-        parser.error("Too many arguments.")
+        parser.error("Too many arguments. Make sure you only supply FILE1 and FILE2.")
 
     # Get the PDFs
     x_morph, y_morph = getPDFFromFile(pargs[0])
@@ -474,9 +476,9 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
 def multiple_morphs(parser, opts, pargs, stdout_flag=True):
     # Custom error messages since usage is distinct when --multiple tag is applied
     if len(pargs) < 2:
-        parser.custom_error("You must supply FILE and DIRECTORY. Go to --help for usage.")
+        parser.custom_error("You must supply FILE and DIRECTORY. See --multiple under --help for usage.")
     elif len(pargs) > 2:
-        parser.custom_error("Too many arguments. Go to --help for usage.")
+        parser.custom_error("Too many arguments. You must only supply a FILE and a DIRECTORY.")
 
     # Parse paths
     morph_file = Path(pargs[0])
@@ -561,24 +563,16 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
                     single_morph(parser, opts, pargs, stdout_flag=False),
             })
 
-    # Parse rws
+    # Parse all parameters from results
     file_names = []
-    rws = []
-    pearsons = []
-    scales = []
-    stretches = []
-    smears = []
     results_length = len(results.keys())
     for key in results.keys():
         file_names.append(key)
-        rws.append(results[key]["Rw"])
-        pearsons.append(results[key]["Pearson"])
-        if "scale" in results[key]:
-            scales.append(results[key]["scale"])
-        if "stretch" in results[key]:
-            stretches.append(results[key]["stretch"])
-        if "smear" in results[key]:
-            smears.append(results[key]["smear"])
+    scales = tools.get_values_from_dictionary_collection(results, "scale")
+    smears = tools.get_values_from_dictionary_collection(results, "smear")
+    stretches = tools.get_values_from_dictionary_collection(results, "stretch")
+    pearsons = tools.get_values_from_dictionary_collection(results, "pearson")
+    rws = tools.get_values_from_dictionary_collection(results, "rw")
 
     # Input parameters used for every morph
     inputs = [None, None]
