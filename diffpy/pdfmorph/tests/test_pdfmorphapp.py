@@ -2,7 +2,12 @@
 
 import pytest
 from pathlib import Path
-import filecmp
+
+# Support Python 2
+try:
+    from future_builtins import filter, zip
+except ImportError:
+    pass
 
 from diffpy.pdfmorph.pdfmorphapp import create_option_parser, single_morph, multiple_morphs
 
@@ -137,6 +142,13 @@ class TestApp:
         assert s_sequence_results == sequence_results
 
     def test_morph_outputs(self, setup_morphsequence, tmp_path):
+        # Ignore PATH data when comparing files
+        def ignore_path(line):
+            # Lines containing PATH data begin with '# from '
+            if "# from " in line:
+                return False
+            return True
+
         morph_file = self.testfiles[0]
         target_file = self.testfiles[-1]
 
@@ -159,10 +171,16 @@ class TestApp:
         # Check the saved files are the same for succinct
         common = []
         for item in tmp_succinct.glob('**/*.*'):
-            common.append(item.resolve().as_posix())
-        assert filecmp.cmpfiles(tmp_succinct, test_saving_succinct, common=common)
+            if item.is_file():
+                common.append(item.relative_to(tmp_succinct).as_posix())
+        for file in common:
+            with open(tmp_succinct.joinpath(file)) as gf:
+                with open(test_saving_succinct.joinpath(file)) as tf:
+                    generated = filter(ignore_path, gf)
+                    target = filter(ignore_path, tf)
+                    assert all(x == y for x, y in zip(generated, target))
 
-        # Save multiple succinct morphs
+        # Save multiple verbose morphs
         tmp_verbose = tmp_path.joinpath("verbose")
         tmp_verbose_name = tmp_verbose.resolve().as_posix()
 
@@ -171,18 +189,24 @@ class TestApp:
         pargs = [morph_file, testsequence_dir]
         multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
 
-        # Save a single succinct morph
-        ssm = tmp_verbose.joinpath("single_succinct_morph.cgr")
-        ssm_name = ssm.resolve().as_posix()
-        (opts, pargs) = self.parser.parse_args(["-s", ssm_name, "-n", "--verbose"])
+        # Save a single verbose morph
+        svm = tmp_verbose.joinpath("single_verbose_morph.cgr")
+        svm_name = svm.resolve().as_posix()
+        (opts, pargs) = self.parser.parse_args(["-s", svm_name, "-n", "--verbose"])
         pargs = [morph_file, target_file]
         single_morph(self.parser, opts, pargs, stdout_flag=False)
 
         # Check the saved files are the same for verbose
         common = []
         for item in tmp_verbose.glob('**/*.*'):
-            common.append(item.resolve().as_posix())
-        assert filecmp.cmpfiles(tmp_verbose, test_saving_verbose, common=common)
+            if item.is_file():
+                common.append(item.relative_to(tmp_verbose).as_posix())
+        for file in common:
+            with open(tmp_verbose.joinpath(file)) as gf:
+                with open(test_saving_verbose.joinpath(file)) as tf:
+                    generated = filter(ignore_path, gf)
+                    target = filter(ignore_path, tf)
+                    assert all(x == y for x, y in zip(generated, target))
 
 
 if __name__ == '__main__':

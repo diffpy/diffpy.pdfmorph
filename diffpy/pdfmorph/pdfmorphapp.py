@@ -396,17 +396,19 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
     chain[0] = morphs.Morph()
     chain(x_morph, y_morph, x_target, y_target)
 
-    morphs_in = "\n# Input morphing parameters:"
-    morphs_in += f"\n# scale = {scale_in}"
-    morphs_in += f"\n# stretch = {stretch_in}"
-    morphs_in += f"\n# smear = {smear_in}\n"
+    # Input morph parameters
+    morph_inputs = {"scale": scale_in, "stretch": stretch_in, "smear": smear_in}
 
     # Output morph parameters
     morph_results = dict(config.items())
-
     # Ensure Rw, Pearson last two outputs
     morph_results.update({"Rw": rw})
     morph_results.update({"Pearson": pcc})
+
+    # Printing to terminal
+
+    morphs_in = "\n# Input morphing parameters:\n"
+    morphs_in += "\n".join(f"# {key} = {morph_inputs[key]}" for key in morph_inputs.keys()) + "\n"
 
     morphs_out = "# Optimized morphing parameters:\n"
     morphs_out += "\n".join(f"# {key} = {morph_results[key]:.6f}" for key in morph_results.keys())
