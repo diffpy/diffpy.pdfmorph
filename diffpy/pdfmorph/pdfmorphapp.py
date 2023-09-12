@@ -18,13 +18,14 @@ from __future__ import print_function
 import sys
 from pathlib import Path
 
+from diffpy.pdfmorph import __save_morph_as__
 from diffpy.pdfmorph.version import __version__
 import diffpy.pdfmorph.tools as tools
 import diffpy.pdfmorph.pdfplot as pdfplot
 import diffpy.pdfmorph.morphs as morphs
 import diffpy.pdfmorph.morph_helpers as helpers
 import diffpy.pdfmorph.refine as refine
-from diffpy.pdfmorph.pdfmorph_io import single_morph_output, multiple_morph_output, tabulate_results
+import diffpy.pdfmorph.pdfmorph_io as io
 
 
 def create_option_parser():
@@ -71,13 +72,13 @@ you can specify names for each saved PDF file using --save-names-file.""",
         '--snf',
         '--save-names-file',
         metavar="NAMESFILE",
-        dest="snfile",
-        help="""Used only when both -s and --multiple are enabled.
+        dest="snamesfile",
+        help=f"""Used only when both -s and --multiple are enabled.
 Specify names for each manipulated PDF when saving (see -s) using a serial file
 NAMESFILE. The format of NAMESFILE should be as follows: each target PDF
-is an entry in NAMESFILE. For each entry, there should be a key 'save_morph_as'
+is an entry in NAMESFILE. For each entry, there should be a key {__save_morph_as__}
 whose value specifies the name to save the manipulated PDF as.
-(See sample names files in the pdfmorph tutorial).""",
+(See sample names files in the PDFmorph tutorial).""",
     )
     parser.add_option(
         '-v',
@@ -407,15 +408,14 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
 
     # Print summary to terminal and save morph to file if requested
     try:
-        single_morph_output(morph_inputs, morph_results,
-                            save_file=opts.slocation, morph_file=pargs[0],
-                            xy_out=[chain.x_morph_out, chain.y_morph_out],
-                            verbose=opts.verbose, stdout_flag=stdout_flag)
+        io.single_morph_output(morph_inputs, morph_results,
+                               save_file=opts.slocation, morph_file=pargs[0],
+                               xy_out=[chain.x_morph_out, chain.y_morph_out],
+                               verbose=opts.verbose, stdout_flag=stdout_flag)
 
-    except FileNotFoundError as e:
+    except (FileNotFoundError, RuntimeError) as e:
         save_fail_message = "Unable to save to designated location."
-        print(save_fail_message)
-        parser.custom_error(str(e))
+        parser.custom_error(save_fail_message)
 
     if opts.plot:
         pairlist = [chain.xy_morph_out, chain.xy_target_out]
@@ -449,7 +449,6 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
 
     # Parse paths
     morph_file = Path(pargs[0])
-    target_directory = Path(pargs[1])
     if not morph_file.is_file():
         parser.custom_error(f"{morph_file} is not a file. Go to --help for usage.")
     target_directory = Path(pargs[1])
@@ -489,33 +488,25 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
     opts.plot = False
 
     # Set up saving
-    save_directory = opts.slocation
-    save_names = {}
-    save_morphs_here = ""
+    save_directory = opts.slocation  # User-given directory for saves
+    save_names_file = opts.snamesfile  # User-given serialfile with names for each morph
+    save_morphs_here = None  # Subdirectory for saving morphed PDFs
+    save_names = {}  # Dictionary of names to save each morph as
     if save_directory is not None:
         try:
-            # Make directory to save files in if it does not already exist
-            Path(save_directory).mkdir(parents=True, exist_ok=True)
+            save_morphs_here = io.create_morphs_directory(save_directory)
 
-            # Morphs will be saved in the subdirectory "Morphs"
-            save_morphs_here = Path(save_directory).joinpath("Morphs")
-            save_morphs_here.mkdir(exist_ok=True)
-
-            # Get names for the saved morphs
-            if opts.snfile is not None:
-                # Names should be stored properly in opts.snfile
-                save_names = tools.deserialize(opts.snfile)
-            # Default naming scheme
-            else:
-                for target_file in target_list:
-                    save_names.update({target_file.name: {"save_morph_as":
-                                                          f"Morph_with_Target_{target_file.stem}.cgr"}})
-
-        # Could not create directory
-        except FileNotFoundError as e:
+        # Could not create directory or find names to save morphs as
+        except (FileNotFoundError, RuntimeError) as e:
             save_fail_message = "\nUnable to create directory"
-            print(save_fail_message)
-            parser.custom_error(str(e))
+            parser.custom_error(save_fail_message)
+
+        try:
+            save_names = io.get_multisave_names(target_list, save_names_file=save_names_file)
+            # Could not create directory or find names to save morphs as
+        except FileNotFoundError:
+            save_fail_message = "\nUnable to read from save names file"
+            parser.custom_error(save_fail_message)
 
     # Morph morph_file against all other files in target_directory
     morph_results = {}
@@ -523,7 +514,8 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
         if target_file.is_file:
             # Set the save file destination to be a file within the SLOC directory
             if save_directory is not None:
-                opts.slocation = Path(save_morphs_here).joinpath(save_names.get(target_file.name).get("save_morph_as"))
+                save_as = save_names[target_file.name][__save_morph_as__]
+                opts.slocation = Path(save_morphs_here).joinpath(save_as)
             # Perform a morph of morph_file against target_file
             pargs = [morph_file, target_file]
             morph_results.update({
@@ -539,18 +531,18 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
 
     try:
         # Print summary of morphs to terminal and to file (if requested)
-        multiple_morph_output(morph_inputs, morph_results, target_file_names,
-                              save_directory=save_directory, morph_file=morph_file, target_directory=target_directory,
-                              field=field, field_list=field_list, verbose=opts.verbose, stdout_flag=stdout_flag)
-    except FileNotFoundError as e:
+        io.multiple_morph_output(morph_inputs, morph_results, target_file_names,
+                                 save_directory=save_directory, morph_file=morph_file,
+                                 target_directory=target_directory, field=field, field_list=field_list,
+                                 verbose=opts.verbose, stdout_flag=stdout_flag)
+    except (FileNotFoundError, RuntimeError) as e:
         save_fail_message = "Unable to save summary to directory."
-        print(save_fail_message)
-        parser.custom_error(str(e))
+        parser.custom_error(save_fail_message)
 
     # Plot the rw values for each target if requested
     # FIXME: create functionality to plot other data (scale, stretch, smear, etc.)
     if plot_opt:
-        plot_results = tabulate_results(morph_results)
+        plot_results = io.tabulate_results(morph_results)
         if field_list is not None:
             pdfplot.plot_rws(field_list, plot_results["Rw"], field)
         else:
