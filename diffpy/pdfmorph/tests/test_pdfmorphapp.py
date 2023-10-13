@@ -63,6 +63,8 @@ class TestApp:
         assert len(n_args) == 1  # Check one leftover
 
     def test_parser_systemexits(self, setup_parser):
+        # ###Basic tests for any variety of morphing###
+
         # Ensure only two pargs given for morphing
         (opts, pargs) = self.parser.parse_args(["toofewfiles"])
         with pytest.raises(SystemExit):
@@ -80,6 +82,7 @@ class TestApp:
         with pytest.raises(SystemExit):
             single_morph(self.parser, opts, pargs, stdout_flag=False)
 
+        # ###Tests exclusive to multiple morphs###
         # Make sure we save to a directory that exists (user must create the directory if non-existing)
         (opts, pargs) = self.parser.parse_args([f"{nickel_PDF}", f"{nickel_PDF}", "-s",
                                                 "/nonexisting_directory/no_way_this_exists/nonexisting_path"])
@@ -101,7 +104,17 @@ class TestApp:
         with pytest.raises(SystemExit):
             multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
         (opts, pargs) = self.parser.parse_args([f"{nickel_PDF}", f"{testsequence_dir}", "--sort-by", "fake_field",
-                                               "--serial-file", f"{serial_JSON}"])
+                                                "--serial-file", f"{serial_JSON}"])
+        with pytest.raises(SystemExit):
+            multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+
+        # Try plotting an unknown parameter
+        (opts, pargs) = self.parser.parse_args([f"{nickel_PDF}", f"{testsequence_dir}", "--plot-parameter", "unknown"])
+        with pytest.raises(SystemExit):
+            multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+
+        # Try plotting an unrefined parameter
+        (opts, pargs) = self.parser.parse_args([f"{nickel_PDF}", f"{testsequence_dir}", "--plot-parameter", "stretch"])
         with pytest.raises(SystemExit):
             multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
 

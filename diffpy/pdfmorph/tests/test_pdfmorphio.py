@@ -51,7 +51,7 @@ class TestApp:
         tmp_succinct_name = tmp_succinct.resolve().as_posix()
 
         (opts, pargs) = self.parser.parse_args(["--multiple", "--sort-by", "temperature", "-s", tmp_succinct_name,
-                                                "-n", "--snf", tssf])
+                                                "-n", "--save-names-file", tssf])
         pargs = [morph_file, testsequence_dir]
         multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
 
@@ -79,7 +79,7 @@ class TestApp:
         tmp_verbose_name = tmp_verbose.resolve().as_posix()
 
         (opts, pargs) = self.parser.parse_args(["--multiple", "--sort-by", "temperature", "-s", tmp_verbose_name,
-                                                "-n", "--snf", tssf, "--verbose"])
+                                                "-n", "--save-names-file", tssf, "--verbose"])
         pargs = [morph_file, testsequence_dir]
         multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
 

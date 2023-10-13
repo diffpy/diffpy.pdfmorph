@@ -212,7 +212,7 @@ def pdfmorph(
             if "scale" in refpars:
                 rptemp.append("scale")
             refiner.refine(*rptemp)
-        # Refine all params
+        # Refine all param_list
         refiner.refine(*refpars)
     else:
         # no operation if refine=False or refpars is empty list

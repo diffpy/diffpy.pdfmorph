@@ -208,13 +208,15 @@ def comparePDFs(
     return
 
 
-def plot_rws(target_labels, rws, field=None):
+def plot_param(target_labels, param_list, param_name=None, field=None):
     """
     Plot Rw values for multiple morphs.
     :param target_labels: Names (or field if --sort-by given) of each file acting as target for the morph.
     :type target_labels: list
-    :param rws: Contains the Rw values corresponding to each file.
-    :type rws: list
+    :param param_list: Contains the values of some parameter corresponding to each file.
+    :type param_list: list
+    :param param_name: Name of the parameter.
+    :type param_name: str
     :param field: When not None and entries in field are numerical, a line chart of Rw versus field is made.
                   When None (default) or values are non-numerical, it plots a bar chart of Rw values per file.
     :type field: list or None
@@ -245,9 +247,10 @@ def plot_rws(target_labels, rws, field=None):
                 numerical = False
 
     if numerical:
-        # Plot Rw vs Temperature
-        plt.plot(target_labels, rws, linestyle='-', marker='o')
-        plt.ylabel(r"$R_w$")
+        # Plot the parameter against a numerical field
+        plt.plot(target_labels, param_list, linestyle='-', marker='o')
+        if param_name is not None:
+            plt.ylabel(rf"{param_name}")
         plt.xlabel(rf"{field}")
         plt.minorticks_on()
 
@@ -263,8 +266,9 @@ def plot_rws(target_labels, rws, field=None):
         plt.xticks(rotation=angle)
 
         # Plot Rw for each file
-        plt.bar(target_labels, rws)
-        plt.ylabel(r"$R_w$")
+        plt.bar(target_labels, param_list)
+        if param_name is not None:
+            plt.ylabel(rf"{param_name}")
         if field is None:
             plt.xlabel(r"Target File")
         else:
