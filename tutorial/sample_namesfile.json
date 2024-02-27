@@ -1,0 +1,13 @@
+{
+  "target1.gr": {
+    "save_morph_as": "name.extension"
+  },
+  "target2.gr": {
+    "save_morph_as": "another_name.extension",
+    "other_information": "[optional]"
+  },
+  "target3.gr": {
+    "SaVe_MoRph_As": "this_also_works.extension",
+    "note": "Capitalization does NOT matter. The program is case insensitive."
+  }
+}

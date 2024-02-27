@@ -15,6 +15,7 @@
 """Collection of plotting functions for PDFs."""
 
 import matplotlib.pyplot as plt
+import diffpy.pdfmorph.tools as tools
 from bg_mpl_stylesheet.bg_mpl_stylesheet import bg_mpl_style
 import numpy
 
@@ -203,6 +204,79 @@ def comparePDFs(
         )
     if show:
         plt.show()
+
+    return
+
+
+def plot_param(target_labels, param_list, param_name=None, field=None):
+    """
+    Plot Rw values for multiple morphs.
+    :param target_labels: Names (or field if --sort-by given) of each file acting as target for the morph.
+    :type target_labels: list
+    :param param_list: Contains the values of some parameter corresponding to each file.
+    :type param_list: list
+    :param param_name: Name of the parameter.
+    :type param_name: str
+    :param field: When not None and entries in field are numerical, a line chart of Rw versus field is made.
+                  When None (default) or values are non-numerical, it plots a bar chart of Rw values per file.
+    :type field: list or None
+    """
+
+    # ensure all entries in target_labels are distinct for plotting
+    unique_labels = set()
+    for idx in range(len(target_labels)):
+        item = target_labels[idx]
+        # if repeat found, add additional label
+        if item in unique_labels:
+            counter = 1
+            new_name = f"{item} ({counter})"
+            while new_name in unique_labels:
+                counter += 1
+                new_name = f"{item} ({counter})"
+            item = new_name
+            target_labels[idx] = item
+        unique_labels.update({item})
+
+    # Check if numerical field
+    numerical = True
+    if field is None:
+        numerical = False
+    else:
+        for item in target_labels:
+            if type(item) is not float:
+                numerical = False
+
+    if numerical:
+        # Plot the parameter against a numerical field
+        plt.plot(target_labels, param_list, linestyle='-', marker='o')
+        if param_name is not None:
+            plt.ylabel(rf"{param_name}")
+        plt.xlabel(rf"{field}")
+        plt.minorticks_on()
+
+    # Create bar chart for each file
+    else:
+        # Ensure file names do not crowd
+        bar_size = 1  # FIXME: depends on resolution
+        max_len = bar_size
+        for item in target_labels:
+            max_len = max(max_len, len(item))
+        angle = numpy.arccos(bar_size / max_len)
+        angle *= 180 / numpy.pi  # Convert to degrees
+        plt.xticks(rotation=angle)
+
+        # Plot Rw for each file
+        plt.bar(target_labels, param_list)
+        if param_name is not None:
+            plt.ylabel(rf"{param_name}")
+        if field is None:
+            plt.xlabel(r"Target File")
+        else:
+            plt.xlabel(rf"{field}")
+
+    # Show plot
+    plt.tight_layout()
+    plt.show()
 
     return
 

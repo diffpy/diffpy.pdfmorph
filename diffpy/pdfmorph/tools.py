@@ -19,6 +19,7 @@
 
 
 import numpy
+import diffpy.utils.parsers as parsers
 
 
 def estimateScale(y_morph_in, y_target_in):
@@ -113,9 +114,109 @@ def readPDF(fname):
 
 
 def nn_value(val, name):
-    # Convenience function for ensuring certain non-negative inputs
+    """Convenience function for ensuring certain non-negative inputs."""
     if val < 0:
         negative_value_warning = f"\n# Negative value for {name} given. Using absolute value instead."
         print(negative_value_warning)
         return -val
     return val
+
+
+def deserialize(serial_file):
+    """Call deserialize_data from diffpy.utils.
+
+    serial_file -- name of file to deserialize.
+
+    Return a Dictonary of data read from serial file.
+    """
+    return parsers.deserialize_data(serial_file)
+
+
+def case_insensitive_dictionary_search(key: str, dictionary: dict):
+    """Search for key in dictionary ignoring case.
+
+    :param key:
+    :param dictionary:
+
+    Returns corresponding value if key is in dictionary. None otherwise.
+    """
+
+    for ci_key in dictionary.keys():
+        if key.lower() == ci_key.lower():
+            key = ci_key
+            break
+
+    return dictionary.get(key)
+
+
+def field_sort(filepaths: list, field, reverse=False, serfile=None, get_field_values=False):
+    """Sort a list of files by a field stored in header information.
+    All files must contain this header information.
+
+    filepaths           -- List of paths to files that we want to sort.
+    field               -- the field we want to sort by. Not case-sensitive.
+    reverse             -- sort in reverse alphabetical/numerical order.
+    serfile             -- path to a serial file with field information for each file.
+    get_field_values    -- Boolean indicating whether to also return a List of field values (default False).
+                           This List of field values is parallel to the sorted list of filepaths with items
+                           in the same position corresponding to each other.
+
+    Return sorted List of paths. When get_fv is true, also return an associated field list.
+    """
+
+    # Get the field from each file
+    files_field_values = []
+    if serfile is None:
+        for path in filepaths:
+            fhd = parsers.loadData(path, headers=True)
+            files_field_values.append([path, case_insensitive_dictionary_search(field, fhd)])
+    else:
+        # deserialize the serial file
+        des_dict = parsers.deserialize_data(serfile)
+
+        # get names of each file to search the serial file
+        import pathlib
+        for path in filepaths:
+            name = pathlib.Path(path).name
+            fv = case_insensitive_dictionary_search(field, des_dict.get(name))
+            files_field_values.append([path, fv])
+
+    # Sort files by field, reverse if reverse flag true
+    try:
+        files_field_values.sort(key=lambda entry: entry[1], reverse=reverse)
+    # Raised if fields for any file are missing
+    except (ValueError, TypeError) as e:
+        raise KeyError("Field missing.")
+    if get_field_values:
+        return [pair[0] for pair in files_field_values], [pair[1] for pair in files_field_values]
+    else:
+        return [pair[0] for pair in files_field_values]
+
+
+def get_values_from_dictionary_collection(dictionary_collection: iter, target_key):
+    """In an (iterable) collection of dictionaries, search for a target key in each dictionary.
+    Return a list of all found values corresponding to that key.
+
+    :param dictionary_collection:   The collection of dictionaries to search through.
+    :param target_key:              The key to search for in each dictionary. For each dictionary
+                                    in dictionary_collection that has that key, the corresponding
+                                    value is appended to a List called values.
+
+    :return: Returns the List of found values.
+    """
+
+    # Store all values corresponding to the target_key into this list
+    values = []
+
+    # Handle dictionary-type iterable
+    if type(dictionary_collection) is dict:
+        # Assume the dictionaries are stored in the values and keys indicate names of the dictionaries
+        dictionary_collection = dictionary_collection.values()
+    # All other type iterables are handled the same way as a list
+
+    # Perform the (case-insensitive) search
+    for entry in dictionary_collection:
+        search_result = case_insensitive_dictionary_search(target_key, entry)
+        if search_result is not None:
+            values.append(search_result)
+    return values

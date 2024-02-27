@@ -2,7 +2,7 @@
 
 
 import os
-import unittest
+import pytest
 
 import numpy
 
@@ -14,8 +14,9 @@ tests_dir = os.path.dirname(os.path.abspath(thisfile))
 from diffpy.pdfmorph.morphs.morphstretch import MorphStretch
 
 
-class TestMorphStretch(unittest.TestCase):
-    def setUp(self):
+class TestMorphStretch:
+    @pytest.fixture
+    def setup(self):
         self.x_morph = numpy.arange(0.01, 5, 0.01)
         # A step function between 2 and 3
         self.y_morph = heaviside(self.x_morph, 1, 2)
@@ -23,7 +24,7 @@ class TestMorphStretch(unittest.TestCase):
         self.y_target = self.x_target.copy()
         return
 
-    def test_morph(self):
+    def test_morph(self, setup):
         """check MorphStretch.morph()"""
         morph = MorphStretch()
 
@@ -32,7 +33,7 @@ class TestMorphStretch(unittest.TestCase):
         x_morph, y_morph, x_target, y_target = morph(self.x_morph, self.y_morph, self.x_target, self.y_target)
 
         # Target should be unchanged
-        self.assertTrue(numpy.allclose(self.y_target, y_target))
+        assert numpy.allclose(self.y_target, y_target)
 
         # Compare to new function. Note that due to interpolation, there will
         # be issues at the boundary of the step function. This will distort up
@@ -40,14 +41,14 @@ class TestMorphStretch(unittest.TestCase):
         # be off by at most 0.5.
         newstep = heaviside(x_morph, 1.5, 3)
         res = sum(numpy.fabs(newstep - y_morph))
-        self.assertTrue(res < 1)
+        assert res < 1
 
         # Stretch by -10%
         morph.stretch = -0.1
         x_morph, y_morph, x_target, y_target = morph(self.x_morph, self.y_morph, self.x_target, self.y_target)
 
         # Target should be unchanged
-        self.assertTrue(numpy.allclose(self.y_target, y_target))
+        assert numpy.allclose(self.y_target, y_target)
 
         # Compare to new function. Note that due to interpolation, there will
         # be issues at the boundary of the step function. This will distort up
@@ -55,7 +56,7 @@ class TestMorphStretch(unittest.TestCase):
         # be off by at most 0.5.
         newstep = heaviside(x_morph, 0.9, 1.8)
         res = sum(numpy.fabs(newstep - y_morph))
-        self.assertTrue(res < 1)
+        assert res < 1
         return
 
 
@@ -71,6 +72,6 @@ def heaviside(x, lb, ub):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    TestMorphStretch()
 
 # End of file

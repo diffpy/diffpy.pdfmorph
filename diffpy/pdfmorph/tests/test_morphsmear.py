@@ -2,7 +2,7 @@
 
 
 import os
-import unittest
+import pytest
 
 import numpy
 
@@ -14,8 +14,9 @@ tests_dir = os.path.dirname(os.path.abspath(thisfile))
 from diffpy.pdfmorph.morphs.morphsmear import MorphSmear
 
 
-class TestMorphSmear(unittest.TestCase):
-    def setUp(self):
+class TestMorphSmear:
+    @pytest.fixture
+    def setup(self):
         self.smear = 0.1
         self.r0 = 7 * numpy.pi / 22.0 * 2
         self.x_morph = numpy.arange(0.01, 5, 0.01)
@@ -24,7 +25,7 @@ class TestMorphSmear(unittest.TestCase):
         self.y_target = self.x_target.copy()
         return
 
-    def test_morph(self):
+    def test_morph(self, setup):
         """check MorphSmear.morph()"""
         morph = MorphSmear()
         morph.smear = 0.15
@@ -32,20 +33,20 @@ class TestMorphSmear(unittest.TestCase):
         x_morph, y_morph, x_target, y_target = morph(self.x_morph, self.y_morph, self.x_target, self.y_target)
 
         # Target should be unchanged
-        self.assertTrue(numpy.allclose(self.y_target, y_target))
+        assert numpy.allclose(self.y_target, y_target)
 
         # Compare to broadened Gaussian
         sigbroad = (self.smear**2 + morph.smear**2) ** 0.5
         ysmear = numpy.exp(-0.5 * ((self.x_morph - self.r0) / sigbroad) ** 2)
         ysmear *= self.smear / sigbroad
 
-        self.assertTrue(numpy.allclose(ysmear, y_morph))
+        assert numpy.allclose(ysmear, y_morph)
         return
 
 
 # End of class TestMorphSmear
 
 if __name__ == '__main__':
-    unittest.main()
+    TestMorphSmear()
 
 # End of file

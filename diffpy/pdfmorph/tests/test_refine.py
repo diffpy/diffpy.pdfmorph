@@ -2,7 +2,7 @@
 
 
 import os
-import unittest
+import pytest
 
 import numpy
 
@@ -20,15 +20,16 @@ from diffpy.pdfmorph.morph_helpers.transformrdftopdf import TransformXtalRDFtoPD
 from diffpy.pdfmorph.refine import Refiner
 
 
-class TestRefine(unittest.TestCase):
-    def setUp(self):
+class TestRefine:
+    @pytest.fixture
+    def setup(self):
         self.x_morph = numpy.arange(0.01, 5, 0.01)
         self.y_morph = numpy.ones_like(self.x_morph)
         self.x_target = numpy.arange(0.01, 5, 0.01)
         self.y_target = 3 * numpy.ones_like(self.x_target)
         return
 
-    def test_refine_morph(self):
+    def test_refine_morph(self, setup):
         """refine a morph"""
         # Define the morphs
         config = {
@@ -41,12 +42,12 @@ class TestRefine(unittest.TestCase):
 
         x_morph, y_morph, x_target, y_target = mscale.xyallout
 
-        self.assertTrue((x_morph == x_target).all())
-        self.assertTrue(numpy.allclose(y_morph, y_target))
-        self.assertAlmostEqual(config["scale"], 3.0)
+        assert (x_morph == x_target).all()
+        assert numpy.allclose(y_morph, y_target)
+        pytest.approx(config["scale"], 3.0)
         return
 
-    def test_refine_chain(self):
+    def test_refine_chain(self, setup):
         """refine a chain"""
         # Give this some texture
         self.y_morph[30:] = 5
@@ -68,17 +69,18 @@ class TestRefine(unittest.TestCase):
         x_morph, y_morph, x_target, y_target = chain.xyallout
         err = 15.0 * 2
         res = sum(numpy.fabs(y_target - y_morph))
-        self.assertTrue(res < err)
-        self.assertAlmostEqual(chain.scale, 3, 2)
-        self.assertAlmostEqual(chain.stretch, 0.1, 2)
+        assert res < err
+        pytest.approx(chain.scale, 3, 2)
+        pytest.approx(chain.stretch, 0.1, 2)
         return
 
 
 # End of class TestRefine
 
 
-class TestRefineUC(unittest.TestCase):
-    def setUp(self):
+class TestRefineUC:
+    @pytest.fixture
+    def setup(self):
         morph_file = os.path.join(testdata_dir, "nickel_ss0.01.cgr")
         self.x_morph, self.y_morph = numpy.loadtxt(morph_file, unpack=True, skiprows=8)
         target_file = os.path.join(testdata_dir, "nickel_ss0.02_eps0.002.cgr")
@@ -86,7 +88,7 @@ class TestRefineUC(unittest.TestCase):
         self.y_target *= 1.5
         return
 
-    def test_refine(self):
+    def test_refine(self, setup):
         config = {
             "scale": 1.0,
             "stretch": 0,
@@ -117,11 +119,12 @@ class TestRefineUC(unittest.TestCase):
         yrsel = y_target[sel]
         diff = yrsel - y_morph[sel]
         rw = (numpy.dot(diff, diff) / numpy.dot(yrsel, yrsel)) ** 0.5
-        self.assertTrue(rw < 0.01)
+        assert rw < 0.01
         return
 
 
 if __name__ == '__main__':
-    unittest.main()
+    TestRefine()
+    TestRefineUC()
 
 # End of file

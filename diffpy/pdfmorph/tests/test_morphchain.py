@@ -2,7 +2,7 @@
 
 
 import os
-import unittest
+import pytest
 
 import numpy
 
@@ -16,8 +16,9 @@ from diffpy.pdfmorph.morphs.morphscale import MorphScale
 from diffpy.pdfmorph.morphs.morphrgrid import MorphRGrid
 
 
-class TestMorphChain(unittest.TestCase):
-    def setUp(self):
+class TestMorphChain:
+    @pytest.fixture
+    def setup(self):
         self.x_morph = numpy.arange(0.01, 5, 0.01)
         self.y_morph = numpy.ones_like(self.x_morph)
         self.x_target = numpy.arange(0.01, 5, 0.01)
@@ -25,7 +26,7 @@ class TestMorphChain(unittest.TestCase):
 
         return
 
-    def test_morph(self):
+    def test_morph(self, setup):
         """check MorphChain.morph()"""
         # Define the morphs
         config = {
@@ -41,20 +42,20 @@ class TestMorphChain(unittest.TestCase):
 
         x_morph, y_morph, x_target, y_target = chain(self.x_morph, self.y_morph, self.x_target, self.y_target)
 
-        self.assertTrue((x_morph == x_target).all())
-        self.assertAlmostEqual(x_morph[0], 1.0)
-        self.assertAlmostEqual(x_morph[-1], 4.9)
-        self.assertAlmostEqual(x_morph[1] - x_morph[0], 0.1)
-        self.assertAlmostEqual(x_morph[0], mgrid.rmin)
-        self.assertAlmostEqual(x_morph[-1], mgrid.rmax - mgrid.rstep)
-        self.assertAlmostEqual(x_morph[1] - x_morph[0], mgrid.rstep)
-        self.assertTrue(numpy.allclose(y_morph, y_target))
+        assert (x_morph == x_target).all()
+        pytest.approx(x_morph[0], 1.0)
+        pytest.approx(x_morph[-1], 4.9)
+        pytest.approx(x_morph[1] - x_morph[0], 0.1)
+        pytest.approx(x_morph[0], mgrid.rmin)
+        pytest.approx(x_morph[-1], mgrid.rmax - mgrid.rstep)
+        pytest.approx(x_morph[1] - x_morph[0], mgrid.rstep)
+        assert numpy.allclose(y_morph, y_target)
         return
 
 
 # End of class TestMorphChain
 
 if __name__ == '__main__':
-    unittest.main()
+    TestMorphChain()
 
 # End of file

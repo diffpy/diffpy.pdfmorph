@@ -17,9 +17,12 @@
 """
 
 # obtain version information
-__version__ = '0.0.1'
+from diffpy.pdfmorph.version import __version__
 
 # top-level import
 from diffpy.pdfmorph.pdfmorph_api import pdfmorph, morph_default_config, plot_morph
+
+# key used when saving multiple morphs
+__save_morph_as__ = "save_morph_as"
 
 # End of file
