@@ -104,8 +104,8 @@ or ::
 
 	conda config --add channels conda-forge
 	conda install diffpy.pdfmorph
-
-If you don't use conda or prefer to install from sources, please 
+ 
+If you do not use conda or prefer to install from sources, please 
 consult online documentation.
 
 With conda, PDFmorph can be later upgraded to the latest released
