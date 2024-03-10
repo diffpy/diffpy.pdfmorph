@@ -9,6 +9,7 @@
 PDFmorph
 ========================================================================
 
+
 PDFmorph is a Python software package designed to increase the insight 
 researchers can obtain from measured atomic pair distribution functions 
 (PDFs) in a model-independent way. The program was designed to help a 
@@ -77,7 +78,7 @@ conda and test that it is working by opening a terminal and typing
 To create and activate a conda environment to use this software, run 
 the following command from the command line ::
 	
-	conda create -n pdfmorph_env python=3
+	conda create -n pdfmorph_env python=3 --yes
 	source activate pdfmorph_env
 
 If you're using Windows, replace ``source activate pdfmorph`` with 
@@ -111,7 +112,7 @@ version using ::
 With other Python distributions the program can be upgraded to
 the latest version as follows ::
 
-     easy_install --upgrade diffpy.pdfmorph
+     pip install diffpy.pdfmorph
 
 
 USING PDFmorph
