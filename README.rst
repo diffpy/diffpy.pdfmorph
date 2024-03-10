@@ -99,11 +99,6 @@ either ::
 
 	conda config --add channels conda-forge
 	conda install diffpy.pdfmorph
-
-or ::
-
-	conda config --add channels conda-forge
-	conda install diffpy.pdfmorph
  
 If you do not use conda or prefer to install from sources, please 
 consult online documentation.
