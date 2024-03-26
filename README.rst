@@ -110,11 +110,6 @@ version using ::
 
      conda update diffpy.pdfmorph
 
-With other Python distributions the program can be upgraded to
-the latest version as follows ::
-
-     conda update diffpy.pdfmorph
-
 
 USING PDFmorph
 ------------------------------------------------------------------------
