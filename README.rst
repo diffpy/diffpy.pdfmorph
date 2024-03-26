@@ -1,6 +1,7 @@
 
-.. image:: https://travis-ci.org/diffpy/diffpy.pdfmorph.svg?branch=master
-   :target: https://travis-ci.org/diffpy/diffpy.pdfmorph
+
+.. image:: https://github.com/diffpy/diffpy.pdfmorph/actions/workflows/main.yml/badge.svg 
+   :target: https://github.com/diffpy/diffpy.pdfmorph/actions/workflows/main.yml
 
 .. image:: http://codecov.io/github/diffpy/diffpy.pdfmorph/coverage.svg?branch=master
    :target: http://codecov.io/github/diffpy/diffpy.pdfmorph?branch=master
@@ -8,6 +9,7 @@
 
 PDFmorph
 ========================================================================
+
 
 PDFmorph is a Python software package designed to increase the insight 
 researchers can obtain from measured atomic pair distribution functions 
@@ -77,7 +79,7 @@ conda and test that it is working by opening a terminal and typing
 To create and activate a conda environment to use this software, run 
 the following command from the command line ::
 	
-	conda create -n pdfmorph_env python=3
+	conda create -n pdfmorph_env python=3 --yes
 	source activate pdfmorph_env
 
 If you're using Windows, replace ``source activate pdfmorph`` with 
@@ -99,24 +101,14 @@ either ::
 
 	conda config --add channels conda-forge
 	conda install diffpy.pdfmorph
-
-or ::
-
-	conda config --add channels conda-forge
-	conda install diffpy.pdfmorph
-
-If you don't use conda or prefer to install from sources, please 
+ 
+If you do not use conda or prefer to install from sources, please 
 consult online documentation.
 
 With conda, PDFmorph can be later upgraded to the latest released
 version using ::
 
      conda update diffpy.pdfmorph
-
-With other Python distributions the program can be upgraded to
-the latest version as follows ::
-
-     easy_install --upgrade diffpy.pdfmorph
 
 
 USING PDFmorph
