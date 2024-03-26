@@ -1,6 +1,9 @@
 
-.. image:: https://img.shields.io/codecov/c/github/diffpy/diffpy.pdfmorph
-   :target: https://app.codecov.io/gh/diffpy/diffpy.pdfmorph
+[![CI](https://github.com/diffpy/diffpy.pdfmorph/actions/workflows/main.yml/badge.svg)](https://github.com/diffpy/diffpy.pdfmorph/actions/workflows/main.yml)
+
+
+#.. image:: https://img.shields.io/codecov/c/github/diffpy/diffpy.pdfmorph
+#   :target: https://app.codecov.io/gh/diffpy/diffpy.pdfmorph
 
 .. image:: http://codecov.io/github/diffpy/diffpy.pdfmorph/coverage.svg?branch=master
    :target: http://codecov.io/github/diffpy/diffpy.pdfmorph?branch=master
@@ -112,7 +115,7 @@ version using ::
 With other Python distributions the program can be upgraded to
 the latest version as follows ::
 
-     pip install diffpy.pdfmorph
+     conda update diffpy.pdfmorph
 
 
 USING PDFmorph
