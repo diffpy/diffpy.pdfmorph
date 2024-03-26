@@ -1,9 +1,7 @@
 
-[![CI](https://github.com/diffpy/diffpy.pdfmorph/actions/workflows/main.yml/badge.svg)](https://github.com/diffpy/diffpy.pdfmorph/actions/workflows/main.yml)
 
-
-#.. image:: https://img.shields.io/codecov/c/github/diffpy/diffpy.pdfmorph
-#   :target: https://app.codecov.io/gh/diffpy/diffpy.pdfmorph
+.. image:: https://github.com/diffpy/diffpy.pdfmorph/actions/workflows/main.yml/badge.svg 
+   :target: https://github.com/diffpy/diffpy.pdfmorph/actions/workflows/main.yml
 
 .. image:: http://codecov.io/github/diffpy/diffpy.pdfmorph/coverage.svg?branch=master
    :target: http://codecov.io/github/diffpy/diffpy.pdfmorph?branch=master
