@@ -1,4 +1,4 @@
-name: regolith
+name: diffpy.pdfmorph
 channels:
   - conda-forge
 dependencies:
