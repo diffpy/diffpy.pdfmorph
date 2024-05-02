@@ -9,10 +9,18 @@
 
 * Can now use --verbose tag to limit amount of header information
 
-**Deprecated:** None
+**Deprecated:**
 
-**Removed:** None
+* <news item>
 
-**Fixed:** None
+**Removed:**
 
-**Security:** None
+* <news item>
+
+**Fixed:**
+
+* <news item>
+
+**Security:**
+
+* <news item>

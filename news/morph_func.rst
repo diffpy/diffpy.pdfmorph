@@ -2,12 +2,22 @@
 
 * pdfmorph python function call, which reproduce the application
 
-**Changed:** None
+**Changed:**
 
-**Deprecated:** None
+* <news item>
 
-**Removed:** None
+**Deprecated:**
 
-**Fixed:** None
+* <news item>
 
-**Security:** None
+**Removed:**
+
+* <news item>
+
+**Fixed:**
+
+* <news item>
+
+**Security:**
+
+* <news item>
