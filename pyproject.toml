@@ -35,6 +35,9 @@ classifiers = [
 Homepage = "https://github.com/diffpy/diffpy.pdfmorph/"
 Issues = "https://github.com/diffpy/diffpy.pdfmorph/issues"
 
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
 [tool.setuptools-git-versioning]
 enabled = true
 template = "{tag}"

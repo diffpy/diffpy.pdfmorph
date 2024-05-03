@@ -50,6 +50,6 @@ jobs:
         shell: bash -l {0}
         run: |
           conda activate test
-          coverage run run_tests.py
+          python -m coverage run run_tests.py  # use `python -m` to search for modules within env
           coverage report -m
           codecov
