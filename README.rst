@@ -148,7 +148,7 @@ Feel free to fork the project and contribute! To install PDFmorph
 in a development mode where the source files are used directly
 rather than copied to a system directory, use ::
 
-     python setup.py develop --user
+     python -m pip install -e .
 
 
 CONTACTS
