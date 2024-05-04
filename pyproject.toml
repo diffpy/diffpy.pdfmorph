@@ -31,6 +31,9 @@ classifiers = [
         'Topic :: Scientific/Engineering :: Physics',
 ]
 
+[project.scripts]
+pdfmorph = "diffpy.pdfmorph.pdfmorphapp:main"
+
 [project.urls]
 Homepage = "https://github.com/diffpy/diffpy.pdfmorph/"
 Issues = "https://github.com/diffpy/diffpy.pdfmorph/issues"
