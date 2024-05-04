@@ -50,6 +50,7 @@ jobs:
         shell: bash -l {0}
         run: |
           conda activate test
+          pdfmorph --help  # Check run on command line
           python -m coverage run run_tests.py  # use `python -m` to search for modules within env
           coverage report -m
           codecov
