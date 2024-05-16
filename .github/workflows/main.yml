@@ -20,7 +20,7 @@ jobs:
         with:
           repository: diffpy/diffpy.pdfmorph
           # for bookkeeping have diffpy.pdfmorph at the same level as everything else in the
-          # directory tree
+          # directory tree. 
           path: .
 
       - name: initialize miniconda
