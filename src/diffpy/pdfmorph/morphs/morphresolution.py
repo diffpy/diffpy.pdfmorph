@@ -26,12 +26,14 @@ from diffpy.pdfmorph.morphs.morph import *
 class MorphResolutionDamping(Morph):
     '''Apply resolution damping and broadening to the morph.
 
-    Configuration variables:
+    Configuration Variables
+    -----------------------
+    qdamp
+        Peak dampening term.
 
-    qdamp  --  Peak dampening term
-
+    Notes
+    -----
     See the PDFgui manual for how this is used.
-
     '''
 
     # Define input output types

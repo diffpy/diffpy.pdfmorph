@@ -25,14 +25,15 @@ import numpy
 class MorphShift(Morph):
     '''Shift the morph.
 
-    Configuration variables:
-
-    vshift  --  The vertical shift to apply to the morph.
-    hshift  --  The horizontal shift to apply to the morph.
+    Configuration Variables
+    -----------------------
+    vshift
+        The vertical shift to apply to the morph.
+    hshift
+        The horizontal shift to apply to the morph.
 
     Note that a horizontal shift may cause edge effects, since the morph does
     not know what lies beyond the edge of the signals.
-
     '''
 
     # Define input output types

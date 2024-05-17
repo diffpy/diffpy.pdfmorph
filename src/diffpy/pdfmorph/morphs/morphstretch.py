@@ -27,11 +27,11 @@ class MorphStretch(Morph):
 
     This stretches (broadens) the morph.
 
-    Configuration variables:
-
-    stretch --  The stretch factor to apply to y_morph_in. This is applied such
-                that a feature at r is moved to r * (1 + stretch).
-
+    Configuration Variables
+    -----------------------
+    stretch
+        The stretch factor to apply to y_morph_in.
+        This is applied such that a feature at r is moved to r * (1 + stretch).
     '''
 
     # Define input output types

@@ -26,10 +26,14 @@ class MorphScale(Morph):
 
     This scales the morph.
 
-    Configuration variables:
+    Configuration Variables
+    -----------------------
+    scale
+        The scale to apply to y_target_in.
 
-    scale   --  The scale to apply to y_target_in.
-
+    Returns
+    -------
+    No return.
     '''
 
     # Define input output types

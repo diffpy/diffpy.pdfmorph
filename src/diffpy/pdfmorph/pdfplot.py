@@ -27,19 +27,20 @@ plt.style.use(bg_mpl_style)
 def plotPDFs(pairlist, labels=None, offset='auto', rmin=None, rmax=None):
     """Plots several PDFs on top of one another.
 
-    pairlist    --  iterable of (r, gr) pairs to plot
-    labels      --  iterable of names for the pairs. If this is not the same
-                    length as the pairlist, a legend will not be shown (default
-                    []).
-    offset      --  offset to place between plots. PDFs will be sequentially
-                    shifted in the y-direction by the offset. If offset is
-                    'auto' (default), the optimal offset will be determined
-                    automatically.
-    rmin        --  The minimum r-value to plot. If this is None (default), the
-                    lower bound of the PDF is not altered.
-    rmax        --  The maximum r-value to plot. If this is None (default), the
-                    upper bound of the PDF is not altered.
-
+    Parameters
+    ----------
+    pairlist
+        Iterable of (r, gr) pairs to plot.
+    labels
+        Iterable of names for the pairs. If this is not the same length as the pairlist, a legend will not
+        be shown (default []).
+    offset
+        Offset to place between plots. PDFs will be sequentially shifted in the y-direction by the offset.
+        If offset is 'auto' (default), the optimal offset will be determined automatically.
+    rmin
+        The minimum r-value to plot. If this is None (default), the lower bound of the PDF is not altered.
+    rmax
+        The maximum r-value to plot. If this is None (default), the upper bound of the PDF is not altered.
     """
     if labels is None:
         labels = []
@@ -79,24 +80,30 @@ def comparePDFs(
 ):
     """Plot two PDFs on top of each other and difference curve.
 
-    pairlist    --  iterable of (r, gr) pairs to plot
-    labels      --  iterable of names for the pairs. If this is not the same
-                    length as the pairlist, a legend will not be shown (default
-                    []).
-    rmin        --  The minimum r-value to plot. If this is None (default), the
-                    lower bound of the PDF is not altered.
-    rmax        --  The maximum r-value to plot. If this is None (default), the
-                    upper bound of the PDF is not altered.
-    show        --  Show the plot (True)
-    maglim      --  Point after which to magnify the signal by mag. If None
-                    (default), no magnification will take place.
-    mag         --  Magnification factor (default 5)
-    rw          --  Rw value to display on the plot, if any.
-    legend      --  Display the legend (default True).
+    The second PDF will be shown as blue circles below and the first as a red line.
+    The difference curve will be in green and offset for clarity.
 
-    The second PDF will be shown as blue circles below and the first as a red
-    line.  The difference curve will be in green and offset for clarity.
-
+    Parameters
+    ----------
+    pairlist
+        Iterable of (r, gr) pairs to plot
+    labels
+        Iterable of names for the pairs. If this is not the same length as the pairlist, a legend will not
+        be shown (default []).
+    rmin
+        The minimum r-value to plot. If this is None (default), the lower bound of the PDF is not altered.
+    rmax
+        The maximum r-value to plot. If this is None (default), the upper bound of the PDF is not altered.
+    show
+        Show the plot (default True)
+    maglim
+        Point after which to magnify the signal by mag. If None (default), no magnification will take place.
+    mag
+        Magnification factor (default 5)
+    rw
+        Rw value to display on the plot, if any.
+    legend
+        Display the legend (default True).
     """
     if labels is None:
         labels = [2]
@@ -211,15 +218,18 @@ def comparePDFs(
 def plot_param(target_labels, param_list, param_name=None, field=None):
     """
     Plot Rw values for multiple morphs.
-    :param target_labels: Names (or field if --sort-by given) of each file acting as target for the morph.
-    :type target_labels: list
-    :param param_list: Contains the values of some parameter corresponding to each file.
-    :type param_list: list
-    :param param_name: Name of the parameter.
-    :type param_name: str
-    :param field: When not None and entries in field are numerical, a line chart of Rw versus field is made.
-                  When None (default) or values are non-numerical, it plots a bar chart of Rw values per file.
-    :type field: list or None
+
+    Parameters
+    ----------
+    target_labels: list
+        Names (or field if --sort-by given) of each file acting as target for the morph.
+    param_list: list
+        Contains the values of some parameter corresponding to each file.
+    param_name: str
+        Name of the parameter.
+    field: list or None
+        When not None and entries in field are numerical, a line chart of Rw versus field is made.
+        When None (default) or values are non-numerical, it plots a bar chart of Rw values per file.
     """
 
     # ensure all entries in target_labels are distinct for plotting
@@ -284,14 +294,21 @@ def plot_param(target_labels, param_list, param_name=None, field=None):
 def truncatePDFs(r, gr, rmin=None, rmax=None):
     """Truncate a PDF to specified bounds.
 
-    r           --  r-values of the PDF
-    gr          --  PDF values.
-    rmin        --  The minimum r-value. If this is None (default), the lower
-                    bound of the PDF is not altered.
-    rmax        --  The maximum r-value. If this is None (default), the upper
-                    bound of the PDF is not altered.
+    Parameters
+    ----------
+    r
+        r-values of the PDF.
+    gr
+        PDF g(r) values.
+    rmin
+        The minimum r-value. If this is None (default), the lower bound of the PDF is not altered.
+    rmax
+        The maximum r-value. If this is None (default), the upper bound of the PDF is not altered.
 
-    Returns the truncated r, gr
+    Returns
+    -------
+    r, gr
+        Returns the truncated r, gr.
     """
 
     if rmin is not None:

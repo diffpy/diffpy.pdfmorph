@@ -32,18 +32,23 @@ def estimateScale(y_morph_in, y_target_in):
 def estimateBaselineSlope(r, gr, rmin=None, rmax=None):
     """Estimate the slope of the linear baseline of a PDF.
 
-    This fits a the equation slope*r through the bottom of the PDF.
+    This fits a slope into the equation slope*r through the bottom of the PDF.
 
-    r       --  The r-grid used for the PDF.
-    gr      --  The PDF over the r-grid.
-    rmin    --  The minimum r-value to consider. If this is None (default)
-                is None, then the minimum of r is used.
-    rmax    --  The maximum r-value to consider. If this is None (default)
-                is None, then the maximum of r is used.
+    Parameters
+    ----------
+    r
+        The r-grid used for the PDF.
+    gr
+        The PDF over the r-grid.
+    rmin
+        The minimum r-value to consider. If this is None (default) is None, then the minimum of r is used.
+    rmax
+        The maximum r-value to consider. If this is None (default) is None, then the maximum of r is used.
 
-    Returns the slope of baseline. If the PDF is scaled properly, this is equal
-    to -4*pi*rho0.
-
+    Returns
+    -------
+    slope: float
+        The slope of baseline. If the PDF is scaled properly, this is equal to -4*pi*rho0.
     """
     from scipy.optimize import leastsq
     from numpy import dot
@@ -100,10 +105,15 @@ def get_pearson(chain):
 def readPDF(fname):
     """Reads an .gr file, loads r and G(r) vectors.
 
-    fname -- name of the file we want to read.
+    Parameters
+    ----------
+    fname
+        Name of the file we want to read.
 
-    Returns r and gr arrays.
-
+    Returns
+    -------
+    r,gr
+        Arrays read from data.
     """
     from diffpy.utils.parsers import loadData
 
@@ -125,9 +135,15 @@ def nn_value(val, name):
 def deserialize(serial_file):
     """Call deserialize_data from diffpy.utils.
 
-    serial_file -- name of file to deserialize.
+    Parameters
+    ----------
+    serial_file
+        Name of file to deserialize.
 
-    Return a Dictonary of data read from serial file.
+    Returns
+    -------
+    dict
+        Data read from serial file.
     """
     return parsers.deserialize_data(serial_file)
 
@@ -135,10 +151,15 @@ def deserialize(serial_file):
 def case_insensitive_dictionary_search(key: str, dictionary: dict):
     """Search for key in dictionary ignoring case.
 
-    :param key:
-    :param dictionary:
+    Parameters
+    ----------
+    key: str
+    dictionary: dict
 
-    Returns corresponding value if key is in dictionary. None otherwise.
+    Returns
+    -------
+    value or None
+        Corresponding value if key is in dictionary. None otherwise.
     """
 
     for ci_key in dictionary.keys():
@@ -153,15 +174,25 @@ def field_sort(filepaths: list, field, reverse=False, serfile=None, get_field_va
     """Sort a list of files by a field stored in header information.
     All files must contain this header information.
 
-    filepaths           -- List of paths to files that we want to sort.
-    field               -- the field we want to sort by. Not case-sensitive.
-    reverse             -- sort in reverse alphabetical/numerical order.
-    serfile             -- path to a serial file with field information for each file.
-    get_field_values    -- Boolean indicating whether to also return a List of field values (default False).
-                           This List of field values is parallel to the sorted list of filepaths with items
-                           in the same position corresponding to each other.
+    Parameters
+    ----------
+    filepaths
+        List of paths to files that we want to sort.
+    field
+        The field we want to sort by. Not case-sensitive.
+    reverse
+        Sort in reverse alphabetical/numerical order.
+    serfile
+        Path to a serial file with field information for each file.
+    get_field_values: bool
+        Boolean indicating whether to also return a List of field values (default False).
+        This List of field values is parallel to the sorted list of filepaths with items
+        in the same position corresponding to each other.
 
-    Return sorted List of paths. When get_fv is true, also return an associated field list.
+    Returns
+    -------
+    list
+        Sorted list of paths. When get_fv is true, also return an associated field list.
     """
 
     # Get the field from each file
@@ -197,12 +228,18 @@ def get_values_from_dictionary_collection(dictionary_collection: iter, target_ke
     """In an (iterable) collection of dictionaries, search for a target key in each dictionary.
     Return a list of all found values corresponding to that key.
 
-    :param dictionary_collection:   The collection of dictionaries to search through.
-    :param target_key:              The key to search for in each dictionary. For each dictionary
-                                    in dictionary_collection that has that key, the corresponding
-                                    value is appended to a List called values.
+    Parameters
+    ----------
+    dictionary_collection: iter
+        The collection of dictionaries to search through.
+    target_key
+        The key to search for in each dictionary. For each dictionary in dictionary_collection that has that key,
+        the corresponding value is appended to a List called values.
 
-    :return: Returns the List of found values.
+    Returns
+    -------
+    list
+        The found values.
     """
 
     # Store all values corresponding to the target_key into this list
