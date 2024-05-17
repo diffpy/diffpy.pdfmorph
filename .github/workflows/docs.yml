@@ -35,4 +35,4 @@ jobs:
         run: python -m pip install . --no-deps
 
       - name: build documents
-        run: make -C doc/manual html
+        run: make -C doc html
