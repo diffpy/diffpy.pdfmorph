@@ -27,10 +27,10 @@ import numpy
 class MorphISphere(Morph):
     '''Apply inverse spherical characteristic function to the morph
 
-    Configuration variables:
-
-    iradius  --  The radius of the sphere
-
+    Configuration Variables
+    -----------------------
+    iradius
+        The radius of the sphere.
     '''
 
     # Define input output types
@@ -57,11 +57,12 @@ class MorphISphere(Morph):
 class MorphISpheroid(Morph):
     '''Apply inverse spherical characteristic function to the morph
 
-    Configuration variables:
-
-    iradius   --  The equatorial radius of the spheroid
-    ipradius  --  The polar radius of the spheroid
-
+    Configuration Variables
+    -----------------------
+    iradius
+        The equatorial radius of the spheroid.
+    ipradius
+        The polar radius of the spheroid.
     '''
 
     # Define input output types

@@ -34,10 +34,10 @@ Basic PDFmorph Workflow
           explore in this tutorial.
 
 	3. Using the ``mkdir`` command, create a directory where you'll
-       store the tutorial PDF files and use the ``cd`` command to change
-       into that directory. You can download the tutorial files
-       :download:`here <../../tests/testdata/tutorialData.zip>`.
-       Then, ``cd`` into the ``tutorialData`` directory.
+           store the tutorial PDF files and use the ``cd`` command to change
+           into that directory. You can download the tutorial files
+           :download:`here <../../tutorial/tutorialData.zip>`.
+           Then, ``cd`` into the ``tutorialData`` directory.
 
         * The files in this dataset were collected by Soham Banerjee
           at Brookhaven National Laboratory in Upton, New York.

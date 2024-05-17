@@ -30,10 +30,10 @@ from diffpy.pdfmorph.morphs.morph import *
 class MorphSphere(Morph):
     '''Apply a spherical characteristic function to the morph
 
-    Configuration variables:
-
-    radius  --  The radius of the sphere
-
+    Configuration Variables
+    -----------------------
+    radius
+        The radius of the sphere.
     '''
 
     # Define input output types
@@ -58,11 +58,13 @@ class MorphSphere(Morph):
 class MorphSpheroid(Morph):
     '''Apply a spherical characteristic function to the morph
 
-    Configuration variables:
+    Configuration Variables
+    -----------------------
 
-    radius   --  The equatorial radius of the spheroid
-    pradius  --  The polar radius of the spheroid
-
+    radius
+        The equatorial radius of the spheroid.
+    pradius
+        The polar radius of the spheroid.
     '''
 
     # Define input output types
@@ -87,12 +89,14 @@ class MorphSpheroid(Morph):
 def _sphericalCF(r, psize):
     """Spherical nanoparticle characteristic function.
 
-    r       --  distance of interaction
-    psize   --  The particle diameter
+    From Kodama et al., Acta Cryst. A, 62, 444-453 (converted from radius to diameter).
 
-    From Kodama et al., Acta Cryst. A, 62, 444-453
-    (converted from radius to diameter)
-
+    Parameters
+    ----------
+    r
+        Distance of interaction.
+    psize
+        The particle diameter.
     """
     f = numpy.zeros_like(r)
     if psize > 0:
@@ -106,15 +110,22 @@ def _sphericalCF(r, psize):
 def _spheroidalCF(r, erad, prad):
     """Spheroidal characteristic function specified using radii.
 
-    Spheroid with radii (erad, erad, prad)
+    Spheroid with radii (erad, erad, prad).
 
-    prad    --  polar radius
-    erad    --  equatorial radius
+    Parameters
+    ----------
+    prad
+        Polar radius.
+    erad
+        Equatorial radius.
 
-    erad < prad equates to a prolate spheroid
-    erad > prad equates to a oblate spheroid
-    erad == prad is a sphere
+    Notes
+    -----
+        erad < prad equates to a prolate spheroid
 
+        erad > prad equates to a oblate spheroid
+
+        erad == prad is a sphere
     """
     psize = 2 * erad
     pelpt = prad / erad

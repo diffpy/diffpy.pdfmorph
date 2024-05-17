@@ -87,23 +87,23 @@ def pdfmorph(
 
     Parameters
     ----------
-    x_morph : numpy.array
+    x_morph: numpy.array
         An array of morphed x values, i.e., those will be manipulated by
         morphing.
-    y_morph : numpy.array
+    y_morph: numpy.array
         An array of morphed y values, i.e., those will be manipulated by
         morphing.
-    x_target : numpy.array
+    x_target: numpy.array
         An array of target x values, i.e., those will be kept constant by
         morphing.
-    y_morph : numpy.array
+    y_morph: numpy.array
         An array of target y values, i.e., those will be kept constant by
         morphing.
-    rmin : float, optional
+    rmin: float, optional
         A value to specify lower r-limit of morph operations.
-    rmax : float, optional
+    rmax: float, optional
         A value to specify upper r-limit of morph operations.
-    rstep : float, optional
+    rstep: float, optional
         A value to specify rstep of morph operations.
     pearson: Bool, optional
         Option to include Pearson coefficient as a minimizing target
@@ -111,16 +111,16 @@ def pdfmorph(
     add_pearson: Bool, optional
         Option to include **both** Pearson coefficient and Rw as
         minimizing targets during morphing. Default to False.
-    fixed_operations : list, optional
+    fixed_operations: list, optional
         A list of string specifying operations will be keep fixed during
         morphing. Default is None.
-    refine : bool, optional
+    refine: bool, optional
         Option to execute the minimization step in morphing. If False,
         the morphing will be applied with parameter values specified in
         `morph_config`. Default to True.
-    verbose : bool, optional
+    verbose: bool, optional
         Option to print full result after morph. Default to False.
-    kwargs : dict, optional
+    kwargs: dict, optional
         A dictionary with morph parameters as keys and initial
         values of morph parameters as values. Currently supported morph
         parparameters are:
@@ -133,19 +133,19 @@ def pdfmorph(
 
     Returns
     -------
-    morph_rv_dict : dict
+    morph_rv_dict: dict
         A dictionary contains following key-value pairs:
 
-        - morph_chain : diffpy.pdfmorph.morphs.morphchain.MorphChain
+        - morph_chain: diffpy.pdfmorph.morphs.morphchain.MorphChain
               The instance of processed morph chain.
               Calling ``x_morph, y_morph, x_target, y_target = morph_chain.xyallout``
               will conviniently retrun morphed data and reference data
-        - morphed_cfg : dict
+        - morphed_cfg: dict
               A dictionary of refined morphing parameters
-        - rw : float
+        - rw: float
               The agreement factor between morphed data and reference
               data
-        - pcc : float
+        - pcc: float
               The pearson correlation coefficient between morphed
                data and referenced data
 
@@ -252,17 +252,14 @@ def plot_morph(chain, ax=None, **kwargs):
         An instance of processed morph chain.
     ax: matplotlib.axes.Axes, optinal
         An instance of Axes class to plot the morphing result.
-        If ax is None, instances of new Figure and Axes will
-         be created. Default to None.
+        If ax is None, instances of new Figure and Axes will be created. Default to None.
     kwargs:
-        Additional keyword arguements will be passed
-         to ``ax.plot(...**kwargs)``
+        Additional keyword arguements will be passed to ``ax.plot(...**kwargs)``
 
     Returns
     -------
     l_list: list
-        A list of ``matplotlib.lines.Line2D`` objects representing
-         the plotted data.
+        A list of ``matplotlib.lines.Line2D`` objects representing the plotted data.
     """
     if ax is None:
         fig, ax = plt.subplots()

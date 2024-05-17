@@ -29,24 +29,21 @@ class Refiner(object):
 
     This is provided to allow for custom residuals and refinement algorithms.
 
-    Attributes:
-
-    chain       --  The Morph or MorphChain to refine
-    x_morph, y_morph  --  Morphed arrays.
-    x_target, y_target  --  Target arrays.
-    pars        --  List of names of parameters to be refined.
-    residual    --  The residual function to optimize. Default _residual. Can
-                    be assigned to other functions.
-
+    Attributes
+    ----------
+    chain
+        The Morph or MorphChain to refine.
+    x_morph, y_morph
+        Morphed arrays.
+    x_target, y_target
+        Target arrays.
+    pars
+        List of names of parameters to be refined.
+    residual
+        The residual function to optimize. Default _residual. Can be assigned to other functions.
     """
 
     def __init__(self, chain, x_morph, y_morph, x_target, y_target):
-        """Initialize the arrays.
-
-        chain       --  The Morph or MorphChain to refine
-        x_morph, y_morph  --  Morphed arrays.
-        x_target, y_target  --  Target arrays.
-        """
         self.chain = chain
         self.x_morph = x_morph
         self.y_morph = y_morph
@@ -75,8 +72,7 @@ class Refiner(object):
         """Pearson correlation function.
 
         This gives e**-p (vector), where p is the pearson correlation function.
-        We seek to minimize this, which occurrs when the correlation is the
-        largest.
+        We seek to minimize this, which occurrs when the correlation is the largest.
         """
         self._update_chain(pvals)
         _x_morph, _y_morph, _x_target, _y_target = self.chain(
@@ -95,19 +91,19 @@ class Refiner(object):
     def refine(self, *args, **kw):
         """Refine the chain.
 
-        Additional arguments are used to specify which parameters are to be
-        refined. If no arguments are passed, then all parameters will be
-        refined.  Keywords pass initial values to the parameters, whether or
-        not they are refined.
+        Additional arguments are used to specify which parameters are to be refined.
+        If no arguments are passed, then all parameters will be refined.
+        Keywords pass initial values to the parameters, whether or not they are refined.
 
         This uses the leastsq algorithm from scipy.optimize.
 
-        This returns the final scalar residual value. The parameters from the
-        fit can be retrieved from the config dictionary of the morph or morph
-        chain.
+        This returns the final scalar residual value.
+        The parameters from the fit can be retrieved from the config dictionary of the morph or morph chain.
 
-        Raises ValueError if a minimum cannot be found.
-
+        Raises
+        ------
+        ValueError
+            Exception raised if a minimum cannot be found.
         """
 
         self.pars = args or self.chain.config.keys()

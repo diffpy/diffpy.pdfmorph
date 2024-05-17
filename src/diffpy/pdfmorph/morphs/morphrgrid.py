@@ -31,17 +31,20 @@ class MorphRGrid(Morph):
     This resamples both the morph and target arrays to be on the
     specified grid.
 
-    Configuration variables:
+    Configuration Variables
+    -----------------------
+    rmin
+        The lower-bound on the r-range.
+    rmax
+        The upper-bound on the r-range (exclusive within tolerance of 1e-8).
+    rstep
+        The r-spacing.
 
-    rmin    --  The lower-bound on the r-range.
-    rmax    --  The upper-bound on the r-range (exclusive within tolerance of
-                1e-8).
-    rstep   --  The r-spacing.
-
-    If any of these is not defined or outside the bounds of the input arrays,
-    then it will be taken to be the most inclusive value from the input arrays.
-    These modified values will be stored as the above attributes.
-
+    Notes
+    -----
+        If any of these is not defined or outside the bounds of the input arrays,
+        then it will be taken to be the most inclusive value from the input arrays.
+        These modified values will be stored as the above attributes.
     '''
 
     # Define input output types

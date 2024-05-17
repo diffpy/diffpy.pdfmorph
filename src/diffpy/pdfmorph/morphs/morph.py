@@ -26,41 +26,59 @@ LABEL_RR = 'R (1/A)'  # RDF R(r)
 class Morph(object):
     '''Base class for implementing a morph given a target.
 
-    Adapted from diffpy.pdfgetx to include two sets of arrays that get passed
-    through.
+    Adapted from diffpy.pdfgetx to include two sets of arrays that get passed through.
 
-    Note that attributes are taken from config when not found locally. The
-    morph may modify the config dictionary. This is the means by which to
-    communicate automatically modified attributes.
+    Attributes are taken from config when not found locally. The morph may modify the config dictionary.
+    This is the means by which to communicate automatically modified attributes.
 
-    Class attributes:
+    Class Attributes
+    ----------------
+    summary
+        Short description of a morph.
+    xinlabel
+        Descriptive label for the x input array.
+    yinlabel
+        Descriptive label for the y input array.
+    xoutlabel
+        Descriptive label for the x output array.
+    youtlabel
+        Descriptive label for the y output array.
+    parnames: list
+        Names of configuration variables.
 
-    summary      -- short description of a morph
-    xinlabel     -- descriptive label for the x input array
-    yinlabel     -- descriptive label for the y input array
-    xoutlabel    -- descriptive label for the x output array
-    youtlabel    -- descriptive label for the y output array
-    parnames     -- list of names of configuration variables
+    Instance Attributes
+    -------------------
+    config: dict
+        All configuration variables.
+    x_morph_in
+        Last morph input x data.
+    y_morph_in
+        Last morph input y data.
+    x_morph_out
+        Last morph result x data.
+    y_morph_out
+        Last morph result y data.
+    x_target_in
+        Last target input x data.
+    y_target_in
+        Last target input y data.
+    x_target_out
+        Last target result x data.
+    y_target_out
+        Last target result y data.
 
-    Instance attributes:
-
-    config      -- dictionary that contains all configuration variables
-    x_morph_in      -- last morph input x data
-    y_morph_in      -- last morph input y data
-    x_morph_out     -- last morph result x data
-    y_morph_out     -- last morph result y data
-    x_target_in      -- last target input x data
-    y_target_in      -- last target input y data
-    x_target_out     -- last target result x data
-    y_target_out     -- last target result y data
-
-    Properties:
-
-    xy_morph_in     -- tuple of (x_morph_in, y_morph_in)
-    xy_morph_out    -- tuple of (x_morph_out, y_morph_out)
-    xy_target_in     -- tuple of (x_target_in, y_target_in)
-    xy_target_out    -- tuple of (x_target_out, y_target_out)
-    xyallout    -- tuple of (x_morph_out, y_morph_out, x_target_out, y_target_out)
+    Properties
+    ----------
+    xy_morph_in
+        Tuple of (x_morph_in, y_morph_in).
+    xy_morph_out
+        Tuple of (x_morph_out, y_morph_out).
+    xy_target_in
+        Tuple of (x_target_in, y_target_in).
+    xy_target_out
+        Tuple of (x_target_out, y_target_out).
+    xyallout
+        Tuple of (x_morph_out, y_morph_out, x_target_out, y_target_out).
     '''
 
     # Class variables
@@ -98,7 +116,8 @@ class Morph(object):
     def __init__(self, config=None):
         '''Create a default Morph instance.
 
-        config  -- dictionary that contains all configuration variables
+        config: dict
+            All configuration variables.
         '''
         # declare empty attributes
         if config is None:
@@ -118,13 +137,19 @@ class Morph(object):
     def morph(self, x_morph, y_morph, x_target, y_target):
         '''Morph arrays morphed or target.
 
-        x_morph, y_morph  --  Morphed arrays.
-        x_target, y_target  --  Target arrays.
+        Identity operation. This method should be overloaded in a derived class.
 
-        Identity operation.  This method should be overloaded in a derived
-        class.
+        Parameters
+        ----------
+        x_morph, y_morph
+            Morphed arrays.
+        x_target, y_target
+            Target arrays.
 
-        Return a tuple of numpy arrays (x_morph_out, y_morph_out, x_target_out, y_target_out)
+        Returns
+        -------
+        tuple
+            A tuple of numpy arrays (x_morph_out, y_morph_out, x_target_out, y_target_out)
         '''
         self.x_morph_in = x_morph
         self.y_morph_in = y_morph
@@ -144,15 +169,20 @@ class Morph(object):
     def applyConfig(self, config):
         '''Process any configuration data from a dictionary.
 
-        config   -- Configuration dictionary.
+        Parameters
+        ----------
+        config: dict
+            Configuration dictionary.
 
+        Returns
+        -------
         No return value.
         '''
         self.config = config
         return
 
     def checkConfig(self):
-        '''Verify data in self.config.  No action by default.
+        '''Verify data in self.config. No action by default.
 
         To be overridden in a derived class.
         '''
@@ -161,9 +191,15 @@ class Morph(object):
     def plotInputs(self, xylabels=True):
         '''Plot input arrays using matplotlib.pyplot
 
-        xylabels -- flag for updating x and y axes labels
+        Parameters
+        ----------
+        xylabels
+            Flag for updating x and y axes labels.
 
-        Return a list of matplotlib line objects.
+        Returns
+        -------
+        list:
+            A list of matplotlib line objects.
         '''
         from matplotlib.pyplot import plot, xlabel, ylabel
 
@@ -177,11 +213,17 @@ class Morph(object):
     def plotOutputs(self, xylabels=True, **plotargs):
         '''Plot output arrays using matplotlib.pyplot
 
-        xylabels -- flag for updating x and y axes labels
-        plotargs -- arguments passed to the pylab plot function. Note that
-                    "label" will be ignored.
+        Parameters
+        ----------
+        xylabels: bool
+            Flag for updating x and y axes labels.
+        plotargs
+            Arguments passed to the pylab plot function. Note that "label" will be ignored.
 
-        Return a list of matplotlib line objects.
+        Returns
+        -------
+        list
+            A list of matplotlib line objects.
         '''
         from matplotlib.pyplot import plot, xlabel, ylabel
 
@@ -197,10 +239,19 @@ class Morph(object):
     def __getattr__(self, name):
         '''Obtain the value from self.config, when normal lookup fails.
 
-        name -- name of the attribute to be recovered
+        Parameters
+        ----------
+        name
+            Name of the attribute to be recovered.
 
-        Return self.config.get(name).
-        Raise AttributeError, when name is not available from self.config.
+        Returns
+        -------
+        self.config.get(name)
+
+        Raises
+        ------
+        AttributeError
+            Name is not available from self.config.
         '''
         if name in self.config:
             return self.config[name]
@@ -211,9 +262,12 @@ class Morph(object):
     def __setattr__(self, name, val):
         '''Set configuration variables to config.
 
-        name -- name of the attribute
-        val  -- value of the attribute
-
+        Parameters
+        ----------
+        name
+            Name of the attribute.
+        val
+            Value of the attribute.
         '''
         if name in self.parnames:
             self.config[name] = val
