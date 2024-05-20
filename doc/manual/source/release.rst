@@ -1,4 +1,4 @@
 .. index:: release notes
 
-.. include:: /../../CHANGELOG.rst
+.. include:: /../../../CHANGELOG.rst
 

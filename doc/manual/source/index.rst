@@ -63,7 +63,7 @@ To get started, please go to :ref:`quick_start`
    release
    package
 
-.. include:: ../../CHANGELOG.rst
+.. include:: ../../../CHANGELOG.rst
 
 Indices
 -------
