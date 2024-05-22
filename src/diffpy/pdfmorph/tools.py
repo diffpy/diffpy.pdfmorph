@@ -217,7 +217,7 @@ def field_sort(filepaths: list, field, reverse=False, serfile=None, get_field_va
     try:
         files_field_values.sort(key=lambda entry: entry[1], reverse=reverse)
     # Raised if fields for any file are missing
-    except (ValueError, TypeError) as e:
+    except (ValueError, TypeError):
         raise KeyError("Field missing.")
     if get_field_values:
         return [pair[0] for pair in files_field_values], [pair[1] for pair in files_field_values]

@@ -52,6 +52,7 @@ where = ["src"]  # list of folders that contain the packages (["."] by default)
 include = ["diffpy*"]  # package names should match these glob patterns (["*"] by default)
 exclude = ["diffpy.pdfmorph.tests*"]  # exclude packages matching these glob patterns (empty by default)
 namespaces = false  # to disable scanning PEP 420 namespaces (true by default)
+
 [tool.black]
 line-length = 115
 include = '\.pyi?$'
@@ -72,3 +73,7 @@ exclude = '''
   | tests/data
 )/
 '''
+
+[tool.flake8]
+max-line-length = 115
+per-file-ignores="__init__.py:F401"
