@@ -23,7 +23,7 @@ from diffpy.pdfmorph.morphs.morph import *
 
 
 class MorphStretch(Morph):
-    '''Smear the morph function.
+    """Smear the morph function.
 
     This stretches (broadens) the morph.
 
@@ -32,10 +32,10 @@ class MorphStretch(Morph):
     stretch
         The stretch factor to apply to y_morph_in.
         This is applied such that a feature at r is moved to r * (1 + stretch).
-    '''
+    """
 
     # Define input output types
-    summary = 'Stretch morph by desired amount'
+    summary = "Stretch morph by desired amount"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA

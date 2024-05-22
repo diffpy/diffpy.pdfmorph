@@ -18,13 +18,13 @@
 """
 
 
-LABEL_RA = 'r (A)'  # r-grid
-LABEL_GR = 'G (1/A^2)'  # PDF G(r)
-LABEL_RR = 'R (1/A)'  # RDF R(r)
+LABEL_RA = "r (A)"  # r-grid
+LABEL_GR = "G (1/A^2)"  # PDF G(r)
+LABEL_RR = "R (1/A)"  # RDF R(r)
 
 
 class Morph(object):
-    '''Base class for implementing a morph given a target.
+    """Base class for implementing a morph given a target.
 
     Adapted from diffpy.pdfgetx to include two sets of arrays that get passed through.
 
@@ -79,46 +79,51 @@ class Morph(object):
         Tuple of (x_target_out, y_target_out).
     xyallout
         Tuple of (x_morph_out, y_morph_out, x_target_out, y_target_out).
-    '''
+    """
 
     # Class variables
     # default array types are empty
-    summary = 'identity transformation'
-    xinlabel = 'x'
-    yinlabel = 'y'
-    xoutlabel = 'x'
-    youtlabel = 'y'
+    summary = "identity transformation"
+    xinlabel = "x"
+    yinlabel = "y"
+    xoutlabel = "x"
+    youtlabel = "y"
     parnames = []
 
     # Properties
 
     xy_morph_in = property(
         lambda self: (self.x_morph_in, self.y_morph_in),
-        doc='Return a tuple of morph input arrays',
+        doc="Return a tuple of morph input arrays",
     )
     xy_morph_out = property(
         lambda self: (self.x_morph_out, self.y_morph_out),
-        doc='Return a tuple of morph output arrays',
+        doc="Return a tuple of morph output arrays",
     )
     xy_target_in = property(
         lambda self: (self.x_target_in, self.y_target_in),
-        doc='Return a tuple of target input arrays',
+        doc="Return a tuple of target input arrays",
     )
     xy_target_out = property(
         lambda self: (self.x_target_out, self.y_target_out),
-        doc='Return a tuple of target output arrays',
+        doc="Return a tuple of target output arrays",
     )
     xyallout = property(
-        lambda self: (self.x_morph_out, self.y_morph_out, self.x_target_out, self.y_target_out),
-        doc='Return a tuple of all output arrays',
+        lambda self: (
+            self.x_morph_out,
+            self.y_morph_out,
+            self.x_target_out,
+            self.y_target_out,
+        ),
+        doc="Return a tuple of all output arrays",
     )
 
     def __init__(self, config=None):
-        '''Create a default Morph instance.
+        """Create a default Morph instance.
 
         config: dict
             All configuration variables.
-        '''
+        """
         # declare empty attributes
         if config is None:
             config = {}
@@ -135,7 +140,7 @@ class Morph(object):
         return
 
     def morph(self, x_morph, y_morph, x_target, y_target):
-        '''Morph arrays morphed or target.
+        """Morph arrays morphed or target.
 
         Identity operation. This method should be overloaded in a derived class.
 
@@ -150,7 +155,7 @@ class Morph(object):
         -------
         tuple
             A tuple of numpy arrays (x_morph_out, y_morph_out, x_target_out, y_target_out)
-        '''
+        """
         self.x_morph_in = x_morph
         self.y_morph_in = y_morph
         self.x_target_in = x_target
@@ -163,11 +168,11 @@ class Morph(object):
         return self.xyallout
 
     def __call__(self, x_morph, y_morph, x_target, y_target):
-        '''Alias for morph.'''
+        """Alias for morph."""
         return self.morph(x_morph, y_morph, x_target, y_target)
 
     def applyConfig(self, config):
-        '''Process any configuration data from a dictionary.
+        """Process any configuration data from a dictionary.
 
         Parameters
         ----------
@@ -177,19 +182,19 @@ class Morph(object):
         Returns
         -------
         No return value.
-        '''
+        """
         self.config = config
         return
 
     def checkConfig(self):
-        '''Verify data in self.config. No action by default.
+        """Verify data in self.config. No action by default.
 
         To be overridden in a derived class.
-        '''
+        """
         return
 
     def plotInputs(self, xylabels=True):
-        '''Plot input arrays using matplotlib.pyplot
+        """Plot input arrays using matplotlib.pyplot
 
         Parameters
         ----------
@@ -200,7 +205,7 @@ class Morph(object):
         -------
         list:
             A list of matplotlib line objects.
-        '''
+        """
         from matplotlib.pyplot import plot, xlabel, ylabel
 
         rv = plot(self.x_target_in, self.y_target_in, label="target")
@@ -211,7 +216,7 @@ class Morph(object):
         return rv
 
     def plotOutputs(self, xylabels=True, **plotargs):
-        '''Plot output arrays using matplotlib.pyplot
+        """Plot output arrays using matplotlib.pyplot
 
         Parameters
         ----------
@@ -224,7 +229,7 @@ class Morph(object):
         -------
         list
             A list of matplotlib line objects.
-        '''
+        """
         from matplotlib.pyplot import plot, xlabel, ylabel
 
         pargs = dict(plotargs)
@@ -237,7 +242,7 @@ class Morph(object):
         return rv
 
     def __getattr__(self, name):
-        '''Obtain the value from self.config, when normal lookup fails.
+        """Obtain the value from self.config, when normal lookup fails.
 
         Parameters
         ----------
@@ -252,15 +257,15 @@ class Morph(object):
         ------
         AttributeError
             Name is not available from self.config.
-        '''
+        """
         if name in self.config:
             return self.config[name]
         else:
-            emsg = 'Object has no attribute %r' % name
+            emsg = "Object has no attribute %r" % name
             raise AttributeError(emsg)
 
     def __setattr__(self, name, val):
-        '''Set configuration variables to config.
+        """Set configuration variables to config.
 
         Parameters
         ----------
@@ -268,7 +273,7 @@ class Morph(object):
             Name of the attribute.
         val
             Value of the attribute.
-        '''
+        """
         if name in self.parnames:
             self.config[name] = val
         else:

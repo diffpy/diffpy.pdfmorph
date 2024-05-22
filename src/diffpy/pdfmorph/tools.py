@@ -207,6 +207,7 @@ def field_sort(filepaths: list, field, reverse=False, serfile=None, get_field_va
 
         # get names of each file to search the serial file
         import pathlib
+
         for path in filepaths:
             name = pathlib.Path(path).name
             fv = case_insensitive_dictionary_search(field, des_dict.get(name))

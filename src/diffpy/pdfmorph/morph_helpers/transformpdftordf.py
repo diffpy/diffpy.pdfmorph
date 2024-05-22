@@ -22,7 +22,7 @@ from diffpy.pdfmorph.morphs.morph import *
 
 
 class TransformXtalPDFtoRDF(Morph):
-    '''Transform crystal PDFs to RDFs.
+    """Transform crystal PDFs to RDFs.
 
     Converts both morph data and target data PDFs to RDFs.
 
@@ -35,10 +35,10 @@ class TransformXtalPDFtoRDF(Morph):
     With s = baselineslope,
     R(r) = r * (G(r) - r * s)
 
-    '''
+    """
 
     # Define input output types
-    summary = 'Turn the PDF into the RDF for both the morph and target'
+    summary = "Turn the PDF into the RDF for both the morph and target"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA

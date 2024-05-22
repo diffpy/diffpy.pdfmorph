@@ -23,7 +23,7 @@ from diffpy.pdfmorph.morphs.morph import *
 
 
 class MorphSmear(Morph):
-    '''Smear the morph function.
+    """Smear the morph function.
 
     This smears (broadens) the peaks of the morph.  Note that this operates
     on the RDF. Inputs are not automatically converted to the RDF.
@@ -32,10 +32,10 @@ class MorphSmear(Morph):
     -----------------------
     smear
         The smear factor to apply to y_morph_in.
-    '''
+    """
 
     # Define input output types
-    summary = 'Smear morph by desired amount'
+    summary = "Smear morph by desired amount"
     xinlabel = LABEL_RA
     yinlabel = LABEL_RR
     xoutlabel = LABEL_RA

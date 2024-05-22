@@ -9,9 +9,13 @@ try:
 except ImportError:
     pass
 
-from diffpy.pdfmorph.pdfmorphapp import create_option_parser, single_morph, multiple_morphs
+from diffpy.pdfmorph.pdfmorphapp import (
+    create_option_parser,
+    single_morph,
+    multiple_morphs,
+)
 
-thisfile = locals().get('__file__', 'file.py')
+thisfile = locals().get("__file__", "file.py")
 tests_dir = Path(thisfile).parent.resolve()
 testdata_dir = tests_dir.joinpath("testdata")
 testsequence_dir = testdata_dir.joinpath("testsequence")
@@ -26,7 +30,15 @@ class TestApp:
     @pytest.fixture
     def setup(self):
         self.parser = create_option_parser()
-        filenames = ["g_174K.gr", "f_180K.gr", "e_186K.gr", "d_192K.gr", "c_198K.gr", "b_204K.gr", "a_210K.gr"]
+        filenames = [
+            "g_174K.gr",
+            "f_180K.gr",
+            "e_186K.gr",
+            "d_192K.gr",
+            "c_198K.gr",
+            "b_204K.gr",
+            "a_210K.gr",
+        ]
         self.testfiles = []
         for filename in filenames:
             self.testfiles.append(testsequence_dir.joinpath(filename))
@@ -50,8 +62,18 @@ class TestApp:
         tmp_succinct = tmp_path.joinpath("succinct")
         tmp_succinct_name = tmp_succinct.resolve().as_posix()
 
-        (opts, pargs) = self.parser.parse_args(["--multiple", "--sort-by", "temperature", "-s", tmp_succinct_name,
-                                                "-n", "--save-names-file", tssf])
+        (opts, pargs) = self.parser.parse_args(
+            [
+                "--multiple",
+                "--sort-by",
+                "temperature",
+                "-s",
+                tmp_succinct_name,
+                "-n",
+                "--save-names-file",
+                tssf,
+            ]
+        )
         pargs = [morph_file, testsequence_dir]
         multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
 
@@ -64,7 +86,7 @@ class TestApp:
 
         # Check the saved files are the same for succinct
         common = []
-        for item in tmp_succinct.glob('**/*.*'):
+        for item in tmp_succinct.glob("**/*.*"):
             if item.is_file():
                 common.append(item.relative_to(tmp_succinct).as_posix())
         for file in common:
@@ -78,8 +100,19 @@ class TestApp:
         tmp_verbose = tmp_path.joinpath("verbose")
         tmp_verbose_name = tmp_verbose.resolve().as_posix()
 
-        (opts, pargs) = self.parser.parse_args(["--multiple", "--sort-by", "temperature", "-s", tmp_verbose_name,
-                                                "-n", "--save-names-file", tssf, "--verbose"])
+        (opts, pargs) = self.parser.parse_args(
+            [
+                "--multiple",
+                "--sort-by",
+                "temperature",
+                "-s",
+                tmp_verbose_name,
+                "-n",
+                "--save-names-file",
+                tssf,
+                "--verbose",
+            ]
+        )
         pargs = [morph_file, testsequence_dir]
         multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
 
@@ -92,7 +125,7 @@ class TestApp:
 
         # Check the saved files are the same for verbose
         common = []
-        for item in tmp_verbose.glob('**/*.*'):
+        for item in tmp_verbose.glob("**/*.*"):
             if item.is_file():
                 common.append(item.relative_to(tmp_verbose).as_posix())
         for file in common:

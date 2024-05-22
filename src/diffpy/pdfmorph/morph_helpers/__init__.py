@@ -21,5 +21,3 @@ morph_helpers = [
     TransformXtalPDFtoRDF,
     TransformXtalRDFtoPDF,
 ]
-
-

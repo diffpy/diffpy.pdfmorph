@@ -19,7 +19,7 @@ def test_plot_morph():
     y_morph = heaviside(x_target, lb * (1 + stretch), ub * (1 + stretch))
     cfg = morph_default_config(stretch=0.1)  # off init
     morph_rv = pdfmorph(x_morph, y_morph, x_target, y_target, verbose=True, **cfg)
-    chain = morph_rv['morph_chain']
+    chain = morph_rv["morph_chain"]
     fig, ax = plt.subplots()
     l_list = plot_morph(chain, ax)
     assert all([isinstance(x, mpl.lines.Line2D) for x in l_list])

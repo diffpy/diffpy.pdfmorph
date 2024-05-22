@@ -22,7 +22,7 @@ from diffpy.pdfmorph.morphs.morph import *
 
 
 class MorphScale(Morph):
-    '''Scale the morph.
+    """Scale the morph.
 
     This scales the morph.
 
@@ -34,10 +34,10 @@ class MorphScale(Morph):
     Returns
     -------
     No return.
-    '''
+    """
 
     # Define input output types
-    summary = 'Scale morph by specified amount'
+    summary = "Scale morph by specified amount"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA

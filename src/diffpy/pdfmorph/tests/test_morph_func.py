@@ -27,9 +27,15 @@ def test_fixed_morph_with_morphfunc():
     x_morph = x_target.copy()
     y_morph = heaviside(x_target, lb * (1 + stretch), ub * (1 + stretch))
     cfg = morph_default_config(stretch=0.1)  # off init
-    cfg['scale'] = 30
+    cfg["scale"] = 30
     morph_rv = pdfmorph(
-        x_morph, y_morph, x_target, y_target, verbose=True, fixed_operations=['scale'], **cfg
+        x_morph,
+        y_morph,
+        x_target,
+        y_target,
+        verbose=True,
+        fixed_operations=["scale"],
+        **cfg,
     )
 
 
@@ -44,15 +50,15 @@ def test_stretch_with_morphfunc():
     y_morph = heaviside(x_target, lb * (1 + stretch), ub * (1 + stretch))
     cfg = morph_default_config(stretch=0.1)  # off init
     morph_rv = pdfmorph(x_morph, y_morph, x_target, y_target, **cfg)
-    morphed_cfg = morph_rv['morphed_config']
+    morphed_cfg = morph_rv["morphed_config"]
     # verified they are morphable
-    x1, y1, x0, y0 = morph_rv['morph_chain'].xyallout
+    x1, y1, x0, y0 = morph_rv["morph_chain"].xyallout
     assert np.allclose(x0, x1)
     assert np.allclose(y0, y1)
     # verify morphed param
     # note: because interpolation, the value might be off by 0.5
     # negative sign as we are compress the gref
-    assert np.allclose(-stretch, morphed_cfg['stretch'], atol=1e-1)
+    assert np.allclose(-stretch, morphed_cfg["stretch"], atol=1e-1)
 
 
 def test_scale_with_morphfunc():
@@ -66,13 +72,13 @@ def test_scale_with_morphfunc():
     y_morph *= scale
     cfg = morph_default_config(scale=1.5)  # off init
     morph_rv = pdfmorph(x_morph, y_morph, x_target, y_target, **cfg)
-    morphed_cfg = morph_rv['morphed_config']
+    morphed_cfg = morph_rv["morphed_config"]
     # verified they are morphable
-    x1, y1, x0, y0 = morph_rv['morph_chain'].xyallout
+    x1, y1, x0, y0 = morph_rv["morph_chain"].xyallout
     assert np.allclose(x0, x1)
     assert np.allclose(y0, y1)
     # verify morphed param
-    assert np.allclose(scale, 1 / morphed_cfg['scale'], atol=1e-1)
+    assert np.allclose(scale, 1 / morphed_cfg["scale"], atol=1e-1)
 
 
 def test_smear_with_morph_func():
@@ -87,10 +93,10 @@ def test_smear_with_morph_func():
     y_morph = np.exp(-0.5 * ((x_morph - r0) / sigma0) ** 2)
     cfg = morph_default_config(smear=0.1, scale=1.1, stretch=0.1)  # off init
     morph_rv = pdfmorph(x_morph, y_morph, x_target, y_target, **cfg)
-    morphed_cfg = morph_rv['morphed_config']
+    morphed_cfg = morph_rv["morphed_config"]
     # verified they are morphable
-    x1, y1, x0, y0 = morph_rv['morph_chain'].xyallout
+    x1, y1, x0, y0 = morph_rv["morph_chain"].xyallout
     assert np.allclose(x0, x1)
     assert np.allclose(y0, y1, atol=1e-3)  # numerical error -> 1e-4
     # verify morphed param
-    assert np.allclose(smear, morphed_cfg['smear'], atol=1e-1)
+    assert np.allclose(smear, morphed_cfg["smear"], atol=1e-1)

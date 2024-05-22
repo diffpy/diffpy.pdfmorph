@@ -18,7 +18,7 @@
 
 
 class MorphChain(list):
-    '''Class for chaining morphs together.
+    """Class for chaining morphs together.
 
     This class is a queue of morphs that get executed in order via the 'morph' method.
     This class derives from the built-in list, and list methods are used to modify the queue.
@@ -64,7 +64,7 @@ class MorphChain(list):
     Notes
     -----
         The properties return tuples of None if there are no morphs.
-    '''
+    """
 
     x_morph_in = property(lambda self: None if len(self) == 0 else self[0].x_morph_in)
     y_morph_in = property(lambda self: None if len(self) == 0 else self[0].y_morph_in)
@@ -75,16 +75,10 @@ class MorphChain(list):
     x_target_out = property(lambda self: None if len(self) == 0 else self[-1].x_target_out)
     y_target_out = property(lambda self: None if len(self) == 0 else self[-1].y_target_out)
     xy_morph_in = property(lambda self: (None, None) if len(self) == 0 else self[0].xy_morph_in)
-    xy_morph_out = property(
-        lambda self: (None, None) if len(self) == 0 else self[-1].xy_morph_out
-    )
+    xy_morph_out = property(lambda self: (None, None) if len(self) == 0 else self[-1].xy_morph_out)
     xy_target_in = property(lambda self: (None, None) if len(self) == 0 else self[0].xy_target_in)
-    xy_target_out = property(
-        lambda self: (None, None) if len(self) == 0 else self[-1].xy_target_out
-    )
-    xyallout = property(
-        lambda self: (None, None, None, None) if len(self) == 0 else self[-1].xyallout
-    )
+    xy_target_out = property(lambda self: (None, None) if len(self) == 0 else self[-1].xy_target_out)
+    xyallout = property(lambda self: (None, None, None, None) if len(self) == 0 else self[-1].xyallout)
     parnames = property(lambda self: set(p for m in self for p in m.parnames))
 
     def __init__(self, config, *args):
@@ -102,7 +96,7 @@ class MorphChain(list):
         return
 
     def morph(self, x_morph, y_morph, x_target, y_target):
-        '''Apply the chain of morphs to the input data.
+        """Apply the chain of morphs to the input data.
 
         Parameters
         ----------
@@ -119,7 +113,7 @@ class MorphChain(list):
         Notes
         -----
             Config may be altered by the morphs.
-        '''
+        """
         xyall = (x_morph, y_morph, x_target, y_target)
         for morph in self:
             morph.applyConfig(self.config)
@@ -127,11 +121,11 @@ class MorphChain(list):
         return xyall
 
     def __call__(self, x_morph, y_morph, x_target, y_target):
-        '''Alias for morph.'''
+        """Alias for morph."""
         return self.morph(x_morph, y_morph, x_target, y_target)
 
     def __getattr__(self, name):
-        '''Obtain the value from self.config, when normal lookup fails.
+        """Obtain the value from self.config, when normal lookup fails.
 
         Parameters
         ----------
@@ -146,15 +140,15 @@ class MorphChain(list):
         ------
         AttributeError
             Name is not available from self.config.
-        '''
+        """
         if name in self.config:
             return self.config[name]
         else:
-            emsg = 'Object has no attribute %r' % name
+            emsg = "Object has no attribute %r" % name
             raise AttributeError(emsg)
 
     def __setattr__(self, name, val):
-        '''Set configuration variables to config.
+        """Set configuration variables to config.
 
         Parameters
         ----------
@@ -162,7 +156,7 @@ class MorphChain(list):
             Name of the attribute.
         val
             Value of the attribute.
-        '''
+        """
         if name in self.parnames:
             self.config[name] = val
         else:

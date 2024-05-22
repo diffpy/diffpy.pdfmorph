@@ -7,9 +7,9 @@ import pytest
 import numpy
 
 # useful variables
-thisfile = locals().get('__file__', 'file.py')
+thisfile = locals().get("__file__", "file.py")
 tests_dir = os.path.dirname(os.path.abspath(thisfile))
-testdata_dir = os.path.join(tests_dir, 'testdata')
+testdata_dir = os.path.join(tests_dir, "testdata")
 
 from diffpy.pdfmorph.morphs.morphchain import MorphChain
 from diffpy.pdfmorph.morphs.morphscale import MorphScale
@@ -123,7 +123,7 @@ class TestRefineUC:
         return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     TestRefine()
     TestRefineUC()
 

@@ -32,12 +32,14 @@ import matplotlib.pyplot as plt
 _morph_step_dict = dict(
     scale=morphs.MorphScale,
     stretch=morphs.MorphStretch,
-    smear=[morph_helpers.TransformXtalPDFtoRDF, morphs.MorphSmear, morph_helpers.TransformXtalRDFtoPDF],
+    smear=[
+        morph_helpers.TransformXtalPDFtoRDF,
+        morphs.MorphSmear,
+        morph_helpers.TransformXtalRDFtoPDF,
+    ],
     qdamp=morphs.MorphResolutionDamping,
 )
-_default_config = dict(
-    scale=None, stretch=None, smear=None, baselineslope=None, qdamp=None
-)
+_default_config = dict(scale=None, stretch=None, smear=None, baselineslope=None, qdamp=None)
 
 
 def morph_default_config(**kwargs):
@@ -61,7 +63,7 @@ def morph_default_config(**kwargs):
     # protect against foreign keys
     for k in kwargs.keys():
         if k not in rv:
-            e = 'operation: %s is not currently supported!' % k
+            e = "operation: %s is not currently supported!" % k
             raise ValueError(e)
     rv.update(**kwargs)
 
@@ -81,7 +83,7 @@ def pdfmorph(
     fixed_operations=None,
     refine=True,
     verbose=False,
-    **kwargs
+    **kwargs,
 ):
     """function to perfom PDF morphing.
 
@@ -170,15 +172,13 @@ def pdfmorph(
     # input config
     rv_cfg = dict(kwargs)
     # configure morph operations
-    active_morphs = [
-        k for k, v in rv_cfg.items() if (v is not None) and k in _morph_step_dict
-    ]
-    rv_cfg['rmin'] = rmin
-    rv_cfg['rmax'] = rmax
-    rv_cfg['rstep'] = rstep
+    active_morphs = [k for k, v in rv_cfg.items() if (v is not None) and k in _morph_step_dict]
+    rv_cfg["rmin"] = rmin
+    rv_cfg["rmax"] = rmax
+    rv_cfg["rstep"] = rstep
     # configure smear, guess baselineslope when it is not provided
-    if rv_cfg.get('smear') is not None and rv_cfg.get('baselineslope') is None:
-        rv_cfg['baselineslope'] = -0.5
+    if rv_cfg.get("smear") is not None and rv_cfg.get("baselineslope") is None:
+        rv_cfg["baselineslope"] = -0.5
     # config dict defines initial guess of parameters
     chain = morphs.MorphChain(rv_cfg)
     # rgrid
@@ -186,9 +186,9 @@ def pdfmorph(
     # configure morph chain
     for k in active_morphs:
         morph_cls = _morph_step_dict[k]
-        if k == 'smear':
+        if k == "smear":
             [chain.append(el()) for el in morph_cls]
-            refpars.append('baselineslope')
+            refpars.append("baselineslope")
         else:
             chain.append(morph_cls())
         refpars.append(k)
@@ -228,11 +228,9 @@ def pdfmorph(
     if verbose:
         if fixed_operations:
             print("== INFO: Following steps are fixed during morphing ==:\n")
-            print('\n'.join(fixed_operations))
+            print("\n".join(fixed_operations))
         print("== INFO: Refined morph parameters ==:\n")
-        output = "\n".join(
-            ["# %s = %f" % (k, v) for k, v in rv_cfg.items() if v is not None]
-        )
+        output = "\n".join(["# %s = %f" % (k, v) for k, v in rv_cfg.items() if v is not None])
         output += "\n# Rw = %f" % rw
         output += "\n# Pearson = %f" % pcc
         print(output)
@@ -265,11 +263,11 @@ def plot_morph(chain, ax=None, **kwargs):
         fig, ax = plt.subplots()
     rfit, grfit = chain.xy_morph_out
     rdat, grdat = chain.xy_target_out
-    l_list = ax.plot(rfit, grfit, label='morph', **kwargs)
-    l_list += ax.plot(rdat, grdat, label='target', **kwargs)
-    ax.set_xlim([chain.config['rmin'], chain.config['rmax']])
+    l_list = ax.plot(rfit, grfit, label="morph", **kwargs)
+    l_list += ax.plot(rdat, grdat, label="target", **kwargs)
+    ax.set_xlim([chain.config["rmin"], chain.config["rmax"]])
     ax.legend()
-    ax.set_xlabel(r'r ($\mathrm{\AA}$)')
-    ax.set_ylabel(r'G ($\mathrm{\AA}^{-2}$)')
+    ax.set_xlabel(r"r ($\mathrm{\AA}$)")
+    ax.set_ylabel(r"G ($\mathrm{\AA}^{-2}$)")
 
     return l_list

@@ -25,16 +25,16 @@ import numpy
 
 
 class MorphISphere(Morph):
-    '''Apply inverse spherical characteristic function to the morph
+    """Apply inverse spherical characteristic function to the morph
 
     Configuration Variables
     -----------------------
     iradius
         The radius of the sphere.
-    '''
+    """
 
     # Define input output types
-    summary = 'Apply inverse spherical characteristic function to morph'
+    summary = "Apply inverse spherical characteristic function to morph"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
@@ -45,7 +45,7 @@ class MorphISphere(Morph):
         """Apply a scale factor."""
         Morph.morph(self, x_morph, y_morph, x_target, y_target)
         f = _sphericalCF(x_morph, 2 * self.iradius)
-        with numpy.errstate(divide='ignore', invalid='ignore'):
+        with numpy.errstate(divide="ignore", invalid="ignore"):
             self.y_morph_out /= f
         self.y_morph_out[f == 0] = 0
         return self.xyallout
@@ -55,7 +55,7 @@ class MorphISphere(Morph):
 
 
 class MorphISpheroid(Morph):
-    '''Apply inverse spherical characteristic function to the morph
+    """Apply inverse spherical characteristic function to the morph
 
     Configuration Variables
     -----------------------
@@ -63,10 +63,10 @@ class MorphISpheroid(Morph):
         The equatorial radius of the spheroid.
     ipradius
         The polar radius of the spheroid.
-    '''
+    """
 
     # Define input output types
-    summary = 'Apply inverse spheroidal characteristic function to morph'
+    summary = "Apply inverse spheroidal characteristic function to morph"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
@@ -77,7 +77,7 @@ class MorphISpheroid(Morph):
         """Apply a scale factor."""
         Morph.morph(self, x_morph, y_morph, x_target, y_target)
         f = _spheroidalCF(x_morph, self.iradius, self.ipradius)
-        with numpy.errstate(divide='ignore', invalid='ignore'):
+        with numpy.errstate(divide="ignore", invalid="ignore"):
             self.y_morph_out /= f
         self.y_morph_out[f == 0] = 0
         return self.xyallout

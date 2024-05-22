@@ -12,10 +12,10 @@ import numpy
 from pathlib import Path
 
 # useful variables
-thisfile = locals().get('__file__', 'file.py')
+thisfile = locals().get("__file__", "file.py")
 tests_dir = os.path.dirname(os.path.abspath(thisfile))
-testdata_dir = os.path.join(tests_dir, 'testdata')
-testsequence_dir = os.path.join(testdata_dir, 'testsequence')
+testdata_dir = os.path.join(tests_dir, "testdata")
+testsequence_dir = os.path.join(testdata_dir, "testsequence")
 
 import diffpy.pdfmorph.tools as tools
 
@@ -68,6 +68,7 @@ class TestTools:
 
         # Fisher-Yates randomization
         import random
+
         length = len(absolute_sf)
         for i in range(length - 1, 0, -1):
             j = random.randint(0, i)
@@ -137,7 +138,7 @@ class TestTools:
 
 # End of class TestTools
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     TestTools()
 
 # End of file

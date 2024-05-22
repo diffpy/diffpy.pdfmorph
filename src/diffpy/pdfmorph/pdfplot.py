@@ -24,7 +24,7 @@ plt.style.use(bg_mpl_style)
 
 # FIXME - make this return the figure object in the future, so several views
 # can be composed.
-def plotPDFs(pairlist, labels=None, offset='auto', rmin=None, rmax=None):
+def plotPDFs(pairlist, labels=None, offset="auto", rmin=None, rmax=None):
     """Plots several PDFs on top of one another.
 
     Parameters
@@ -44,7 +44,7 @@ def plotPDFs(pairlist, labels=None, offset='auto', rmin=None, rmax=None):
     """
     if labels is None:
         labels = []
-    if offset == 'auto':
+    if offset == "auto":
         offset = _find_offset(pairlist)
 
     gap = len(pairlist) - len(labels)
@@ -172,20 +172,18 @@ def comparePDFs(
 
     plt.plot(rdat, grdat, linewidth=l_width, label=labeldata)
     plt.plot(rfit, grfit, linewidth=l_width, label=labelfit)
-    plt.plot(rdat, offset * numpy.ones_like(diff), linewidth=3, color='black')
+    plt.plot(rdat, offset * numpy.ones_like(diff), linewidth=3, color="black")
 
     diff += offset
     plt.plot(rdat, diff, linewidth=l_width, label=labeldiff)
 
     if maglim is not None:
         # Add a line for the magnification cutoff
-        plt.axvline(
-            maglim, 0, 1, linestyle='--', color='black', linewidth=1.5, dashes=(14, 7)
-        )
+        plt.axvline(maglim, 0, 1, linestyle="--", color="black", linewidth=1.5, dashes=(14, 7))
         # FIXME - look for a place to put the maglim
         xpos = (rvmax * 0.85 + maglim) / 2 / (rvmax - rvmin)
         if xpos <= 0.9:
-            plt.figtext(xpos, 0.7, "x%.1f" % mag, backgroundcolor='w')
+            plt.figtext(xpos, 0.7, "x%.1f" % mag, backgroundcolor="w")
 
     # Get a tight view
     plt.xlim(rvmin, rvmax)
@@ -258,7 +256,7 @@ def plot_param(target_labels, param_list, param_name=None, field=None):
 
     if numerical:
         # Plot the parameter against a numerical field
-        plt.plot(target_labels, param_list, linestyle='-', marker='o')
+        plt.plot(target_labels, param_list, linestyle="-", marker="o")
         if param_name is not None:
             plt.ylabel(rf"{param_name}")
         plt.xlabel(rf"{field}")
