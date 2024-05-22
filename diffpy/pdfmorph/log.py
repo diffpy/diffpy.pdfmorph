@@ -26,16 +26,16 @@ __id__ = "$Id$"
 import logging
 
 # logging configuration
-plog = logging.getLogger('diffpy.pdfmorph')
+plog = logging.getLogger("diffpy.pdfmorph")
 
 
 def setVerbosity(vb):
-    '''Set verbosity of the pdfmorph logger.
+    """Set verbosity of the pdfmorph logger.
 
     vb   -- integer or one of ('debug', 'info', 'warning', 'error') strings
 
     No return value.
-    '''
+    """
     try:
         if type(vb) is str:
             level = int(getattr(logging, vb.upper(), vb))
@@ -47,5 +47,6 @@ def setVerbosity(vb):
     plog.setLevel(level)
     plog.info("log level set to %r", level)
     return
+
 
 # End of file

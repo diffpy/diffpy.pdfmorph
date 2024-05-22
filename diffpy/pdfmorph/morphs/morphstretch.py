@@ -24,8 +24,9 @@ __id__ = "$Id$"
 import numpy
 from diffpy.pdfmorph.morphs.morph import *
 
+
 class MorphStretch(Morph):
-    '''Smear the objective function.
+    """Smear the objective function.
 
     This stretches (broadens) the objective.
 
@@ -34,10 +35,10 @@ class MorphStretch(Morph):
     stretch --  The stretch factor to apply to yobjin. This is applied such
                 that a feature at r is moved to r * (1 + stretch).
 
-    '''
+    """
 
     # Define input output types
-    summary = 'Stretch objective by desired amount'
+    summary = "Stretch objective by desired amount"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
@@ -53,5 +54,6 @@ class MorphStretch(Morph):
         r = self.xobjin / (1.0 + self.stretch)
         self.yobjout = numpy.interp(r, self.xobjin, self.yobjin)
         return self.xyallout
+
 
 # End of class MorphSmear

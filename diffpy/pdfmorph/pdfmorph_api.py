@@ -15,6 +15,7 @@
 
 
 import sys
+
 if sys.version_info.major < 3:
     # old import for py2.7
     from collections import Iterable
@@ -28,14 +29,13 @@ import matplotlib.pyplot as plt
 
 # map of operation dict
 # TODO: include morphing on psize
-_morph_step_dict = dict(scale=morphs.MorphScale,
-                        stretch=morphs.MorphStretch,
-                        smear=[morphs.MorphXtalPDFtoRDF,
-                               morphs.MorphSmear,
-                               morphs.MorphXtalRDFtoPDF],
-                        qdamp=morphs.MorphResolutionDamping)
-_default_config = dict(scale=None, stretch=None, smear=None,
-                       baselineslope=None, qdamp=None)
+_morph_step_dict = dict(
+    scale=morphs.MorphScale,
+    stretch=morphs.MorphStretch,
+    smear=[morphs.MorphXtalPDFtoRDF, morphs.MorphSmear, morphs.MorphXtalRDFtoPDF],
+    qdamp=morphs.MorphResolutionDamping,
+)
+_default_config = dict(scale=None, stretch=None, smear=None, baselineslope=None, qdamp=None)
 
 
 def morph_default_config(**kwargs):
@@ -59,16 +59,28 @@ def morph_default_config(**kwargs):
     # protect against foreign keys
     for k in kwargs.keys():
         if k not in rv:
-            e = 'operation: %s is not currently supported!' % k
+            e = "operation: %s is not currently supported!" % k
             raise ValueError(e)
     rv.update(**kwargs)
 
     return rv
 
 
-def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
-             pearson=False, add_pearson=False, fixed_operations=None,
-             refine=True, verbose=False, **kwargs):
+def pdfmorph(
+    xobj,
+    yobj,
+    xref,
+    yref,
+    rmin=None,
+    rmax=None,
+    rstep=None,
+    pearson=False,
+    add_pearson=False,
+    fixed_operations=None,
+    refine=True,
+    verbose=False,
+    **kwargs
+):
     """function to perfom PDF morphing.
 
     Parameters
@@ -156,15 +168,13 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     # input config
     rv_cfg = dict(kwargs)
     # configure morph operations
-    active_morphs = [k for k, v in rv_cfg.items() if (v is not None) and k in
-                     _morph_step_dict]
-    rv_cfg['rmin'] = rmin
-    rv_cfg['rmax'] = rmax
-    rv_cfg['rstep'] = rstep
+    active_morphs = [k for k, v in rv_cfg.items() if (v is not None) and k in _morph_step_dict]
+    rv_cfg["rmin"] = rmin
+    rv_cfg["rmax"] = rmax
+    rv_cfg["rstep"] = rstep
     # configure smear, guess baselineslope when it is not provided
-    if (rv_cfg.get('smear') is not None
-        and rv_cfg.get('baselineslope') is None):
-        rv_cfg['baselineslope'] = -0.5
+    if rv_cfg.get("smear") is not None and rv_cfg.get("baselineslope") is None:
+        rv_cfg["baselineslope"] = -0.5
     # config dict defines initial guess of parameters
     chain = morphs.MorphChain(rv_cfg)
     # rgrid
@@ -172,9 +182,9 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     # configure morph chain
     for k in active_morphs:
         morph_cls = _morph_step_dict[k]
-        if k == 'smear':
+        if k == "smear":
             [chain.append(el()) for el in morph_cls]
-            refpars.append('baselineslope')
+            refpars.append("baselineslope")
         else:
             chain.append(morph_cls())
         refpars.append(k)
@@ -189,7 +199,7 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     if pearson:
         refiner.residual = refiner._pearson
     if add_pearson:
-       refiner.residual = refiner._addpearson
+        refiner.residual = refiner._addpearson
     # execute morphing
     if refpars and refine:
         # This works better when we adjust scale and smear first.
@@ -214,16 +224,14 @@ def pdfmorph(xobj, yobj, xref, yref, rmin=None, rmax=None, rstep=None,
     if verbose:
         if fixed_operations:
             print("== INFO: Following steps are fixed during morphing ==:\n")
-            print('\n'.join(fixed_operations))
+            print("\n".join(fixed_operations))
         print("== INFO: Refined morph parameters ==:\n")
-        output = "\n".join(["# %s = %f" % (k, v) for k, v in \
-                rv_cfg.items() if v is not None])
+        output = "\n".join(["# %s = %f" % (k, v) for k, v in rv_cfg.items() if v is not None])
         output += "\n# Rw = %f" % rw
         output += "\n# Pearson = %f" % pcc
         print(output)
 
-    rv_dict = dict(morph_chain=chain, morphed_config=rv_cfg,
-                   rw=rw, pcc=pcc)
+    rv_dict = dict(morph_chain=chain, morphed_config=rv_cfg, rw=rw, pcc=pcc)
     return rv_dict
 
 
@@ -254,11 +262,11 @@ def plot_morph(chain, ax=None, **kwargs):
         fig, ax = plt.subplots()
     rfit, grfit = chain.xyobjout
     rdat, grdat = chain.xyrefout
-    l_list = ax.plot(rfit, grfit, label='objective', **kwargs)
-    l_list += ax.plot(rdat, grdat, label='reference', **kwargs)
-    ax.set_xlim([chain.config['rmin'], chain.config['rmax']])
+    l_list = ax.plot(rfit, grfit, label="objective", **kwargs)
+    l_list += ax.plot(rdat, grdat, label="reference", **kwargs)
+    ax.set_xlim([chain.config["rmin"], chain.config["rmax"]])
     ax.legend()
-    ax.set_xlabel(r'r ($\mathrm{\AA}$)')
-    ax.set_ylabel(r'G ($\mathrm{\AA}^{-2}$)')
+    ax.set_xlabel(r"r ($\mathrm{\AA}$)")
+    ax.set_ylabel(r"G ($\mathrm{\AA}^{-2}$)")
 
     return l_list

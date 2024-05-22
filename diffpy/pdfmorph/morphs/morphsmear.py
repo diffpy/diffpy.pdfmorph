@@ -24,8 +24,9 @@ __id__ = "$Id$"
 import numpy
 from diffpy.pdfmorph.morphs.morph import *
 
+
 class MorphSmear(Morph):
-    '''Smear the objective function.
+    """Smear the objective function.
 
     This smears (broadens) the peaks of the objective.  Note that this operates
     on the RDF. Inputs are not automatically converted to the RDF.
@@ -34,10 +35,10 @@ class MorphSmear(Morph):
 
     smear   --  The smear factor to apply to yobjin.
 
-    '''
+    """
 
     # Define input output types
-    summary = 'Smear objective by desired amount'
+    summary = "Smear objective by desired amount"
     xinlabel = LABEL_RA
     yinlabel = LABEL_RR
     xoutlabel = LABEL_RA
@@ -56,17 +57,17 @@ class MorphSmear(Morph):
         r = self.xobjin
         rr = self.yobjin
         r0 = r[len(r) // 2]
-        gaussian = numpy.exp(-0.5 * ((r - r0)/self.smear)**2 )
+        gaussian = numpy.exp(-0.5 * ((r - r0) / self.smear) ** 2)
 
         # Get the full convolution
         c = numpy.convolve(rr, gaussian, mode="full")
         # Find the centroid of the RDF, we don't want this to change from the
         # convolution.
         x1 = numpy.arange(len(rr), dtype=float)
-        c1idx = numpy.sum(rr * x1)/sum(rr)
+        c1idx = numpy.sum(rr * x1) / sum(rr)
         # Find the centroid of the convolution
         xc = numpy.arange(len(c), dtype=float)
-        ccidx = numpy.sum(c * xc)/sum(c)
+        ccidx = numpy.sum(c * xc) / sum(c)
         # Interpolate the convolution such that the centroids line up. This
         # uses linear interpolation.
         shift = ccidx - c1idx
@@ -79,5 +80,6 @@ class MorphSmear(Morph):
         self.yobjout = rrbroad
 
         return self.xyallout
+
 
 # End of class MorphSmear

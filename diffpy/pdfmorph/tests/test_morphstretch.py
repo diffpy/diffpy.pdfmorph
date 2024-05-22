@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # version
-__id__ = '$Id$'
+__id__ = "$Id$"
 
 import os
 import unittest
@@ -9,11 +9,12 @@ import unittest
 import numpy
 
 # useful variables
-thisfile = locals().get('__file__', 'file.py')
+thisfile = locals().get("__file__", "file.py")
 tests_dir = os.path.dirname(os.path.abspath(thisfile))
 # testdata_dir = os.path.join(tests_dir, 'testdata')
 
 from diffpy.pdfmorph.morphs.morphstretch import MorphStretch
+
 
 class TestMorphStretch(unittest.TestCase):
 
@@ -26,14 +27,12 @@ class TestMorphStretch(unittest.TestCase):
         return
 
     def test_morph(self):
-        """check MorphStretch.morph()
-        """
+        """check MorphStretch.morph()"""
         morph = MorphStretch()
 
         # Stretch by 50%
         morph.stretch = 0.5
-        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref,
-                self.yref)
+        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref, self.yref)
 
         # Reference should be unchanged
         self.assertTrue(numpy.allclose(self.yref, yref))
@@ -48,8 +47,7 @@ class TestMorphStretch(unittest.TestCase):
 
         # Stretch by -10%
         morph.stretch = -0.1
-        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref,
-                self.yref)
+        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref, self.yref)
 
         # Reference should be unchanged
         self.assertTrue(numpy.allclose(self.yref, yref))
@@ -63,7 +61,9 @@ class TestMorphStretch(unittest.TestCase):
         self.assertTrue(res < 1)
         return
 
+
 # End of class TestMorphSmear
+
 
 def heaviside(x, lb, ub):
     """The Heaviside function."""
@@ -73,7 +73,7 @@ def heaviside(x, lb, ub):
     return y
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
 
 # End of file

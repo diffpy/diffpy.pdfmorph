@@ -17,9 +17,10 @@
 import matplotlib.pyplot as plt
 import numpy
 
+
 # FIXME - make this return the figure object in the future, so several views
 # can be composed.
-def plotPDFs(pairlist, labels=None, offset ='auto', rmin = None, rmax = None):
+def plotPDFs(pairlist, labels=None, offset="auto", rmin=None, rmax=None):
     """Plots several PDFs on top of one another.
 
     pairlist    --  iterable of (r, gr) pairs to plot
@@ -38,7 +39,7 @@ def plotPDFs(pairlist, labels=None, offset ='auto', rmin = None, rmax = None):
     """
     if labels is None:
         labels = []
-    if offset == 'auto':
+    if offset == "auto":
         offset = _findOffset(pairlist)
 
     gap = len(pairlist) - len(labels)
@@ -47,19 +48,19 @@ def plotPDFs(pairlist, labels=None, offset ='auto', rmin = None, rmax = None):
 
     for idx, pair in enumerate(pairlist):
         r, gr = pair
-        plt.plot(r, gr + idx * offset, label = labels[idx])
+        plt.plot(r, gr + idx * offset, label=labels[idx])
     plt.xlim(rmin, rmax)
 
     if gap == 0:
-        plt.legend(loc = 0)
+        plt.legend(loc=0)
 
     plt.xlabel(r"$r (\mathrm{\AA})$")
     plt.ylabel(r"$G (\mathrm{\AA}^{-1})$")
     plt.show()
     return
 
-def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
-                maglim = None, mag = 5, rw = None, legend = True):
+
+def comparePDFs(pairlist, labels=None, rmin=None, rmax=None, show=True, maglim=None, mag=5, rw=None, legend=True):
     """Plot two PDFs on top of each other and difference curve.
 
     pairlist    --  iterable of (r, gr) pairs to plot
@@ -79,7 +80,7 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
 
     The second PDF will be shown as blue circles below and the first as a red
     line.  The difference curve will be in green and offset for clarity.
-    
+
     """
     if labels is None:
         labels = [2]
@@ -110,7 +111,7 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     # Put rw in the label
     labeldiff = "difference" if len(labels) < 3 else labels[2]
     if rw is not None:
-        labeldiff += " (Rw = %.3f)"%rw
+        labeldiff += " (Rw = %.3f)" % rw
 
     # Magnify if necessary
     if maglim is not None:
@@ -123,10 +124,10 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
         gtemp[sel] *= mag
 
     # Determine the offset for the difference curve.
-    sel = numpy.logical_and( rdat <= rvmax, rdat >= rvmin)
+    sel = numpy.logical_and(rdat <= rvmax, rdat >= rvmin)
     ymin = min(min(grdat[sel]), min(gtemp[sel]))
     ymax = max(diff[sel])
-    offset = -1.1*(ymax - ymin)
+    offset = -1.1 * (ymax - ymin)
 
     # Set up the plot
     _configure()
@@ -138,8 +139,8 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     # Set a reasonable minimum of .8 and maximum of 1
     scale = min(1, max(scale, 0.8))
     figsize = [13.5, 4.5]
-    figsize[0] *=  scale
-    fig = plt.figure(1, figsize = figsize)
+    figsize[0] *= scale
+    fig = plt.figure(1, figsize=figsize)
     # Get the margins based on the figure size
     lm = 0.12 / scale
     bm = 0.20 / scale
@@ -149,25 +150,30 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     fig.add_axes(axes)
     plt.minorticks_on()
 
-    plt.plot(rdat, grdat, label = labeldata, marker = 'o', markerfacecolor
-            = 'white', markeredgecolor = 'blue', markersize = 7,
-            markeredgewidth = 0.75)
-    plt.plot(rfit, grfit, label = labelfit, linestyle = 'solid', linewidth =
-            2, color = 'red')
-    plt.plot(rdat, offset*numpy.ones_like(diff), linestyle = '--', linewidth
-            = 1, color = 'black', dashes = (15, 15), aa = False)
+    plt.plot(
+        rdat,
+        grdat,
+        label=labeldata,
+        marker="o",
+        markerfacecolor="white",
+        markeredgecolor="blue",
+        markersize=7,
+        markeredgewidth=0.75,
+    )
+    plt.plot(rfit, grfit, label=labelfit, linestyle="solid", linewidth=2, color="red")
+    plt.plot(
+        rdat, offset * numpy.ones_like(diff), linestyle="--", linewidth=1, color="black", dashes=(15, 15), aa=False
+    )
     diff += offset
-    plt.plot(rdat, diff, label = labeldiff, linestyle = 'solid',
-            linewidth = 1.5, color = 'green')
+    plt.plot(rdat, diff, label=labeldiff, linestyle="solid", linewidth=1.5, color="green")
 
     if maglim is not None:
         # Add a line for the magnification cutoff
-        plt.axvline(maglim, 0, 1, linestyle = '--', color = 'black',
-                linewidth = 1.5, dashes = (14, 7))
+        plt.axvline(maglim, 0, 1, linestyle="--", color="black", linewidth=1.5, dashes=(14, 7))
         # FIXME - look for a place to put the maglim
-        xpos = (rvmax*0.85 + maglim) / 2 / (rvmax - rvmin)
+        xpos = (rvmax * 0.85 + maglim) / 2 / (rvmax - rvmin)
         if xpos <= 0.9:
-            plt.figtext(xpos, 0.7, "x%.1f"%mag, backgroundcolor='w')
+            plt.figtext(xpos, 0.7, "x%.1f" % mag, backgroundcolor="w")
 
     # Get a tight view
     plt.xlim(rvmin, rvmax)
@@ -184,13 +190,14 @@ def comparePDFs(pairlist, labels=None, rmin = None, rmax = None, show = True,
     plt.xlabel(r"r ($\mathrm{\AA})$")
     plt.ylabel(r"G $(\mathrm{\AA}^{-1})$")
     if legend:
-        plt.legend(bbox_to_anchor=(0.005, 1.02, 0.99, .10), loc=3,
-                ncol=3, mode="expand", borderaxespad=0)
-    if show: plt.show()
+        plt.legend(bbox_to_anchor=(0.005, 1.02, 0.99, 0.10), loc=3, ncol=3, mode="expand", borderaxespad=0)
+    if show:
+        plt.show()
 
     return
 
-def truncatePDFs(r, gr, rmin = None, rmax = None):
+
+def truncatePDFs(r, gr, rmin=None, rmax=None):
     """Truncate a PDF to specified bounds.
 
     r           --  r-values of the PDF
@@ -214,20 +221,23 @@ def truncatePDFs(r, gr, rmin = None, rmax = None):
 
     return r, gr
 
+
 def _configure():
     """Configure look and feel."""
     import matplotlib.pyplot as plt
-    plt.rc("font", size = 40)
-    plt.rc("axes", linewidth = 2, labelsize = 30)
-    plt.rc("xtick", labelsize = 25)
-    plt.rc("xtick.major", size = 7)
-    plt.rc("xtick.minor", size = 3)
-    plt.rc("ytick", labelsize = 25)
-    plt.rc("ytick.major", size = 7)
-    plt.rc("ytick.minor", size = 3)
-    plt.rc("legend", fontsize = 18)
-    plt.rc("lines", markeredgewidth = 2) # thicker axes and symbols
+
+    plt.rc("font", size=40)
+    plt.rc("axes", linewidth=2, labelsize=30)
+    plt.rc("xtick", labelsize=25)
+    plt.rc("xtick.major", size=7)
+    plt.rc("xtick.minor", size=3)
+    plt.rc("ytick", labelsize=25)
+    plt.rc("ytick.major", size=7)
+    plt.rc("ytick.minor", size=3)
+    plt.rc("legend", fontsize=18)
+    plt.rc("lines", markeredgewidth=2)  # thicker axes and symbols
     return
+
 
 def _findOffset(pairlist):
     """Find an optimal offset between PDFs."""

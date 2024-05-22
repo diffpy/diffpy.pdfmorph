@@ -20,12 +20,13 @@
 # module version
 __id__ = "$Id$"
 
-LABEL_RA = 'r (A)'     # r-grid
-LABEL_GR = 'G (1/A^2)' # PDF G(r)
-LABEL_RR = 'R (1/A)'   # RDF R(r)
+LABEL_RA = "r (A)"  # r-grid
+LABEL_GR = "G (1/A^2)"  # PDF G(r)
+LABEL_RR = "R (1/A)"  # RDF R(r)
+
 
 class Morph(object):
-    '''Base class for implementing a morph on an objective given a reference.
+    """Base class for implementing a morph on an objective given a reference.
 
     Adapted from diffpy.pdfgetx to include two sets of arrays that get passed
     through. In most cases, the objective is modified by a morph, but it is
@@ -64,36 +65,33 @@ class Morph(object):
     xyrefin     -- tuple of (xrefin, yrefin)
     xyrefout    -- tuple of (xrefout, yrefout)
     xyallout    -- tuple of (xobjout, yobjout, xrefout, yrefout)
-    '''
+    """
 
     # Class variables
     # default array types are empty
-    summary = 'identity transformation'
-    xinlabel = 'x'
-    yinlabel = 'y'
-    xoutlabel = 'x'
-    youtlabel = 'y'
+    summary = "identity transformation"
+    xinlabel = "x"
+    yinlabel = "y"
+    xoutlabel = "x"
+    youtlabel = "y"
     parnames = []
 
     # Properties
 
-    xyobjin = property(lambda self: (self.xobjin, self.yobjin),
-            doc='Return a tuple of objective input arrays')
-    xyobjout = property(lambda self: (self.xobjout, self.yobjout),
-            doc='Return a tuple of objective output arrays')
-    xyrefin = property(lambda self: (self.xrefin, self.yrefin),
-            doc='Return a tuple of reference input arrays')
-    xyrefout = property(lambda self: (self.xrefout, self.yrefout),
-            doc='Return a tuple of reference output arrays')
-    xyallout = property(lambda self: 
-            (self.xobjout, self.yobjout, self.xrefout, self.yrefout), 
-            doc='Return a tuple of all output arrays')
+    xyobjin = property(lambda self: (self.xobjin, self.yobjin), doc="Return a tuple of objective input arrays")
+    xyobjout = property(lambda self: (self.xobjout, self.yobjout), doc="Return a tuple of objective output arrays")
+    xyrefin = property(lambda self: (self.xrefin, self.yrefin), doc="Return a tuple of reference input arrays")
+    xyrefout = property(lambda self: (self.xrefout, self.yrefout), doc="Return a tuple of reference output arrays")
+    xyallout = property(
+        lambda self: (self.xobjout, self.yobjout, self.xrefout, self.yrefout),
+        doc="Return a tuple of all output arrays",
+    )
 
     def __init__(self, config=None):
-        '''Create a default Morph instance.
+        """Create a default Morph instance.
 
         config  -- dictionary that contains all configuration variables
-        '''
+        """
         # declare empty attributes
         if config is None:
             config = {}
@@ -109,9 +107,8 @@ class Morph(object):
         self.applyConfig(config)
         return
 
-
     def morph(self, xobj, yobj, xref, yref):
-        '''Morph arrays objective or reference.
+        """Morph arrays objective or reference.
 
         xobj, yobj  --  Objective arrays.
         xref, yref  --  Reference arrays.
@@ -120,7 +117,7 @@ class Morph(object):
         class.
 
         Return a tuple of numpy arrays (xobjout, yobjout, xrefout, yrefout)
-        '''
+        """
         self.xobjin = xobj
         self.yobjin = yobj
         self.xrefin = xref
@@ -132,95 +129,89 @@ class Morph(object):
         self.checkConfig()
         return self.xyallout
 
-
     def __call__(self, xobj, yobj, xref, yref):
-        '''Alias for morph.
-        '''
+        """Alias for morph."""
         return self.morph(xobj, yobj, xref, yref)
 
-
     def applyConfig(self, config):
-        '''Process any configuration data from a dictionary.
+        """Process any configuration data from a dictionary.
 
         config   -- Configuration dictionary.
 
         No return value.
-        '''
+        """
         self.config = config
         return
 
-
     def checkConfig(self):
-        '''Verify data in self.config.  No action by default.
+        """Verify data in self.config.  No action by default.
 
         To be overridden in a derived class.
-        '''
+        """
         return
 
-
     def plotInputs(self, xylabels=True):
-        '''Plot input arrays using matplotlib.pyplot
+        """Plot input arrays using matplotlib.pyplot
 
         xylabels -- flag for updating x and y axis labels
 
         Return a list of matplotlib line objects.
-        '''
+        """
         from matplotlib.pyplot import plot, xlabel, ylabel
-        rv = plot(self.xrefin, self.yrefin, label = "reference")
-        rv = plot(self.xobjin, self.yobjin, label = "objective")
+
+        rv = plot(self.xrefin, self.yrefin, label="reference")
+        rv = plot(self.xobjin, self.yobjin, label="objective")
         if xylabels:
             xlabel(self.xinlabel)
             ylabel(self.yinlabel)
         return rv
 
-
     def plotOutputs(self, xylabels=True, **plotargs):
-        '''Plot output arrays using matplotlib.pyplot
+        """Plot output arrays using matplotlib.pyplot
 
         xylabels -- flag for updating x and y axis labels
         plotargs -- arguments passed to the pylab plot function. Note that
                     "label" will be ignored.
 
         Return a list of matplotlib line objects.
-        '''
+        """
         from matplotlib.pyplot import plot, xlabel, ylabel
+
         pargs = dict(plotargs)
         pargs.pop("label", None)
-        rv = plot(self.xrefout, self.yrefout, label = "reference", **pargs)
-        rv = plot(self.xobjout, self.yobjout, label = "objective", **pargs)
+        rv = plot(self.xrefout, self.yrefout, label="reference", **pargs)
+        rv = plot(self.xobjout, self.yobjout, label="objective", **pargs)
         if xylabels:
             xlabel(self.xoutlabel)
             ylabel(self.youtlabel)
         return rv
 
-
     def __getattr__(self, name):
-        '''Obtain the value from self.config, when normal lookup fails.
+        """Obtain the value from self.config, when normal lookup fails.
 
         name -- name of the attribute to be recovered
 
         Return self.config.get(name).
         Raise AttributeError, when name is not available from self.config.
-        '''
+        """
         if name in self.config:
             return self.config[name]
         else:
-            emsg = 'Object has no attribute %r' % name
+            emsg = "Object has no attribute %r" % name
             raise AttributeError(emsg)
 
-
     def __setattr__(self, name, val):
-        '''Set configuration variables to config.
+        """Set configuration variables to config.
 
         name -- name of the attribute
         val  -- value of the attribute
 
-        '''
+        """
         if name in self.parnames:
             self.config[name] = val
         else:
             object.__setattr__(self, name, val)
         return
 
-# End class Morph
 
+# End class Morph

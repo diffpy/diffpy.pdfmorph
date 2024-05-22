@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # version
-__id__ = '$Id$'
+__id__ = "$Id$"
 
 import os
 import unittest
@@ -9,13 +9,14 @@ import unittest
 import numpy
 
 # useful variables
-thisfile = locals().get('__file__', 'file.py')
+thisfile = locals().get("__file__", "file.py")
 tests_dir = os.path.dirname(os.path.abspath(thisfile))
 # testdata_dir = os.path.join(tests_dir, 'testdata')
 
 from diffpy.pdfmorph.morphs.morphchain import MorphChain
 from diffpy.pdfmorph.morphs.morphscale import MorphScale
 from diffpy.pdfmorph.morphs.morphrgrid import MorphRGrid
+
 
 class TestMorphChain(unittest.TestCase):
 
@@ -28,22 +29,20 @@ class TestMorphChain(unittest.TestCase):
         return
 
     def test_morph(self):
-        """check MorphChain.morph()
-        """
+        """check MorphChain.morph()"""
         # Define the morphs
         config = {
-                "rmin" : 1,
-                "rmax" : 6,
-                "rstep" : 0.1,
-                "scale" : 3.0,
-                }
+            "rmin": 1,
+            "rmax": 6,
+            "rstep": 0.1,
+            "scale": 3.0,
+        }
 
         mgrid = MorphRGrid()
         mscale = MorphScale()
         chain = MorphChain(config, mgrid, mscale)
 
-        xobj, yobj, xref, yref = chain(self.xobj, self.yobj, self.xref,
-                self.yref)
+        xobj, yobj, xref, yref = chain(self.xobj, self.yobj, self.xref, self.yref)
 
         self.assertTrue((xobj == xref).all())
         self.assertAlmostEqual(xobj[0], 1.0)
@@ -55,9 +54,10 @@ class TestMorphChain(unittest.TestCase):
         self.assertTrue(numpy.allclose(yobj, yref))
         return
 
+
 # End of class TestMorphChain
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
 
 # End of file

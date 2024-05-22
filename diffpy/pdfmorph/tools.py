@@ -23,13 +23,15 @@ __id__ = "$Id$"
 
 import numpy
 
+
 def estimateScale(yobjin, yrefin):
     """Set the scale that best matches the objective to the reference."""
     dot = numpy.dot
     scale = dot(yobjin, yrefin) / dot(yobjin, yobjin)
     return scale
 
-def estimateBaselineSlope(r, gr, rmin = None, rmax = None):
+
+def estimateBaselineSlope(r, gr, rmin=None, rmax=None):
     """Estimate the slope of the linear baseline of a PDF.
 
     This fits a the equation slope*r through the bottom of the PDF.
@@ -51,11 +53,11 @@ def estimateBaselineSlope(r, gr, rmin = None, rmax = None):
     rp = r.copy()
     grp = gr.copy()
     if rmax is not None:
-        grp = grp[ rp <= rmax ]
-        rp = rp[ rp <= rmax ]
+        grp = grp[rp <= rmax]
+        rp = rp[rp <= rmax]
     if rmin is not None:
-        grp = grp[ rp >= rmin ]
-        rp = rp[ rp >= rmin ]
+        grp = grp[rp >= rmin]
+        rp = rp[rp >= rmin]
 
     def chiv(pars):
 
@@ -68,7 +70,7 @@ def estimateBaselineSlope(r, gr, rmin = None, rmax = None):
         diff = chiv.copy()
         diff[diff > 0] = 0
         negpenalty = dot(diff, diff)
-        chiv *= 1 + 0.5*negpenalty
+        chiv *= 1 + 0.5 * negpenalty
 
         return chiv
 
@@ -89,11 +91,14 @@ def getRw(chain):
     rw = rw**0.5
     return rw
 
+
 def getPearson(chain):
     from scipy.stats.stats import pearsonr
+
     xobj, yobj, xref, yref = chain.xyallout
     pcc, pval = pearsonr(yobj, yref)
     return pcc
+
 
 def readPDF(fname):
     """Reads an .gr file, loads r and G(r) vectors.
@@ -109,4 +114,3 @@ def readPDF(fname):
     if len(rv) >= 2:
         return rv[:2]
     return (None, None)
-

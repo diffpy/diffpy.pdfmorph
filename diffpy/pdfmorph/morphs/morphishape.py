@@ -24,17 +24,18 @@ __id__ = "$Id$"
 from diffpy.pdfmorph.morphs.morph import *
 from diffpy.pdfmorph.morphs.morphshape import _sphericalCF, _spheroidalCF
 
+
 class MorphISphere(Morph):
-    '''Apply inverse spherical characteristic function to the objective
+    """Apply inverse spherical characteristic function to the objective
 
     Configuration variables:
 
     iradius  --  The radius of the sphere
 
-    '''
+    """
 
     # Define input output types
-    summary = 'Apply inverse spherical characteristic function to objective'
+    summary = "Apply inverse spherical characteristic function to objective"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
@@ -49,20 +50,22 @@ class MorphISphere(Morph):
         self.yobjout[f == 0] = 0
         return self.xyallout
 
+
 # End of class MorphISphere
 
+
 class MorphISpheroid(Morph):
-    '''Apply inverse spherical characteristic function to the objective
+    """Apply inverse spherical characteristic function to the objective
 
     Configuration variables:
 
     iradius   --  The equatorial radius of the spheroid
     ipradius  --  The polar radius of the spheroid
 
-    '''
+    """
 
     # Define input output types
-    summary = 'Apply inverse spheroidal characteristic function to objective'
+    summary = "Apply inverse spheroidal characteristic function to objective"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
@@ -76,5 +79,6 @@ class MorphISpheroid(Morph):
         self.yobjout /= f
         self.yobjout[f == 0] == 0
         return self.xyallout
+
 
 # End of class MorphSpheroid

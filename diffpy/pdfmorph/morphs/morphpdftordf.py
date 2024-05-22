@@ -22,8 +22,9 @@ __id__ = "$Id$"
 
 from diffpy.pdfmorph.morphs.morph import *
 
+
 class MorphXtalPDFtoRDF(Morph):
-    '''Morph crystal PDFs to RDFs.
+    """Morph crystal PDFs to RDFs.
 
     This morphs both the objective and the reference.
 
@@ -36,10 +37,10 @@ class MorphXtalPDFtoRDF(Morph):
     With s = baselineslope,
     R(r) = r * (G(r) - r * s)
 
-    '''
+    """
 
     # Define input output types
-    summary = 'Turn the PDF into the RDF for both the objective and reference'
+    summary = "Turn the PDF into the RDF for both the objective and reference"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
@@ -54,5 +55,6 @@ class MorphXtalPDFtoRDF(Morph):
         refbaseline = self.baselineslope * self.xrefin
         self.yrefout = self.xrefin * (self.yrefin - refbaseline)
         return self.xyallout
+
 
 # End of class MorphXtalPDFtoRDF

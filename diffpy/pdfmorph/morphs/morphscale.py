@@ -22,8 +22,9 @@ __id__ = "$Id$"
 
 from diffpy.pdfmorph.morphs.morph import *
 
+
 class MorphScale(Morph):
-    '''Scale the objective.
+    """Scale the objective.
 
     This scales the objective.
 
@@ -31,10 +32,10 @@ class MorphScale(Morph):
 
     scale   --  The scale to apply to yrefin.
 
-    '''
+    """
 
     # Define input output types
-    summary = 'Scale objective by specified amount'
+    summary = "Scale objective by specified amount"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
@@ -46,5 +47,6 @@ class MorphScale(Morph):
         Morph.morph(self, xobj, yobj, xref, yref)
         self.yobjout *= self.scale
         return self.xyallout
+
 
 # End of class MorphScale

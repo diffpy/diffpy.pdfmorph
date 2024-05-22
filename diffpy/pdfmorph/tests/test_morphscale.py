@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # version
-__id__ = '$Id$'
+__id__ = "$Id$"
 
 import os
 import unittest
@@ -9,11 +9,12 @@ import unittest
 import numpy
 
 # useful variables
-thisfile = locals().get('__file__', 'file.py')
+thisfile = locals().get("__file__", "file.py")
 tests_dir = os.path.dirname(os.path.abspath(thisfile))
 # testdata_dir = os.path.join(tests_dir, 'testdata')
 
 from diffpy.pdfmorph.morphs.morphscale import MorphScale
+
 
 class TestMorphScale(unittest.TestCase):
 
@@ -25,21 +26,20 @@ class TestMorphScale(unittest.TestCase):
         return
 
     def test_morph(self):
-        """check MorphScale.morph()
-        """
-        config = {"scale" : 2.0}
+        """check MorphScale.morph()"""
+        config = {"scale": 2.0}
         morph = MorphScale(config)
 
-        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref,
-                self.yref)
+        xobj, yobj, xref, yref = morph(self.xobj, self.yobj, self.xref, self.yref)
 
         self.assertTrue(numpy.allclose(2 * self.yobj, yobj))
         self.assertTrue(numpy.allclose(self.yref, yref))
         return
 
+
 # End of class TestMorphScale
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
 
 # End of file

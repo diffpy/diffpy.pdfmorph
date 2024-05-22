@@ -23,8 +23,9 @@ __id__ = "$Id$"
 from diffpy.pdfmorph.morphs.morph import *
 import numpy
 
+
 class MorphShift(Morph):
-    '''Shift the objective.
+    """Shift the objective.
 
     Configuration variables:
 
@@ -34,10 +35,10 @@ class MorphShift(Morph):
     Note that a horizontal shift may cause edge effects, since the morph does
     not know what lies beyond the edge of the signals.
 
-    '''
+    """
 
     # Define input output types
-    summary = 'Shift objective by specified amount'
+    summary = "Shift objective by specified amount"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
@@ -51,5 +52,6 @@ class MorphShift(Morph):
         self.yobjout = numpy.interp(r, self.xobjin, self.yobjin)
         self.yobjout += self.vshift
         return self.xyallout
+
 
 # End of class MorphShift
