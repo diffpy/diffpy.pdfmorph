@@ -5,7 +5,8 @@ on:
     branches:
       - main
   release:
-    
+
+  # Documentation built but not deployed for pull requests
   pull_request:
     branches:
       - main
@@ -42,8 +43,10 @@ jobs:
         run: make -C doc/manual html
 
       - name: Deploy
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v3
+        # Documentation deployed only on pushes to main and releases
+        if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'release' }}
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./doc/manual/build/html
+
