@@ -100,13 +100,14 @@
 
 
 <span class="kn">import</span> <span class="nn">numpy</span>
+
 <span class="kn">from</span> <span class="nn">diffpy.pdfmorph.morphs.morph</span> <span class="kn">import</span> <span class="o">*</span>
 
 
 <div class="viewcode-block" id="TransformXtalRDFtoPDF">
 <a class="viewcode-back" href="../../../../morph_helpers.html#diffpy.pdfmorph.morph_helpers.transformrdftopdf.TransformXtalRDFtoPDF">[docs]</a>
 <span class="k">class</span> <span class="nc">TransformXtalRDFtoPDF</span><span class="p">(</span><span class="n">Morph</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Transform crystal RDFs to PDFs.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transform crystal RDFs to PDFs.</span>
 
 <span class="sd">    Converts both morph data and target data RDFs to PDFs.</span>
 
@@ -119,10 +120,10 @@
 <span class="sd">    With s = baselineslope,</span>
 <span class="sd">    G(r) = R(r) / r + r * s</span>
 
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Define input output types</span>
-    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Turn the PDF into the RDF for both the morph and target&#39;</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="s2">&quot;Turn the PDF into the RDF for both the morph and target&quot;</span>
     <span class="n">xinlabel</span> <span class="o">=</span> <span class="n">LABEL_RA</span>
     <span class="n">yinlabel</span> <span class="o">=</span> <span class="n">LABEL_RR</span>
     <span class="n">xoutlabel</span> <span class="o">=</span> <span class="n">LABEL_RA</span>
@@ -136,10 +137,10 @@
         <span class="n">Morph</span><span class="o">.</span><span class="n">morph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_morph</span><span class="p">,</span> <span class="n">y_morph</span><span class="p">,</span> <span class="n">x_target</span><span class="p">,</span> <span class="n">y_target</span><span class="p">)</span>
         <span class="n">morph_baseline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">baselineslope</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_morph_in</span>
         <span class="n">target_baseline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">baselineslope</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_target_in</span>
-        <span class="k">with</span> <span class="n">numpy</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">numpy</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_target_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_target_in</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_target_in</span> <span class="o">+</span> <span class="n">target_baseline</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y_target_out</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x_target_in</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">with</span> <span class="n">numpy</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">numpy</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_morph_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_morph_in</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_morph_in</span> <span class="o">+</span> <span class="n">morph_baseline</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y_morph_out</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x_target_in</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyallout</span></div>

@@ -100,6 +100,7 @@
 
 
 <span class="kn">import</span> <span class="nn">numpy</span>
+
 <span class="kn">from</span> <span class="nn">diffpy.pdfmorph.morphs.morph</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1"># roundoff tolerance for selecting bounds on arrays.</span>
@@ -109,7 +110,7 @@
 <div class="viewcode-block" id="MorphRGrid">
 <a class="viewcode-back" href="../../../../morphs.html#diffpy.pdfmorph.morphs.morphrgrid.MorphRGrid">[docs]</a>
 <span class="k">class</span> <span class="nc">MorphRGrid</span><span class="p">(</span><span class="n">Morph</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Resample to specified r-grid.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resample to specified r-grid.</span>
 
 <span class="sd">    This resamples both the morph and target arrays to be on the</span>
 <span class="sd">    specified grid.</span>
@@ -128,10 +129,10 @@
 <span class="sd">        If any of these is not defined or outside the bounds of the input arrays,</span>
 <span class="sd">        then it will be taken to be the most inclusive value from the input arrays.</span>
 <span class="sd">        These modified values will be stored as the above attributes.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Define input output types</span>
-    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Interplolate data onto specified grid&#39;</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="s2">&quot;Interplolate data onto specified grid&quot;</span>
     <span class="n">xinlabel</span> <span class="o">=</span> <span class="n">LABEL_RA</span>
     <span class="n">yinlabel</span> <span class="o">=</span> <span class="n">LABEL_GR</span>
     <span class="n">xoutlabel</span> <span class="o">=</span> <span class="n">LABEL_RA</span>

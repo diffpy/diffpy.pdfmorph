@@ -99,14 +99,15 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
-<span class="kn">from</span> <span class="nn">diffpy.pdfmorph.morphs.morph</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">from</span> <span class="nn">diffpy.pdfmorph.morphs.morph</span> <span class="kn">import</span> <span class="o">*</span>
 
 
 <div class="viewcode-block" id="MorphShift">
 <a class="viewcode-back" href="../../../../morphs.html#diffpy.pdfmorph.morphs.morphshift.MorphShift">[docs]</a>
 <span class="k">class</span> <span class="nc">MorphShift</span><span class="p">(</span><span class="n">Morph</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Shift the morph.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shift the morph.</span>
 
 <span class="sd">    Configuration Variables</span>
 <span class="sd">    -----------------------</span>
@@ -117,10 +118,10 @@
 
 <span class="sd">    Note that a horizontal shift may cause edge effects, since the morph does</span>
 <span class="sd">    not know what lies beyond the edge of the signals.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Define input output types</span>
-    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Shift morph by specified amount&#39;</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="s2">&quot;Shift morph by specified amount&quot;</span>
     <span class="n">xinlabel</span> <span class="o">=</span> <span class="n">LABEL_RA</span>
     <span class="n">yinlabel</span> <span class="o">=</span> <span class="n">LABEL_GR</span>
     <span class="n">xoutlabel</span> <span class="o">=</span> <span class="n">LABEL_RA</span>

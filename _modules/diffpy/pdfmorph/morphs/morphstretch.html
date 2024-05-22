@@ -100,13 +100,14 @@
 
 
 <span class="kn">import</span> <span class="nn">numpy</span>
+
 <span class="kn">from</span> <span class="nn">diffpy.pdfmorph.morphs.morph</span> <span class="kn">import</span> <span class="o">*</span>
 
 
 <div class="viewcode-block" id="MorphStretch">
 <a class="viewcode-back" href="../../../../morphs.html#diffpy.pdfmorph.morphs.morphstretch.MorphStretch">[docs]</a>
 <span class="k">class</span> <span class="nc">MorphStretch</span><span class="p">(</span><span class="n">Morph</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Smear the morph function.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Smear the morph function.</span>
 
 <span class="sd">    This stretches (broadens) the morph.</span>
 
@@ -115,10 +116,10 @@
 <span class="sd">    stretch</span>
 <span class="sd">        The stretch factor to apply to y_morph_in.</span>
 <span class="sd">        This is applied such that a feature at r is moved to r * (1 + stretch).</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Define input output types</span>
-    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Stretch morph by desired amount&#39;</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="s2">&quot;Stretch morph by desired amount&quot;</span>
     <span class="n">xinlabel</span> <span class="o">=</span> <span class="n">LABEL_RA</span>
     <span class="n">yinlabel</span> <span class="o">=</span> <span class="n">LABEL_GR</span>
     <span class="n">xoutlabel</span> <span class="o">=</span> <span class="n">LABEL_RA</span>

@@ -100,6 +100,7 @@
 
 
 <span class="kn">import</span> <span class="nn">numpy</span>
+
 <span class="kn">import</span> <span class="nn">diffpy.utils.parsers</span> <span class="k">as</span> <span class="nn">parsers</span>
 
 
@@ -136,8 +137,8 @@
 <span class="sd">    slope: float</span>
 <span class="sd">        The slope of baseline. If the PDF is scaled properly, this is equal to -4*pi*rho0.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">leastsq</span>
     <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">dot</span>
+    <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">leastsq</span>
 
     <span class="n">rp</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">grp</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -314,6 +315,7 @@
 
         <span class="c1"># get names of each file to search the serial file</span>
         <span class="kn">import</span> <span class="nn">pathlib</span>
+
         <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">filepaths</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
             <span class="n">fv</span> <span class="o">=</span> <span class="n">case_insensitive_dictionary_search</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">des_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
@@ -323,7 +325,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">files_field_values</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">entry</span><span class="p">:</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">)</span>
     <span class="c1"># Raised if fields for any file are missing</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field missing.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">get_field_values</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">files_field_values</span><span class="p">],</span> <span class="p">[</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">files_field_values</span><span class="p">]</span>

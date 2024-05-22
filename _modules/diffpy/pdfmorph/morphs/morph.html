@@ -99,15 +99,15 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
-<span class="n">LABEL_RA</span> <span class="o">=</span> <span class="s1">&#39;r (A)&#39;</span>  <span class="c1"># r-grid</span>
-<span class="n">LABEL_GR</span> <span class="o">=</span> <span class="s1">&#39;G (1/A^2)&#39;</span>  <span class="c1"># PDF G(r)</span>
-<span class="n">LABEL_RR</span> <span class="o">=</span> <span class="s1">&#39;R (1/A)&#39;</span>  <span class="c1"># RDF R(r)</span>
+<span class="n">LABEL_RA</span> <span class="o">=</span> <span class="s2">&quot;r (A)&quot;</span>  <span class="c1"># r-grid</span>
+<span class="n">LABEL_GR</span> <span class="o">=</span> <span class="s2">&quot;G (1/A^2)&quot;</span>  <span class="c1"># PDF G(r)</span>
+<span class="n">LABEL_RR</span> <span class="o">=</span> <span class="s2">&quot;R (1/A)&quot;</span>  <span class="c1"># RDF R(r)</span>
 
 
 <div class="viewcode-block" id="Morph">
 <a class="viewcode-back" href="../../../../morphs.html#diffpy.pdfmorph.morphs.morph.Morph">[docs]</a>
 <span class="k">class</span> <span class="nc">Morph</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Base class for implementing a morph given a target.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for implementing a morph given a target.</span>
 
 <span class="sd">    Adapted from diffpy.pdfgetx to include two sets of arrays that get passed through.</span>
 
@@ -162,46 +162,51 @@
 <span class="sd">        Tuple of (x_target_out, y_target_out).</span>
 <span class="sd">    xyallout</span>
 <span class="sd">        Tuple of (x_morph_out, y_morph_out, x_target_out, y_target_out).</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Class variables</span>
     <span class="c1"># default array types are empty</span>
-    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;identity transformation&#39;</span>
-    <span class="n">xinlabel</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
-    <span class="n">yinlabel</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
-    <span class="n">xoutlabel</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
-    <span class="n">youtlabel</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="s2">&quot;identity transformation&quot;</span>
+    <span class="n">xinlabel</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
+    <span class="n">yinlabel</span> <span class="o">=</span> <span class="s2">&quot;y&quot;</span>
+    <span class="n">xoutlabel</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
+    <span class="n">youtlabel</span> <span class="o">=</span> <span class="s2">&quot;y&quot;</span>
     <span class="n">parnames</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># Properties</span>
 
     <span class="n">xy_morph_in</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_morph_in</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_morph_in</span><span class="p">),</span>
-        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Return a tuple of morph input arrays&#39;</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;Return a tuple of morph input arrays&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">xy_morph_out</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_morph_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_morph_out</span><span class="p">),</span>
-        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Return a tuple of morph output arrays&#39;</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;Return a tuple of morph output arrays&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">xy_target_in</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_target_in</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_target_in</span><span class="p">),</span>
-        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Return a tuple of target input arrays&#39;</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;Return a tuple of target input arrays&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">xy_target_out</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
         <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_target_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_target_out</span><span class="p">),</span>
-        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Return a tuple of target output arrays&#39;</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;Return a tuple of target output arrays&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">xyallout</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
-        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_morph_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_morph_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_target_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_target_out</span><span class="p">),</span>
-        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;Return a tuple of all output arrays&#39;</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_morph_out</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_morph_out</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_target_out</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_target_out</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;Return a tuple of all output arrays&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Create a default Morph instance.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a default Morph instance.</span>
 
 <span class="sd">        config: dict</span>
 <span class="sd">            All configuration variables.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># declare empty attributes</span>
         <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
@@ -220,7 +225,7 @@
 <div class="viewcode-block" id="Morph.morph">
 <a class="viewcode-back" href="../../../../morphs.html#diffpy.pdfmorph.morphs.morph.Morph.morph">[docs]</a>
     <span class="k">def</span> <span class="nf">morph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_morph</span><span class="p">,</span> <span class="n">y_morph</span><span class="p">,</span> <span class="n">x_target</span><span class="p">,</span> <span class="n">y_target</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Morph arrays morphed or target.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Morph arrays morphed or target.</span>
 
 <span class="sd">        Identity operation. This method should be overloaded in a derived class.</span>
 
@@ -235,7 +240,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        tuple</span>
 <span class="sd">            A tuple of numpy arrays (x_morph_out, y_morph_out, x_target_out, y_target_out)</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_morph_in</span> <span class="o">=</span> <span class="n">x_morph</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y_morph_in</span> <span class="o">=</span> <span class="n">y_morph</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_target_in</span> <span class="o">=</span> <span class="n">x_target</span>
@@ -249,13 +254,13 @@
 
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_morph</span><span class="p">,</span> <span class="n">y_morph</span><span class="p">,</span> <span class="n">x_target</span><span class="p">,</span> <span class="n">y_target</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Alias for morph.&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for morph.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">morph</span><span class="p">(</span><span class="n">x_morph</span><span class="p">,</span> <span class="n">y_morph</span><span class="p">,</span> <span class="n">x_target</span><span class="p">,</span> <span class="n">y_target</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Morph.applyConfig">
 <a class="viewcode-back" href="../../../../morphs.html#diffpy.pdfmorph.morphs.morph.Morph.applyConfig">[docs]</a>
     <span class="k">def</span> <span class="nf">applyConfig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Process any configuration data from a dictionary.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process any configuration data from a dictionary.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -265,7 +270,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        No return value.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
         <span class="k">return</span></div>
 
@@ -273,17 +278,17 @@
 <div class="viewcode-block" id="Morph.checkConfig">
 <a class="viewcode-back" href="../../../../morphs.html#diffpy.pdfmorph.morphs.morph.Morph.checkConfig">[docs]</a>
     <span class="k">def</span> <span class="nf">checkConfig</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Verify data in self.config. No action by default.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Verify data in self.config. No action by default.</span>
 
 <span class="sd">        To be overridden in a derived class.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span></div>
 
 
 <div class="viewcode-block" id="Morph.plotInputs">
 <a class="viewcode-back" href="../../../../morphs.html#diffpy.pdfmorph.morphs.morph.Morph.plotInputs">[docs]</a>
     <span class="k">def</span> <span class="nf">plotInputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xylabels</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Plot input arrays using matplotlib.pyplot</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot input arrays using matplotlib.pyplot</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -294,7 +299,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        list:</span>
 <span class="sd">            A list of matplotlib line objects.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">plot</span><span class="p">,</span> <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span>
 
         <span class="n">rv</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_target_in</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_target_in</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">)</span>
@@ -308,7 +313,7 @@
 <div class="viewcode-block" id="Morph.plotOutputs">
 <a class="viewcode-back" href="../../../../morphs.html#diffpy.pdfmorph.morphs.morph.Morph.plotOutputs">[docs]</a>
     <span class="k">def</span> <span class="nf">plotOutputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xylabels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">plotargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Plot output arrays using matplotlib.pyplot</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot output arrays using matplotlib.pyplot</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -321,7 +326,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        list</span>
 <span class="sd">            A list of matplotlib line objects.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">plot</span><span class="p">,</span> <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span>
 
         <span class="n">pargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">plotargs</span><span class="p">)</span>
@@ -335,7 +340,7 @@
 
 
     <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Obtain the value from self.config, when normal lookup fails.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Obtain the value from self.config, when normal lookup fails.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -350,15 +355,15 @@
 <span class="sd">        ------</span>
 <span class="sd">        AttributeError</span>
 <span class="sd">            Name is not available from self.config.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">emsg</span> <span class="o">=</span> <span class="s1">&#39;Object has no attribute </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">name</span>
+            <span class="n">emsg</span> <span class="o">=</span> <span class="s2">&quot;Object has no attribute </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="n">emsg</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Set configuration variables to config.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set configuration variables to config.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -366,7 +371,7 @@
 <span class="sd">            Name of the attribute.</span>
 <span class="sd">        val</span>
 <span class="sd">            Value of the attribute.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parnames</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
         <span class="k">else</span><span class="p">:</span>

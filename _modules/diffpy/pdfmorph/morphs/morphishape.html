@@ -100,24 +100,25 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
+<span class="kn">import</span> <span class="nn">numpy</span>
+
 <span class="kn">from</span> <span class="nn">diffpy.pdfmorph.morphs.morph</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">diffpy.pdfmorph.morphs.morphshape</span> <span class="kn">import</span> <span class="n">_sphericalCF</span><span class="p">,</span> <span class="n">_spheroidalCF</span>
-<span class="kn">import</span> <span class="nn">numpy</span>
 
 
 <div class="viewcode-block" id="MorphISphere">
 <a class="viewcode-back" href="../../../../morphs.html#diffpy.pdfmorph.morphs.morphishape.MorphISphere">[docs]</a>
 <span class="k">class</span> <span class="nc">MorphISphere</span><span class="p">(</span><span class="n">Morph</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Apply inverse spherical characteristic function to the morph</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply inverse spherical characteristic function to the morph</span>
 
 <span class="sd">    Configuration Variables</span>
 <span class="sd">    -----------------------</span>
 <span class="sd">    iradius</span>
 <span class="sd">        The radius of the sphere.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Define input output types</span>
-    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Apply inverse spherical characteristic function to morph&#39;</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="s2">&quot;Apply inverse spherical characteristic function to morph&quot;</span>
     <span class="n">xinlabel</span> <span class="o">=</span> <span class="n">LABEL_RA</span>
     <span class="n">yinlabel</span> <span class="o">=</span> <span class="n">LABEL_GR</span>
     <span class="n">xoutlabel</span> <span class="o">=</span> <span class="n">LABEL_RA</span>
@@ -130,7 +131,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply a scale factor.&quot;&quot;&quot;</span>
         <span class="n">Morph</span><span class="o">.</span><span class="n">morph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_morph</span><span class="p">,</span> <span class="n">y_morph</span><span class="p">,</span> <span class="n">x_target</span><span class="p">,</span> <span class="n">y_target</span><span class="p">)</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">_sphericalCF</span><span class="p">(</span><span class="n">x_morph</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">iradius</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">numpy</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">numpy</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_morph_out</span> <span class="o">/=</span> <span class="n">f</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y_morph_out</span><span class="p">[</span><span class="n">f</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyallout</span></div>
@@ -144,7 +145,7 @@
 <div class="viewcode-block" id="MorphISpheroid">
 <a class="viewcode-back" href="../../../../morphs.html#diffpy.pdfmorph.morphs.morphishape.MorphISpheroid">[docs]</a>
 <span class="k">class</span> <span class="nc">MorphISpheroid</span><span class="p">(</span><span class="n">Morph</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;Apply inverse spherical characteristic function to the morph</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply inverse spherical characteristic function to the morph</span>
 
 <span class="sd">    Configuration Variables</span>
 <span class="sd">    -----------------------</span>
@@ -152,10 +153,10 @@
 <span class="sd">        The equatorial radius of the spheroid.</span>
 <span class="sd">    ipradius</span>
 <span class="sd">        The polar radius of the spheroid.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Define input output types</span>
-    <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39;Apply inverse spheroidal characteristic function to morph&#39;</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="s2">&quot;Apply inverse spheroidal characteristic function to morph&quot;</span>
     <span class="n">xinlabel</span> <span class="o">=</span> <span class="n">LABEL_RA</span>
     <span class="n">yinlabel</span> <span class="o">=</span> <span class="n">LABEL_GR</span>
     <span class="n">xoutlabel</span> <span class="o">=</span> <span class="n">LABEL_RA</span>
@@ -168,7 +169,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply a scale factor.&quot;&quot;&quot;</span>
         <span class="n">Morph</span><span class="o">.</span><span class="n">morph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_morph</span><span class="p">,</span> <span class="n">y_morph</span><span class="p">,</span> <span class="n">x_target</span><span class="p">,</span> <span class="n">y_target</span><span class="p">)</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">_spheroidalCF</span><span class="p">(</span><span class="n">x_morph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">iradius</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipradius</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">numpy</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">numpy</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">y_morph_out</span> <span class="o">/=</span> <span class="n">f</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y_morph_out</span><span class="p">[</span><span class="n">f</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyallout</span></div>
