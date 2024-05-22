@@ -19,9 +19,10 @@ class MorphISpheroid -- apply inverse spheroidal shape function
 """
 
 
+import numpy
+
 from diffpy.pdfmorph.morphs.morph import *
 from diffpy.pdfmorph.morphs.morphshape import _sphericalCF, _spheroidalCF
-import numpy
 
 
 class MorphISphere(Morph):

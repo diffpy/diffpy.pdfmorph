@@ -21,8 +21,8 @@ from pathlib import Path
 
 import numpy
 
-from diffpy.pdfmorph import __save_morph_as__
 import diffpy.pdfmorph.tools as tools
+from diffpy.pdfmorph import __save_morph_as__
 
 
 def single_morph_output(

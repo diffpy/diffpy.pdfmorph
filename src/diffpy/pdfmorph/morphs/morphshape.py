@@ -20,9 +20,9 @@ class MorphSpheroid -- apply a spheroidal shape function to the morph
 
 
 import numpy
-from numpy import sqrt
 from numpy import arctan as atan
 from numpy import arctanh as atanh
+from numpy import sqrt
 
 from diffpy.pdfmorph.morphs.morph import *
 

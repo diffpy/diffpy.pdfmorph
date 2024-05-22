@@ -2,9 +2,9 @@
 
 
 import os
-import pytest
 
 import numpy
+import pytest
 
 # useful variables
 thisfile = locals().get("__file__", "file.py")

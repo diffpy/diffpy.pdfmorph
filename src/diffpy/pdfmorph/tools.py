@@ -19,6 +19,7 @@
 
 
 import numpy
+
 import diffpy.utils.parsers as parsers
 
 
@@ -50,8 +51,8 @@ def estimateBaselineSlope(r, gr, rmin=None, rmax=None):
     slope: float
         The slope of baseline. If the PDF is scaled properly, this is equal to -4*pi*rho0.
     """
-    from scipy.optimize import leastsq
     from numpy import dot
+    from scipy.optimize import leastsq
 
     rp = r.copy()
     grp = gr.copy()

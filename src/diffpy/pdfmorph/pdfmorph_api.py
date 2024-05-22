@@ -21,11 +21,12 @@ if sys.version_info.major < 3:
     from collections import Iterable
 else:
     from collections.abc import Iterable
-from diffpy.pdfmorph import morphs, morph_helpers
-from diffpy.pdfmorph import refine as ref
-from diffpy.pdfmorph import tools
+
 import matplotlib.pyplot as plt
 
+from diffpy.pdfmorph import morph_helpers, morphs
+from diffpy.pdfmorph import refine as ref
+from diffpy.pdfmorph import tools
 
 # map of operation dict
 # TODO: include morphing on psize

@@ -19,6 +19,7 @@
 
 
 import numpy
+
 from diffpy.pdfmorph.morphs.morph import *
 
 # roundoff tolerance for selecting bounds on arrays.

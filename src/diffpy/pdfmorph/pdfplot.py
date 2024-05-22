@@ -15,9 +15,10 @@
 """Collection of plotting functions for PDFs."""
 
 import matplotlib.pyplot as plt
-import diffpy.pdfmorph.tools as tools
-from bg_mpl_stylesheet.bg_mpl_stylesheet import bg_mpl_style
 import numpy
+from bg_mpl_stylesheet.bg_mpl_stylesheet import bg_mpl_style
+
+import diffpy.pdfmorph.tools as tools
 
 plt.style.use(bg_mpl_style)
 

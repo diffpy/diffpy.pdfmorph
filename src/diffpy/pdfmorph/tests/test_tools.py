@@ -5,11 +5,10 @@
 
 
 import os
-import pytest
+from pathlib import Path
 
 import numpy
-
-from pathlib import Path
+import pytest
 
 # useful variables
 thisfile = locals().get("__file__", "file.py")

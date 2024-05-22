@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 
-import pytest
 from pathlib import Path
 
-from diffpy.pdfmorph.pdfmorphapp import (
-    create_option_parser,
-    single_morph,
-    multiple_morphs,
-)
+import pytest
+
+from diffpy.pdfmorph.pdfmorphapp import (create_option_parser, multiple_morphs,
+                                         single_morph)
 
 thisfile = locals().get("__file__", "file.py")
 tests_dir = Path(thisfile).parent.resolve()

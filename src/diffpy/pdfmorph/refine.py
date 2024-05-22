@@ -16,10 +16,9 @@
 """refine -- Refine a morph or morph chain
 """
 
+from numpy import concatenate, dot, exp, ones_like
 from scipy.optimize import leastsq
 from scipy.stats import pearsonr
-from numpy import exp, dot, ones_like, concatenate
-
 
 # Map of scipy minimizer names to the method that uses them
 

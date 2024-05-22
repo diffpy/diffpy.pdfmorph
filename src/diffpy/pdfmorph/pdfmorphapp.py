@@ -18,14 +18,14 @@ from __future__ import print_function
 import sys
 from pathlib import Path
 
+import diffpy.pdfmorph.morph_helpers as helpers
+import diffpy.pdfmorph.morphs as morphs
+import diffpy.pdfmorph.pdfmorph_io as io
+import diffpy.pdfmorph.pdfplot as pdfplot
+import diffpy.pdfmorph.refine as refine
+import diffpy.pdfmorph.tools as tools
 from diffpy.pdfmorph import __save_morph_as__
 from diffpy.pdfmorph.version import __version__
-import diffpy.pdfmorph.tools as tools
-import diffpy.pdfmorph.pdfplot as pdfplot
-import diffpy.pdfmorph.morphs as morphs
-import diffpy.pdfmorph.morph_helpers as helpers
-import diffpy.pdfmorph.refine as refine
-import diffpy.pdfmorph.pdfmorph_io as io
 
 
 def create_option_parser():

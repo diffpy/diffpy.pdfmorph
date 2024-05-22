@@ -18,8 +18,9 @@
 """
 
 
-from diffpy.pdfmorph.morphs.morph import *
 import numpy
+
+from diffpy.pdfmorph.morphs.morph import *
 
 
 class MorphShift(Morph):
