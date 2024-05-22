@@ -23,11 +23,11 @@ plog -- logger instance for normal operation
 import logging
 
 # logging configuration
-plog = logging.getLogger('diffpy.pdfmorph')
+plog = logging.getLogger("diffpy.pdfmorph")
 
 
 def set_verbosity(vb):
-    '''Set verbosity of the pdfmorph logger.
+    """Set verbosity of the pdfmorph logger.
 
     Parameters
     ----------
@@ -37,7 +37,7 @@ def set_verbosity(vb):
     Returns
     -------
     No return value.
-    '''
+    """
     try:
         if type(vb) is str:
             level = int(getattr(logging, vb.upper(), vb))

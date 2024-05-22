@@ -2,12 +2,12 @@
 
 
 import os
-import pytest
 
 import numpy
+import pytest
 
 # useful variables
-thisfile = locals().get('__file__', 'file.py')
+thisfile = locals().get("__file__", "file.py")
 tests_dir = os.path.dirname(os.path.abspath(thisfile))
 # testdata_dir = os.path.join(tests_dir, 'testdata')
 
@@ -21,7 +21,7 @@ class TestMorphRGrid:
         self.x_morph = numpy.arange(0, 10, 0.01)
         self.y_morph = self.x_morph.copy()
         self.x_target = numpy.arange(1, 5, 0.01)
-        self.y_target = self.x_target ** 2
+        self.y_target = self.x_target**2
         return
 
     def _runTests(self, xyallout, morph):
@@ -100,7 +100,7 @@ class TestMorphRGrid:
 
 # End of class TestMorphRGrid
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     TestMorphRGrid()
 
 # End of file

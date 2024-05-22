@@ -2,17 +2,16 @@
 
 
 import os
+import numpy
 import pytest
 
-import numpy
-
 # useful variables
-thisfile = locals().get('__file__', 'file.py')
+thisfile = locals().get("__file__", "file.py")
 tests_dir = os.path.dirname(os.path.abspath(thisfile))
-testdata_dir = os.path.join(tests_dir, 'testdata')
+testdata_dir = os.path.join(tests_dir, "testdata")
 
-from diffpy.pdfmorph.morphs.morphshape import MorphSphere, MorphSpheroid
 from diffpy.pdfmorph.morphs.morphishape import MorphISphere, MorphISpheroid
+from diffpy.pdfmorph.morphs.morphshape import MorphSphere, MorphSpheroid
 
 
 class TestMorphSphere:
@@ -113,7 +112,7 @@ class TestMorphSpheroid:
 
 # End of class TestMorphSpheroid
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     TestMorphSphere()
     TestMorphSpheroid()
 

@@ -18,12 +18,13 @@
 """
 
 
-from diffpy.pdfmorph.morphs.morph import *
 import numpy
+
+from diffpy.pdfmorph.morphs.morph import *
 
 
 class MorphShift(Morph):
-    '''Shift the morph.
+    """Shift the morph.
 
     Configuration Variables
     -----------------------
@@ -34,10 +35,10 @@ class MorphShift(Morph):
 
     Note that a horizontal shift may cause edge effects, since the morph does
     not know what lies beyond the edge of the signals.
-    '''
+    """
 
     # Define input output types
-    summary = 'Shift morph by specified amount'
+    summary = "Shift morph by specified amount"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA

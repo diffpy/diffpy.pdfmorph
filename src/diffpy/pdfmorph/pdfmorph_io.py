@@ -21,13 +21,19 @@ from pathlib import Path
 
 import numpy
 
-from diffpy.pdfmorph import __save_morph_as__
 import diffpy.pdfmorph.tools as tools
+from diffpy.pdfmorph import __save_morph_as__
 
 
-def single_morph_output(morph_inputs, morph_results,
-                        save_file=None, morph_file=None, xy_out=None,
-                        verbose=False, stdout_flag=False):
+def single_morph_output(
+    morph_inputs,
+    morph_results,
+    save_file=None,
+    morph_file=None,
+    xy_out=None,
+    verbose=False,
+    stdout_flag=False,
+):
     """Helper function for printing details about a single morph.
     Handles both printing to terminal and printing to a file.
 
@@ -69,7 +75,7 @@ def single_morph_output(morph_inputs, morph_results,
         header_verbose = f"{morphs_in}\n{morphs_out}"
 
         if save_file != "-":
-            with open(save_file, 'w') as outfile:
+            with open(save_file, "w") as outfile:
                 # Print out a header (more if verbose)
                 print(header, file=outfile)
                 if verbose:
@@ -147,15 +153,22 @@ def get_multisave_names(target_list: list, save_names_file=None):
     # Apply default naming scheme to missing targets
     for target_file in target_list:
         if target_file.name not in save_names.keys():
-            save_names.update({target_file.name:
-                                   {__save_morph_as__: f"Morph_with_Target_{target_file.stem}.cgr"}})
+            save_names.update({target_file.name: {__save_morph_as__: f"Morph_with_Target_{target_file.stem}.cgr"}})
     return save_names
 
 
-def multiple_morph_output(morph_inputs, morph_results, target_files,
-                          field=None, field_list=None,
-                          save_directory=None, morph_file=None, target_directory=None,
-                          verbose=False, stdout_flag=False):
+def multiple_morph_output(
+    morph_inputs,
+    morph_results,
+    target_files,
+    field=None,
+    field_list=None,
+    save_directory=None,
+    morph_file=None,
+    target_directory=None,
+    verbose=False,
+    stdout_flag=False,
+):
     """Helper function for printing details about a series of multiple morphs.
     Handles both printing to terminal and printing to a file.
 
@@ -195,7 +208,9 @@ def multiple_morph_output(morph_inputs, morph_results, target_files,
         for target in morph_results.keys():
             output = f"\n# Target: {target}\n"
             output += "# Optimized morphing parameters:\n"
-            output += "\n".join(f"# {param} = {morph_results[target][param]:.6f}" for param in morph_results[target])
+            output += "\n".join(
+                f"# {param} = {morph_results[target][param]:.6f}" for param in morph_results[target]
+            )
             verbose_outputs += f"{output}\n"
 
     # Get items we want to put in table
@@ -234,7 +249,7 @@ def multiple_morph_output(morph_inputs, morph_results, target_files,
         header += f"# from morphing {morph_path_name}\n"
         header += f"# with target directory {target_path_name}"
         reference_table = Path(save_directory).joinpath("Morph_Reference_Table.csv")
-        with open(reference_table, 'w') as reference:
+        with open(reference_table, "w") as reference:
             print(f"{header}\n{inputs}\n{verbose_outputs}{table}", file=reference)
 
         if stdout_flag:
@@ -264,5 +279,7 @@ def tabulate_results(multiple_morph_results):
     # Keys in this table represent column names and the value will be a list of column data
     tabulated_results = {}
     for param in relevant_parameters:
-        tabulated_results.update({param: tools.get_values_from_dictionary_collection(multiple_morph_results, param)})
+        tabulated_results.update(
+            {param: tools.get_values_from_dictionary_collection(multiple_morph_results, param)}
+        )
     return tabulated_results

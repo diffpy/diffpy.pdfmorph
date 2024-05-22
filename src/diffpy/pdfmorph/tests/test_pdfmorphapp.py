@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
-import pytest
 from pathlib import Path
 
-from diffpy.pdfmorph.pdfmorphapp import create_option_parser, single_morph, multiple_morphs
+import pytest
 
-thisfile = locals().get('__file__', 'file.py')
+from diffpy.pdfmorph.pdfmorphapp import (create_option_parser, multiple_morphs,
+                                         single_morph)
+
+thisfile = locals().get("__file__", "file.py")
 tests_dir = Path(thisfile).parent.resolve()
 testdata_dir = tests_dir.joinpath("testdata")
 testsequence_dir = testdata_dir.joinpath("testsequence")
@@ -27,7 +29,15 @@ class TestApp:
     @pytest.fixture
     def setup_morphsequence(self):
         self.parser = create_option_parser()
-        filenames = ["g_174K.gr", "f_180K.gr", "e_186K.gr", "d_192K.gr", "c_198K.gr", "b_204K.gr", "a_210K.gr"]
+        filenames = [
+            "g_174K.gr",
+            "f_180K.gr",
+            "e_186K.gr",
+            "d_192K.gr",
+            "c_198K.gr",
+            "b_204K.gr",
+            "a_210K.gr",
+        ]
         self.testfiles = []
         for filename in filenames:
             self.testfiles.append(testsequence_dir.joinpath(filename))
@@ -37,7 +47,15 @@ class TestApp:
         renamed_dests = {"slope": "baselineslope"}
 
         # Check values parsed correctly
-        n_names = ["--rmin", "--rmax", "--scale", "--smear", "--stretch", "--slope", "--qdamp"]
+        n_names = [
+            "--rmin",
+            "--rmax",
+            "--scale",
+            "--smear",
+            "--stretch",
+            "--slope",
+            "--qdamp",
+        ]
         n_values = ["2.5", "40", "2.1", "-0.8", "0.0000005", "-0.0000005", ".00000003"]
         n_names.extend(["--radius", "--pradius", "--iradius", "--ipradius", "--pmin", "--pmax"])
         n_values.extend(["+0.5", "-0.2", "+.3", "-.1", "2.5", "40"])
@@ -84,8 +102,14 @@ class TestApp:
 
         # ###Tests exclusive to multiple morphs###
         # Make sure we save to a directory that exists (user must create the directory if non-existing)
-        (opts, pargs) = self.parser.parse_args([f"{nickel_PDF}", f"{nickel_PDF}", "-s",
-                                                "/nonexisting_directory/no_way_this_exists/nonexisting_path"])
+        (opts, pargs) = self.parser.parse_args(
+            [
+                f"{nickel_PDF}",
+                f"{nickel_PDF}",
+                "-s",
+                "/nonexisting_directory/no_way_this_exists/nonexisting_path",
+            ]
+        )
         with pytest.raises(SystemExit):
             single_morph(self.parser, opts, pargs, stdout_flag=False)
         with pytest.raises(SystemExit):
@@ -103,25 +127,38 @@ class TestApp:
         (opts, pargs) = self.parser.parse_args([f"{nickel_PDF}", f"{testsequence_dir}", "--sort-by", "fake_field"])
         with pytest.raises(SystemExit):
             multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
-        (opts, pargs) = self.parser.parse_args([f"{nickel_PDF}", f"{testsequence_dir}", "--sort-by", "fake_field",
-                                                "--serial-file", f"{serial_JSON}"])
+        (opts, pargs) = self.parser.parse_args(
+            [
+                f"{nickel_PDF}",
+                f"{testsequence_dir}",
+                "--sort-by",
+                "fake_field",
+                "--serial-file",
+                f"{serial_JSON}",
+            ]
+        )
         with pytest.raises(SystemExit):
             multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
 
         # Try plotting an unknown parameter
-        (opts, pargs) = self.parser.parse_args([f"{nickel_PDF}", f"{testsequence_dir}", "--plot-parameter", "unknown"])
+        (opts, pargs) = self.parser.parse_args(
+            [f"{nickel_PDF}", f"{testsequence_dir}", "--plot-parameter", "unknown"]
+        )
         with pytest.raises(SystemExit):
             multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
 
         # Try plotting an unrefined parameter
-        (opts, pargs) = self.parser.parse_args([f"{nickel_PDF}", f"{testsequence_dir}", "--plot-parameter", "stretch"])
+        (opts, pargs) = self.parser.parse_args(
+            [f"{nickel_PDF}", f"{testsequence_dir}", "--plot-parameter", "stretch"]
+        )
         with pytest.raises(SystemExit):
             multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
 
     def test_morphsequence(self, setup_morphsequence):
         # Parse arguments sorting by field
-        (opts, pargs) = self.parser.parse_args(["--scale", "1", "--stretch", "0",
-                                                "-n", "--sort-by", "temperature"])
+        (opts, pargs) = self.parser.parse_args(
+            ["--scale", "1", "--stretch", "0", "-n", "--sort-by", "temperature"]
+        )
 
         # Run multiple single morphs
         single_results = {}
@@ -140,13 +177,23 @@ class TestApp:
 
         # Check using a serial file produces the same result
         s_file = tssf.resolve().as_posix()
-        (opts, pargs) = self.parser.parse_args(["--scale", "1", "--stretch", "0",
-                                                "-n", "--sort-by", "temperature",
-                                                "--serial-file", s_file])
+        (opts, pargs) = self.parser.parse_args(
+            [
+                "--scale",
+                "1",
+                "--stretch",
+                "0",
+                "-n",
+                "--sort-by",
+                "temperature",
+                "--serial-file",
+                s_file,
+            ]
+        )
         pargs = [morph_file, testsequence_dir]
         s_sequence_results = multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
         assert s_sequence_results == sequence_results
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     TestApp()

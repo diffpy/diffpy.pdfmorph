@@ -52,3 +52,28 @@ where = ["src"]  # list of folders that contain the packages (["."] by default)
 include = ["diffpy*"]  # package names should match these glob patterns (["*"] by default)
 exclude = ["diffpy.pdfmorph.tests*"]  # exclude packages matching these glob patterns (empty by default)
 namespaces = false  # to disable scanning PEP 420 namespaces (true by default)
+
+[tool.black]
+line-length = 115
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+
+  # The following are specific to Black, you probably don't want those.
+  | blib2to3
+  | tests/data
+)/
+'''
+
+[tool.flake8]
+max-line-length = 115
+per-file-ignores="__init__.py:F401"

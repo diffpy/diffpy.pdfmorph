@@ -18,12 +18,13 @@ python -m diffpy.morphs.tests.run
 """
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     # show warnings by default
     if not sys.warnoptions:
-        import os, warnings
+        import os
+        import warnings
 
         warnings.simplefilter("default")
         # also affect subprocesses

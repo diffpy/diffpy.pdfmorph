@@ -2,16 +2,17 @@
 
 
 import os
-import pytest
 
 import numpy
+import pytest
 
 # useful variables
-thisfile = locals().get('__file__', 'file.py')
+thisfile = locals().get("__file__", "file.py")
 tests_dir = os.path.dirname(os.path.abspath(thisfile))
 # testdata_dir = os.path.join(tests_dir, 'testdata')
 
-from diffpy.pdfmorph.morph_helpers.transformpdftordf import TransformXtalPDFtoRDF
+from diffpy.pdfmorph.morph_helpers.transformpdftordf import \
+    TransformXtalPDFtoRDF
 
 
 class TestTransformXtalPDFtoRDF:
@@ -39,7 +40,7 @@ class TestTransformXtalPDFtoRDF:
 
 # End of class TestTransformXtalPDFtoRDF
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     TestTransformXtalPDFtoRDF()
 
 # End of file

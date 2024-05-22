@@ -20,24 +20,24 @@ class MorphSpheroid -- apply a spheroidal shape function to the morph
 
 
 import numpy
-from numpy import sqrt
 from numpy import arctan as atan
 from numpy import arctanh as atanh
+from numpy import sqrt
 
 from diffpy.pdfmorph.morphs.morph import *
 
 
 class MorphSphere(Morph):
-    '''Apply a spherical characteristic function to the morph
+    """Apply a spherical characteristic function to the morph
 
     Configuration Variables
     -----------------------
     radius
         The radius of the sphere.
-    '''
+    """
 
     # Define input output types
-    summary = 'Apply spherical characteristic function to morph'
+    summary = "Apply spherical characteristic function to morph"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
@@ -56,7 +56,7 @@ class MorphSphere(Morph):
 
 
 class MorphSpheroid(Morph):
-    '''Apply a spherical characteristic function to the morph
+    """Apply a spherical characteristic function to the morph
 
     Configuration Variables
     -----------------------
@@ -65,10 +65,10 @@ class MorphSpheroid(Morph):
         The equatorial radius of the spheroid.
     pradius
         The polar radius of the spheroid.
-    '''
+    """
 
     # Define input output types
-    summary = 'Apply spheroidal characteristic function to morph'
+    summary = "Apply spheroidal characteristic function to morph"
     xinlabel = LABEL_RA
     yinlabel = LABEL_GR
     xoutlabel = LABEL_RA
@@ -165,13 +165,7 @@ def _spheroidalCF2(r, psize, axrat):
         f1 = (
             1
             - 3 * r / (4 * d * v) * (1 - r2 / (4 * d2) * (1 + 2.0 / (3 * v2)))
-            - 3
-            * r
-            / (4 * d)
-            * (1 - r2 / (4 * d2))
-            * v
-            / sqrt(1 - v2)
-            * atanh(sqrt(1 - v2))
+            - 3 * r / (4 * d) * (1 - r2 / (4 * d2)) * v / sqrt(1 - v2) * atanh(sqrt(1 - v2))
         )
 
         r = rx[numpy.logical_and(rx > v * psize, rx <= psize)]
@@ -196,13 +190,7 @@ def _spheroidalCF2(r, psize, axrat):
         f1 = (
             1
             - 3 * r / (4 * d * v) * (1 - r2 / (4 * d2) * (1 + 2.0 / (3 * v2)))
-            - 3
-            * r
-            / (4 * d)
-            * (1 - r2 / (4 * d2))
-            * v
-            / sqrt(v2 - 1)
-            * atan(sqrt(v2 - 1))
+            - 3 * r / (4 * d) * (1 - r2 / (4 * d2)) * v / sqrt(v2 - 1) * atan(sqrt(v2 - 1))
         )
 
         r = rx[numpy.logical_and(rx > psize, rx <= v * psize)]
