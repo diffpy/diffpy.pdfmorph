@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDFmorph Tutorial &mdash; PDFmorph 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="Welcome to PDFmorph’s Documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            PDFmorph
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PDFmorph Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-pdfmorph-workflow">Basic PDFmorph Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bug-reports">Bug Reports</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="package.html">Package API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PDFmorph</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">PDFmorph Tutorial</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pdfmorph-tutorial">
+<span id="quick-start"></span><h1>PDFmorph Tutorial<a class="headerlink" href="#pdfmorph-tutorial" title="Link to this heading"></a></h1>
+<p>Welcome! This will be a quick tutorial to accquaint users with PDFmorph
+and some of what it can do.</p>
+<p>As we described in the README and installation instructions, please make
+sure that you are familiar with working with your command line terminal
+before using this application.</p>
+<p>Before you’ve started this tutorial, please ensure that you’ve installed
+all necessary software and dependencies.</p>
+<section id="basic-pdfmorph-workflow">
+<h2>Basic PDFmorph Workflow<a class="headerlink" href="#basic-pdfmorph-workflow" title="Link to this heading"></a></h2>
+<blockquote>
+<div><blockquote>
+<div><ol class="arabic">
+<li><p>Open your Terminal or Command Prompt.</p></li>
+<li><p>It it’s not active already, activate your PDFmorph-equipped
+conda environment by typing in</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="n">activate</span> <span class="o">&lt;</span><span class="n">pdfmorph_env</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>on Linux or <code class="docutils literal notranslate"><span class="pre">activate</span> <span class="pre">&lt;pdfmorph_env&gt;</span></code> on Windows.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>If you need to list your available conda environments,
+run the command <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">info</span> <span class="pre">--envs</span></code> or
+<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">env</span> <span class="pre">list</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+<ul class="simple">
+<li><p>Run the <code class="docutils literal notranslate"><span class="pre">pdfmorph</span> <span class="pre">--help</span></code> command and read over the
+info on that page for a brief overview of some of what we will
+explore in this tutorial.</p></li>
+</ul>
+<ol class="arabic simple" start="3">
+<li><p>Using the <code class="docutils literal notranslate"><span class="pre">mkdir</span></code> command, create a directory where you’ll
+store the tutorial PDF files and use the <code class="docutils literal notranslate"><span class="pre">cd</span></code> command to change
+into that directory. You can download the tutorial files
+<a class="reference download internal" download="" href="_downloads/838673d435494fd7282730bb1aa66048/tutorialData.zip"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>.
+Then, <code class="docutils literal notranslate"><span class="pre">cd</span></code> into the <code class="docutils literal notranslate"><span class="pre">tutorialData</span></code> directory.</p></li>
+</ol>
+<ul class="simple">
+<li><p>The files in this dataset were collected by Soham Banerjee
+at Brookhaven National Laboratory in Upton, New York.</p></li>
+<li><p>The files are PDF data collected on Iridium Telluride with
+20% Rhodium Doping (IrRhTe2) with the first file (01) collected
+at 10K and the last (44) at 300K. The samples increase in
+temperature as their numbers increase. The “C” in their names
+indicates that they have undergone cooling.</p></li>
+<li><p>Note that these files have the <code class="docutils literal notranslate"><span class="pre">.gr</span></code> extension, which
+indicates that they are measured PDFs. The <code class="docutils literal notranslate"><span class="pre">.cgr</span></code> file
+extension indicates that a file is a calculated PDF, sich as
+those generated by the <a class="reference external" href="https://www.diffpy.org/products/pdfgui.html">PDFgui</a>
+program.</p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic" start="4">
+<li><p>First, we will run the PDFmorph application without any morphing
+and only using one PDF. Type the following command into your
+Command Line</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">pdfmorph</span> <span class="n">darkSub_rh20_C_01</span><span class="o">.</span><span class="n">gr</span> <span class="n">darkSub_rh20_C_01</span><span class="o">.</span><span class="n">gr</span>
+
+<span class="n">This</span> <span class="n">should</span> <span class="n">produce</span> <span class="n">two</span> <span class="n">PDF</span> <span class="n">curves</span> <span class="n">which</span> <span class="n">are</span> <span class="n">congruent</span><span class="p">,</span> <span class="n">resulting</span>
+<span class="ow">in</span> <span class="n">a</span> <span class="n">flat</span> <span class="n">green</span> <span class="n">line</span> <span class="n">underneath</span> <span class="n">them</span><span class="o">.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Now, we will see PDFmorph run with two different PDFs and no
+morphing. Type the following command into your command line</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="n">darkSub_rh20_C_01</span><span class="o">.</span><span class="n">gr</span> <span class="n">darkSub_rh20_C_44</span><span class="o">.</span><span class="n">gr</span>
+</pre></div>
+</div>
+<p>Without morphing, the difference Rw = 0.407. This indicates that
+the two PDFs vary drastically.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>While running the <code class="docutils literal notranslate"><span class="pre">pdfmorph</span></code> command, it is important
+to remember that the first PDF file argument you provide
+(in this case, <code class="docutils literal notranslate"><span class="pre">darkSub_rh20_C_01.gr</span></code>) is the PDF which
+will get morphed, while the second PDF file argument you
+provide (here, <code class="docutils literal notranslate"><span class="pre">darkSub_rh20_C_44.gr</span></code>) is the PDF which
+acts as the model and does not get morphed. Hereinafter,
+we will refer to the first PDF argument as the “morph”
+and the second as the “target”, as the PDFmorph display
+does.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Now, we will start the morphing process, which requires us to
+provide initial guesses for our scaling factor, Gaussian smear,
+and stretch, separately. We will start with the scaling factor.
+Begin by typing the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="o">--</span><span class="n">scale</span><span class="o">=</span><span class="mi">2</span> <span class="o">-</span><span class="n">a</span> <span class="n">darkSub_rh20_C_01</span><span class="o">.</span><span class="n">gr</span> <span class="n">darkSub_rh20_C_44</span><span class="o">.</span><span class="n">gr</span>
+</pre></div>
+</div>
+<p>Now, the difference Rw = 1.457, a significant increase from our
+value previously. We must modify our initial value for the
+scaling factor and do so until we see a reduction in the
+difference Rw from the unmorphed value. Type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="o">--</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.9</span> <span class="o">-</span><span class="n">a</span> <span class="n">darkSub_rh20_C_01</span><span class="o">.</span><span class="n">gr</span> <span class="n">darkSub_rh20_C_44</span><span class="o">.</span><span class="n">gr</span>
+</pre></div>
+</div>
+<p>The difference Rw is now 0.351, lower than our unmorphed
+example’s value. To see PDFmorph optimize the scale factor,
+simply drop <code class="docutils literal notranslate"><span class="pre">-a</span></code> from the command and type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="o">--</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.9</span> <span class="n">darkSub_rh20_C_01</span><span class="o">.</span><span class="n">gr</span> <span class="n">darkSub_rh20_C_44</span><span class="o">.</span><span class="n">gr</span>
+</pre></div>
+</div>
+<p>PDFmorph, given a reasonable initial guess, will use find the
+optimal value for each morphing feature. Here, we see that
+PDFmorph displays <code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">=</span> <span class="pre">0.799025</span></code> in the command prompt,
+meaning that it has found this to be the most optimal value for
+the scale factor. The difference Rw = 0.330, indicating a
+better fit than our reasonable initial guess.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>It is the choice of the user whether or not to run values
+before removing <code class="docutils literal notranslate"><span class="pre">-a</span></code> when analyzing data with PDFmorph.
+By including it, you allow the possibility to move towards
+convergence before allowing the program to optimize by
+removing it; when including it, you may reach a highly
+optimized value on the first guess or diverge greatly.
+In this tutorial, we will use it every time to check
+for convergence.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Now, we will examine the Gaussian smearing factor. We provide an
+initial guess by typing</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="o">--</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.8</span> <span class="o">--</span><span class="n">smear</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">-</span><span class="n">a</span> <span class="n">darkSub_rh20_C_01</span><span class="o">.</span><span class="n">gr</span> <span class="n">darkSub_rh20_C_44</span><span class="o">.</span><span class="n">gr</span>
+</pre></div>
+</div>
+<p>And viewing the results. We’ve tailored our scale factor to be
+close to the value given by PDFmorph, but see that the difference
+Rw has increased substantially due to our smear value. One
+approach, as described above, is to remove the <code class="docutils literal notranslate"><span class="pre">-a</span></code> from the
+above command and run it again.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Note: The warnings that the Terminal/Command Prompt
+displays are largely numerical in nature and do not
+indicate a physically irrelevant guess. These are somewhat
+superficial and in most cases can be ignored.</p></li>
+</ul>
+</div></blockquote>
+<p>We see that this has had hardly any effect on our PDF. To see
+an effect, we restrict the <code class="docutils literal notranslate"><span class="pre">rmin</span></code> and <code class="docutils literal notranslate"><span class="pre">rmax</span></code> values to
+reflect relevant data range by typing</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="o">--</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.8</span> <span class="o">--</span><span class="n">smear</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">--</span><span class="n">rmin</span><span class="o">=</span><span class="mf">1.5</span> <span class="o">--</span><span class="n">rmax</span><span class="o">=</span><span class="mi">30</span> <span class="n">darkSub_rh20_C_01</span><span class="o">.</span><span class="n">gr</span> <span class="n">darkSub_rh20_C_44</span><span class="o">.</span><span class="n">gr</span>
+</pre></div>
+</div>
+<p>Now, we see that the difference Rw = 0.204 and that the optimized
+<code class="docutils literal notranslate"><span class="pre">smear=-0.084138</span></code>.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>We restricted the r values because some of the Gaussian
+smear effects are only visible in a fixed r range. We
+chose this r range by noting where most of our relevant
+data was that was not exponentially decayed by
+instrumental shortcomings.</p></li>
+</ul>
+</div></blockquote>
+<p>We are getting closer to an acceptably close fit to our data!</p>
+</li>
+<li><p>Finally, we will examine the stretch factor. Provide an intial
+guess by typing</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="o">--</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.8</span> <span class="o">--</span><span class="n">smear</span><span class="o">=-</span><span class="mf">0.08</span> <span class="o">--</span><span class="n">stretch</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">--</span><span class="n">rmin</span><span class="o">=</span><span class="mf">1.5</span> <span class="o">--</span><span class="n">rmax</span><span class="o">=</span><span class="mi">30</span> <span class="o">-</span><span class="n">a</span> <span class="n">darkSub_rh20_C_01</span><span class="o">.</span><span class="n">gr</span> <span class="n">darkSub_rh20_C_44</span><span class="o">.</span><span class="n">gr</span>
+</pre></div>
+</div>
+<p>And noting that the difference has increased. Before continuing,
+see if you can see which direction (higher or lower) our initial
+estimate for the stretch factor needs to go and then removing
+the <code class="docutils literal notranslate"><span class="pre">-a</span></code> to check optimized value!</p>
+<p>If you cannot, type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="o">--</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.8</span> <span class="o">--</span><span class="n">smear</span><span class="o">=-</span><span class="mf">0.08</span> <span class="o">--</span><span class="n">stretch</span><span class="o">=</span><span class="mf">0.005</span> <span class="o">--</span><span class="n">rmin</span><span class="o">=</span><span class="mf">1.5</span> <span class="o">--</span><span class="n">rmax</span><span class="o">=</span><span class="mi">30</span> <span class="o">-</span><span class="n">a</span> <span class="n">darkSub_rh20_C_01</span><span class="o">.</span><span class="n">gr</span> <span class="n">darkSub_rh20_C_44</span><span class="o">.</span><span class="n">gr</span>
+</pre></div>
+</div>
+<p>to observe decreased difference and then remove <code class="docutils literal notranslate"><span class="pre">-a</span></code> to see
+the optimized <code class="docutils literal notranslate"><span class="pre">--stretch=0.001762</span></code>. We have now reached
+the optimal fit for our PDF!</p>
+</li>
+<li><p>Now, try it on your own! If you have personally collected or
+otherwise readily available PDF data, try this process to see if
+you can morph your PDFs to one another. Many of the parameters
+provided in this tutorial are unique to it, so be cautious about
+your choices and made sure that they remain physically relevant.</p></li>
+</ol>
+</div></blockquote>
+<p>Enjoy the software!</p>
+</section>
+<section id="bug-reports">
+<h2>Bug Reports<a class="headerlink" href="#bug-reports" title="Link to this heading"></a></h2>
+<p>Please enjoy using our software! If you come accross any bugs in the
+application, please report them to <a class="reference external" href="mailto:diffpy-dev&#37;&#52;&#48;googlegroups&#46;com">diffpy-dev<span>&#64;</span>googlegroups<span>&#46;</span>com</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to PDFmorph’s Documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2009-2019, Trustees of Columbia University in the City of New York, all rights reserved..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
