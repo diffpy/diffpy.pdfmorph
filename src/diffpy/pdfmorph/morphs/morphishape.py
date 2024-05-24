@@ -15,7 +15,7 @@
 
 
 """class MorphISphere -- apply inverse spherical shape function
-class MorphISpheroid -- apply inverse spheroidal shape function 
+class MorphISpheroid -- apply inverse spheroidal shape function
 """
 
 

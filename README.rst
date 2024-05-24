@@ -1,6 +1,6 @@
 
 
-.. image:: https://github.com/diffpy/diffpy.pdfmorph/actions/workflows/main.yml/badge.svg 
+.. image:: https://github.com/diffpy/diffpy.pdfmorph/actions/workflows/main.yml/badge.svg
    :target: https://github.com/diffpy/diffpy.pdfmorph/actions/workflows/main.yml
 
 .. image:: http://codecov.io/github/diffpy/diffpy.pdfmorph/coverage.svg?branch=master
@@ -11,31 +11,31 @@ PDFmorph
 ========================================================================
 
 
-PDFmorph is a Python software package designed to increase the insight 
-researchers can obtain from measured atomic pair distribution functions 
-(PDFs) in a model-independent way. The program was designed to help a 
-researcher answer the question: "Has my material undergone a phase 
+PDFmorph is a Python software package designed to increase the insight
+researchers can obtain from measured atomic pair distribution functions
+(PDFs) in a model-independent way. The program was designed to help a
+researcher answer the question: "Has my material undergone a phase
 transition between these two measurements?"
 
-One approach is to compare the two PDFs in a plot and view the difference 
-curve underneath. However, significant signal can be seen in the 
-difference curve from benign effects such as thermal expansion (peak 
-shifts) and increased thermal motion (peak broadening) or a change in 
-scale due to differences in incident flux, for example. PDFmorph will 
-do its best to correct for these benign effects before computing and 
+One approach is to compare the two PDFs in a plot and view the difference
+curve underneath. However, significant signal can be seen in the
+difference curve from benign effects such as thermal expansion (peak
+shifts) and increased thermal motion (peak broadening) or a change in
+scale due to differences in incident flux, for example. PDFmorph will
+do its best to correct for these benign effects before computing and
 plotting the difference curve. One measured PDF (typically that collected
-at higher temperature) is identified as the target PDF and the second 
-PDF is then morphed by "stretching" (changing the r-axis to simulate a 
-uniform lattice expansion), "smearing" (broadening peaks through a 
-uniform convolution to simulate increased thermal motion), and "scaling" 
-(self-explanatory). PDFmorph will vary the amplitude of the morphing 
-transformations to obtain the best fit between the morphed and the target 
-PDFs, then plot them on top of each other with the difference plotted 
+at higher temperature) is identified as the target PDF and the second
+PDF is then morphed by "stretching" (changing the r-axis to simulate a
+uniform lattice expansion), "smearing" (broadening peaks through a
+uniform convolution to simulate increased thermal motion), and "scaling"
+(self-explanatory). PDFmorph will vary the amplitude of the morphing
+transformations to obtain the best fit between the morphed and the target
+PDFs, then plot them on top of each other with the difference plotted
 below.
 
 There are also a few other morphing transformations in the program.
 
-Finally, we note that PDFmorph should work on other spectra that are not 
+Finally, we note that PDFmorph should work on other spectra that are not
 PDFs, though it has not been extensively tested beyond the PDF.
 
 
@@ -50,11 +50,11 @@ REQUIREMENTS
 ------------------------------------------------------------------------
 
 PDFmorph is currently run from the command line, which requires opening
-and typing into a terminal window or Windows command prompt. It is 
-recommended that you consult online resources and become somewhat 
+and typing into a terminal window or Windows command prompt. It is
+recommended that you consult online resources and become somewhat
 familiar before using PDFmorph.
 
-PDFmorph can be run with Python 2.7 and Python 3.5 or higher. We 
+PDFmorph can be run with Python 2.7 and Python 3.5 or higher. We
 recommend using the Python 3 version. It makes use of several third party
 libraries that you'll need to run the app and its components.
 
@@ -75,34 +75,34 @@ or mini-conda installed on your computer, you can proceed directly to
 the instructions below. If not, we recommend that you install mini-
 conda and test that it is working by opening a terminal and typing
 ``conda``.
- 
-To create and activate a conda environment to use this software, run 
+
+To create and activate a conda environment to use this software, run
 the following command from the command line ::
-	
+
 	conda create -n pdfmorph_env python=3 --yes
 	source activate pdfmorph_env
 
-If you're using Windows, replace ``source activate pdfmorph`` with 
+If you're using Windows, replace ``source activate pdfmorph`` with
 ``activate pdfmorph_env``.
 
-When you are finished with the session, exit the environment by running :: 
+When you are finished with the session, exit the environment by running ::
 
 	source deactivate pdfmorph_env
 
 or, on Windows, ``deactivate pdfmorph_env``.
 
-For your future sessions with the application: Make sure to run the 
-``source activate pdfmorph_env`` or ``activate pdfmorph_env`` commands 
+For your future sessions with the application: Make sure to run the
+``source activate pdfmorph_env`` or ``activate pdfmorph_env`` commands
 from your command line beforehand to ensure access to the software.
 
 Once in your desired conda environment, you can install from either the
-"diffpy" or "conda-forge" channels of Anaconda packages by running 
+"diffpy" or "conda-forge" channels of Anaconda packages by running
 either ::
 
 	conda config --add channels conda-forge
 	conda install diffpy.pdfmorph
- 
-If you do not use conda or prefer to install from sources, please 
+
+If you do not use conda or prefer to install from sources, please
 consult online documentation.
 
 With conda, PDFmorph can be later upgraded to the latest released
@@ -123,16 +123,16 @@ up a terminal and check installation has worked properly by running ::
 	pdfmorph -h			  #get some helpful information
 	pdfmorph --version
 
-If installed correctly, this last command should return the version 
-of PDFmorph that you have installed on your system. To begin using 
+If installed correctly, this last command should return the version
+of PDFmorph that you have installed on your system. To begin using
 PDFmorph, run a command like ::
 
 	pdfmorph <target PDF file> <morphed PDF file>
 
 where both PDFs file are text files which contain PDF data, such as ``.gr``
-or ``.cgr`` files that are produced by ``PDFgetX2``, ``PDFgetX3``, 
-or ``PDFgui``. Though some file extensions other than ``.gr`` or ``.cgr``, 
-but with the same content structure, have been shown to work with 
+or ``.cgr`` files that are produced by ``PDFgetX2``, ``PDFgetX3``,
+or ``PDFgui``. Though some file extensions other than ``.gr`` or ``.cgr``,
+but with the same content structure, have been shown to work with
 PDFmorph, it is recommended to stick with ``.gr`` files.
 
 Enjoy!
@@ -174,4 +174,3 @@ CONTACTS
 
 For more information on PDFmorph, visit the `PDFmorph project web-page, <https://github.com/diffpy/diffpy.github.io/blob/source/products/pdfmorph.rst/>`_
 or email Professor Simon Billinge at sb2896@columbia.edu
-

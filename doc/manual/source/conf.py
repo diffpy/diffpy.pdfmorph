@@ -13,30 +13,32 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path('../../..').resolve()))
-sys.path.insert(0, str(Path('../../../src').resolve()))
+sys.path.insert(0, str(Path("../../..").resolve()))
+sys.path.insert(0, str(Path("../../../src").resolve()))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'PDFmorph'
-project_full = 'diffpy.pdfmorph'
-copyright = '2009-2019, Trustees of Columbia University in the City of New York, all rights reserved.'
-author = 'Chris Farrow, Christopher J. Wright, Pavol Juhás, Chia-Hao (Timothy) Liu, S. Matthew Román, Simon J.L. Billinge'
+project = "PDFmorph"
+project_full = "diffpy.pdfmorph"
+copyright = "2009-2019, Trustees of Columbia University in the City of New York, all rights reserved."
+author = "Chris Farrow, Christopher J. Wright, Pavol Juhás, Chia-Hao (Timothy) Liu, S. Matthew Román, Simon J.L. Billinge"
 
 # The full version, including alpha/beta/rc tags
 from importlib.metadata import version
+
 fullversion = version(project_full)
 # The short X.Y version.
-version = ''.join(fullversion.split('.post')[:1])
+version = "".join(fullversion.split(".post")[:1])
 # The full version, including alpha/beta/rc tags.
 release = fullversion
 
 # Get current date for copyright
 import time
-today = time.strftime('%B %d, %Y', time.localtime())
+
+today = time.strftime("%B %d, %Y", time.localtime())
 year = today.split()[-1]
-copyright = copyright.replace('%Y', year)
+copyright = copyright.replace("%Y", year)
 
 
 # -- General configuration ---------------------------------------------------
@@ -44,34 +46,35 @@ copyright = copyright.replace('%Y', year)
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.napoleon', 
-	'sphinx.ext.todo',
-    'sphinx.ext.viewcode', 
-	'sphinx.ext.intersphinx',
-    'sphinx_rtd_theme',
-    'm2r',
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.intersphinx",
+    "sphinx_rtd_theme",
+    "m2r",
 ]
 napoleon_google_docstring = False
 napoleon_use_param = False
 napoleon_use_ivar = False
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
-from jinja2 import Template, Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, Template
 
-source_suffix = '.rst'
+source_suffix = ".rst"
 
-master_doc = 'index'
+master_doc = "index"
 
-language = 'en'
+language = "en"
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['Thumbs.db', '.DS_Store'] 
+exclude_patterns = ["Thumbs.db", ".DS_Store"]
 
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 
 todo_include_todos = True
 
@@ -80,7 +83,8 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 import sphinx_rtd_theme
-html_theme = 'sphinx_rtd_theme'
+
+html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 html_theme_options = {}
@@ -90,20 +94,24 @@ html_theme_options = {}
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = []
 
-htmlhelp_basename = 'PDFmorphdoc'
+htmlhelp_basename = "PDFmorphdoc"
 
 latex_documents = [
-	(master_doc, 'pdfmorph.tex', 'PDFmorph Documentation', 
-	'author', 'manual'),
+    (master_doc, "pdfmorph.tex", "PDFmorph Documentation", "author", "manual"),
 ]
 
-man_pages = [
-	(master_doc, 'pdfmorph', 'PDFmorph Documentation', [author], 1)
-]
+man_pages = [(master_doc, "pdfmorph", "PDFmorph Documentation", [author], 1)]
 
 texinfo_documents = [
-	(master_doc, 'PDFmorph', 'PDFmorph Documentation', author,
-	'PDFmorph', 'One line description of project.', 'Miscellaneous'),
+    (
+        master_doc,
+        "PDFmorph",
+        "PDFmorph Documentation",
+        author,
+        "PDFmorph",
+        "One line description of project.",
+        "Miscellaneous",
+    ),
 ]
 
 epub_title = project
@@ -111,4 +119,4 @@ epub_author = author
 epub_publisher = author
 epub_copyright = copyright
 
-epub_exclude_files = ['search.html']
+epub_exclude_files = ["search.html"]
