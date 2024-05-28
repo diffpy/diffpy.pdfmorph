@@ -48,7 +48,8 @@ def single_morph_output(
     morph_file
         Name of the morphed PDF file. Required when printing to a non-terminal file.
     param xy_out: list
-        List of the form [x_morph_out, y_morph_out]. x_morph_out is a List of r values and y_morph_out is a List of gr values.
+        List of the form [x_morph_out, y_morph_out]. x_morph_out is a List of r values 
+        and y_morph_out is a List of gr values.
     verbose: bool
         Print additional details about the morph when True (default False).
     stdout_flag: bool
@@ -208,7 +209,9 @@ def multiple_morph_output(
         for target in morph_results.keys():
             output = f"\n# Target: {target}\n"
             output += "# Optimized morphing parameters:\n"
-            output += "\n".join(f"# {param} = {morph_results[target][param]: .6f}" for param in morph_results[target])
+            output += "\n".join(
+                f"# {param} = {morph_results[target][param]: .6f}" for param in morph_results[target]
+            )
             verbose_outputs += f"{output}\n"
 
     # Get items we want to put in table
@@ -277,5 +280,7 @@ def tabulate_results(multiple_morph_results):
     # Keys in this table represent column names and the value will be a list of column data
     tabulated_results = {}
     for param in relevant_parameters:
-        tabulated_results.update({param: tools.get_values_from_dictionary_collection(multiple_morph_results, param)})
+        tabulated_results.update(
+            {param: tools.get_values_from_dictionary_collection(multiple_morph_results, param)}
+        )
     return tabulated_results

@@ -206,26 +206,32 @@ factor. It will be estimated if not provided.""",
         type="float",
         metavar="RADIUS",
         help="""Apply characteristic function of sphere with radius RADIUS.
-If PRADIUS is also specified, instead apply characteristic function of spheroid with equatorial radius RADIUS and polar radius PRADIUS.""",
+If PRADIUS is also specified, instead apply characteristic function of spheroid with equatorial radius RADIUS 
+and polar radius PRADIUS.""",
     )
     group.add_option(
         "--pradius",
         type="float",
         metavar="PRADIUS",
         help="""Apply characteristic function of spheroid with equatorial
-radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead apply characteristic function of sphere with radius PRADIUS.""",
+radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead apply characteristic 
+function of sphere with radius PRADIUS.""",
     )
     group.add_option(
         "--iradius",
         type="float",
         metavar="IRADIUS",
-        help="""Apply inverse characteristic function of sphere with radius IRADIUS.  If IPRADIUS is also specified, instead apply inverse characteristic function of spheroid with equatorial radius IRADIUS and polar radius IPRADIUS.""",
+        help="""Apply inverse characteristic function of sphere with radius IRADIUS.  If IPRADIUS is 
+        also specified, instead apply inverse characteristic function of spheroid with equatorial 
+        radius IRADIUS and polar radius IPRADIUS.""",
     )
     group.add_option(
         "--ipradius",
         type="float",
         metavar="IPRADIUS",
-        help="""Apply inverse characteristic function of spheroid with equatorial radius IRADIUS and polar radius IPRADIUS. If only IPRADIUS is specified, instead apply inverse characteristic function of sphere with radius IPRADIUS.""",
+        help="""Apply inverse characteristic function of spheroid with equatorial radius IRADIUS and 
+        polar radius IPRADIUS. If only IPRADIUS is specified, instead apply inverse characteristic function 
+        of sphere with radius IPRADIUS.""",
     )
 
     # Plot Options
