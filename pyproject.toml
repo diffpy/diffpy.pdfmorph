@@ -54,7 +54,7 @@ exclude = ["diffpy.pdfmorph.tests*"]  # exclude packages matching these glob pat
 namespaces = false  # to disable scanning PEP 420 namespaces (true by default)
 
 [tool.black]
-line-length = 115
+line-length = 236
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -75,5 +75,5 @@ exclude = '''
 '''
 
 [tool.flake8]
-max-line-length = 115
+max-line-length = 236
 per-file-ignores="__init__.py:F401"
