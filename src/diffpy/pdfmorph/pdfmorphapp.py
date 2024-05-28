@@ -206,7 +206,7 @@ def create_option_parser():
         type="float",
         metavar="RADIUS",
         help="""Apply characteristic function of sphere with radius RADIUS.
-         If PRADIUS is also specified, instead apply characteristic function of spheroid with equatorial radius RADIUS 
+         If PRADIUS is also specified, instead apply characteristic function of spheroid with equatorial radius RADIUS
          and polar radius PRADIUS.""",
     )
     group.add_option(
@@ -214,23 +214,23 @@ def create_option_parser():
         type="float",
         metavar="PRADIUS",
         help="""Apply characteristic function of spheroid with equatorial
-         radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead apply characteristic 
+         radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead apply characteristic
          function of sphere with radius PRADIUS.""",
     )
     group.add_option(
         "--iradius",
         type="float",
         metavar="IRADIUS",
-        help="""Apply inverse characteristic function of sphere with radius IRADIUS.  If IPRADIUS is 
-         also specified, instead apply inverse characteristic function of spheroid with equatorial 
+        help="""Apply inverse characteristic function of sphere with radius IRADIUS.  If IPRADIUS is
+         also specified, instead apply inverse characteristic function of spheroid with equatorial
          radius IRADIUS and polar radius IPRADIUS.""",
     )
     group.add_option(
         "--ipradius",
         type="float",
         metavar="IPRADIUS",
-        help="""Apply inverse characteristic function of spheroid with equatorial radius IRADIUS and 
-         polar radius IPRADIUS. If only IPRADIUS is specified, instead apply inverse characteristic function 
+        help="""Apply inverse characteristic function of spheroid with equatorial radius IRADIUS and
+         polar radius IPRADIUS. If only IPRADIUS is specified, instead apply inverse characteristic function
          of sphere with radius IPRADIUS.""",
     )
 
@@ -492,7 +492,9 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
     # Sort files in directory by some field
     if field is not None:
         try:
-            target_list, field_list = tools.field_sort(target_list, field, opts.reverse, opts.serfile, get_field_values=True)
+            target_list, field_list = tools.field_sort(
+                target_list, field, opts.reverse, opts.serfile, get_field_values=True
+            )
         except KeyError:
             if opts.serfile is not None:
                 parser.custom_error("The requested field was not found in the metadata file.")
@@ -589,7 +591,10 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
             # Can occur for non-refined plotting parameters
             # i.e. --smear is not selected as an option, but smear is the plotting parameter
             except ValueError:
-                parser.custom_error("The plot parameter is missing values for at least one morph and target pair. " "No plot shown.")
+                parser.custom_error(
+                    "The plot parameter is missing values for at least one morph and target pair. "
+                    "No plot shown."
+                )
 
     return morph_results
 

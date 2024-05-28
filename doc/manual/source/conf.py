@@ -11,11 +11,11 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import sys
-from pathlib import Path
 from importlib.metadata import version
+from pathlib import Path
+
 import sphinx_rtd_theme
 from jinja2 import Environment, FileSystemLoader, Template
-
 
 sys.path.insert(0, str(Path("../../..").resolve()))
 sys.path.insert(0, str(Path("../../../src").resolve()))
