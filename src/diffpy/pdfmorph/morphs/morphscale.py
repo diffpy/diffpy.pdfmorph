@@ -18,7 +18,8 @@
 """
 
 
-from diffpy.pdfmorph.morphs.morph import *
+# from diffpy.pdfmorph.morphs.morph import *
+from diffpy.pdfmorph.morphs.morph import LABEL_GR, LABEL_RA, Morph
 
 
 class MorphScale(Morph):

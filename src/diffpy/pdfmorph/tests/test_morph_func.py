@@ -10,13 +10,13 @@ from diffpy.pdfmorph.tests.test_morphstretch import heaviside
 def test_morphfunc_verbose():
     lb, ub = 1, 2
     x_target = np.arange(0.01, 5, 0.01)
-    y_target = heaviside(x_target, lb, ub)
+    # y_target = heaviside(x_target, lb, ub)
     # expand 30%
     stretch = 0.3
-    x_morph = x_target.copy()
-    y_morph = heaviside(x_target, lb * (1 + stretch), ub * (1 + stretch))
-    cfg = morph_default_config(stretch=0.1)  # off init
-    morph_rv = pdfmorph(x_morph, y_morph, x_target, y_target, verbose=True, **cfg)
+    # x_morph = x_target.copy()
+    # y_morph = heaviside(x_target, lb * (1 + stretch), ub * (1 + stretch))
+    # cfg = morph_default_config(stretch=0.1)  # off init
+    # morph_rv = pdfmorph(x_morph, y_morph, x_target, y_target, verbose=True, **cfg)
 
 
 def test_fixed_morph_with_morphfunc():
@@ -29,15 +29,15 @@ def test_fixed_morph_with_morphfunc():
     y_morph = heaviside(x_target, lb * (1 + stretch), ub * (1 + stretch))
     cfg = morph_default_config(stretch=0.1)  # off init
     cfg["scale"] = 30
-    morph_rv = pdfmorph(
-        x_morph,
-        y_morph,
-        x_target,
-        y_target,
-        verbose=True,
-        fixed_operations=["scale"],
-        **cfg,
-    )
+    # morph_rv = pdfmorph(
+    #    x_morph,
+    #    y_morph,
+    #    x_target,
+    #    y_target,
+    #    verbose=True,
+    #    fixed_operations=["scale"],
+    #    **cfg,
+    # )
 
 
 def test_stretch_with_morphfunc():

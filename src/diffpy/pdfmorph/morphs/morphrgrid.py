@@ -20,7 +20,8 @@
 
 import numpy
 
-from diffpy.pdfmorph.morphs.morph import *
+# from diffpy.pdfmorph.morphs.morph import *
+from diffpy.pdfmorph.morphs.morph import LABEL_GR, LABEL_RA, Morph
 
 # roundoff tolerance for selecting bounds on arrays.
 epsilon = 1e-8

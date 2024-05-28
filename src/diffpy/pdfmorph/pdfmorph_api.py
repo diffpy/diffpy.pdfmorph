@@ -168,7 +168,7 @@ def pdfmorph(
     print(morph_rv_dict['pcc'])
     print(morph_rv_dict['rw'])
     """
-    operation_dict = {}
+    # operation_dict = {}
     refpars = []
     # input config
     rv_cfg = dict(kwargs)

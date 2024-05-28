@@ -10,13 +10,13 @@ from pathlib import Path
 import numpy
 import pytest
 
+import diffpy.pdfmorph.tools as tools
+
 # useful variables
 thisfile = locals().get("__file__", "file.py")
 tests_dir = os.path.dirname(os.path.abspath(thisfile))
 testdata_dir = os.path.join(tests_dir, "testdata")
 testsequence_dir = os.path.join(testdata_dir, "testsequence")
-
-import diffpy.pdfmorph.tools as tools
 
 
 ##############################################################################
