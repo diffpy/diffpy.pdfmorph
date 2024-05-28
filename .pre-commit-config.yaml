@@ -6,7 +6,9 @@ repos:
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer
+        exclude: '\.rst$'
       - id: trailing-whitespace
+        exclude: '\.rst$'
   - repo: https://github.com/ambv/black
     rev: 23.3.0
     hooks:
