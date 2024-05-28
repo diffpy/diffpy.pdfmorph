@@ -7,6 +7,6 @@ exclude =
     versioneer.py,
     labpdfproc/_version.py,
     doc/manual/source/conf.py
-max-line-length = 236
+max-line-length = 115
 # Ignore some style 'errors' produced while formatting by 'black'
 ignore = E203, W503
