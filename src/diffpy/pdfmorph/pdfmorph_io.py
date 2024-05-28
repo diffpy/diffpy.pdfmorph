@@ -208,9 +208,7 @@ def multiple_morph_output(
         for target in morph_results.keys():
             output = f"\n# Target: {target}\n"
             output += "# Optimized morphing parameters:\n"
-            output += "\n".join(
-                f"# {param} = {morph_results[target][param]: .6f}" for param in morph_results[target]
-            )
+            output += "\n".join(f"# {param} = {morph_results[target][param]: .6f}" for param in morph_results[target])
             verbose_outputs += f"{output}\n"
 
     # Get items we want to put in table
@@ -230,9 +228,9 @@ def multiple_morph_output(
         row = f"{target_files[idx]}"
         if field_list is not None:
             row += f" {field_list[idx]}"
-        for param in tabulated_results.keys(): 
+        for param in tabulated_results.keys():
             if len(tabulated_results[param]) > idx:
-                row += f" {tabulated_results[param][idx]:0.6f}"
+                row += f" {tabulated_results[param][idx]: 0.6f}"
         table += f"{row}\n"
     table = table[:-1]  # Remove extra indent
 
@@ -279,7 +277,5 @@ def tabulate_results(multiple_morph_results):
     # Keys in this table represent column names and the value will be a list of column data
     tabulated_results = {}
     for param in relevant_parameters:
-        tabulated_results.update(
-            {param: tools.get_values_from_dictionary_collection(multiple_morph_results, param)}
-        )
+        tabulated_results.update({param: tools.get_values_from_dictionary_collection(multiple_morph_results, param)})
     return tabulated_results
