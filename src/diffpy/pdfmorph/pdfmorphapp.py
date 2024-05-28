@@ -304,19 +304,19 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
     chain.append(morphs.MorphRGrid())
     refpars = []
 
-    ## Scale
+    # Scale
     if opts.scale is not None:
         scale_in = opts.scale
         chain.append(morphs.MorphScale())
         config["scale"] = opts.scale
         refpars.append("scale")
-    ## Stretch
+    # Stretch
     if opts.stretch is not None:
         stretch_in = opts.stretch
         chain.append(morphs.MorphStretch())
         config["stretch"] = opts.stretch
         refpars.append("stretch")
-    ## Smear
+    # Smear
     if opts.smear is not None:
         smear_in = opts.smear
         chain.append(helpers.TransformXtalPDFtoRDF())
@@ -328,7 +328,7 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
         if opts.baselineslope is None:
             refpars.append("baselineslope")
             config["baselineslope"] = -0.5
-    ## Size
+    # Size
     radii = [opts.radius, opts.pradius]
     nrad = 2 - radii.count(None)
     if nrad == 1:
@@ -356,7 +356,7 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
         refpars.append("ipradius")
         chain.append(morphs.MorphISpheroid())
 
-    ## Resolution
+    # Resolution
     if opts.qdamp is not None:
         chain.append(morphs.MorphResolutionDamping())
         refpars.append("qdamp")
@@ -486,9 +486,7 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
     # Sort files in directory by some field
     if field is not None:
         try:
-            target_list, field_list = tools.field_sort(
-                target_list, field, opts.reverse, opts.serfile, get_field_values=True
-            )
+            target_list, field_list = tools.field_sort(target_list, field, opts.reverse, opts.serfile, get_field_values=True)
         except KeyError:
             if opts.serfile is not None:
                 parser.custom_error("The requested field was not found in the metadata file.")
@@ -585,10 +583,7 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
             # Can occur for non-refined plotting parameters
             # i.e. --smear is not selected as an option, but smear is the plotting parameter
             except ValueError:
-                parser.custom_error(
-                    "The plot parameter is missing values for at least one morph and target pair. "
-                    "No plot shown."
-                )
+                parser.custom_error("The plot parameter is missing values for at least one morph and target pair. " "No plot shown.")
 
     return morph_results
 
