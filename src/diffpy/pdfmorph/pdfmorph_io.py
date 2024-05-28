@@ -35,7 +35,7 @@ def single_morph_output(
     stdout_flag=False,
 ):
     """Helper function for printing details about a single morph.
-    Handles both printing to terminal and printing to a file.
+     Handles both printing to terminal and printing to a file.
 
     Parameters
     ----------
@@ -49,7 +49,7 @@ def single_morph_output(
         Name of the morphed PDF file. Required when printing to a non-terminal file.
     param xy_out: list
         List of the form [x_morph_out, y_morph_out]. x_morph_out is a List of r values 
-        and y_morph_out is a List of gr values.
+         and y_morph_out is a List of gr values.
     verbose: bool
         Print additional details about the morph when True (default False).
     stdout_flag: bool
@@ -101,8 +101,8 @@ def create_morphs_directory(save_directory):
     """Create a directory for saving multiple morphed PDFs.
 
     Takes in a user-given path to a directory save_directory and create a subdirectory named Morphs.
-    PDFmorph will save all morphs into the Morphs subdirectory while metadata about the morphs will
-    be stored in save_directory outside Morphs.
+     PDFmorph will save all morphs into the Morphs subdirectory while metadata about the morphs will
+     be stored in save_directory outside Morphs.
 
     Parameters
     ----------
@@ -126,8 +126,8 @@ def create_morphs_directory(save_directory):
 
 def get_multisave_names(target_list: list, save_names_file=None):
     """Create or import a dictionary that specifies names to save morphs as.
-    First attempt to import names from a specified file. If names for certain morphs not found,
-    use default naming scheme: 'Morph_with_Target_<target file name>.cgr'.
+     First attempt to import names from a specified file. If names for certain morphs not found,
+     use default naming scheme: 'Morph_with_Target_<target file name>.cgr'.
 
     Used when saving multiple morphs.
 
@@ -171,7 +171,7 @@ def multiple_morph_output(
     stdout_flag=False,
 ):
     """Helper function for printing details about a series of multiple morphs.
-    Handles both printing to terminal and printing to a file.
+     Handles both printing to terminal and printing to a file.
 
     Parameters
     ----------
@@ -191,7 +191,7 @@ def multiple_morph_output(
         Name of the morphed PDF file. Required to give summary data after saving to a directory.
     target_directory
         Name of the directory containing the target PDF files.
-        Required to give summary data after saving to a directory.
+         Required to give summary data after saving to a directory.
     verbose: bool
         Print additional summary details when True (default False).
     stdout_flag: bool
@@ -271,7 +271,7 @@ def tabulate_results(multiple_morph_results):
     -------
     tabulated_results: dict
         Keys in tabulated_results are the table's column names and each corresponding value is a list
-        of data for that column.
+         of data for that column.
     """
 
     # We only care about the following parameters in our data tables
