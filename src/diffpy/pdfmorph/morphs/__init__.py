@@ -17,8 +17,8 @@
 """
 
 
-from diffpy.pdfmorph.morphs.morph import Morph
-from diffpy.pdfmorph.morphs.morphchain import MorphChain
+from diffpy.pdfmorph.morphs.morph import Morph  # noqa: F401
+from diffpy.pdfmorph.morphs.morphchain import MorphChain  # noqa: F401
 from diffpy.pdfmorph.morphs.morphishape import MorphISphere, MorphISpheroid
 from diffpy.pdfmorph.morphs.morphresolution import MorphResolutionDamping
 from diffpy.pdfmorph.morphs.morphrgrid import MorphRGrid
@@ -27,12 +27,6 @@ from diffpy.pdfmorph.morphs.morphshape import MorphSphere, MorphSpheroid
 from diffpy.pdfmorph.morphs.morphshift import MorphShift
 from diffpy.pdfmorph.morphs.morphsmear import MorphSmear
 from diffpy.pdfmorph.morphs.morphstretch import MorphStretch
-
-# List of morph base classes
-morph_base = [
-    Morph,
-    MorphChain,
-]
 
 # List of morphs
 morphs = [
