@@ -64,8 +64,8 @@ def create_option_parser():
         metavar="NAME",
         dest="slocation",
         help="""Save the manipulated PDF to a file named NAME. Use \'-\' for stdout.
-When --multiple is enabled, save each manipulated PDF as a file in a directory named NAME;
-you can specify names for each saved PDF file using --save-names-file.""",
+ When --multiple is enabled, save each manipulated PDF as a file in a directory named NAME;
+ you can specify names for each saved PDF file using --save-names-file.""",
     )
     parser.add_option(
         "-v",
@@ -87,14 +87,14 @@ you can specify names for each saved PDF file using --save-names-file.""",
         action="store_true",
         dest="addpearson",
         help="""Maximize agreement in the Pearson function as well as
-minimizing the residual.""",
+ minimizing the residual.""",
     )
 
     group = optparse.OptionGroup(
         parser,
         "Multiple Morphs",
         """This program can morph a PDF against multiple targets in one command.
-See -s and Plot Options for how saving and plotting functionality changes when performing multiple morphs.""",
+ See -s and Plot Options for how saving and plotting functionality changes when performing multiple morphs.""",
     )
     parser.add_option_group(group)
     group.add_option(
@@ -102,16 +102,16 @@ See -s and Plot Options for how saving and plotting functionality changes when p
         dest="multiple",
         action="store_true",
         help=f"""Changes usage to \'{prog_short} [options] FILE DIRECTORY\'. FILE
-will be morphed with each file in DIRECTORY as target.
-Files in DIRECTORY are sorted by alphabetical order unless a field is
-specified by --sort-by.""",
+ will be morphed with each file in DIRECTORY as target.
+ Files in DIRECTORY are sorted by alphabetical order unless a field is
+ specified by --sort-by.""",
     )
     group.add_option(
         "--sort-by",
         metavar="FIELD",
         dest="field",
         help="""Used with --multiple to sort files in DIRECTORY by FIELD from lowest to highest.
-FIELD must be included in the header of all the PDF files.""",
+ FIELD must be included in the header of all the PDF files.""",
     )
     group.add_option(
         "--reverse",
@@ -124,17 +124,17 @@ FIELD must be included in the header of all the PDF files.""",
         metavar="SERIALFILE",
         dest="serfile",
         help="""Look for FIELD in a serial file instead.
-Must specify name of serial file SERIALFILE.""",
+ Must specify name of serial file SERIALFILE.""",
     )
     group.add_option(
         "--save-names-file",
         metavar="NAMESFILE",
         dest="snamesfile",
         help=f"""Used when both -s and --multiple are enabled.
-Specify names for each manipulated PDF when saving (see -s) using a serial file
-NAMESFILE. The format of NAMESFILE should be as follows: each target PDF
-is an entry in NAMESFILE. For each entry, there should be a key {__save_morph_as__}
-whose value specifies the name to save the manipulated PDF as.
+ Specify names for each manipulated PDF when saving (see -s) using a serial file
+ NAMESFILE. The format of NAMESFILE should be as follows: each target PDF
+ is an entry in NAMESFILE. For each entry, there should be a key {__save_morph_as__}
+ whose value specifies the name to save the manipulated PDF as.
 (See sample names files in the PDFmorph tutorial).""",
     )
     group.add_option(
@@ -142,11 +142,11 @@ whose value specifies the name to save the manipulated PDF as.
         metavar="PLOTPARAM",
         dest="plotparam",
         help="""Used when both plotting and --multiple are enabled.
-Choose a PLOTPARAM to plot for each morph (i.e. adding --pp=Pearson means the program
-will display a plot of the Pearson correlation coefficient for each morph-target pair).
-PLOTPARAM is not case sensitive, so both Pearson and pearson indicate the same parameter.
-When PLOTPARAM is not specified, Rw values for each morph-target pair will be plotted.
-PLOTPARAM will be displayed as the vertical axis label for the plot.""",
+ Choose a PLOTPARAM to plot for each morph (i.e. adding --pp=Pearson means the program
+ will display a plot of the Pearson correlation coefficient for each morph-target pair).
+ PLOTPARAM is not case sensitive, so both Pearson and pearson indicate the same parameter.
+ When PLOTPARAM is not specified, Rw values for each morph-target pair will be plotted.
+ PLOTPARAM will be displayed as the vertical axis label for the plot.""",
     )
 
     # Manipulations
@@ -154,9 +154,9 @@ PLOTPARAM will be displayed as the vertical axis label for the plot.""",
         parser,
         "Manipulations",
         """These options select the manipulations that are to be applied to
-the PDF from FILE1. The passed values will be refined unless specifically
-excluded with the -a or -x options. If no option is specified, the PDFs from FILE1 and FILE2 will
-be plotted without any manipulations.""",
+ the PDF from FILE1. The passed values will be refined unless specifically
+ excluded with the -a or -x options. If no option is specified, the PDFs from FILE1 and FILE2 will
+ be plotted without any manipulations.""",
     )
     parser.add_option_group(group)
     group.add_option(
@@ -173,7 +173,7 @@ be plotted without any manipulations.""",
         dest="exclude",
         metavar="MANIP",
         help="""Exclude a manipulation from refinement by name. This can
-appear multiple times.""",
+ appear multiple times.""",
     )
     group.add_option("--scale", type="float", metavar="SCALE", help="Apply scale factor SCALE.")
     group.add_option(
@@ -193,7 +193,7 @@ appear multiple times.""",
         type="float",
         dest="baselineslope",
         help="""Slope of the baseline. This is used when applying the smear
-factor. It will be estimated if not provided.""",
+ factor. It will be estimated if not provided.""",
     )
     group.add_option(
         "--qdamp",
@@ -206,26 +206,32 @@ factor. It will be estimated if not provided.""",
         type="float",
         metavar="RADIUS",
         help="""Apply characteristic function of sphere with radius RADIUS.
-If PRADIUS is also specified, instead apply characteristic function of spheroid with equatorial radius RADIUS and polar radius PRADIUS.""",
+ If PRADIUS is also specified, instead apply characteristic function of spheroid with equatorial
+ radius RADIUS and polar radius PRADIUS.""",
     )
     group.add_option(
         "--pradius",
         type="float",
         metavar="PRADIUS",
         help="""Apply characteristic function of spheroid with equatorial
-radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead apply characteristic function of sphere with radius PRADIUS.""",
+ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead apply
+ characteristic function of sphere with radius PRADIUS.""",
     )
     group.add_option(
         "--iradius",
         type="float",
         metavar="IRADIUS",
-        help="""Apply inverse characteristic function of sphere with radius IRADIUS.  If IPRADIUS is also specified, instead apply inverse characteristic function of spheroid with equatorial radius IRADIUS and polar radius IPRADIUS.""",
+        help="""Apply inverse characteristic function of sphere with radius IRADIUS.
+         If IPRADIUS is also specified, instead apply inverse characteristic function of spheroid
+         with equatorial radius IRADIUS and polar radius IPRADIUS.""",
     )
     group.add_option(
         "--ipradius",
         type="float",
         metavar="IPRADIUS",
-        help="""Apply inverse characteristic function of spheroid with equatorial radius IRADIUS and polar radius IPRADIUS. If only IPRADIUS is specified, instead apply inverse characteristic function of sphere with radius IPRADIUS.""",
+        help="""Apply inverse characteristic function of spheroid with equatorial radius IRADIUS
+         and polar radius IPRADIUS. If only IPRADIUS is specified, instead apply inverse characteristic
+         function of sphere with radius IPRADIUS.""",
     )
 
     # Plot Options
@@ -233,9 +239,9 @@ radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead ap
         parser,
         "Plot Options",
         """These options control plotting.
-The manipulated and target PDFs will be plotted against each other with a
-difference curve below. When --multiple is enabled, the value of a parameter (specified by
---plot-parameter) will be plotted instead.""",
+ The manipulated and target PDFs will be plotted against each other with a
+ difference curve below. When --multiple is enabled, the value of a parameter (specified by
+ --plot-parameter) will be plotted instead.""",
     )
     parser.add_option_group(group)
     group.add_option(
