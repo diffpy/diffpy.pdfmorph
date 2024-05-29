@@ -17,8 +17,8 @@
 """
 
 
-from diffpy.pdfmorph.morphs.morph import Morph
-from diffpy.pdfmorph.morphs.morphchain import MorphChain
+from diffpy.pdfmorph.morphs.morph import Morph  # noqa: F401
+from diffpy.pdfmorph.morphs.morphchain import MorphChain  # noqa: F401
 from diffpy.pdfmorph.morphs.morphishape import MorphISphere, MorphISpheroid
 from diffpy.pdfmorph.morphs.morphresolution import MorphResolutionDamping
 from diffpy.pdfmorph.morphs.morphrgrid import MorphRGrid
