@@ -48,7 +48,8 @@ def single_morph_output(
     morph_file
         Name of the morphed PDF file. Required when printing to a non-terminal file.
     param xy_out: list
-        List of the form [x_morph_out, y_morph_out]. x_morph_out is a List of r values and y_morph_out is a List of gr values.
+        List of the form [x_morph_out, y_morph_out]. x_morph_out is a List of r values and
+         y_morph_out is a List of gr values.
     verbose: bool
         Print additional details about the morph when True (default False).
     stdout_flag: bool
