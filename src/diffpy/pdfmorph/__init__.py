@@ -16,7 +16,7 @@
 """Tools for manipulating and comparing PDFs.
 """
 # top-level import
-from diffpy.pdfmorph.pdfmorph_api import morph_default_config, pdfmorph, plot_morph
+from diffpy.pdfmorph.pdfmorph_api import morph_default_config, pdfmorph, plot_morph  # noqa: F401
 
 top_level = [
     pdfmorph,

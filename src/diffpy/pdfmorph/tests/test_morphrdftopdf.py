@@ -6,12 +6,12 @@ import os
 import numpy
 import pytest
 
+from diffpy.pdfmorph.morph_helpers.transformrdftopdf import TransformXtalRDFtoPDF
+
 # useful variables
 thisfile = locals().get("__file__", "file.py")
 tests_dir = os.path.dirname(os.path.abspath(thisfile))
 # testdata_dir = os.path.join(tests_dir, 'testdata')
-
-from diffpy.pdfmorph.morph_helpers.transformrdftopdf import TransformXtalRDFtoPDF
 
 
 class TestTransformXtalRDFtoPDF:

@@ -310,19 +310,19 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
     chain.append(morphs.MorphRGrid())
     refpars = []
 
-    ## Scale
+    # Scale
     if opts.scale is not None:
         scale_in = opts.scale
         chain.append(morphs.MorphScale())
         config["scale"] = opts.scale
         refpars.append("scale")
-    ## Stretch
+    # Stretch
     if opts.stretch is not None:
         stretch_in = opts.stretch
         chain.append(morphs.MorphStretch())
         config["stretch"] = opts.stretch
         refpars.append("stretch")
-    ## Smear
+    # Smear
     if opts.smear is not None:
         smear_in = opts.smear
         chain.append(helpers.TransformXtalPDFtoRDF())
@@ -334,7 +334,7 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
         if opts.baselineslope is None:
             refpars.append("baselineslope")
             config["baselineslope"] = -0.5
-    ## Size
+    # Size
     radii = [opts.radius, opts.pradius]
     nrad = 2 - radii.count(None)
     if nrad == 1:
@@ -362,7 +362,7 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
         refpars.append("ipradius")
         chain.append(morphs.MorphISpheroid())
 
-    ## Resolution
+    # Resolution
     if opts.qdamp is not None:
         chain.append(morphs.MorphResolutionDamping())
         refpars.append("qdamp")
@@ -426,7 +426,7 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
             stdout_flag=stdout_flag,
         )
 
-    except (FileNotFoundError, RuntimeError) as e:
+    except (FileNotFoundError, RuntimeError):
         save_fail_message = "Unable to save to designated location."
         parser.custom_error(save_fail_message)
 
@@ -518,7 +518,7 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
             save_morphs_here = io.create_morphs_directory(save_directory)
 
         # Could not create directory or find names to save morphs as
-        except (FileNotFoundError, RuntimeError) as e:
+        except (FileNotFoundError, RuntimeError):
             save_fail_message = "\nUnable to create directory"
             parser.custom_error(save_fail_message)
 
@@ -565,7 +565,7 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
             verbose=opts.verbose,
             stdout_flag=stdout_flag,
         )
-    except (FileNotFoundError, RuntimeError) as e:
+    except (FileNotFoundError, RuntimeError):
         save_fail_message = "Unable to save summary to directory."
         parser.custom_error(save_fail_message)
 

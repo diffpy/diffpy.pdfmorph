@@ -16,7 +16,7 @@ def test_morphfunc_verbose():
     x_morph = x_target.copy()
     y_morph = heaviside(x_target, lb * (1 + stretch), ub * (1 + stretch))
     cfg = morph_default_config(stretch=0.1)  # off init
-    morph_rv = pdfmorph(x_morph, y_morph, x_target, y_target, verbose=True, **cfg)
+    pdfmorph(x_morph, y_morph, x_target, y_target, verbose=True, **cfg)
 
 
 def test_fixed_morph_with_morphfunc():
@@ -29,7 +29,7 @@ def test_fixed_morph_with_morphfunc():
     y_morph = heaviside(x_target, lb * (1 + stretch), ub * (1 + stretch))
     cfg = morph_default_config(stretch=0.1)  # off init
     cfg["scale"] = 30
-    morph_rv = pdfmorph(
+    pdfmorph(
         x_morph,
         y_morph,
         x_target,

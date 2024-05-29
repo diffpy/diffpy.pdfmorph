@@ -18,8 +18,6 @@ import matplotlib.pyplot as plt
 import numpy
 from bg_mpl_stylesheet.bg_mpl_stylesheet import bg_mpl_style
 
-import diffpy.pdfmorph.tools as tools
-
 plt.style.use(bg_mpl_style)
 
 
