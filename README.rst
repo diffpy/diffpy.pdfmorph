@@ -174,4 +174,3 @@ CONTACTS
 
 For more information on PDFmorph, visit the `PDFmorph project web-page, <https://github.com/diffpy/diffpy.github.io/blob/source/products/pdfmorph.rst/>`_
 or email Professor Simon Billinge at sb2896@columbia.edu
-
