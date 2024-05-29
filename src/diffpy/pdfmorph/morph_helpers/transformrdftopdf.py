@@ -19,7 +19,8 @@
 
 
 import numpy
-from diffpy.pdfmorph.morphs.morph import Morph, LABEL_RA, LABEL_GR, LABEL_RR
+
+from diffpy.pdfmorph.morphs.morph import LABEL_GR, LABEL_RA, LABEL_RR, Morph
 
 
 class TransformXtalRDFtoPDF(Morph):

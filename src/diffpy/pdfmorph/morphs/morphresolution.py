@@ -19,7 +19,8 @@
 
 
 import numpy
-from diffpy.pdfmorph.morphs.morph import Morph, LABEL_RA, LABEL_RR
+
+from diffpy.pdfmorph.morphs.morph import LABEL_RA, LABEL_RR, Morph
 
 
 class MorphResolutionDamping(Morph):
