@@ -23,8 +23,7 @@ import numpy
 from numpy import arctan as atan
 from numpy import arctanh as atanh
 from numpy import sqrt
-from diffpy.pdfmorph.morphs.morph import Morph
-from diffpy.pdfmorph.morphs.morph import LABEL_RA, LABEL_GR
+from diffpy.pdfmorph.morphs.morph import Morph, LABEL_RA, LABEL_GR
 
 
 class MorphSphere(Morph):

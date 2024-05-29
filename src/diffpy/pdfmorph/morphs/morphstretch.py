@@ -19,8 +19,7 @@
 
 
 import numpy
-from diffpy.pdfmorph.morphs.morph import Morph
-from diffpy.pdfmorph.morphs.morph import LABEL_RA, LABEL_GR
+from diffpy.pdfmorph.morphs.morph import Morph, LABEL_RA, LABEL_GR
 
 
 class MorphStretch(Morph):
