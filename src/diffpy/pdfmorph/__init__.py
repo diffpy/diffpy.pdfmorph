@@ -17,8 +17,8 @@
 """
 
 # top-level import
-from diffpy.pdfmorph.pdfmorph_api import (morph_default_config, pdfmorph,
-                                          plot_morph)
+from diffpy.pdfmorph.pdfmorph_api import morph_default_config, pdfmorph, plot_morph
+
 # obtain version information
 from diffpy.pdfmorph.version import __version__
 

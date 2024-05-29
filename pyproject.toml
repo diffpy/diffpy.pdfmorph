@@ -63,6 +63,8 @@ exclude = '''
   | \.mypy_cache
   | \.tox
   | \.venv
+  | \.rst
+  | \.txt
   | _build
   | buck-out
   | build

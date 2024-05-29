@@ -4,8 +4,11 @@ from pathlib import Path
 
 import pytest
 
-from diffpy.pdfmorph.pdfmorphapp import (create_option_parser, multiple_morphs,
-                                         single_morph)
+from diffpy.pdfmorph.pdfmorphapp import (
+    create_option_parser,
+    multiple_morphs,
+    single_morph,
+)
 
 thisfile = locals().get("__file__", "file.py")
 tests_dir = Path(thisfile).parent.resolve()
