@@ -15,7 +15,14 @@
 
 """Tools for manipulating and comparing PDFs.
 """
+# top-level import
+from diffpy.pdfmorph.pdfmorph_api import morph_default_config, pdfmorph, plot_morph
 
+top_level = [
+    pdfmorph,
+    plot_morph,
+    morph_default_config,
+]
 
 # key used when saving multiple morphs
 __save_morph_as__ = "save_morph_as"
