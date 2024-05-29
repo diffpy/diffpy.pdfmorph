@@ -28,6 +28,12 @@ from diffpy.pdfmorph.morphs.morphshift import MorphShift
 from diffpy.pdfmorph.morphs.morphsmear import MorphSmear
 from diffpy.pdfmorph.morphs.morphstretch import MorphStretch
 
+# List of morph base classes
+morph_base = [
+    Morph,
+    MorphChain,
+]
+
 # List of morphs
 morphs = [
     MorphRGrid,
