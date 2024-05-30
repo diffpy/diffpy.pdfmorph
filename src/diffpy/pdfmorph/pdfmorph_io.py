@@ -61,7 +61,7 @@ def single_morph_output(
     morphs_in += "\n".join(f"# {key} = {morph_inputs[key]}" for key in morph_inputs.keys()) + "\n"
 
     morphs_out = "# Optimized morphing parameters:\n"
-    morphs_out += "\n".join(f"# {key} = {morph_results[key]:.6f}" for key in morph_results.keys())
+    morphs_out += "\n".join(f"# {key} = {morph_results[key]: .6f}" for key in morph_results.keys())
 
     # Printing to terminal
     if stdout_flag:
@@ -210,7 +210,7 @@ def multiple_morph_output(
             output = f"\n# Target: {target}\n"
             output += "# Optimized morphing parameters:\n"
             output += "\n".join(
-                f"# {param} = {morph_results[target][param]:.6f}" for param in morph_results[target]
+                f"# {param} = {morph_results[target][param]: .6f}" for param in morph_results[target]
             )
             verbose_outputs += f"{output}\n"
 
@@ -233,7 +233,7 @@ def multiple_morph_output(
             row += f" {field_list[idx]}"
         for param in tabulated_results.keys():
             if len(tabulated_results[param]) > idx:
-                row += f" {tabulated_results[param][idx]:0.6f}"
+                row += f" {tabulated_results[param][idx]: 0.6f}"
         table += f"{row}\n"
     table = table[:-1]  # Remove extra indent
 
