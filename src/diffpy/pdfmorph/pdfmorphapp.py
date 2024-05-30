@@ -104,7 +104,7 @@ def create_option_parser():
         help=f"""Changes usage to \'{prog_short} [options] FILE DIRECTORY\'. FILE
  will be morphed with each file in DIRECTORY as target.
  Files in DIRECTORY are sorted by alphabetical order unless a field is
- specified by --sort-by.""",
+specified by --sort-by.""",
     )
     group.add_option(
         "--sort-by",
@@ -133,7 +133,7 @@ def create_option_parser():
         help=f"""Used when both -s and --multiple are enabled.
  Specify names for each manipulated PDF when saving (see -s) using a serial file
  NAMESFILE. The format of NAMESFILE should be as follows: each target PDF
- is an entry in NAMESFILE. For each entry, there should be a key {__save_morph_as__}
+is an entry in NAMESFILE. For each entry, there should be a key {__save_morph_as__}
  whose value specifies the name to save the manipulated PDF as.
 (See sample names files in the PDFmorph tutorial).""",
     )
