@@ -9,4 +9,4 @@ exclude =
     doc/manual/source/conf.py
 max-line-length = 115
 # Ignore some style 'errors' produced while formatting by 'black'
-ignore = W503, E231
+ignore = W503, E231, E271, E272
