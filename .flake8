@@ -9,5 +9,8 @@ exclude =
     doc/manual/source/conf.py
 max-line-length = 115
 # Ignore some style 'errors' produced while formatting by 'black'
-# E231, E271, and E272 are ignored for formatting purposes regarding space around ':' and docstrings
+# W503: line break error in morphshape.py
+# E231: Missing whitespace after ':'. Ignored for formatting in pdfmorph_io.py (i.e. lines 64, 213, 236)
+# E271: Multiple spaces before keyword. Ignored for docstring formatting in pdfmorphapp.py
+# E272: Multiple spaces after keyword. Ignored for docstring formatting in pdfmorphapp.py
 ignore = W503, E231, E271, E272
