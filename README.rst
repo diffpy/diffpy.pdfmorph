@@ -54,14 +54,13 @@ and typing into a terminal window or Windows command prompt. It is
 recommended that you consult online resources and become somewhat 
 familiar before using PDFmorph.
 
-PDFmorph can be run with Python 2.7 and Python 3.5 or higher. We 
-recommend using the Python 3 version. It makes use of several third party
+PDFmorph can be run with Python 3.10 or higher. It makes use of several third party
 libraries that you'll need to run the app and its components.
 
-* NumPy              - library for scientific computing with Python
-* matplotlib         - Python 2D plotting library
-* SciPy              - library for highly technical Python computing
-* diffpy.utils       - `shared helper utilities <https://github.com/diffpy/diffpy.utils/>`_ for wx GUI
+* `NumPy`              - library for scientific computing with Python
+* `matplotlib`         - Python 2D plotting library
+* `SciPy`              - library for highly technical Python computing
+* `diffpy.utils`       - `shared helper utilities <https://github.com/diffpy/diffpy.utils/>`_ for wx GUI
 
 These dependencies will be installed automatically if you use the conda
 installation procedure described below.
@@ -157,16 +156,14 @@ We welcome contributors from the community.  Please consider posting issues, and
 To ensure code quality and to prevent accidental commits into the default branch, please set up the use of our pre-commit
 hooks.
 
-1. modify the permissions to executable on the bash script called ``prevent_commit_to_main.sh`` in this directory: ``chmod +x prevent_commit_to_main.sh``
+1. Install pre-commit in your working environment by running ``conda install pre-commit``
 
-2. install pre-commit in your working environment with ``conda install pre-commit``
-
-3. initialize pre-commit (one time only) ``pre-commit install``
+2. Initialize pre-commit (one time only) ``pre-commit install``
 
 Thereafter your code will be linted by black and isort and checked against flake8 before you can commit.
 If it fails by black or isort, just rerun and it should pass (black and isort will modify the files so should
 pass after they are modified).  If the flake8 test fails please see the error messages and fix them manually before
-trying to commit again
+trying to commit again.
 
 
 CONTACTS
