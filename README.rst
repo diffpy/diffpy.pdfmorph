@@ -54,8 +54,7 @@ and typing into a terminal window or Windows command prompt. It is
 recommended that you consult online resources and become somewhat 
 familiar before using PDFmorph.
 
-PDFmorph can be run with Python 2.7 and Python 3.10 or higher. We 
-recommend using the Python 3 version. It makes use of several third party
+PDFmorph can be run with Python 3.10 or higher. It makes use of several third party
 libraries that you'll need to run the app and its components.
 
 * `NumPy`              - library for scientific computing with Python
@@ -157,7 +156,7 @@ We welcome contributors from the community.  Please consider posting issues, and
 To ensure code quality and to prevent accidental commits into the default branch, please set up the use of our pre-commit
 hooks.
 
-1. Install pre-commit in your working environment with ``conda install pre-commit``
+1. Install pre-commit in your working environment by running ``conda install pre-commit``
 
 2. Initialize pre-commit (one time only) ``pre-commit install``
 
