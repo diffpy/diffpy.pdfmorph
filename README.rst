@@ -79,24 +79,18 @@ To create and activate a conda environment to use this software, run
 the following command from the command line ::
 	
 	conda create -n pdfmorph_env python=3 --yes
-	source activate pdfmorph_env
-
-If you're using Windows, replace ``source activate pdfmorph`` with 
-``activate pdfmorph_env``.
+	conda activate pdfmorph_env
 
 When you are finished with the session, exit the environment by running :: 
 
-	source deactivate pdfmorph_env
-
-or, on Windows, ``deactivate pdfmorph_env``.
+	conda deactivate pdfmorph_env
 
 For your future sessions with the application: Make sure to run the 
-``source activate pdfmorph_env`` or ``activate pdfmorph_env`` commands 
-from your command line beforehand to ensure access to the software.
+``conda activate pdfmorph_env`` command from your command line beforehand
+to ensure access to the software.
 
 Once in your desired conda environment, you can install from either the
-"diffpy" or "conda-forge" channels of Anaconda packages by running 
-either ::
+"conda-forge" channel of Anaconda packages by running ::
 
 	conda config --add channels conda-forge
 	conda install diffpy.pdfmorph
@@ -113,7 +107,8 @@ version using ::
 USING PDFmorph
 ------------------------------------------------------------------------
 
-For detailed instructions and full tutorial, consult online documentation.
+For detailed instructions and full tutorial, consult our
+`online documentation <https://www.diffpy.org/diffpy.pdfmorph/index.html>`_.
 
 Once the required software, including PDFmorph is all installed, open
 up a terminal and check installation has worked properly by running ::
@@ -156,9 +151,9 @@ We welcome contributors from the community.  Please consider posting issues, and
 To ensure code quality and to prevent accidental commits into the default branch, please set up the use of our pre-commit
 hooks.
 
-1. Install pre-commit in your working environment by running ``conda install pre-commit``
+1. Install pre-commit in your working environment by running ``conda install pre-commit``.
 
-2. Initialize pre-commit (one time only) ``pre-commit install``
+2. Initialize pre-commit (one time only) ``pre-commit install``.
 
 Thereafter your code will be linted by black and isort and checked against flake8 before you can commit.
 If it fails by black or isort, just rerun and it should pass (black and isort will modify the files so should
