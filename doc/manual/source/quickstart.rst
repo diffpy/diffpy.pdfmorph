@@ -189,6 +189,50 @@ Tutorials for these additional functionalities are included below. Additional
 files for these tutorials can be downloaded
 :download:`here <../../../tutorial/additionalData.zip>`.
 
+Performing a Sequence of Morphs
+-------------------------------
+
+It may be useful to morph a PDF against multiple targets:
+for example, you may want to morph a PDF against a sequence of PDFs measured
+at various temepratures to determine whether a phase change has occured.
+PDFmorph currently allows users to morph a PDF against all files in a
+selected directory and plot resulting :math:`R_w` values from each morph.
+
+1. Within the ``additionalData`` directory, ``cd`` into the ``morphsequence`` directory.
+   Inside, you will find multiple PDFs of :math:`SrFe_2As_2` measured at various temperatures.
+   These PDFs are from `"Atomic Pair Distribution Function Analysis: A primer" <https://github.com/Billingegroup/pdfttp_data/>`_.
+2. Let us start by getting the Rw of ``SrFe2As2_150K.gr`` compared to all other files in the
+   directory. Run ::
+
+       pdfmorph SrFe2As2_150K.gr . --sequence
+
+   The sequence tag indicates we are comparing PDF file (first input) against all PDFs in
+   a directory (second input). Our choice of file was ``SeFe2As2_150K.gr``
+   and directory was the cwd, which should be ``morphsequence``.
+3. After running this, we get chart of Rw values for each target file. However, this chart can
+   be a bit confusing to interpret. To get a more understandable plot, run ::
+
+       pdfmorph SrFe2As2_150K.gr . --sequence --temperature
+
+   The temperature option can be used when our files end in ``_#K.gr`` or ``_#K.cgr`` where ``#``
+   is a temperature (float value). When enabled, PDFmorph will plot Rw values against the temperatures.
+4. Between 192K and 198K, the Rw has a sharp increase, indicating that we may have a phase change.
+   To confirm, let us now apply morphs onto ``SrFe2As2_150K.gr`` with all other files in ``morphsequence``
+   as targets ::
+
+       pdfmorph --scale=1 --stretch=0 SrFe2As2_150K.gr . --sequence --temperature
+
+   Note that we are not applying a smear since it takes a long time to apply and does not significantly
+   change the Rw values in this example.
+5. We should now see a sharper increase in Rw between 192K and 198K.
+6. Go back to the terminal to see optimized morphing parameters from each morph.
+7. On the morph with ``SrFe2As2_192K.gr`` as target, ``scale = 0.972085`` and ``stretch = 0.000508``
+   and with ``SrFe2As2_198K.gr`` as target, ``scale = 0.970276`` and ``stretch = 0.000510``.
+   These are very similar, meaning that thermal lattice expansion (accounted for by ``stretch``)
+   is not occurring. This, coupled with the fact that the Rw significantly increases suggests
+   a phase change in this temperature regime. (In fact, :math:`SrFe_2As_2` does transition from
+   orthorhombic at lower temperature to tetragonal at higher temperature!)
+
 Nanoparticle Shape Effects
 --------------------------
 
@@ -246,50 +290,6 @@ Currently, the supported nanoparticle shapes include: spheres and spheroids.
 
 There is also support for morphing from a nanoparticle to a bulk. When applying the inverse morphs,
 it is recommended to set ``--rmax=psize`` where ``psize`` is the longest diameter of the nanoparticle.
-
-Performing a Sequence of Morphs
--------------------------------
-
-It may be useful to morph a PDF against multiple targets:
-for example, you may want to morph a PDF against a sequence of PDFs measured
-at various temepratures to determine whether a phase change has occured.
-PDFmorph currently allows users to morph a PDF against all files in a
-selected directory and plot resulting :math:`R_w` values from each morph.
-
-1. Within the ``additionalData`` directory, ``cd`` into the ``morphsequence`` directory.
-   Inside, you will find multiple PDFs of :math:`SrFe_2As_2` measured at various temperatures.
-   These PDFs are from `"Atomic Pair Distribution Function Analysis: A primer" <https://github.com/Billingegroup/pdfttp_data/>`_.
-2. Let us start by getting the Rw of ``SrFe2As2_150K.gr`` compared to all other files in the
-   directory. Run ::
-
-       pdfmorph SrFe2As2_150K.gr . --sequence
-
-   The sequence tag indicates we are comparing PDF file (first input) against all PDFs in
-   a directory (second input). Our choice of file was ``SeFe2As2_150K.gr``
-   and directory was the cwd, which should be ``morphsequence``.
-3. After running this, we get chart of Rw values for each target file. However, this chart can
-   be a bit confusing to interpret. To get a more understandable plot, run ::
-
-       pdfmorph SrFe2As2_150K.gr . --sequence --temperature
-
-   The temperature option can be used when our files end in ``_#K.gr`` or ``_#K.cgr`` where ``#``
-   is a temperature (float value). When enabled, PDFmorph will plot Rw values against the temperatures.
-4. Between 192K and 198K, the Rw has a sharp increase, indicating that we may have a phase change.
-   To confirm, let us now apply morphs onto ``SrFe2As2_150K.gr`` with all other files in ``morphsequence``
-   as targets ::
-
-       pdfmorph --scale=1 --stretch=0 SrFe2As2_150K.gr . --sequence --temperature
-
-   Note that we are not applying a smear since it takes a long time to apply and does not significantly
-   change the Rw values in this example.
-5. We should now see a sharper increase in Rw between 192K and 198K.
-6. Go back to the terminal to see optimized morphing parameters from each morph.
-7. On the morph with ``SrFe2As2_192K.gr`` as target, ``scale = 0.972085`` and ``stretch = 0.000508``
-   and with ``SrFe2As2_198K.gr`` as target, ``scale = 0.970276`` and ``stretch = 0.000510``.
-   These are very similar, meaning that thermal lattice expansion (accounted for by ``stretch``)
-   is not occurring. This, coupled with the fact that the Rw significantly increases indicates we
-   very likely have a phase change in this region. (In fact, :math:`SrFe_2As_2` does transition from
-   orthorhombic at lower temperature to tetragonal at higher temperature!)
 
 Bug Reports
 ===========
