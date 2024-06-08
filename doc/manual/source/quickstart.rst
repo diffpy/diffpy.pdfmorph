@@ -18,12 +18,11 @@ Basic PDFmorph Workflow
 
     1. Open your Terminal or Command Prompt.
 
-    2. It it's not active already, activate your PDFmorph-equipped
+    2. If it's not active already, activate your PDFmorph-equipped
        conda environment by typing in ::
 
-           source activate <pdfmorph_env>
+           conda activate <pdfmorph_env>
 
-       on Linux or ``activate <pdfmorph_env>`` on Windows.
 
        * If you need to list your available conda environments,
          run the command ``conda info --envs`` or
