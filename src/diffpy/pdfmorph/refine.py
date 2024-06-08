@@ -114,14 +114,14 @@ class Refiner(object):
             return 0.0
 
         initial = [config[p] for p in self.pars]
-        out = leastsq(self.residual, initial, full_output=1)
-        fvec = out[2]["fvec"]
-        if out[4] not in (1, 2, 3, 4):
-            mesg = out[3]
-            raise ValueError(mesg)
+        sol, cov_sol, infodict, emesg, ier = leastsq(self.residual, initial, full_output=1)
+        fvec = infodict["fvec"]
+        if ier not in (1, 2, 3, 4):
+            emesg
+            raise ValueError(emesg)
 
         # Place the fit parameters in config
-        vals = out[0]
+        vals = sol
         if not hasattr(vals, "__iter__"):
             vals = [vals]
         self.chain.config.update(zip(self.pars, vals))
