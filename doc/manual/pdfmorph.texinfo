@@ -90,7 +90,7 @@ Copyright 2009-2024, Board of Trustees of Columbia University in the city of New
 @menu
 * Introduction::
 * Installation::
-* Quick start tutorial::
+* Tutorials::
 * Available morphs::
 * PDFmorph options::
 * Index::
@@ -112,7 +112,7 @@ these two measurements?"
 
 @page
 @vskip 0pt plus 1filll
-@node    Installation, Quick start tutorial, Introduction, Top
+@node    Installation, Tutorials, Introduction, Top
 @chapter Installation
 @cindex  installation
 
@@ -149,14 +149,13 @@ the following third party libraries:
 These dependencies will be installed automatically if you use the conda installation
 procedure described in the following section (@ref{Installation instructions}).
 
-@node    Installation instructions, Quick start tutorial, Requirements, Installation
+@node    Installation instructions, , Requirements, Installation
 @section Installation instructions
 @cindex  installationinstrunctions
 
 We recommend installing the package and its dependencies using conda.
 Miniconda, a minimal installer for conda, can be downloaded
 @url{https://docs.anaconda.com/free/miniconda/, here}. 
-Miniconda makes it easy to manage dependencies in isolated environments.
 Once Miniconda is installed, run @code{conda} on the command line
  to test that it has been installed properly.
 
@@ -192,11 +191,28 @@ methods will require you to first install the dependencies listed in the previou
 
 @page
 @vskip 0pt plus 1filll
-@node    Quick start tutorial, Available morphs, Installation, Top
-@chapter Quick start tutorial
+@node    Tutorials, Available morphs, Installation, Top
+@chapter Tutorials
+@cindex  tutorials
+
+@menu
+* Quick start tutorial::
+* Extra tutorials::
+@end menu
+
+This section includes a quick tutorial to acquaint users with PDFmorph.
+Also included are a few extra tutorials covering some more specific PDFmorph functionalities.
+
+Before you start this tutorial, make sure you have installed all necessary software
+and dependencies (@ref{Installation instructions}).
+
+@node    Quick start tutorial, Extra tutorials, Tutorials, Tutorials
+@section Quick start tutorial
 @cindex  quickstarttutorial
 
-Download packaged tutorial files
+@node    Extra tutorials, , Quick start tutorial, Tutorials
+@section Extra tutorials
+@cindex  extratutorials
 
 @page
 @vskip 0pt plus 1filll
@@ -204,7 +220,7 @@ Download packaged tutorial files
 @chapter Available morphs
 @cindex  availablemorphs
 
-In this section, we detail a few use-cases for morphs
+In this section, we detail a few use-cases for morphs.
 
 @page
 @vskip 0pt plus 1filll
