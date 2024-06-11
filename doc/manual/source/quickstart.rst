@@ -55,7 +55,7 @@ Basic PDFmorph Workflow
 
     4. First, we will run the PDFmorph application without any morphing
        and only using one PDF. Type the following command into your
-       Commagnd Line ::
+       command line ::
 
            pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_01.gr
 
