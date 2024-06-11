@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path("../../../src").resolve()))
 
 project = "PDFmorph"
 project_full = "diffpy.pdfmorph"
-copyright = "2009-2019, Trustees of Columbia University in the City of New York, all rights reserved."
+copyright = "2009-2024, Trustees of Columbia University in the City of New York, all rights reserved"
 author = "Chris Farrow, Christopher J. Wright, Pavol Juhás, Chia-Hao (Timothy) Liu, S. Matthew Román, Simon J.L. Billinge"
 
 # The full version, including alpha/beta/rc tags
