@@ -220,7 +220,7 @@ selected directory and plot resulting :math:`R_w` values from each morph.
    To confirm, let us now apply morphs onto ``SrFe2As2_150K.gr`` with all other files in ``morphMultiple``
    as targets ::
 
-       pdfmorph --scale=1 --stretch=0 SrFe2As2_150K.gr . --multiple --temperature
+       pdfmorph --scale=1 --stretch=0 SrFe2As2_150K.gr . --multiple --sort-by=temperature
 
    Note that we are not applying a smear since it takes a long time to apply and does not significantly
    change the Rw values in this example.
