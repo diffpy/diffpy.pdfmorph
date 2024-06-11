@@ -52,7 +52,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">PDFmorph Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#basic-pdfmorph-workflow">Basic PDFmorph Workflow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#extra-tutorials">Extra Tutorials</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#performing-a-sequence-of-morphs">Performing a Sequence of Morphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performing-multiple-morphs">Performing Multiple Morphs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#nanoparticle-shape-effects">Nanoparticle Shape Effects</a></li>
 </ul>
 </li>
@@ -141,7 +141,7 @@ program.</p></li>
 </li>
 <li><p>First, we will run the PDFmorph application without any morphing
 and only using one PDF. Type the following command into your
-Commagnd Line</p>
+command line</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="n">darkSub_rh20_C_01</span><span class="o">.</span><span class="n">gr</span> <span class="n">darkSub_rh20_C_01</span><span class="o">.</span><span class="n">gr</span>
 </pre></div>
 </div>
@@ -272,38 +272,38 @@ your choices and made sure that they remain physically relevant.</p></li>
 Tutorials for these additional functionalities are included below. Additional
 files for these tutorials can be downloaded
 <a class="reference download internal" download="" href="_downloads/f9616e3cae7b31127fe787c47f8a9330/additionalData.zip"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>.</p>
-<section id="performing-a-sequence-of-morphs">
-<h3>Performing a Sequence of Morphs<a class="headerlink" href="#performing-a-sequence-of-morphs" title="Link to this heading"></a></h3>
+<section id="performing-multiple-morphs">
+<h3>Performing Multiple Morphs<a class="headerlink" href="#performing-multiple-morphs" title="Link to this heading"></a></h3>
 <p>It may be useful to morph a PDF against multiple targets:
-for example, you may want to morph a PDF against a sequence of PDFs measured
+for example, you may want to morph a PDF against multiple PDFs measured
 at various temepratures to determine whether a phase change has occured.
 PDFmorph currently allows users to morph a PDF against all files in a
 selected directory and plot resulting <span class="math notranslate nohighlight">\(R_w\)</span> values from each morph.</p>
 <ol class="arabic">
-<li><p>Within the <code class="docutils literal notranslate"><span class="pre">additionalData</span></code> directory, <code class="docutils literal notranslate"><span class="pre">cd</span></code> into the <code class="docutils literal notranslate"><span class="pre">morphsequence</span></code> directory.
+<li><p>Within the <code class="docutils literal notranslate"><span class="pre">additionalData</span></code> directory, <code class="docutils literal notranslate"><span class="pre">cd</span></code> into the <code class="docutils literal notranslate"><span class="pre">morphMultiple</span></code> directory.
 Inside, you will find multiple PDFs of <span class="math notranslate nohighlight">\(SrFe_2As_2\)</span> measured at various temperatures.
 These PDFs are from <a class="reference external" href="https://github.com/Billingegroup/pdfttp_data/">“Atomic Pair Distribution Function Analysis: A primer”</a>.</p></li>
 <li><p>Let us start by getting the Rw of <code class="docutils literal notranslate"><span class="pre">SrFe2As2_150K.gr</span></code> compared to all other files in the
 directory. Run</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="n">SrFe2As2_150K</span><span class="o">.</span><span class="n">gr</span> <span class="o">.</span> <span class="o">--</span><span class="n">sequence</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="n">SrFe2As2_150K</span><span class="o">.</span><span class="n">gr</span> <span class="o">.</span> <span class="o">--</span><span class="n">multiple</span>
 </pre></div>
 </div>
-<p>The sequence tag indicates we are comparing PDF file (first input) against all PDFs in
+<p>The multiple tag indicates we are comparing PDF file (first input) against all PDFs in
 a directory (second input). Our choice of file was <code class="docutils literal notranslate"><span class="pre">SeFe2As2_150K.gr</span></code>
-and directory was the cwd, which should be <code class="docutils literal notranslate"><span class="pre">morphsequence</span></code>.</p>
+and directory was the cwd, which should be <code class="docutils literal notranslate"><span class="pre">morphMultiple</span></code>.</p>
 </li>
 <li><p>After running this, we get chart of Rw values for each target file. However, this chart can
 be a bit confusing to interpret. To get a more understandable plot, run</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="n">SrFe2As2_150K</span><span class="o">.</span><span class="n">gr</span> <span class="o">.</span> <span class="o">--</span><span class="n">sequence</span> <span class="o">--</span><span class="n">temperature</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="n">SrFe2As2_150K</span><span class="o">.</span><span class="n">gr</span> <span class="o">.</span> <span class="o">--</span><span class="n">multiple</span> <span class="o">--</span><span class="n">temperature</span>
 </pre></div>
 </div>
 <p>The temperature option can be used when our files end in <code class="docutils literal notranslate"><span class="pre">_#K.gr</span></code> or <code class="docutils literal notranslate"><span class="pre">_#K.cgr</span></code> where <code class="docutils literal notranslate"><span class="pre">#</span></code>
 is a temperature (float value). When enabled, PDFmorph will plot Rw values against the temperatures.</p>
 </li>
 <li><p>Between 192K and 198K, the Rw has a sharp increase, indicating that we may have a phase change.
-To confirm, let us now apply morphs onto <code class="docutils literal notranslate"><span class="pre">SrFe2As2_150K.gr</span></code> with all other files in <code class="docutils literal notranslate"><span class="pre">morphsequence</span></code>
+To confirm, let us now apply morphs onto <code class="docutils literal notranslate"><span class="pre">SrFe2As2_150K.gr</span></code> with all other files in <code class="docutils literal notranslate"><span class="pre">morphMultiple</span></code>
 as targets</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="o">--</span><span class="n">scale</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">stretch</span><span class="o">=</span><span class="mi">0</span> <span class="n">SrFe2As2_150K</span><span class="o">.</span><span class="n">gr</span> <span class="o">.</span> <span class="o">--</span><span class="n">sequence</span> <span class="o">--</span><span class="n">temperature</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="o">--</span><span class="n">scale</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">stretch</span><span class="o">=</span><span class="mi">0</span> <span class="n">SrFe2As2_150K</span><span class="o">.</span><span class="n">gr</span> <span class="o">.</span> <span class="o">--</span><span class="n">multiple</span> <span class="o">--</span><span class="n">temperature</span>
 </pre></div>
 </div>
 <p>Note that we are not applying a smear since it takes a long time to apply and does not significantly
@@ -325,7 +325,7 @@ orthorhombic at lower temperature to tetragonal at higher temperature!)</p></li>
 We can use PDFmorph to morph a bulk material PDF to simulate these shape effects.
 Currently, the supported nanoparticle shapes include: spheres and spheroids.</p>
 <ul>
-<li><p>Within the <code class="docutils literal notranslate"><span class="pre">additionalData</span></code> directory, <code class="docutils literal notranslate"><span class="pre">cd</span></code> into the <code class="docutils literal notranslate"><span class="pre">morphshape</span></code> subdirectory.
+<li><p>Within the <code class="docutils literal notranslate"><span class="pre">additionalData</span></code> directory, <code class="docutils literal notranslate"><span class="pre">cd</span></code> into the <code class="docutils literal notranslate"><span class="pre">morphShape</span></code> subdirectory.
 Inside, you will find a sample Ni bulk material PDF <code class="docutils literal notranslate"><span class="pre">Ni_bulk.gr</span></code>.
 This PDF is from <a class="reference external" href="https://github.com/Billingegroup/pdfttp_data/">“Atomic Pair Distribution Function Analysis: A primer”</a>.
 There are also multiple <code class="docutils literal notranslate"><span class="pre">.cgr</span></code> files with calculated Ni nanoparticle PDFs.</p></li>
