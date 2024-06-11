@@ -188,16 +188,16 @@ Tutorials for these additional functionalities are included below. Additional
 files for these tutorials can be downloaded
 :download:`here <../../../tutorial/additionalData.zip>`.
 
-Performing a Sequence of Morphs
--------------------------------
+Performing Multiple Morphs
+--------------------------
 
 It may be useful to morph a PDF against multiple targets:
-for example, you may want to morph a PDF against a sequence of PDFs measured
+for example, you may want to morph a PDF against multiple PDFs measured
 at various temepratures to determine whether a phase change has occured.
 PDFmorph currently allows users to morph a PDF against all files in a
 selected directory and plot resulting :math:`R_w` values from each morph.
 
-1. Within the ``additionalData`` directory, ``cd`` into the ``morphsequence`` directory.
+1. Within the ``additionalData`` directory, ``cd`` into the ``morphMultiple`` directory.
    Inside, you will find multiple PDFs of :math:`SrFe_2As_2` measured at various temperatures.
    These PDFs are from `"Atomic Pair Distribution Function Analysis: A primer" <https://github.com/Billingegroup/pdfttp_data/>`_.
 2. Let us start by getting the Rw of ``SrFe2As2_150K.gr`` compared to all other files in the
@@ -205,9 +205,9 @@ selected directory and plot resulting :math:`R_w` values from each morph.
 
        pdfmorph SrFe2As2_150K.gr . --multiple
 
-   The sequence tag indicates we are comparing PDF file (first input) against all PDFs in
+   The multiple tag indicates we are comparing PDF file (first input) against all PDFs in
    a directory (second input). Our choice of file was ``SeFe2As2_150K.gr``
-   and directory was the cwd, which should be ``morphsequence``.
+   and directory was the cwd, which should be ``morphMultiple``.
 3. After running this, we get chart of Rw values for each target file. However, this chart can
    be a bit confusing to interpret. To get a more understandable plot, run ::
 
@@ -216,7 +216,7 @@ selected directory and plot resulting :math:`R_w` values from each morph.
    The temperature option can be used when our files end in ``_#K.gr`` or ``_#K.cgr`` where ``#``
    is a temperature (float value). When enabled, PDFmorph will plot Rw values against the temperatures.
 4. Between 192K and 198K, the Rw has a sharp increase, indicating that we may have a phase change.
-   To confirm, let us now apply morphs onto ``SrFe2As2_150K.gr`` with all other files in ``morphsequence``
+   To confirm, let us now apply morphs onto ``SrFe2As2_150K.gr`` with all other files in ``morphMultiple``
    as targets ::
 
        pdfmorph --scale=1 --stretch=0 SrFe2As2_150K.gr . --multiple --temperature
@@ -239,7 +239,7 @@ A nanoparticle's finite size and shape can affect the shape of its PDF.
 We can use PDFmorph to morph a bulk material PDF to simulate these shape effects.
 Currently, the supported nanoparticle shapes include: spheres and spheroids.
 
-* Within the ``additionalData`` directory, ``cd`` into the ``morphshape`` subdirectory.
+* Within the ``additionalData`` directory, ``cd`` into the ``morphShape`` subdirectory.
   Inside, you will find a sample Ni bulk material PDF ``Ni_bulk.gr``.
   This PDF is from `"Atomic Pair Distribution Function Analysis: A primer" <https://github.com/Billingegroup/pdfttp_data/>`_.
   There are also multiple ``.cgr`` files with calculated Ni nanoparticle PDFs.
