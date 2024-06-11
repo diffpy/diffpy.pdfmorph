@@ -22,8 +22,8 @@
 @end html
 @end macro
 
-@macro ScreenShot{f}
-@center @image{\f\, 5in}
+@macro ScreenShot{f,ext}
+@center @image{\f\, 5.5in,,\ext\}
 @end macro
 
 @macro ReleaseDate{}
@@ -104,11 +104,36 @@ Copyright 2009-2024, Board of Trustees of Columbia University in the city of New
 @chapter Introduction
 @cindex  introduction
 
-PDFmorph is a Python package that increases the insight researchers can
-obtain from measured atomic pair distribution functions (PDFs) in a 
+@code{PDFmorph} is a Python package that increases the insight researchers can
+obtain by comparing measured atomic pair distribution functions (PDFs) in a
 model-independent way. It was originally designed to help a researcher
 answer a question: "Has my material undergone a phase transition between
 these two measurements?"
+
+A common approach to compare two PDFs is to plot the difference curve below
+the two PDFs. However, a significant signal can be seen in the difference curve
+due to benign effects such as thermal expansion (peak shifts), increased thermal
+motion (peak broadening), or a change in scale due to differences in the incident
+flux when computing the PDFs for example. Other commonly-used dissimilarity metrics
+such as the weighted Rietveld reliability factor @math{R_W} are also inflated by
+these effects. @code{PDFmorph} does its best to correct for these benign effects
+prior to computing the @math{R_W} and plotting the difference curve.
+
+To use @code{PDFmorph}, supply one PDF as the "target" (suggested to the one collected
+under higher temperature) and a second PDF to be morphed. The user can choose from
+a list of morphs to apply, which includes "stretching" (scaling the @math{r}-axis,
+the abscissa, to simulate isotropic expansion/compression), "smearing" (peak broadening
+by convlution with a Gaussian), and "scaling" (scaling the ordinate axis). By default,
+@code{PDFmorph} will refine the intensity of the morphs to best match the morphed to
+the target PDF.
+
+@code{PDFmorph} includes other morphs including those that factor in nanoparticle
+shape effects. For a full list of available morphs, see @ref{Available morphs}.
+For a quick tutorial on using @code{PDFmorph}, see @ref{Quick start tutorial}.
+For a full list of command-line options, see @ref{PDFmorph options}.
+
+Finally, we note that though @code{PDFmorph} could be used on other spectra,
+it has not been extensively tested beyond the PDF.
 
 @page
 @vskip 0pt plus 1filll
@@ -126,24 +151,28 @@ these two measurements?"
 @section Availability
 @cindex  availability
 
-PDFmorph is open source and distributed under the BSD license. 
+@code{PDFmorph} is open source and distributed under the BSD license.
 It runs on Windows, Mac OS, Linux, and all major Unix systems.
 The source code is freely available at @url{https://github.com/diffpy/diffpy.pdfmorph}.
+
+If you come accross any bugs in the application, please open an
+@url{https://github.com/diffpy/diffpy.pdfmorph/issues, issue} or email
+diffpy-dev@@googlegroups.com.
 
 @node    Requirements, Installation instructions, Availability, Installation
 @section Requirements
 @cindex  requirements
 
-PDFmorph is currently run from the command line, so it is recommended that users
+@code{PDFmorph} is currently run from the command line, so it is recommended that users
 first familiarize themselves with their operating system's command line interface.
 
-PDFmorph currently requires Python 3.10 or higher to run. It also makes use of
+@code{PDFmorph} currently requires Python 3.10 or higher to run. It also makes use of
 the following third party libraries:
 @itemize @bullet
 @item @url{https://numpy.org/, NumPy} - Python's fast scientific computing library
 @item @url{https://matplotlib.org/, Matplotlib} - Python plotting library
 @item @url{https://scipy.org/, SciPy} - Python's technical computing library
-@item @url{https://www.diffpy.org/diffpy.utils/, diffpy.utils} 
+@item @url{https://www.diffpy.org/diffpy.utils/, diffpy.utils}
 - @url{https://www.diffpy.org/, DiffPy} general utility functions
 @end itemize
 These dependencies will be installed automatically if you use the conda installation
@@ -151,15 +180,15 @@ procedure described in the following section (@ref{Installation instructions}).
 
 @node    Installation instructions, , Requirements, Installation
 @section Installation instructions
-@cindex  installationinstrunctions
+@cindex  installation instrunctions
 
 We recommend installing the package and its dependencies using conda.
 Miniconda, a minimal installer for conda, can be downloaded
-@url{https://docs.anaconda.com/free/miniconda/, here}. 
+@url{https://docs.anaconda.com/free/miniconda/, here}.
 Once Miniconda is installed, run @code{conda} on the command line
  to test that it has been installed properly.
 
-To create and activate a conda environment to use PDFmorph, run the following command.
+To create and activate a conda environment to use @code{PDFmorph}, run the following command.
 @example
 conda create -n pdfmorph_env python=3 --yes
 conda activate pdfmorph_env
@@ -167,23 +196,27 @@ conda activate pdfmorph_env
 
 A conda environment must be active to use the packages within.
 In future sessions, make sure to run @code{conda activate pdfmorph_env} to activate the
-environment before interacting with the PDFmorph program.
+environment before interacting with the @code{PDFmorph} program.
 
-Once active, you can install PDFmorph into your environment from the
+Once active, you can install @code{PDFmorph} into your environment from the
 @url{https://conda-forge.org/, conda-forge} channel of Anaconda packages by running
 @example
 conda config --add channels conda-forge
 conda install diffpy.pdfmorph
 @end example
 This installation only needs to be done once. The next time you activate the environment,
-these packages will already be installed.
+these packages will already be installed. To see a list of all installed packages within
+an environment, run
+@example
+conda list
+@end example
 
 When you are finished with the session, exit the environment by running
 @example
 conda deactivate pdfmorph_env
 @end example
 
-If you do not wish to use conda to install, PDFmorph is also available on the
+If you do not wish to use conda to install, @code{PDFmorph} is also available on the
 @url{https://pypi.org/, Python Package Index} or can be installed from source
 at @url{https://github.com/diffpy/diffpy.pdfmorph}. Note that these installation
 methods will require you to first install the dependencies listed in the previous section
@@ -200,33 +233,250 @@ methods will require you to first install the dependencies listed in the previou
 * Extra tutorials::
 @end menu
 
-This section includes a quick tutorial to acquaint users with PDFmorph.
-Also included are a few extra tutorials covering some more specific PDFmorph functionalities.
+This section includes a quick start tutorial to acquaint users with the core
+features of @code{PDFmorph}. Also included are a few extra tutorials
+covering some more specific @code{PDFmorph} functionalities.
 
 Before you start this tutorial, make sure you have installed all necessary software
-and dependencies (@ref{Installation instructions}).
+and dependencies (@ref{Installation instructions}). If you are looking for a full
+summary of @code{PDFmorph} command-line options, see @ref{PDFmorph options} or
+run @code{pdfmorph --help} in a @code{PDFmorph}-equipped @code{conda} environment.
 
 @node    Quick start tutorial, Extra tutorials, Tutorials, Tutorials
 @section Quick start tutorial
-@cindex  quickstarttutorial
+@cindex  quick start tutorial
+
+In this tutorial, we will demonstrate how to use @code{PDFmorph} to compare two PDFs
+measured from the same material at different temperatures. The morphs showcased include
+"stretch", "scale", and "smear". Throughout this tutorial, entries surrounded by angle
+brackets @code{<>} represent placeholder names. The user is free to use their own names
+in stead of those provided.
+
+@enumerate
+@item Open your terminal (Linux and MacOS) or Command Prompt (Windows).
+@item If not already active, activate your @code{conda} environment with @code{PDFmorph} installed using
+@example
+conda activate <PDFmorph_env>
+@end example
+@itemize
+@item See @ref{Installation} for how to set up a @code{conda} environment with @code{PDFmorph} installed.
+@item If you need to list your available @code{conda} environments, run
+@example
+conda env list
+@end example
+@end itemize
+@item Create a directory to store the tutorial PDF files using
+@example
+mkdir <PDFmorph_tutorial_directory>
+@end example
+and enter the directory with the @code{cd} command
+@example
+cd <PDFmorph_tutorial_directory>
+@end example
+@item Download the tutorial files @code{tutorialData.zip} folder (***INSERT LINK***)
+into your current directory and extract the files. After this is done,
+type @code{ls} in the command line to list your current directory contents
+and make sure there is a directory named @code{tutorialData}.
+@itemize
+@item The files in this dataset were collected by Soham Banerjee at Brookhaven National Laboratory in Upton,
+New York. Note that these files have a @code{.gr} extension, indicating that they are measured PDFs.
+The @code{.cgr} file extension indicates a calculated PDF such as those generated by the
+@url{https://www.diffpy.org/products/pdfgui.html, PDFgui} program.
+@item Each file is PDF data collected on Iridium Telluride with 20% Rhodium Doping @math{IrRhTe_2} at different
+temperatures with the first file (01) collected at @math{10K} and the last (44) at @math{300K}.
+The samples increase in temperature as their numbers increase. The "C" in their names indicates that they
+have undergone cooling.
+@end itemize
+@item Enter the @code{tutorialData} directory using the @code{cd} command and
+find the data labeled @code{darkSub_rh20_C_##.gr} within this directory.
+@float Figure,fig3.1-1
+@ScreenShot{images/qs_tutorial_download,png}
+@caption{Entering the @code{tutorialData} directory and searching
+for the PDF data (Linux Terminal Output).}
+@end float
+@item Let us try try using the @code{PDFmorph} program to plot two PDFs against each other.
+Type the following command into the command line
+@example
+pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr
+@end example
+Underneath the two PDFs, we can see a substantial difference curve and large @math{R_W} value of @math{0.407}
+@float Figure,fig3.1-2
+@ScreenShot{images/qs_tutorial_unmorphed,png}
+@caption{Using @code{PDFmorph} to compare two PDFs without morphing.}
+@end float
+@item Now, we will start the morphing process.
+@itemize
+@item Note that the morphs will apply only to the first PDF provided (which will be
+@code{darkSub_rh20_C_01.gr} in our case). We will henceforth refer to the first PDF as the "morphed"
+and the second (unmorphed) PDF as the "target". Our goal will be to apply morphs to see if we can reduce the
+difference between the morphed and target PDFs.
+@item In this tutorial, we will apply the scale factor, Gaussian smear, and stretch morphs.
+To learn more about why we wish to apply these three morphs in particular,
+see @ref{Temperature-related morphs}.
+@end itemize
+@item We will begin by applying a scaling factor of @math{2} by typing the command
+@example
+pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr --scale=2 -a
+@end example
+Now, the difference is much larger @math{R_W=1.457}. We should modify our initial value
+for the scaling factor until we see a reduction in @math{R_W}. We can try @math{0.9}
+@example
+pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr --scale=0.9 -a
+@end example
+and see that the difference has dropped to @math{R_W=0.351}, lower than when comparing the unmorphed PDF.
+For @code{PDFmorph} to optimize the scale factor, drop the @code{-a} option
+@example
+pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr --scale=0.9
+@end example
+Given a reasonable initial guess, @code{PDFmorph} will find the optimal value for each morph.
+In this example, @code{PDFmorph} should display @code{scale=0.799025} meaning it has found this
+to be the optimal value for the scale factor. The difference @math{R_W=0.330} has further decreased.
+@itemize
+@item The @code{-a} option prevents @code{PDFmorph} from refining the morph.
+It is the choice of the user whether or not to run values before removing @code{-a} when analyzing data with
+@code{PDFmorph}. By including it, you can attempt to manually move towards convergence before allowing the
+program to optimize by removing it; when including it, you may reach a highly optimized value on the first
+guess or diverge greatly.
+@end itemize
+@float Figure,fig3.1-3
+@ScreenShot{images/qs_tutorial_scaled,png}
+@caption{@code{PDFmorph} has found an optimal value (minimizes @math{R_W}) for the scale factor.}
+@end float
+@item Now we will add on a Gaussian smear morph with an initial smear factor of @math{0.5}. The absolute value
+of the  smear factor is the standard deviation of the Gaussian that is convoluted with the morphed PDF.
+@example
+pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr --scale=0.8 \
+--smear=0.5 -a
+@end example
+@itemize
+@item The @code{\} in the above command is only used to break our long command into multiple lines for readability
+on this document. In your Terminal/Command Prompt, you can write the entire command in a single line.
+@end itemize
+We have tailored our initial scale factor to be close to the optimal value given by @code{PDFmorph},
+but we should see that the @math{R_W=0.897} has increased substantially due to the smear factor. Remove the
+@math{-a} from above and run it again to refine the smear factor.
+@itemize
+@item Note that the warnings that the Terminal/Command Prompt displays are largely numerical in nature and
+do not indicate a physically irrelevant guess. These are somewhat superficial and in most cases can be ignored.
+@end itemize
+After refining, we should see that @math{R_W} has dropped back to @math{0.330}, and the optimized smear factor is
+quite small (@code{smear = 0.002940}) indicating that the smear has hardly had an effect on our PDF.
+To see an effect, restrict the @code{rmin} and @code{rmax} values by typing
+@example
+pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr --scale=0.8 \
+--smear=0.5 --rmin=1.5 --rmax=30
+@end example
+The optimized smear factor is now a non-insignificant @code{smear=-0.084138} and @math{R_W=0.204}.
+@itemize
+@item We restricted the @code{r} (abscissa) values because some of the Gaussian smear effects are only
+visible in a fixed @code{r} range. We chose this @code{r} range by noting where most of our relevant
+data was that was not exponentially decayed by instrumental shortcomings.
+@item Also note that a negative smear factor is equivalent to its absolute value. You can see that
+@example
+pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr --scale=0.8 \
+--smear=-0.84138 --rmin=1.5 --rmax=30 -a
+@end example
+and
+@example
+pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr --scale=0.8 \
+--smear=+0.84138 --rmin=1.5 --rmax=30 -a
+@end example
+give the exact same results.
+@end itemize
+@item Finally, we will examine the stretch morph. The @code{r} axis will be stretched by
+@math{1+s} where @math{s} is the stretch factor.
+@example
+pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr --scale=0.8 \
+--smear=-0.84 --stretch=0.5 --rmin=1.5 --rmax=30 -a
+@end example
+Again, the @math{R_W} has increased. Before letting @code{PDFmorph} refine automatically,
+try seeing which direction (higher or lower) the initial stretch factor should go to decrease
+@math{R_W}. If you cannot, type
+@example
+pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr --scale=0.8 \
+--smear=-0.84 --stretch=0.005 --rmin=1.5 --rmax=30 -a
+@end example
+to observe a decreased difference and remove the @code{-a} to get the optimized
+stretch factor of @code{stretch=0.001762} and smaller @math{R_W=0.117}.
+We have reached the optimal fit for our PDF!
+@float Figure,fig3.1-4
+@ScreenShot{images/qs_tutorial_morphed,png}
+@caption{The optimal fit after applying the scale, smear, and stretch morphs.}
+@end float
+@item Now, try it on your own!
+If you have personally collected or otherwise readily available PDF data,
+try this process to see if you can morph your PDFs to one another.
+Note that many of the parameters provided in this tutorial are unique to it,
+so be cautious about your choices and made sure that they remain physically relevant.
+@end enumerate
 
 @node    Extra tutorials, , Quick start tutorial, Tutorials
 @section Extra tutorials
-@cindex  extratutorials
+@cindex  extra tutorials
+PDFmorph has some more functionalities not showcased in the basic workflow above
+(run @code{pdfmorph –-help} for an overview of all @code{PDFmorph} functionalities).
+Tutorials for some of these are included below.
+Additional files are used for these tutorials. Please download and extract
+@code{additionalData.zip} (***INSERT LINK***) before proceeding.
+
+@menu
+* Performing multiple morphs
+* Nanoparticle shape effect
+@end menu
+
+It may be useful to morph a PDF against multiple targets: for example, you may want
+to morph a PDF against a sequence of PDFs measured at various temepratures to determine
+whether a phase change has occured. PDFmorph currently allows users to morph a PDF
+against all files in a selected directory and plot resulting @math{R_W} values from each morph.
+It is advised that the lowest temperature PDF be that morphed and the higher temperature PDFs
+act as targets as the smear morph is only able to account for increases in thermal motion.
+
+@enumerate
+@item Within @code{additionalData}, enter (using @code{cd}) the @code{morphsequence} directory.
+Inside, you will find multiple PDFs of @math{SrFe_2As_2} measured at various temperatures.
+@itemize
+@item These PDFs come from @url{https://github.com/Billingegroup/pdfttp_data/,
+@emph{Atomic Pair Distribution Function Analysis: A Primer}} by Simon Billinge and
+Kirsten Jensen.
+@end itemize
+@item It is generally advisable for the
+@end enumerate
+
+@node    Performing multiple morphs, Nanoparticle shape effect, Extra tutorials, Extra tutorials
+@subsection Performing multiple morphs
+@cindex  performing multiple morphs
+
+
+@node    Nanoparticle shape effect, , Performing multiple morphs, Extra tutorials
+@subsection Nanoparticle shape effect
+@cindex  nanoparticle shape effect
 
 @page
 @vskip 0pt plus 1filll
 @node    Available morphs, PDFmorph options, Quick start tutorial, Top
 @chapter Available morphs
-@cindex  availablemorphs
+@cindex  available morphs
+
+@menu
+* Temperature-related morphs::
+* Shape-related morphs::
+@end menu
 
 In this section, we detail a few use-cases for morphs.
+
+@node    Temperature-related morphs, Shape-related morphs, Available morphs, Available morphs
+@section Temperature-related morphs
+@cindex  temperature-related morphs
+
+@node    Shape-related morphs, , Temperature-related morphs, Available morphs
+@section Shape-related morphs
+@cindex  shape-related morphs
 
 @page
 @vskip 0pt plus 1filll
 @node    PDFmorph options, Index, Available morphs, Top
 @chapter PDFmorph options
-@cindex  pdfmorphoptions
+@cindex  pdfmorph options
 
 Explaination of options
 
