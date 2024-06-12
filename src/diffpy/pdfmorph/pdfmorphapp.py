@@ -475,8 +475,13 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
     if not target_directory.is_dir():
         parser.custom_error(f"{target_directory} is not a directory. Go to --help for usage.")
 
-    # Do not morph morph_file against itself if it is in the same directory
+    # Get list of files from target directory
     target_list = list(target_directory.iterdir())
+    for target in target_list:
+        if target.is_dir():
+            target_list.remove(target)
+
+    # Do not morph morph_file against itself if it is in the same directory
     if morph_file in target_list:
         target_list.remove(morph_file)
 
