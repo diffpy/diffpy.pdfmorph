@@ -211,15 +211,16 @@ selected directory and plot resulting :math:`R_w` values from each morph.
 3. After running this, we get chart of Rw values for each target file. However, this chart can
    be a bit confusing to interpret. To get a more understandable plot, run ::
 
-       pdfmorph SrFe2As2_150K.gr . --multiple --temperature
+       pdfmorph SrFe2As2_150K.gr . --multiple --sort-by=temperature
 
-   The temperature option can be used when our files end in ``_#K.gr`` or ``_#K.cgr`` where ``#``
-   is a temperature (float value). When enabled, PDFmorph will plot Rw values against the temperatures.
+   This plots the Rw against the temperature parameter value provided at the top of each file.
+   Parameters are entries of the form ``<parameter_name> = <parameter_value>`` and are located
+   above the ``r`` versus ``gr`` table in each PDF file.
 4. Between 192K and 198K, the Rw has a sharp increase, indicating that we may have a phase change.
    To confirm, let us now apply morphs onto ``SrFe2As2_150K.gr`` with all other files in ``morphMultiple``
    as targets ::
 
-       pdfmorph --scale=1 --stretch=0 SrFe2As2_150K.gr . --multiple --temperature
+       pdfmorph --scale=1 --stretch=0 SrFe2As2_150K.gr . --multiple --sort-by=temperature
 
    Note that we are not applying a smear since it takes a long time to apply and does not significantly
    change the Rw values in this example.
