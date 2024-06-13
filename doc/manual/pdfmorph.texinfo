@@ -164,8 +164,8 @@ diffpy-dev@@googlegroups.com.
 @section Requirements
 @cindex  requirements
 
-@code{PDFmorph} is currently run from the command line, so it is recommended that users
-first familiarize themselves with their operating system's command line interface.
+@code{PDFmorph} is currently run from the command-line, so it is recommended that users
+first familiarize themselves with their operating system's command-line interface.
 
 @code{PDFmorph} currently requires Python 3.10 or higher to run. It also makes use of
 the following third party libraries:
@@ -186,7 +186,7 @@ procedure described in the following section (@ref{Installation instructions}).
 We recommend installing the package and its dependencies using conda.
 Miniconda, a minimal installer for conda, can be downloaded
 @url{https://docs.anaconda.com/free/miniconda/, here}.
-Once Miniconda is installed, run @code{conda} on the command line
+Once Miniconda is installed, run @code{conda} on the command-line
  to test that it has been installed properly.
 
 To create and activate a conda environment to use @code{PDFmorph}, run the following command.
@@ -277,7 +277,7 @@ cd <PDFmorph_tutorial_directory>
 @item Download the @url{https://www.diffpy.org/diffpy.pdfmorph/tutorialfiles.html,
 quick start tutorial files @code{tutorialData.zip}}
 into your current directory and extract the files. After this is done,
-type @code{ls} in the command line to list your current directory contents
+type @code{ls} in the command-line to list your current directory contents
 and make sure there is a directory named @code{tutorialData}.
 @itemize
 @item The files in this dataset were collected by Soham Banerjee at Brookhaven National Laboratory in Upton,
@@ -297,7 +297,7 @@ find the data labeled @code{darkSub_rh20_C_##.gr} within this directory.
 for the PDF data (Linux Terminal Output).}
 @end float
 @item Let us try try using the @code{PDFmorph} program to plot two PDFs against each other.
-Type the following command into the command line
+Type the following command into the command-line
 @example
 pdfmorph darkSub_rh20_C_01.gr darkSub_rh20_C_44.gr
 @end example
@@ -669,7 +669,114 @@ In this section, we describe the following morphs:
 @chapter PDFmorph options
 @cindex  pdfmorph options
 
+In this section we describe all the options available to use in the
+@code{PDFmorph} program. Without options, the @code{PDFmorph} program
+is run with the command
+@example
+pdfmorph <morphed_PDF> <target_PDF>
+@end example
+@noindent where morphs will be applied to the morphed PDF in attempt to minimize
+the residual with the target PDF.
 
+@noindent @code{-h, --help}
+@* @indent Show a brief summary of all the options listed in this section.
+
+@noindent @code{-V, --version}
+@* @indent Show the program version (does not run the program).
+
+@noindent @code{-s NAME, --save=NAME}
+@* @indent Save the morphed PDF into a file named @code{NAME}. You can use
+@code{-} to save to @code{stdout} instead.
+When you have the @code{--multiple} tag enabled, multiple morphed PDFs are
+generated. Using this command with the @code{--multiple} tag will save all
+these morphs into a directory named @code{NAME} as well as a @code{.txt}
+file summary of refined morph parameters (if applicable) and @math{R_W}
+for each morph done. To specify names for each saved PDF file, use the
+@code{--save-names-file} option.
+
+@noindent @code{-v, --verbose}
+@* @indent Increase the amount of information saved to the file(s) generated
+by @code{--save}. Without this option enabled, only the morphed PDF table will be
+saved (the table of @math{r} and corresponding @math{g(r)} values). When enabled,
+information about the input and refined morph parameters (when applicable) and
+the @math{R_W} and Pearson correlation coefficient will be saved as parameters
+above the PDF table.
+
+@noindent @code{--rmin=RMIN}
+@* @indent The minimum @math{r}-value to use for PDF comparisons and manipulations.
+
+@noindent @code{--rmax=RMAX}
+@* @indent The maximum @math{r}-value to use for PDF comparisons and manipulations.
+
+@noindent @code{--pearson}
+@* @indent When enabled, refinement will seek only to maximize the Pearson correlation
+coefficient between the two PDFs.
+
+@noindent @code{--addpearson}
+@* @indent When enabled, refinement will seek to both maximize the Pearson correlation
+coefficient and minimize the residual between the two PDFs.
+
+@b{Manipulations}: These options select the manipulations (morphs) that are to be applied to
+the morphed PDF. The passed values will be refined unlesss specifically excluded with the
+@code{--apply} or @code{--exclude} options. If no morphs are selected, the morphed PDF will
+be unchanged and plotted against the target PDF.
+
+@noindent @code{-a, --apply}
+@* @indent Apply the morph but do not refine the morph parameter value.
+When this is not enabled, @code{PDFmorph} will automatically refine the
+morph parameters.
+
+@noindent @code{-x MORPH, --exclude=MORPH}
+@* @indent Do not refine the morph named @code{MORPH}. Note that the input @code{MORPH}
+must be lower case and match exactly the name of the morph option that you wish not to refine.
+For example, running
+@example
+pdfmorph <MORPHED> <TARGET> --scale=2 --smear=0.1 --exclude=scale
+@end example
+@noindent will scale the morphed PDF by exactly @math{2}, but will refine the
+parameter @math{0.1} for smear. However, @code{--exclude=Scale} will not stop
+@code{--scale=2} from being refined.
+
+@noindent @code{--scale=SCALE}
+@* @indent Apply a scale factor @code{SCALE} to the function being plotted. For instance,
+scaling @math{g(r)} by @code{SCALE} will return @math{@code{SCALE}*g(r)}.
+
+@noindent @code{--smear=SMEAR}
+@* @indent Smear the PDF peaks with a Gaussian of width (standard deviation) @math{|{@code{SMEAR}|}.
+This input can be negative, but will have the same effect as its absolute value. This function is designed
+only for use on PDFs. This operation assumes the RDF (see @section{Available morphs}) peaks are approximately
+Gaussian and works by converting the PDF to an RDF, convoluting a Gaussian of width @code{SMEAR} with the RDF,
+and converting back to the PDF. This conversion requires a parameter @code{BASELINESLOPE} which will be
+refined if not provided by the user in the @code{--slope} option.
+
+@noindent @code{--stretch}
+@* @indent Stretch the function being plotted along the abscissa by a factor of @math{1 + @code{STRETCH}}.
+For example, if the original function is @math{g(r)}, the stretch returns @math{g(r/(1+@code{STRETCH}))}.
+The returned PDF will always only be defined between @code{RMIN} and @code{RMAX} (see @code{--rmin}
+and @code{--rmax}). The @code{STRETCH} coefficient must be larger than @math{-1} and values in the
+range @math{(-1, 0}} will compress the function and set the remaining portion of the function up to
+@code{RMAX} as zero.
+
+@noindent @code{--slope=BASELINESLOPE}
+@* @indent The slope of the baseline used when applying the smear factor. If provided, it will not be refined.
+The equation @math{@code{BASELINESLOPE}=4 @pi r @rho_0 @gamma_0)} can be used if the atomic number density
+@math{@rho_0} and the nanoparticle form factor @math{@gamma_0} is known for the morphed PDF. Otherwise,
+do not include this slope and @code{PDFmorph} will automatically estimate it for you.
+
+@noindent @code{}
+@* @indent
+
+@noindent @code{}
+@* @indent
+
+@noindent @code{}
+@* @indent
+
+@noindent @code{}
+@* @indent
+
+@noindent @code{}
+@* @indent
 
 @c End TexInfo file
 @node Index, Top
