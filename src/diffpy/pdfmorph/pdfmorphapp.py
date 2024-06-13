@@ -331,10 +331,11 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
         chain.append(helpers.TransformXtalRDFtoPDF())
         refpars.append("smear")
         config["smear"] = opts.smear
+        # Set baselineslope if not given
         config["baselineslope"] = opts.baselineslope
         if opts.baselineslope is None:
-            refpars.append("baselineslope")
             config["baselineslope"] = -0.5
+        refpars.append("baselineslope")
     # Size
     radii = [opts.radius, opts.pradius]
     nrad = 2 - radii.count(None)
@@ -371,8 +372,7 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
 
     # Now remove non-refinable parameters
     if opts.exclude is not None:
-        refpars = set(refpars) - set(opts.exclude)
-        refpars = list(refpars)
+        refpars = list(set(refpars) - set(opts.exclude))
 
     # Refine or execute the morph
     refiner = refine.Refiner(chain, x_morph, y_morph, x_target, y_target)
@@ -388,12 +388,15 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
                 if "scale" in refpars:
                     rptemp.append("scale")
                 refiner.refine(*rptemp)
+            # Adjust all parameters
             refiner.refine(*refpars)
         except ValueError as e:
             parser.custom_error(str(e))
-    elif "smear" in refpars and opts.baselineslope is None:
+    # Smear is not being refined, but baselineslope needs to refined to apply smear
+    # Note that baselineslope is only added to the refine list if smear is applied
+    elif "baselineslope" in refpars:
         try:
-            refiner.refine("baselineslope", baselineslope=-0.5)
+            refiner.refine("baselineslope", baselineslope=config["baselineslope"])
         except ValueError as e:
             parser.custom_error(str(e))
     else:
