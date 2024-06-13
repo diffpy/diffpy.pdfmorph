@@ -53,7 +53,12 @@ def create_option_parser():
                 "Use --help for help.",
             ]
         ),
-        epilog="Please report bugs to diffpy-dev@googlegroups.com.",
+        epilog="\n".join(
+            [
+                "For more information, see the PDFmorph manual."
+                "Please report bugs to diffpy-dev@googlegroups.com.",
+            ]
+        ),
     )
 
     parser.add_option("-V", "--version", action="version", help="Show program version and exit.")
@@ -140,7 +145,7 @@ def create_option_parser():
         "--qdamp",
         type="float",
         metavar="QDAMP",
-        help="Dampen PDF by a factor QDAMP. (See PDFGui manual.)",
+        help="Dampen PDF by a factor QDAMP.",
     )
     group.add_option(
         "--radius",
@@ -196,18 +201,18 @@ def create_option_parser():
         "--mlabel",
         metavar="MLABEL",
         dest="mlabel",
-        help="Set label for morphed data to MLABEL on plot. Ignored if using file names as labels.",
+        help="Set label for morphed data to MLABEL on plot. Default label is FILE1.",
     )
     group.add_option(
         "--tlabel",
         metavar="TLABEL",
         dest="tlabel",
-        help="Set label for target data to TLABEL on plot. Ignored if using file names as labels.",
+        help="Set label for target data to TLABEL on plot. Default label is FILE2.",
     )
     group.add_option("--pmin", type="float", help="Minimum r-value to plot. Defaults to RMIN.")
     group.add_option("--pmax", type="float", help="Maximum r-value to plot. Defaults to RMAX.")
-    group.add_option("--maglim", type="float", help="Magnify plot curves beyond MAGLIM by MAG.")
-    group.add_option("--mag", type="float", help="Magnify plot curves beyond MAGLIM by MAG.")
+    group.add_option("--maglim", type="float", help="Magnify plot curves beyond r=MAGLIM by MAG.")
+    group.add_option("--mag", type="float", help="Magnify plot curves beyond r=MAGLIM by MAG.")
     group.add_option("--lwidth", type="float", help="Line thickness of plotted curves.")
 
     # Multiple morph options
@@ -231,7 +236,9 @@ def create_option_parser():
         "--sort-by",
         metavar="FIELD",
         dest="field",
-        help="""Used with --multiple to sort files in DIRECTORY by FIELD from lowest to highest.
+        help="""Used with --multiple to sort files in DIRECTORY by FIELD.
+ If the FIELD being used has a numerical value, sort from lowest to highest.
+ Otherwise, sort in ASCII sort order.
  FIELD must be included in the header of all the PDF files.""",
     )
     group.add_option(
@@ -255,19 +262,19 @@ def create_option_parser():
  Specify names for each manipulated PDF when saving (see -s) using a serial file
  NAMESFILE. The format of NAMESFILE should be as follows: each target PDF
  is an entry in NAMESFILE. For each entry, there should be a key {__save_morph_as__}
- whose value specifies the name to save the manipulated PDF as.
-(See sample names files in the PDFmorph tutorial).""",
+ whose value specifies the name to save the manipulated PDF as. An example .json
+ serial file is shown in the PDFmorph manual.""",
     )
     group.add_option(
         "--plot-parameter",
         metavar="PLOTPARAM",
         dest="plotparam",
         help="""Used when both plotting and --multiple are enabled.
- Choose a PLOTPARAM to plot for each morph (i.e. adding --pp=Pearson means the program
- will display a plot of the Pearson correlation coefficient for each morph-target pair).
- PLOTPARAM is not case sensitive, so both Pearson and pearson indicate the same parameter.
- When PLOTPARAM is not specified, Rw values for each morph-target pair will be plotted.
- PLOTPARAM will be displayed as the vertical axis label for the plot.""",
+ Choose a PLOTPARAM to plot for each morph (i.e. adding --plot-parameter=Pearson means the
+ program will display a plot of the Pearson correlation coefficient for each morph-target
+ pair). PLOTPARAM is not case sensitive, so both Pearson and pearson indicate the same
+ parameter. When PLOTPARAM is not specified, Rw values for each morph-target pair will be
+ plotted. PLOTPARAM will be displayed as the vertical axis label for the plot.""",
     )
 
     # Defaults
