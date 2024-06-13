@@ -90,65 +90,6 @@ def create_option_parser():
  minimizing the residual.""",
     )
 
-    group = optparse.OptionGroup(
-        parser,
-        "Multiple Morphs",
-        """This program can morph a PDF against multiple targets in one command.
- See -s and Plot Options for how saving and plotting functionality changes when performing multiple morphs.""",
-    )
-    parser.add_option_group(group)
-    group.add_option(
-        "--multiple",
-        dest="multiple",
-        action="store_true",
-        help=f"""Changes usage to \'{prog_short} [options] FILE DIRECTORY\'. FILE
- will be morphed with each file in DIRECTORY as target.
- Files in DIRECTORY are sorted by alphabetical order unless a field is
- specified by --sort-by.""",
-    )
-    group.add_option(
-        "--sort-by",
-        metavar="FIELD",
-        dest="field",
-        help="""Used with --multiple to sort files in DIRECTORY by FIELD from lowest to highest.
- FIELD must be included in the header of all the PDF files.""",
-    )
-    group.add_option(
-        "--reverse",
-        dest="reverse",
-        action="store_true",
-        help="""Sort from highest to lowest instead.""",
-    )
-    group.add_option(
-        "--serial-file",
-        metavar="SERIALFILE",
-        dest="serfile",
-        help="""Look for FIELD in a serial file instead.
- Must specify name of serial file SERIALFILE.""",
-    )
-    group.add_option(
-        "--save-names-file",
-        metavar="NAMESFILE",
-        dest="snamesfile",
-        help=f"""Used when both -s and --multiple are enabled.
- Specify names for each manipulated PDF when saving (see -s) using a serial file
- NAMESFILE. The format of NAMESFILE should be as follows: each target PDF
- is an entry in NAMESFILE. For each entry, there should be a key {__save_morph_as__}
- whose value specifies the name to save the manipulated PDF as.
-(See sample names files in the PDFmorph tutorial).""",
-    )
-    group.add_option(
-        "--plot-parameter",
-        metavar="PLOTPARAM",
-        dest="plotparam",
-        help="""Used when both plotting and --multiple are enabled.
- Choose a PLOTPARAM to plot for each morph (i.e. adding --pp=Pearson means the program
- will display a plot of the Pearson correlation coefficient for each morph-target pair).
- PLOTPARAM is not case sensitive, so both Pearson and pearson indicate the same parameter.
- When PLOTPARAM is not specified, Rw values for each morph-target pair will be plotted.
- PLOTPARAM will be displayed as the vertical axis label for the plot.""",
-    )
-
     # Manipulations
     group = optparse.OptionGroup(
         parser,
@@ -268,6 +209,66 @@ def create_option_parser():
     group.add_option("--maglim", type="float", help="Magnify plot curves beyond MAGLIM by MAG.")
     group.add_option("--mag", type="float", help="Magnify plot curves beyond MAGLIM by MAG.")
     group.add_option("--lwidth", type="float", help="Line thickness of plotted curves.")
+
+    # Multiple morph options
+    group = optparse.OptionGroup(
+        parser,
+        "Multiple Morphs",
+        """This program can morph a PDF against multiple targets in one command.
+ See -s and Plot Options for how saving and plotting functionality changes when performing multiple morphs.""",
+    )
+    parser.add_option_group(group)
+    group.add_option(
+        "--multiple",
+        dest="multiple",
+        action="store_true",
+        help=f"""Changes usage to \'{prog_short} [options] FILE DIRECTORY\'. FILE
+ will be morphed with each file in DIRECTORY as target.
+ Files in DIRECTORY are sorted by alphabetical order unless a field is
+ specified by --sort-by.""",
+    )
+    group.add_option(
+        "--sort-by",
+        metavar="FIELD",
+        dest="field",
+        help="""Used with --multiple to sort files in DIRECTORY by FIELD from lowest to highest.
+ FIELD must be included in the header of all the PDF files.""",
+    )
+    group.add_option(
+        "--reverse",
+        dest="reverse",
+        action="store_true",
+        help="""Sort from highest to lowest instead.""",
+    )
+    group.add_option(
+        "--serial-file",
+        metavar="SERIALFILE",
+        dest="serfile",
+        help="""Look for FIELD in a serial file instead.
+ Must specify name of serial file SERIALFILE.""",
+    )
+    group.add_option(
+        "--save-names-file",
+        metavar="NAMESFILE",
+        dest="snamesfile",
+        help=f"""Used when both -s and --multiple are enabled.
+ Specify names for each manipulated PDF when saving (see -s) using a serial file
+ NAMESFILE. The format of NAMESFILE should be as follows: each target PDF
+ is an entry in NAMESFILE. For each entry, there should be a key {__save_morph_as__}
+ whose value specifies the name to save the manipulated PDF as.
+(See sample names files in the PDFmorph tutorial).""",
+    )
+    group.add_option(
+        "--plot-parameter",
+        metavar="PLOTPARAM",
+        dest="plotparam",
+        help="""Used when both plotting and --multiple are enabled.
+ Choose a PLOTPARAM to plot for each morph (i.e. adding --pp=Pearson means the program
+ will display a plot of the Pearson correlation coefficient for each morph-target pair).
+ PLOTPARAM is not case sensitive, so both Pearson and pearson indicate the same parameter.
+ When PLOTPARAM is not specified, Rw values for each morph-target pair will be plotted.
+ PLOTPARAM will be displayed as the vertical axis label for the plot.""",
+    )
 
     # Defaults
     parser.set_defaults(multiple=False)
