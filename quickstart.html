@@ -294,16 +294,17 @@ and directory was the cwd, which should be <code class="docutils literal notrans
 </li>
 <li><p>After running this, we get chart of Rw values for each target file. However, this chart can
 be a bit confusing to interpret. To get a more understandable plot, run</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="n">SrFe2As2_150K</span><span class="o">.</span><span class="n">gr</span> <span class="o">.</span> <span class="o">--</span><span class="n">multiple</span> <span class="o">--</span><span class="n">temperature</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="n">SrFe2As2_150K</span><span class="o">.</span><span class="n">gr</span> <span class="o">.</span> <span class="o">--</span><span class="n">multiple</span> <span class="o">--</span><span class="n">sort</span><span class="o">-</span><span class="n">by</span><span class="o">=</span><span class="n">temperature</span>
 </pre></div>
 </div>
-<p>The temperature option can be used when our files end in <code class="docutils literal notranslate"><span class="pre">_#K.gr</span></code> or <code class="docutils literal notranslate"><span class="pre">_#K.cgr</span></code> where <code class="docutils literal notranslate"><span class="pre">#</span></code>
-is a temperature (float value). When enabled, PDFmorph will plot Rw values against the temperatures.</p>
+<p>This plots the Rw against the temperature parameter value provided at the top of each file.
+Parameters are entries of the form <code class="docutils literal notranslate"><span class="pre">&lt;parameter_name&gt;</span> <span class="pre">=</span> <span class="pre">&lt;parameter_value&gt;</span></code> and are located
+above the <code class="docutils literal notranslate"><span class="pre">r</span></code> versus <code class="docutils literal notranslate"><span class="pre">gr</span></code> table in each PDF file.</p>
 </li>
 <li><p>Between 192K and 198K, the Rw has a sharp increase, indicating that we may have a phase change.
 To confirm, let us now apply morphs onto <code class="docutils literal notranslate"><span class="pre">SrFe2As2_150K.gr</span></code> with all other files in <code class="docutils literal notranslate"><span class="pre">morphMultiple</span></code>
 as targets</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="o">--</span><span class="n">scale</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">stretch</span><span class="o">=</span><span class="mi">0</span> <span class="n">SrFe2As2_150K</span><span class="o">.</span><span class="n">gr</span> <span class="o">.</span> <span class="o">--</span><span class="n">multiple</span> <span class="o">--</span><span class="n">temperature</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pdfmorph</span> <span class="o">--</span><span class="n">scale</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">stretch</span><span class="o">=</span><span class="mi">0</span> <span class="n">SrFe2As2_150K</span><span class="o">.</span><span class="n">gr</span> <span class="o">.</span> <span class="o">--</span><span class="n">multiple</span> <span class="o">--</span><span class="n">sort</span><span class="o">-</span><span class="n">by</span><span class="o">=</span><span class="n">temperature</span>
 </pre></div>
 </div>
 <p>Note that we are not applying a smear since it takes a long time to apply and does not significantly
@@ -414,7 +415,7 @@ application, please report them to <a class="reference external" href="mailto:di
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2009-2019, Trustees of Columbia University in the City of New York, all rights reserved..</p>
+    <p>&#169; Copyright 2009-2024, Trustees of Columbia University in the City of New York, all rights reserved.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
