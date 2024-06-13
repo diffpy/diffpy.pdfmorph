@@ -110,7 +110,7 @@ model-independent way. It was originally designed to help a researcher
 answer a question: "Has my material undergone a phase transition between
 these two measurements?"
 
-A common approach to compare two PDFs is to plot the fdifference curve below
+A common approach to compare two PDFs is to plot the difference curve below
 the two PDFs. However, a significant signal can be seen in the difference curve
 due to benign effects such as thermal expansion (peak shifts), increased thermal
 motion (peak broadening), or a change in scale due to differences in the incident
@@ -170,11 +170,11 @@ first familiarize themselves with their operating system's command-line interfac
 @code{PDFmorph} currently requires Python 3.10 or higher to run. It also makes use of
 the following third party libraries:
 @itemize @bullet
-@item @url{https://numpy.org/, NumPy} - Python's fast scientific computing library
-@item @url{https://matplotlib.org/, Matplotlib} - Python plotting library
-@item @url{https://scipy.org/, SciPy} - Python's technical computing library
-@item @url{https://www.diffpy.org/diffpy.utils/, diffpy.utils}
-- @url{https://www.diffpy.org/, DiffPy} general utility functions
+@item @url{https://numpy.org, NumPy} - Python's fast scientific computing library
+@item @url{https://matplotlib.org, Matplotlib} - Python plotting library
+@item @url{https://scipy.org, SciPy} - Python's technical computing library
+@item @url{https://www.diffpy.org/diffpy.utils, diffpy.utils}
+- @url{https://www.diffpy.org, DiffPy} general utility functions
 @end itemize
 These dependencies will be installed automatically if you use the conda installation
 procedure described in the following section (@ref{Installation instructions}).
@@ -185,7 +185,7 @@ procedure described in the following section (@ref{Installation instructions}).
 
 We recommend installing the package and its dependencies using conda.
 Miniconda, a minimal installer for conda, can be downloaded
-@url{https://docs.anaconda.com/free/miniconda/, here}.
+@url{https://docs.anaconda.com/free/miniconda, here}.
 Once Miniconda is installed, run @code{conda} on the command-line
  to test that it has been installed properly.
 
@@ -200,7 +200,7 @@ In future sessions, make sure to run @code{conda activate pdfmorph_env} to activ
 environment before interacting with the @code{PDFmorph} program.
 
 Once active, you can install @code{PDFmorph} into your environment from the
-@url{https://conda-forge.org/, conda-forge} channel of Anaconda packages by running
+@url{https://conda-forge.org, conda-forge} channel of Anaconda packages by running
 @example
 conda config --add channels conda-forge
 conda install diffpy.pdfmorph
@@ -218,7 +218,7 @@ conda deactivate pdfmorph_env
 @end example
 
 If you do not wish to use conda to install, @code{PDFmorph} is also available on the
-@url{https://pypi.org/, Python Package Index} or can be installed from source
+@url{https://pypi.org, Python Package Index} or can be installed from source
 at @url{https://github.com/diffpy/diffpy.pdfmorph}. Note that these installation
 methods will require you to first install the dependencies listed in the previous section
 (@ref{Requirements}).
@@ -450,7 +450,7 @@ act as targets as the smear morph is only able to account for increases in therm
 @item Within @code{additionalData}, enter (using @code{cd}) the @code{morphMultiple} directory.
 Inside, you will find multiple PDFs of @math{SrFe_2As_2} measured at various temperatures.
 @itemize
-@item These PDFs come from @url{https://github.com/Billingegroup/pdfttp_data/,
+@item These PDFs come from @url{https://github.com/Billingegroup/pdfttp_data,
 @emph{Atomic Pair Distribution Function Analysis: A Primer}} by Simon Billinge and
 Kirsten Jensen. Contributions to the dataset have been made by Benjamin Frandsen and
 Long Yang.
@@ -560,7 +560,7 @@ Currently, the supported nanoparticle shapes include only spheres and spheroids.
 @itemize
 @item Within the @code{additionalData} directory, @code{cd} into the @code{morphShape}
 subdirectory. Inside, you will find a sample Nickel bulk material PDF @code{Ni_bulk.gr}.
-This PDF comes from @url{https://github.com/Billingegroup/pdfttp_data/,
+This PDF comes from @url{https://github.com/Billingegroup/pdfttp_data,
 @emph{Atomic Pair Distribution Function Analysis: A Primer}}.
 Also in the directory are multiple @code{.cgr}, which are calculated Nickel nanoparticle
 PDFs.
@@ -716,7 +716,9 @@ coefficient between the two PDFs.
 @* @indent When enabled, refinement will seek to both maximize the Pearson correlation
 coefficient and minimize the residual between the two PDFs.
 
-@b{Manipulations}: These options select the manipulations (morphs) that are to be applied to
+@noindent @titlefont{Morphs and manipulations}
+
+These options select the morphs and manipulations that are to be applied to
 the morphed PDF. The passed values will be refined unlesss specifically excluded with the
 @code{--apply} or @code{--exclude} options. If no morphs are selected, the morphed PDF will
 be unchanged and plotted against the target PDF.
@@ -724,7 +726,7 @@ be unchanged and plotted against the target PDF.
 @noindent @code{-a, --apply}
 @* @indent Apply the morph but do not refine the morph parameter value.
 When this is not enabled, @code{PDFmorph} will automatically refine the
-morph parameters.
+morph parameters for all morph options below.
 
 @noindent @code{-x MORPH, --exclude=MORPH}
 @* @indent Do not refine the morph named @code{MORPH}. Note that the input @code{MORPH}
@@ -742,9 +744,9 @@ parameter @math{0.1} for smear. However, @code{--exclude=Scale} will not stop
 scaling @math{g(r)} by @code{SCALE} will return @math{@code{SCALE}*g(r)}.
 
 @noindent @code{--smear=SMEAR}
-@* @indent Smear the PDF peaks with a Gaussian of width (standard deviation) @math{|{@code{SMEAR}|}.
+@* @indent Smear the PDF peaks with a Gaussian of width (standard deviation) @math{abs(@code{SMEAR})}.
 This input can be negative, but will have the same effect as its absolute value. This function is designed
-only for use on PDFs. This operation assumes the RDF (see @section{Available morphs}) peaks are approximately
+only for use on PDFs. This operation assumes the RDF (see @ref{Available morphs}) peaks are approximately
 Gaussian and works by converting the PDF to an RDF, convoluting a Gaussian of width @code{SMEAR} with the RDF,
 and converting back to the PDF. This conversion requires a parameter @code{BASELINESLOPE} which will be
 refined if not provided by the user in the @code{--slope} option.
@@ -754,29 +756,140 @@ refined if not provided by the user in the @code{--slope} option.
 For example, if the original function is @math{g(r)}, the stretch returns @math{g(r/(1+@code{STRETCH}))}.
 The returned PDF will always only be defined between @code{RMIN} and @code{RMAX} (see @code{--rmin}
 and @code{--rmax}). The @code{STRETCH} coefficient must be larger than @math{-1} and values in the
-range @math{(-1, 0}} will compress the function and set the remaining portion of the function up to
+range @math{(-1, 0)} will compress the function and set the remaining portion of the function up to
 @code{RMAX} as zero.
 
 @noindent @code{--slope=BASELINESLOPE}
-@* @indent The slope of the baseline used when applying the smear factor. If provided, it will not be refined.
-The equation @math{@code{BASELINESLOPE}=4 @pi r @rho_0 @gamma_0)} can be used if the atomic number density
-@math{@rho_0} and the nanoparticle form factor @math{@gamma_0} is known for the morphed PDF. Otherwise,
-do not include this slope and @code{PDFmorph} will automatically estimate it for you.
+@* @indent The slope of the baseline used when applying the smear factor. Unless excluded using @code{--apply}
+or @code{--exclude}, it will be refined whenever @code{--smear} is used, even if @code{--smear} is not being refined.
+The equation @math{@code{BASELINESLOPE}=4 \pi r \rho_0 \gamma_0)} can be used if the atomic number density
+@math{\rho_0} and the nanoparticle form factor @math{\gamma_0} is known for the morphed PDF.
 
-@noindent @code{}
-@* @indent
+@noindent @code{--qdamp=QDAMP}
+@* @indent Dampen the PDF by a factor @code{QDAMP}. A limited @math{Q}-resolution of the diffractometer
+requires us to apply a Gaussian dampening envelope centered at @math{r=0} with width (standard deviation)
+@code{QDAMP}. This envelop is directly multiplied to the PDF.
 
-@noindent @code{}
-@* @indent
+@noindent @code{--radius=RADIUS}
+@* @indent Apply the nanoparticle form factor @math{\gamma_0} for a sphere of radius @code{RADIUS}.
+If @code{PRADIUS} is also specified, instead apply the characteristic function of a spheroid with
+equitorial radius @code{RADIUS} and polar radius @code{PRADIUS}.
 
-@noindent @code{}
-@* @indent
+@noindent @code{--pradius=PRADIUS}
+@* @indent If @code{RADIUS} is also specified, see @code{--radius}. Otherwise, apply the characteristic
+function of a sphere with radius @code{PRADIUS}.
 
-@noindent @code{}
-@* @indent
+@noindent @code{--iradius=IRADIUS}
+@* @indent Apply the inverse characteristic function @math{1/\gamma_0} of a sphere of radius @code{IRADIUS}/
+If @code{IPRADIUS} is also specified, instead apply the characteristic function of a spheroid with
+equitorial radius @code{IRADIUS} and polar radius @code{PRADIUS}.
 
-@noindent @code{}
-@* @indent
+@noindent @code{--ipradius=IPRADIUS}
+@* @indent If @code{IRADIUS} is also specified, see @code{--iradius}. Otherwise, apply the characteristic
+function of a sphere with radius @code{IPRADIUS}.
+
+@noindent @titlefont{@b{Plot options}}
+
+These options control plotting. The morphed and target PDFs will be plotted against each other with a
+difference curve shown below. The following changes occur when @code{--multiple} is enabled.
+(1) The @math{R_W} for each morphed PDF compared to the target will be plotted unless
+another parameter is specified by @code{--plot-parameter}. (2) The plot will be a bar chart
+where the abscissa names are the file names of the target PDFs unless otherwise specified by
+@code{--sort-by}. If the parameter given to @code{--sort-by} has numerical value, the plot
+will be a line chart; otherwise, a bar chart the parameter values as the absicssa names will
+be plotted. By default, ASCII sort order is used for the bar chart abscissa names, but
+@code{--reverse} can be used to reverse the order.
+
+@noindent @code{-n, --noplot}
+@* @indent Do not display a plot if enabled. Otherwise, show a plot.
+
+@noindent @code{--mlabel=MLABEL}
+@* @indent Set the label for the morphed PDF to @code{MLABEL} on the plot. If not specified,
+the morphed file name will be used as the label.
+
+@noindent @code{--tlabel=TLABEL}
+@* @indent Set the label for the target PDF to @code{TLABEL} on the plot. If not specified,
+the target file name will be used as the label.
+
+@noindent @code{--pmin=PMIN}
+@* @indent The minimum @math{r}-value (abscissa) to plot. If not specified, @code{RMIN} will be used.
+
+@noindent @code{--pmax=PMAX}
+@* @indent @indent The maximum @math{r}-value (abscissa) to plot. If not specified, @code{RMAX} will be used.
+
+@noindent @code{--maglim=MAGLIM}
+@* @indent The function @math{g(r)} will be magnified by @code{MAG} for @math{r>@code{MAGLIM}}. This may
+be useful as PDF amplitude can get very small for large @math{r}. No magnification will take place if
+@code{--maglim} is not specified.
+
+@noindent @code{--mag=MAG}
+@* @indent See @code{--maglim}. No magnification will take place if @code{--maglim} is not specified.
+
+@noindent @code{--lwidth=LWIDTH}
+@* @indent Set the line thickness of the plotted curves. If not specified, it will default to @math{1.5}.
+
+@noindent @titlefont{@b{Multiple morphs}}
+
+@code{PDFmorph} allows one to morph one PDF against multiple different targets when @code{--multiple}
+is enabled. See @code{-s} and the description under "Plot options" for how saving and plotting
+change when @code{--multiple} is enabled.
+
+@noindent @code{--multiple}
+@* @indent Changes usage of @code{PDFmorph} to
+@example
+pdfmorph <MORPHED_FILE> <TARGET_DIRECTORY>
+@end example
+@noindent where the PDF in the file @code{MORPHED_FILE} will be morphed with each (PDF) file
+in the directory @code{TARGET_DIRECTORY} as the target. Files in @code{TARGET_DIRECTORY} will
+be sorted in ASCII sort order order unless a sorting parameter is specified by @code{sort-by}.
+
+@noindent @code{--sort-by=FIELD}
+@* @indent Used with @code{--multiple}. Sort the files in @code{TARGET_DIRECTORY} by some parameter
+named @code{FIELD}. Parameters can be specified within each target PDF file by lines of the form
+@code{<PARAM_NAME> = <PARAM_VALUE>} in the header (anywhere above the @math{r} versus @math{g(r)}
+data table). @code{PDFmorph} will attempt to find a parameter named @code{FIELD} using a
+case-insensitive search. Numerical @code{PARAM_VALUE} will be sorted in ascending order and
+non-numerical ones will be sorted in ASCII sort order.
+
+@noindent @code{--reverse}
+@* @indent Used with @code{--multiple}. Sort the files in @code{TARGET_DIRECTORY} in reverse
+ASCII sort order. If a parameter is given by @code{--sort-by}, reverse the order given by
+@code{--sort-by}.
+
+@noindent @code{--serial-file=SERIALFILE}
+@* @indent Used with @code{--multiple} and @code{--sort-by}. Look for @code{FIELD} in a serial
+file named @code{SERIALFILE} instead. Only serial file types supported by
+@url{https://www.diffpy.org/diffpy.utils, diffpy.utils} such as @code{.json} are allowed.
+
+@noindent @code{--save-names-file=NAMESFILE}
+@* @indent Used with @code{--multiple} and @code{-s}. Specify names for each manipulated PDF when
+saving using a serial file named @code{NAMESFILE}. The format of @code{NAMESFILE} should be
+as follows: (1) Each target PDF file name is an entry in @code{NAMESFILE}. (2) For each entry,
+there should be a key @code{save_morph_as} whose value specified the name to save the manipulated
+PDF as. An example @code{.json} @code{NAMESFILE} is below.
+@example
+@{
+  "target1.gr": @{
+    "save_morph_as": "name.extension"
+  @},
+  "target2.gr": @{
+    "save_morph_as": "another_name.extension",
+    "other_information": "[optional]"
+  @},
+  "target3.gr": @{
+    "SaVe_MoRph_As": "this_also_works.extension",
+    "note": "Capitalization does NOT matter. This is case insensitive."
+  @}
+@}
+@end example
+@noindent Only serial file types supported by @url{https://www.diffpy.org/diffpy.utils, diffpy.utils}
+such as @code{.json} are allowed.
+
+@noindent @code{--plot-parameter=PLOTPARAM}
+@* @indent Used with @code{--multiple} and when plotting is enabled. Choose a parameter @code{PLOTPARAM}
+to plot for each morph. When not specified, the @math{R_W} values for each morphed PDF compared to the
+target PDFs will be plotted. This option is not case sensitive meaning @code{--plot-parameter=Scale} and
+@code{--plot-parameter=scale} will both cause the parameter @code{scale} to be plotted.
 
 @c End TexInfo file
 @node Index, Top
