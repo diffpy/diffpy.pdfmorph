@@ -294,4 +294,4 @@ Bug Reports
 ===========
 
 Please enjoy using our software! If you come accross any bugs in the
-application, please report them to diffpy-dev@googlegroups.com.
+application, please report them to diffpy-users@googlegroups.com.
