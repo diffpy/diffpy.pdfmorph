@@ -4,10 +4,10 @@ collected by Soham Banerjee at Brookhaven National Laboratory,
 Benjamin Frandsen during his PhD at Columbia Unversity,
 and Long Yang from Tonji University.
 
-The PDFmorph development team is the set of all contributors to the PDFgui project.
+The DiffPy development team is the set of all contributors to DiffPy projects.
 Each member of the development team maintains copyright on their individual
-contributions to the code base. For a detailed contribution history, see the
-git logs at @url{https://github.com/diffpy/diffpy.pdfmorph}.
+contributions to the code base. For a detailed contribution history of
+@code{PDFmorph}, see the git logs at @url{https://github.com/diffpy/diffpy.pdfmorph}.
 
 For more information about the application, please visit
 @url{https://www.diffpy.org/diffpy.pdfmorph}.
