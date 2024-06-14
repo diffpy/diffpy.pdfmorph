@@ -55,8 +55,8 @@ def create_option_parser():
         ),
         epilog="\n".join(
             [
-                "For more information, see the PDFmorph manual."
-                "Please report bugs to diffpy-dev@googlegroups.com.",
+                "Please report bugs to diffpy-users@googlegroups.com.",
+                "For more information, see the PDFmorph website at https://www.diffpy.org/diffpy.pdfmorph.",
             ]
         ),
     )
