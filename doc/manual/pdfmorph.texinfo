@@ -674,9 +674,9 @@ The effects of isotropic expansion/compression can be accounted for by scaling a
 To prove this, we will make use of the (total) radial distribution function (RDF), denoted @math{R(r)}.
 This function is related to the PDF through
 @displaymath
-G(r) = {R(r) \over r} - 4 \pi r \rho_0 \gamma_0(r)
+G(r) = {R(r) \over r} - 4 \pi r \rho_0 \gamma_0(r),
 @end displaymath
-where @math{\rho_0} is atomic number density the and @math{\gamma_0(r)} is the nanoparticle form factor
+where @math{\rho_0} is the atomic number density the and @math{\gamma_0(r)} is the nanoparticle form factor
 (see @ref{Shape-related morphs}). A partial RDF @math{R_i(r)} is defined such that @math{R_i(r)dr} gives
 the number of atoms in the spherical shell bounded by @math{r} and @math{r + dr} centered at atom @math{i}.
 The total RDF for an atomic system is the average of the partial RDFs of each atom in the system
