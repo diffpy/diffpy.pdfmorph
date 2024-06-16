@@ -53,7 +53,12 @@ def create_option_parser():
                 "Use --help for help.",
             ]
         ),
-        epilog="Please report bugs to diffpy-dev@googlegroups.com.",
+        epilog="\n".join(
+            [
+                "Please report bugs to diffpy-users@googlegroups.com.",
+                "For more information, see the PDFmorph website at https://www.diffpy.org/diffpy.pdfmorph.",
+            ]
+        ),
     )
 
     parser.add_option("-V", "--version", action="version", help="Show program version and exit.")
@@ -88,65 +93,6 @@ def create_option_parser():
         dest="addpearson",
         help="""Maximize agreement in the Pearson function as well as
  minimizing the residual.""",
-    )
-
-    group = optparse.OptionGroup(
-        parser,
-        "Multiple Morphs",
-        """This program can morph a PDF against multiple targets in one command.
- See -s and Plot Options for how saving and plotting functionality changes when performing multiple morphs.""",
-    )
-    parser.add_option_group(group)
-    group.add_option(
-        "--multiple",
-        dest="multiple",
-        action="store_true",
-        help=f"""Changes usage to \'{prog_short} [options] FILE DIRECTORY\'. FILE
- will be morphed with each file in DIRECTORY as target.
- Files in DIRECTORY are sorted by alphabetical order unless a field is
- specified by --sort-by.""",
-    )
-    group.add_option(
-        "--sort-by",
-        metavar="FIELD",
-        dest="field",
-        help="""Used with --multiple to sort files in DIRECTORY by FIELD from lowest to highest.
- FIELD must be included in the header of all the PDF files.""",
-    )
-    group.add_option(
-        "--reverse",
-        dest="reverse",
-        action="store_true",
-        help="""Sort from highest to lowest instead.""",
-    )
-    group.add_option(
-        "--serial-file",
-        metavar="SERIALFILE",
-        dest="serfile",
-        help="""Look for FIELD in a serial file instead.
- Must specify name of serial file SERIALFILE.""",
-    )
-    group.add_option(
-        "--save-names-file",
-        metavar="NAMESFILE",
-        dest="snamesfile",
-        help=f"""Used when both -s and --multiple are enabled.
- Specify names for each manipulated PDF when saving (see -s) using a serial file
- NAMESFILE. The format of NAMESFILE should be as follows: each target PDF
- is an entry in NAMESFILE. For each entry, there should be a key {__save_morph_as__}
- whose value specifies the name to save the manipulated PDF as.
-(See sample names files in the PDFmorph tutorial).""",
-    )
-    group.add_option(
-        "--plot-parameter",
-        metavar="PLOTPARAM",
-        dest="plotparam",
-        help="""Used when both plotting and --multiple are enabled.
- Choose a PLOTPARAM to plot for each morph (i.e. adding --pp=Pearson means the program
- will display a plot of the Pearson correlation coefficient for each morph-target pair).
- PLOTPARAM is not case sensitive, so both Pearson and pearson indicate the same parameter.
- When PLOTPARAM is not specified, Rw values for each morph-target pair will be plotted.
- PLOTPARAM will be displayed as the vertical axis label for the plot.""",
     )
 
     # Manipulations
@@ -199,7 +145,7 @@ def create_option_parser():
         "--qdamp",
         type="float",
         metavar="QDAMP",
-        help="Dampen PDF by a factor QDAMP. (See PDFGui manual.)",
+        help="Dampen PDF by a factor QDAMP.",
     )
     group.add_option(
         "--radius",
@@ -255,19 +201,81 @@ def create_option_parser():
         "--mlabel",
         metavar="MLABEL",
         dest="mlabel",
-        help="Set label for morphed data to MLABEL on plot. Ignored if using file names as labels.",
+        help="Set label for morphed data to MLABEL on plot. Default label is FILE1.",
     )
     group.add_option(
         "--tlabel",
         metavar="TLABEL",
         dest="tlabel",
-        help="Set label for target data to TLABEL on plot. Ignored if using file names as labels.",
+        help="Set label for target data to TLABEL on plot. Default label is FILE2.",
     )
     group.add_option("--pmin", type="float", help="Minimum r-value to plot. Defaults to RMIN.")
     group.add_option("--pmax", type="float", help="Maximum r-value to plot. Defaults to RMAX.")
-    group.add_option("--maglim", type="float", help="Magnify plot curves beyond MAGLIM by MAG.")
-    group.add_option("--mag", type="float", help="Magnify plot curves beyond MAGLIM by MAG.")
+    group.add_option("--maglim", type="float", help="Magnify plot curves beyond r=MAGLIM by MAG.")
+    group.add_option("--mag", type="float", help="Magnify plot curves beyond r=MAGLIM by MAG.")
     group.add_option("--lwidth", type="float", help="Line thickness of plotted curves.")
+
+    # Multiple morph options
+    group = optparse.OptionGroup(
+        parser,
+        "Multiple Morphs",
+        """This program can morph a PDF against multiple targets in one command.
+ See -s and Plot Options for how saving and plotting functionality changes when performing multiple morphs.""",
+    )
+    parser.add_option_group(group)
+    group.add_option(
+        "--multiple",
+        dest="multiple",
+        action="store_true",
+        help=f"""Changes usage to \'{prog_short} [options] FILE DIRECTORY\'. FILE
+ will be morphed with each file in DIRECTORY as target.
+ Files in DIRECTORY are sorted by alphabetical order unless a field is
+ specified by --sort-by.""",
+    )
+    group.add_option(
+        "--sort-by",
+        metavar="FIELD",
+        dest="field",
+        help="""Used with --multiple to sort files in DIRECTORY by FIELD.
+ If the FIELD being used has a numerical value, sort from lowest to highest.
+ Otherwise, sort in ASCII sort order.
+ FIELD must be included in the header of all the PDF files.""",
+    )
+    group.add_option(
+        "--reverse",
+        dest="reverse",
+        action="store_true",
+        help="""Sort from highest to lowest instead.""",
+    )
+    group.add_option(
+        "--serial-file",
+        metavar="SERIALFILE",
+        dest="serfile",
+        help="""Look for FIELD in a serial file instead.
+ Must specify name of serial file SERIALFILE.""",
+    )
+    group.add_option(
+        "--save-names-file",
+        metavar="NAMESFILE",
+        dest="snamesfile",
+        help=f"""Used when both -s and --multiple are enabled.
+ Specify names for each manipulated PDF when saving (see -s) using a serial file
+ NAMESFILE. The format of NAMESFILE should be as follows: each target PDF
+ is an entry in NAMESFILE. For each entry, there should be a key {__save_morph_as__}
+ whose value specifies the name to save the manipulated PDF as. An example .json
+ serial file is shown in the PDFmorph manual.""",
+    )
+    group.add_option(
+        "--plot-parameter",
+        metavar="PLOTPARAM",
+        dest="plotparam",
+        help="""Used when both plotting and --multiple are enabled.
+ Choose a PLOTPARAM to plot for each morph (i.e. adding --plot-parameter=Pearson means the
+ program will display a plot of the Pearson correlation coefficient for each morph-target
+ pair). PLOTPARAM is not case sensitive, so both Pearson and pearson indicate the same
+ parameter. When PLOTPARAM is not specified, Rw values for each morph-target pair will be
+ plotted. PLOTPARAM will be displayed as the vertical axis label for the plot.""",
+    )
 
     # Defaults
     parser.set_defaults(multiple=False)
@@ -330,10 +338,11 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
         chain.append(helpers.TransformXtalRDFtoPDF())
         refpars.append("smear")
         config["smear"] = opts.smear
+        # Set baselineslope if not given
         config["baselineslope"] = opts.baselineslope
         if opts.baselineslope is None:
-            refpars.append("baselineslope")
             config["baselineslope"] = -0.5
+        refpars.append("baselineslope")
     # Size
     radii = [opts.radius, opts.pradius]
     nrad = 2 - radii.count(None)
@@ -370,8 +379,7 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
 
     # Now remove non-refinable parameters
     if opts.exclude is not None:
-        refpars = set(refpars) - set(opts.exclude)
-        refpars = list(refpars)
+        refpars = list(set(refpars) - set(opts.exclude))
 
     # Refine or execute the morph
     refiner = refine.Refiner(chain, x_morph, y_morph, x_target, y_target)
@@ -387,12 +395,15 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
                 if "scale" in refpars:
                     rptemp.append("scale")
                 refiner.refine(*rptemp)
+            # Adjust all parameters
             refiner.refine(*refpars)
         except ValueError as e:
             parser.custom_error(str(e))
-    elif "smear" in refpars and opts.baselineslope is None:
+    # Smear is not being refined, but baselineslope needs to refined to apply smear
+    # Note that baselineslope is only added to the refine list if smear is applied
+    elif "baselineslope" in refpars:
         try:
-            refiner.refine("baselineslope", baselineslope=-0.5)
+            refiner.refine("baselineslope", baselineslope=config["baselineslope"])
         except ValueError as e:
             parser.custom_error(str(e))
     else:
@@ -475,8 +486,13 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
     if not target_directory.is_dir():
         parser.custom_error(f"{target_directory} is not a directory. Go to --help for usage.")
 
-    # Do not morph morph_file against itself if it is in the same directory
+    # Get list of files from target directory
     target_list = list(target_directory.iterdir())
+    for target in target_list:
+        if target.is_dir():
+            target_list.remove(target)
+
+    # Do not morph morph_file against itself if it is in the same directory
     if morph_file in target_list:
         target_list.remove(morph_file)
 
