@@ -35,6 +35,8 @@ the plotted PDFs.
 Finally, we note that though ``PDFmorph`` should work on other spectra 
 that are not PDFs, it has not been extensively tested beyond the PDF.
 
+To get started, please download our :download:`user manual  <../pdfmorph.pdf>`
+or visit the :ref:`quick_start`.
 
 Authors
 -------
@@ -46,8 +48,6 @@ Christopher L. Farrow, Christopher J. Wright, Pavol Juhás, Chia-Hao
 
 For a detailed list of contributors, check `here 
 <https://github.com/diffpy/diffpy.pdfmorph/graphs/contributors>`_.
-
-To get started, please go to :ref:`quick_start`
 
 .. toctree::
    :maxdepth: 3

@@ -113,7 +113,8 @@ version using ::
 USING PDFmorph
 ------------------------------------------------------------------------
 
-For detailed instructions and full tutorial, consult online documentation.
+For detailed instructions and full tutorial, consult the user manual
+on our `website <www.diffpy.org/diffpy.pdfmorph/>`.
 
 Once the required software, including PDFmorph is all installed, open
 up a terminal and check installation has worked properly by running ::
