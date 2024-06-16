@@ -574,7 +574,7 @@ reproduce the calculated PDFs.
 
 Note that there are also support for morphing a nanoparticle PDF into bulk. For more information
 see @ref{PDFmorph options}. When applying these inverse morphs it is recommended to set
-@code{--rmax=psize} wher @code{psize} is the longest diameter of the nanoparticle as data
+@code{--rmax=psize} where @code{psize} is the longest diameter of the nanoparticle as data
 beyond @code{psize} is noise.
 
 @node    Spherical shape, Spheroidal shape, Nanoparticle shape effect, Nanoparticle shape effect
@@ -646,22 +646,212 @@ pdfmorph Ni_bulk.gr Ni_nano_spheroid.cgr --radius=12 --pradius=6 -a
 @end menu
 
 In this section, we detail the available morphs and the theory behind when they can
-(and should) be applied.
+(and should) be applied. For specifics on how to use these options in @code{PDFmorph},
+check out @ref{PDFmorph options} and the @ref{Tutorials}.
 
 @node    Temperature-related morphs, Shape-related morphs, Available morphs, Available morphs
 @section Temperature-related morphs
 @cindex  temperature-related morphs
 
-In this section, we describe the following morphs:
+Comparing two PDFs of the same material measured at different temperatures can produce large
+@math{R_W}s and signals in the difference curves. Though this can be due to a structural phase
+transition across the measurements, structure-preserving changes such as isotropic expansion/compression
+and thermal peak broadening/thinning can produce just as large @math{R_W} values.
+
+The following morph options are related to our discussion:
 @itemize
-@item @code{--stretch=STRETCH} -
-@item @code{--scale=SCALE} - scale the ordinate by
-@item @code{--smear=SMEAR} - convolute the
+@item @code{--stretch=STRETCH} - Stretch the abscissa by a factor @math{1+@code{STRETCH}}.
+@item @code{--scale=SCALE} - Scale the plotted function by a factor @code{SCALE}.
+@item @code{--smear=SMEAR} - Broaden the PDF peaks with a Gaussian smear of width (standard deviation)
+@code{SMEAR}.
 @end itemize
+
+@node    Isotropic expansion, Thermal broadening, Temperature-related morphs, Temperature-related morphs
+@subsection Isotropic expansion
+@cindex  isotropic expansion
+
+The effects of isotropic expansion/compression can be accounted for by scaling and stretching the PDF.
+To prove this, we will make use of the (total) radial distribution function (RDF), denoted @math{R(r)}.
+This function is related to the PDF through
+@displaymath
+G(r) = {R(r) \over r} - 4 \pi r \rho_0 \gamma_0(r)
+@end displaymath
+where @math{\rho_0} is atomic number density the and @math{\gamma_0(r)} is the nanoparticle form factor
+(see @ref{Shape-related morphs}). A partial RDF @math{R_i(r)} is defined such that @math{R_i(r)dr} gives
+the number of atoms in the spherical shell bounded by @math{r} and @math{r + dr} centered at atom @math{i}.
+The total RDF for an atomic system is the average of the partial RDFs of each atom in the system
+@footnote{Farrow, C.L. and Billinge, S.J.L. (2009), Relationship between the atomic pair distribution
+function and small-angle scattering: implications for modeling of nanoparticles. Acta Cryst. A, 65: 232-239.
+@url{https://doi.org/10.1107/S0108767309009714}}.
+@displaymath
+R(r) = {1 \over @#\;atoms}\sum^{atoms}_{i} R_i(r).
+@end displaymath
+Therefore, the integral of the RDF from @math{a} to @math{b} gives the number of atomic pairs per atom with
+a separation distance between @math{a} and @math{b}.
+
+When a material expands isotropically by a factor @math{\alpha}, all distances between pairs of atoms
+increase by a factor of @math{\alpha} (expansion by a factor of @math{0 < \alpha < 1} is considered compression).
+Therefore, the number of atomic pairs with separation distance between @math{a} and @math{b} before the expansion
+should equal the number of atomic pairs with separation distance between @math{\alpha a} and @math{\alpha b} after.
+Defining @math{R(r)} to be the RDF pre-expansion and @math{R'(r)} to be that post-expansion,
+@displaymath
+\int_a^b R(r)dr = \int_{\alpha a}^{\alpha b} R'(r)dr.
+@end displaymath
+A change of variables tells us
+@displaymath
+\int_a^b R(r)dr = \int_{\alpha a}^{\alpha b} {R(r/\alpha) \over \alpha}dr,
+@end displaymath
+and since these relations hold for all choices of @math{a \leq b},
+@displaymath
+R'(r) = {R(r/\alpha) \over \alpha}.
+@end displaymath
+
+The corresponding PDFs are
+@displaymath
+G(r) = {R(r) \over r} - 4\pi r\rho_0\gamma_0(r)
+@end displaymath
+pre-expansion, and
+@displaymath
+G'(r) = {R'(r) \over r} - 4\pi r \rho'_0\gamma'_0(r) = {{R(r/\alpha)} \over {\alpha r}} - 4\pi r \rho'_0\gamma'_0(r)
+@end displaymath
+post-expansion. Due to the expansion, the volume of the material has increased by @math{\alpha^3}, while the total number
+of atoms remains the same, meaning
+@displaymath
+\rho'_0 = {1 \over \alpha^3}\rho_0,
+@end displaymath
+and the nanoparticle form function is scaled
+@displaymath
+\gamma_0'(r) = \gamma_0(r/\alpha)
+@end displaymath
+(see the bottom of @ref{Shape-related morphs}).
+
+Finally, we can conclude that the PDF after expansion follows
+@displaymath
+G'(r) = {{R(r/\alpha)} \over {\alpha r}} - 4\pi r {{\rho_0} \over {\alpha^3}} \gamma_0(r / \alpha)
+= {{G(\alpha r)} \over \alpha^2},
+@end displaymath
+which is the original PDF scaled by a factor @math{1/\alpha^2} and stretched by @math{\alpha}.
+
+@node    Thermal broadening, , Isotropic expansion, Temperature-related morphs
+@subsection Thermal broadening
+@cindex  thermal broadening
+
+Peaks in the radial distribution functions (see @ref{Isotropic expansion}) obtained from measured PDFs have
+approximately Gaussian shapes due to Debye-Waller effects. The variance of each peak is the mean square
+atomic displacement factor (ADP), denoted @math{@={u^2}} which can depend on dynamic (temperature-dependent)
+and static factors. Models, such as the Debye model, generally separate the two: @math{@={u^2} =
+A(T) + A_{static}}, where @math{A(T)} increases with temperature.
+
+When a material consists of atoms with similar masses, the @math{A(T)} at each peak is approximately the
+same at a fixed temperature (motivated below). Therefore, an increase in temperature only serves to increase
+the ADP (and thus the variance of each Gaussian peak) by some fixed constant @math{\zeta^2}.
+@code{PDFmorph} simulates this effect by converting the morphed PDF into an RDF,
+convolving the RDF with a Gaussian of variance @math{\zeta^2} centered at @math{r=0},
+and converting back to a PDF. The convolution step increases the variance of each peak by @math{\zeta^2} exactly
+@footnote{Bromiley, P. (2003). Products and Convolutions of Gaussian Distributions.}.
+
+Using the Debye model @footnote{Dinnebier, R.E. and Billinge, S.J.L. (2018). Overview and principles of
+powder diffraction. In International Tables for Crystallography (eds C.P. Brock, T. Hahn, H. Wondratschek,
+U. Müller, U. Shmueli, E. Prince, A. Authier, V. Kopský, D.B. Litvin, E. Arnold, D.M. Himmel, M.G. Rossmann,
+S.R. Hall, B. McMahon, M.I. Aroyo, C.J. Gilmore, J.A. Kaduk, H. Schenk, C.J. Gilmore, J.A. Kaduk and H. Schenk).
+@url{https://doi.org/10.1107/97809553602060000935}}, we can motivate the statement that @math{A(T)} is
+similar for a material composed of similar-mass atoms. The model shows
+@displaymath
+A(T) = {{3h^2T^2} \over {4\pi^2Mk_B\theta_D^3}}\int_0^{\theta_D/T} {{x} \over {e^x - 1}} dx
++ {{3h^2} \over {16\pi^2Mk_B\theta_D}},
+@end displaymath
+where @math{M} is the mass of the oscillating atom,
+@math{\theta_D} is the Debye temperature of the (crystal) material, and @math{h} and @math{k_B} are Planck's
+constant and Boltzmann's constant respectively. Thus, when the @math{M} for each atom is similar,
+@math{A(T)} is also similar. Note also that @math{A(T)} is monotonically increasing
+as a function of temperature.
 
 @node    Shape-related morphs, , Temperature-related morphs, Available morphs
 @section Shape-related morphs
 @cindex  shape-related morphs
+
+The shape and size of a nanoparticle can affect its electronic and optical properties
+@footnote{Singh, M., Goyal, M., & Devlal, K. (2018). Size and shape effects on the band gap of semiconductor
+compound nanomaterials. Journal of Taibah University for Science, 12(4), 470–475.
+@url{https://doi.org/10.1080/16583655.2018.1473946}}.
+@code{PDFmorph} contains tools to help a researcher identify the shape and size of a nanoparticle PDF given a PDF of a
+bulk sample. The researcher should select a shape-related morph (listed below) associated with a particular shape and
+provide the bulk sample PDF as the morphed PDF and nanoparticle PDF as the target. @code{PDFmorph} will then multiply the
+nanoparticle form factor @math{\gamma(r)} for that particular shape to the bulk PDF and refine the parameters
+(e.g. the radius for a spherical shape) to best match the target. Significant difference curve signals or @math{R_W}s
+indicate large deviations from the desired shape, while small signals allow the user to extract size parameters
+(e.g. the radius of the sphere) from the fit.
+
+This approach has been used to estimate diameters of spherical CdSe nanoparticles consistent
+with those obtained from transmission electron microscopy, ultraviolet-visible spectroscopy, and photoluminescense
+measurements @footnote{Masadeh, A. S., Božin, E. S., Farrow, C. L., Paglia, G., Juhas, P., Billinge, S. J. L., Karkamkar,
+A., & Kanatzidis, M. G. (2007). Quantitative size-dependent structure and strain determination of CdSe nanoparticles
+using atomic pair distribution function analysis. Phys. Rev. B, 76(11), 115413.
+@url{https://doi.org/10.1103/PhysRevB.76.115413}}.
+
+The available shape morphs are listed below:
+@itemize
+@item @code{--radius=RADIUS} - Multiply the PDF by the nanoparticle form factor for a sphere of radius @code{RADIUS}.
+If used with @code{--pradius}, multiply the PDF by the nanoparticle form factor for a spheroid of equitorial radius
+@code{RADIUS} and polar radius @code{PRADIUS}.
+@itemize
+@item The sphere form factor was computed by Kodama et al. @footnote{Kodama, K., Iikubo, S., Taguchi, T., &
+Shamoto, S. (2006). Finite size effects of nanoparticles on the atomic pair distribution functions.
+Acta Crystallographica Section A, 62(6), 444–453. @url{https://doi.org/10.1107/S0108767306034635}}.
+@end itemize
+@item @code{--pradius=PRADIUS} - Multiply the PDF by the nanoparticle form factor for a spheroid of equitorial radius
+@code{RADIUS} and polar radius @code{PRADIUS}.
+@itemize
+@item The spheroid form factor was computed by Lei et al. @footnote{Lei, M., de Graff, A. M. R., Thorpe, M. F., Wells,
+S. A., & Sartbaeva, A. (2009). Uncovering the intrinsic geometry from the atomic pair distribution function of
+nanomaterials. Phys. Rev. B, 80(2), 024118. @url{https://doi.org/10.1103/PhysRevB.80.024118}}.
+@end itemize
+@item @code{--iradius=IRADIUS} - Divide the PDF by the nanoparticle form factor for a sphere of radius @code{IRADIUS}.
+If used with @code{--ipradius}, divide the PDF by the nanoparticle form factor for a spheroid of equitorial radius
+@code{IRADIUS} and polar radius @code{IPRADIUS}.
+@item @code{--ipradius=IPRADIUS} - Divide the PDF by the nanoparticle form factor for a spheroid of equitorial radius
+@code{IRADIUS} and polar radius @code{IPRADIUS}.
+@end itemize
+
+In the rest of this section, we will detail how the nanoparticle form factor is computed.
+We first need to define the shape function @math{s\vec{r}}, which is @math{1} within the nanoparticle and
+@math{0} outside. The unaveraged particle form factor @math{\gamma_0(\vec{r})} is the autocorrelation
+of this shape function averaged over the nanoparticle volume @math{V}.
+@displaymath
+\gamma_0(\vec{r}) = {1 \over V} \int \int \int s(\vec{r}')s(\vec{r}'+\vec{r})d\vec{r}'.
+@end displaymath
+In this manual, we refer to the angle-averaged version, denoted @math{\gamma_0(r)}, as the nanoparticle form factor.
+@displaymath
+\gamma_0(r) = {{\int d\phi \int d\theta \sin(\theta)r^2\gamma_0(\vec{r})} \over {\int d\phi \int d\theta r^2\sin(\theta)}}.
+@end displaymath
+This form factor is particularly useful as one can approximate the nanoparticle PDF @math{G_{nano}(r)}
+by multiplying the proper nanoparticle form factor with the bulk PDF @math{G_{bulk}(r)}
+@footnote{Farrow, C.L. and Billinge, S.J.L. (2009), Relationship between the atomic pair distribution function and
+small-angle scattering: implications for modeling of nanoparticles. Acta Cryst. A, 65: 232-239.
+@url{https://doi.org/10.1107/S0108767309009714}}
+as follows
+@displaymath
+G_{nano}(r) = \gamma(r)G_{bulk}(r).
+@end displaymath
+
+Finally, an important property of the nanoparticle form factor @math{\gamma_0(r)} that we use in @ref{Isotropic expansion}
+is that, after undergoing isotropic expansion by a factor @math{\alpha}, the new form factor @math{\gamma'(r)} is a stretched
+version of the original form factor: @math{\gamma'_0(r) = \gamma_0(r / \alpha)}. To show this, consider the new shape function
+@math{s'(\alpha \vec{r}) = s(\vec{r})} as each point @math{\vec{r}} pre-expansion is mapped to a point @math{\alpha\vec{r}}
+post-expansion. The volume of the nanoparticle also increases by a factor @math{\alpha^3}, so
+@displaymath
+\gamma'_0(\vec{r}) = {1 \over {\alpha^3 V}} \int \int \int s'(\vec{r}')s'(\vec{r}'+\vec{r})d\vec{r}'.
+@end displaymath
+Aplying a change of variables @math{\vec{r}' \rightarrow \vec{r}' / \alpha} gives
+@displaymath
+\gamma'_0(\vec{r}) = {1 \over {\alpha^3 V}} \int \int \int s'(\alpha \vec{r}')s'(\alpha \vec{r}'+\vec{r})\alpha^3d\vec{r}',
+@end displaymath
+and substituting @math{s'(\alpha \vec{r}) = s(\vec{r})} gives
+@displaymath
+\gamma'_0(\vec{r}) = {1 \over V} \int \int \int s(\vec{r}')s(\vec{r}'+\vec{r}/\alpha)d\vec{r}'
+= \gamma_0(\vec{r} / \alpha).
+@end displaymath
+Taking the angle-averaged integrals gives the desired relation @math{\gamma'_0(r) = \gamma'_0(r/\alpha)}.
 
 @page
 @vskip 0pt plus 1filll
@@ -697,7 +887,7 @@ for each morph done. To specify names for each saved PDF file, use the
 @noindent @code{-v, --verbose}
 @* @indent Increase the amount of information saved to the file(s) generated
 by @code{--save}. Without this option enabled, only the morphed PDF table will be
-saved (the table of @math{r} and corresponding @math{g(r)} values). When enabled,
+saved (the table of @math{r} and corresponding @math{G(r)} values). When enabled,
 information about the input and refined morph parameters (when applicable) and
 the @math{R_W} and Pearson correlation coefficient will be saved as parameters
 above the PDF table.
@@ -741,7 +931,7 @@ parameter @math{0.1} for smear. However, @code{--exclude=Scale} will not stop
 
 @noindent @code{--scale=SCALE}
 @* @indent Apply a scale factor @code{SCALE} to the function being plotted. For instance,
-scaling @math{g(r)} by @code{SCALE} will return @math{@code{SCALE}*g(r)}.
+scaling @math{G(r)} by @code{SCALE} will return @math{@code{SCALE}*G(r)}.
 
 @noindent @code{--smear=SMEAR}
 @* @indent Smear the PDF peaks with a Gaussian of width (standard deviation) @math{abs(@code{SMEAR})}.
@@ -753,7 +943,7 @@ refined if not provided by the user in the @code{--slope} option.
 
 @noindent @code{--stretch}
 @* @indent Stretch the function being plotted along the abscissa by a factor of @math{1 + @code{STRETCH}}.
-For example, if the original function is @math{g(r)}, the stretch returns @math{g(r/(1+@code{STRETCH}))}.
+For example, if the original function is @math{G(r)}, the stretch returns @math{g(r/(1+@code{STRETCH}))}.
 The returned PDF will always only be defined between @code{RMIN} and @code{RMAX} (see @code{--rmin}
 and @code{--rmax}). The @code{STRETCH} coefficient must be larger than @math{-1} and values in the
 range @math{(-1, 0)} will compress the function and set the remaining portion of the function up to
@@ -796,7 +986,7 @@ difference curve shown below. The following changes occur when @code{--multiple}
 another parameter is specified by @code{--plot-parameter}. (2) The plot will be a bar chart
 where the abscissa names are the file names of the target PDFs unless otherwise specified by
 @code{--sort-by}. If the parameter given to @code{--sort-by} has numerical value, the plot
-will be a line chart; otherwise, a bar chart the parameter values as the absicssa names will
+will be a line chart; otherwise, a bar chart the parameter values as the abscissa names will
 be plotted. By default, ASCII sort order is used for the bar chart abscissa names, but
 @code{--reverse} can be used to reverse the order.
 
@@ -818,7 +1008,7 @@ the target file name will be used as the label.
 @* @indent @indent The maximum @math{r}-value (abscissa) to plot. If not specified, @code{RMAX} will be used.
 
 @noindent @code{--maglim=MAGLIM}
-@* @indent The function @math{g(r)} will be magnified by @code{MAG} for @math{r>@code{MAGLIM}}. This may
+@* @indent The function @math{G(r)} will be magnified by @code{MAG} for @math{r>@code{MAGLIM}}. This may
 be useful as PDF amplitude can get very small for large @math{r}. No magnification will take place if
 @code{--maglim} is not specified.
 
@@ -846,7 +1036,7 @@ be sorted in ASCII sort order order unless a sorting parameter is specified by @
 @noindent @code{--sort-by=FIELD}
 @* @indent Used with @code{--multiple}. Sort the files in @code{TARGET_DIRECTORY} by some parameter
 named @code{FIELD}. Parameters can be specified within each target PDF file by lines of the form
-@code{<PARAM_NAME> = <PARAM_VALUE>} in the header (anywhere above the @math{r} versus @math{g(r)}
+@code{<PARAM_NAME> = <PARAM_VALUE>} in the header (anywhere above the @math{r} versus @math{G(r)}
 data table). @code{PDFmorph} will attempt to find a parameter named @code{FIELD} using a
 case-insensitive search. Numerical @code{PARAM_VALUE} will be sorted in ascending order and
 non-numerical ones will be sorted in ASCII sort order.
