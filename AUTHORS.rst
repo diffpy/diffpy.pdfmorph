@@ -1,11 +1,10 @@
 Authors
-====================
+=======
 
-Christopher L. Farrow, Christopher James Wright, Pavol Juhas,
-Chia-Hao (Timothy) Liu, Timur Davis, S. Matthew Román, Simon J.L. 
-Billinge
+Billinge Group and community contibutors.
 
 Contributors
 ------------
-For a list of contributors, visit 
+
+For a list of contributors, visit
 https://github.com/diffpy/diffpy.pdfmorph/graphs/contributors

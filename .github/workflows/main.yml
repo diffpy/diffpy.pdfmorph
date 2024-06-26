@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - CI
   pull_request:
   workflow_dispatch:
 
@@ -19,9 +20,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: diffpy/diffpy.pdfmorph
-          # for bookkeeping have diffpy.pdfmorph at the same level as everything else in the
-          # directory tree
           path: .
+          fetch-depth: 0  # avoid shallow clone with no tags
 
       - name: initialize miniconda
         # this uses a marketplace action that sets up miniconda in a way that makes
@@ -36,7 +36,7 @@ jobs:
           python-version: 3
           auto-activate-base: false
 
-      - name: install pdfmorph requirements
+      - name: install diffpy.pdfmorph requirements
         shell: bash -l {0}
         run: |
           conda config --set always_yes yes --set changeps1 no
@@ -45,12 +45,10 @@ jobs:
           conda install --file requirements/run.txt
           conda install --file requirements/test.txt
           pip install .
-
-      - name: Validate pdfmorph
+      - name: Validate diffpy.pdfmorph
         shell: bash -l {0}
         run: |
           conda activate test
-          pdfmorph --help  # Check run on command line
-          python -m coverage run run_tests.py  # use `python -m` to search for modules within env
+          coverage run -m pytest -vv -s
           coverage report -m
           codecov
