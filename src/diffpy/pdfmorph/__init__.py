@@ -15,10 +15,17 @@
 
 """Tools for manipulating and comparing PDF profiles"""
 
+# key used when saving multiple morphs
+__save_morph_as__ = "save_morph_as"
+
 # package version
 from diffpy.pdfmorph.version import __version__
 
 # silence the pyflakes syntax checker
 assert __version__ or True
+
+# key used when saving multiple morphs
+__save_morph_as__ = "save_morph_as"
+
 
 # End of file
