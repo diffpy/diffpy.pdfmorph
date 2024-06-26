@@ -1,25 +1,24 @@
 #!/usr/bin/env python
 ##############################################################################
 #
-# pdfmorph          by DANSE Diffraction group
-#                   Simon J. L. Billinge
-#                   (c) 2006 trustees of the Michigan State University.
-#                   All rights reserved.
+# (c) 2024 The Trustees of Columbia University in the City of New York.
+# All rights reserved.
 #
-# File coded by:    Chris Farrow
+# File coded by: Billinge Group members and community contributors.
 #
-# See AUTHORS.txt for a list of people who contributed.
-# See LICENSE.txt for license information.
+# See GitHub contributions for a more detailed list of contributors.
+# https://github.com/diffpy/diffpy.pdfmorph/graphs/contributors
+#
+# See LICENSE.rst for license information.
 #
 ##############################################################################
 
-"""Tools for manipulating and comparing PDFs.
-"""
+"""Tools for manipulating and comparing PDF profiles"""
 
-# top-level import
-from diffpy.pdfmorph.pdfmorph_api import morph_default_config, pdfmorph, plot_morph  # noqa: F401
+# package version
+from diffpy.pdfmorph.version import __version__
 
-# key used when saving multiple morphs
-__save_morph_as__ = "save_morph_as"
+# silence the pyflakes syntax checker
+assert __version__ or True
 
 # End of file
