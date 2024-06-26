@@ -1,6 +1,6 @@
 [run]
 source =
-    src/diffpy/pdfmorph/
+    diffpy.pdfmorph
 [report]
 omit =
     */python?.?/*

@@ -12,23 +12,24 @@
 # See LICENSE.rst for license information.
 #
 ##############################################################################
-"""Convenience module for executing all unit tests with
-python -m diffpy.pdfmorph.tests.run
+
+"""
+Convenience module for debugging the unit tests using
+
+python -m diffpy.pdfmorph.tests.debug
+
+Exceptions raised by failed tests or other errors are not caught.
 """
 
-import sys
-
-import pytest
 
 if __name__ == "__main__":
-    # show output results from every test function
-    args = ["-v"]
-    # show the message output for skipped and expected failure tests
-    if len(sys.argv) > 1:
-        args.extend(sys.argv[1:])
-    print("pytest arguments: {}".format(args))
-    # call pytest and exit with the return code from pytest
-    exit_res = pytest.main(args)
-    sys.exit(exit_res)
+    import sys
+
+    from diffpy.pdfmorph.tests import testsuite
+
+    pattern = sys.argv[1] if len(sys.argv) > 1 else ""
+    suite = testsuite(pattern)
+    suite.debug()
+
 
 # End of file

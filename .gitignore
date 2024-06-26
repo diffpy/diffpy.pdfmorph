@@ -20,9 +20,14 @@ lib64/
 parts/
 sdist/
 var/
+venv/
 *.egg-info/
 .installed.cfg
 *.egg
+bin/
+temp/
+tags/
+errors.err
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -33,6 +38,7 @@ var/
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+MANIFEST
 
 # Unit test / coverage reports
 htmlcov/
@@ -49,48 +55,45 @@ coverage.xml
 *.mo
 *.pot
 
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
 # Django stuff:
 *.log
-local_settings.py
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
 
 # Sphinx documentation
-docs/_build/
+docs/build/
+docs/source/generated/
+
+# pytest
+.pytest_cache/
 
 # PyBuilder
 target/
 
-# IPython Notebook
-.ipynb_checkpoints
+# Editor files
+# mac
+.DS_Store
+*~
 
-# pyenv
-.python-version
-
-# celery beat schedule file
-celerybeat-schedule
-
-# dotenv
-.env
-
-# virtualenv
-venv/
-ENV/
-
-# Spyder project settings
-.spyderproject
-
-# Rope project settings
-.ropeproject
+# vim
+*.swp
+*.swo
 
 # pycharm
 .idea/
-# Mac
-.DS_Store
+
+# VSCode
+.vscode/
+
+# Ipython Notebook
+.ipynb_checkpoints
+
+# version information
+setup.cfg
+/src/diffpy/*/version.cfg
+
 # Rever
 rever/
