@@ -4,6 +4,15 @@ Release Notes
 
 .. current developments
 
+0.1.1
+=====
+
+**Fixed:**
+
+* README title so that it is valid syntax for uploading to PyPi
+
+
+
 0.1.0
 =====
 
