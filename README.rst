@@ -1,5 +1,5 @@
 |Icon| `diffpy.pdfmorph <https://diffpy.github.io/diffpy.pdfmorph>`_
-=========================================================
+====================================================================
 
 .. |Icon| image:: https://avatars.githubusercontent.com/diffpy
         :target: https://diffpy.github.io/diffpy.pdfmorph
