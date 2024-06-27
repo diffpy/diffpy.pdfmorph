@@ -4,6 +4,23 @@ Release Notes
 
 .. current developments
 
+0.1.0
+=====
+
+**Added:**
+
+* Add ability to perform multiple morphs in one call using --multiple.
+  * A FILE is morphed against every file in a given DIRECTORY.
+  * Can sort PDFs by some field parameter in the header using --sort-by.
+  * Can also find the field from some serialized metadata file using --serial-file.
+* pdfmorph python function call, which reproduce the application
+
+**Changed:**
+
+* Can now use --verbose tag to limit amount of header information
+
+
+
 v0.0.1
 ====================
 
