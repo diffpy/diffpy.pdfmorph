@@ -15,8 +15,8 @@
 
 import sys
 import time
-from pathlib import Path
 from importlib.metadata import version
+from pathlib import Path
 
 autodoc_mock_imports = [
     "diffpy.utils",
