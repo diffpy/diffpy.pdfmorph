@@ -5,7 +5,7 @@ PDFmorph Tutorial
 
 Welcome! This will be a quick tutorial to accquaint users with PDFmorph
 and some of what it can do. For a more detailed tutorial, check out
-our :download:`user manual <../pdfmorph.pdf>`.
+our :download:`user manual <../manual/pdfmorph.pdf>`.
 
 As we described in the README and installation instructions, please make
 sure that you are familiar with working with your command line terminal
@@ -36,7 +36,7 @@ Basic PDFmorph Workflow
     3. Using the ``mkdir`` command, create a directory where you'll
        store the tutorial PDF files and use the ``cd`` command to change
        into that directory. You can download the tutorial files
-       :download:`here <../../../tutorial/tutorialData.zip>`.
+       :download:`here <../../tutorial/tutorialData.zip>`.
        Then, ``cd`` into the ``tutorialData`` directory.
 
        * The files in this dataset were collected by Soham Banerjee
@@ -179,13 +179,14 @@ Enjoy the software!
 .. Additional PDFmorph Functionality/Exploration
 .. ---------------------------------------------
 .. TODO include undoped PDF example
+
 Extra Tutorials
 ===============
 PDFmorph has some more functionalities not showcased in the basic workflow above
 (see `pdfmorph --help` for an overview of these functionalities).
 Tutorials for these additional functionalities are included below. Additional
 files for these tutorials can be downloaded
-:download:`here <../../../tutorial/additionalData.zip>`.
+:download:`here <../../tutorial/additionalData.zip>`.
 
 Performing Multiple Morphs
 --------------------------
