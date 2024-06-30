@@ -1,5 +1,5 @@
 numpy
 scipy
 diffpy.utils
-matplotlib
+matplotlib-base
 bg-mpl-stylesheets
