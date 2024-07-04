@@ -71,6 +71,25 @@ If you use diffpy.pdfmorph in a scientific publication, we would like you to cit
 
         diffpy.pdfmorph Package, https://github.com/diffpy/diffpy.pdfmorph
 
+REQUIREMENTS
+------------------------------------------------------------------------
+
+PDFmorph is currently run from the command line, which requires opening
+and typing into a terminal window or Windows command prompt. It is 
+recommended that you consult online resources and become somewhat 
+familiar before using PDFmorph.
+
+PDFmorph can be run with Python 3.10 or higher. It makes use of several third party
+libraries that you'll need to run the app and its components.
+
+* `NumPy`              - library for scientific computing with Python
+* `matplotlib`         - Python 2D plotting library
+* `SciPy`              - library for highly technical Python computing
+* `diffpy.utils`       - `shared helper utilities <https://github.com/diffpy/diffpy.utils/>`_ for wx GUI
+
+These dependencies will be installed automatically if you use the conda
+installation procedure described below.
+
 Installation
 ------------
 
