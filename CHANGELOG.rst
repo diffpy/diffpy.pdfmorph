@@ -4,6 +4,16 @@ Release Notes
 
 .. current developments
 
+0.1.2
+=====
+
+**Changed:**
+
+* downgraded matplotlib requirement to matplotlib-base
+* updated imports of bg-mpl-stylesheets for latest release of that code
+
+
+
 0.1.1
 =====
 
