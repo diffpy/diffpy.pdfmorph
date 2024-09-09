@@ -4,10 +4,9 @@
 import numpy as np
 
 from diffpy.pdfmorph.pdfmorph_api import morph_default_config, pdfmorph
-from diffpy.pdfmorph.tests.test_morphstretch import heaviside
 
 
-def test_morphfunc_verbose():
+def test_morphfunc_verbose(heaviside):
     lb, ub = 1, 2
     x_target = np.arange(0.01, 5, 0.01)
     y_target = heaviside(x_target, lb, ub)
@@ -19,7 +18,7 @@ def test_morphfunc_verbose():
     pdfmorph(x_morph, y_morph, x_target, y_target, verbose=True, **cfg)
 
 
-def test_fixed_morph_with_morphfunc():
+def test_fixed_morph_with_morphfunc(heaviside):
     lb, ub = 1, 2
     x_target = np.arange(0.01, 5, 0.01)
     y_target = heaviside(x_target, lb, ub)
@@ -40,7 +39,7 @@ def test_fixed_morph_with_morphfunc():
     )
 
 
-def test_stretch_with_morphfunc():
+def test_stretch_with_morphfunc(heaviside):
     # use the same setup as test_moprhchain
     lb, ub = 1, 2
     x_target = np.arange(0.01, 5, 0.01)
@@ -62,7 +61,7 @@ def test_stretch_with_morphfunc():
     assert np.allclose(-stretch, morphed_cfg["stretch"], atol=1e-1)
 
 
-def test_scale_with_morphfunc():
+def test_scale_with_morphfunc(heaviside):
     lb, ub = 1, 2
     x_target = np.arange(0.01, 5, 0.01)
     y_target = heaviside(x_target, lb, ub)

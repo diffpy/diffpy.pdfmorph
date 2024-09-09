@@ -6,11 +6,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from diffpy.pdfmorph.pdfmorph_api import morph_default_config, pdfmorph, plot_morph
-from diffpy.pdfmorph.tests.test_morphstretch import heaviside
 
 
 # smoke test
-def test_plot_morph():
+def test_plot_morph(heaviside):
     lb, ub = 1, 2
     x_target = np.arange(0.01, 5, 0.01)
     y_target = heaviside(x_target, lb, ub)

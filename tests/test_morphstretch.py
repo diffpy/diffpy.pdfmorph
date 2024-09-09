@@ -16,7 +16,7 @@ tests_dir = os.path.dirname(os.path.abspath(thisfile))
 
 class TestMorphStretch:
     @pytest.fixture
-    def setup(self):
+    def setup(self, heaviside):
         self.x_morph = numpy.arange(0.01, 5, 0.01)
         # A step function between 2 and 3
         self.y_morph = heaviside(self.x_morph, 1, 2)
@@ -24,7 +24,7 @@ class TestMorphStretch:
         self.y_target = self.x_target.copy()
         return
 
-    def test_morph(self, setup):
+    def test_morph(self, setup, heaviside):
         """check MorphStretch.morph()"""
         morph = MorphStretch()
 
@@ -61,14 +61,6 @@ class TestMorphStretch:
 
 
 # End of class TestMorphSmear
-
-
-def heaviside(x, lb, ub):
-    """The Heaviside function."""
-    y = numpy.ones_like(x)
-    y[x < lb] = 0.0
-    y[x > ub] = 0.0
-    return y
 
 
 if __name__ == "__main__":

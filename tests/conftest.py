@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 
@@ -17,3 +18,16 @@ def user_filesystem(tmp_path):
         json.dump(home_config_data, f)
 
     yield tmp_path
+
+
+@pytest.fixture
+def heaviside():
+    """The Heaviside function as a pytest fixture."""
+
+    def heaviside_function(x, lb, ub):
+        y = np.ones_like(x)
+        y[x < lb] = 0.0
+        y[x > ub] = 0.0
+        return y
+
+    return heaviside_function
