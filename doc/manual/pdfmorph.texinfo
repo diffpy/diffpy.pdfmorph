@@ -728,7 +728,7 @@ and the nanoparticle form function is scaled
 Finally, we can conclude that the PDF after expansion follows
 @displaymath
 G'(r) = {{R(r/\alpha)} \over {\alpha r}} - 4\pi r {{\rho_0} \over {\alpha^3}} \gamma_0(r / \alpha)
-= {{G(\alpha r)} \over \alpha^2},
+= {{G(r/\alpha)} \over \alpha^2},
 @end displaymath
 which is the original PDF scaled by a factor @math{1/\alpha^2} and stretched by @math{\alpha}.
 
