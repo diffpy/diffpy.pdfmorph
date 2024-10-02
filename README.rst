@@ -75,8 +75,8 @@ REQUIREMENTS
 ------------------------------------------------------------------------
 
 PDFmorph is currently run from the command line, which requires opening
-and typing into a terminal window or Windows command prompt. It is 
-recommended that you consult online resources and become somewhat 
+and typing into a terminal window or Windows command prompt. It is
+recommended that you consult online resources and become somewhat
 familiar before using PDFmorph.
 
 PDFmorph can be run with Python 3.10 or higher. It makes use of several third party
@@ -160,7 +160,7 @@ Support and Contribute
 
 `Diffpy user group <https://groups.google.com/g/diffpy-users>`_ is the discussion forum for general questions and discussions about the use of diffpy.pdfmorph. Please join the diffpy.pdfmorph users community by joining the Google group. The diffpy.pdfmorph project welcomes your expertise and enthusiasm!
 
-If you see a bug or want to request a feature, please `report it as an issue <https://github.com/diffpy/diffpy.pdfmorph/issues>`_ and/or `submit a fix as a PR <https://github.com/diffpy/diffpy.pdfmorph/pulls>`_. You can also post it to the `Diffpy user group <https://groups.google.com/g/diffpy-users>`_. 
+If you see a bug or want to request a feature, please `report it as an issue <https://github.com/diffpy/diffpy.pdfmorph/issues>`_ and/or `submit a fix as a PR <https://github.com/diffpy/diffpy.pdfmorph/pulls>`_. You can also post it to the `Diffpy user group <https://groups.google.com/g/diffpy-users>`_.
 
 Feel free to fork the project and contribute. To install diffpy.pdfmorph
 in a development mode, with its sources being directly used by Python
