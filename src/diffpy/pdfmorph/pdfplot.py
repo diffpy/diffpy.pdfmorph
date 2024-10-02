@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 import numpy
 from bg_mpl_stylesheets.styles import all_styles
 
-plt.style.use(all_styles["bg_style"])
+plt.style.use(all_styles["bg-style"])
 
 
 # FIXME - make this return the figure object in the future, so several views
