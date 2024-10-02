@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=62.0", "setuptools-git-versioning<2"]
+requires = ["setuptools>=62.0", "setuptools-git-versioning>=2.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "diffpy.pdfmorph"
-dynamic=['version']
+dynamic=['version', 'dependencies']
 authors = [
   { name="Simon J.L. Billinge group", email="simon.billinge@gmail.com" },
 ]
@@ -37,10 +37,7 @@ pdfmorph = "diffpy.pdfmorph.pdfmorphapp:main"
 
 [project.urls]
 Homepage = "https://github.com/diffpy/diffpy.pdfmorph/"
-Issues = "https://github.com/diffpy/diffpy.pdfmorph/issues"
-
-[tool.pytest.ini_options]
-pythonpath = ["src"]
+Issues = "https://github.com/diffpy/diffpy.pdfmorph/issues/"
 
 [tool.setuptools-git-versioning]
 enabled = true
@@ -51,8 +48,11 @@ dirty_template = "{tag}"
 [tool.setuptools.packages.find]
 where = ["src"]  # list of folders that contain the packages (["."] by default)
 include = ["*"]  # package names should match these glob patterns (["*"] by default)
-exclude = ["diffpy.pdfmorph.tests*"]  # exclude packages matching these glob patterns (empty by default)
+exclude = ["tests"]  # exclude packages matching these glob patterns (empty by default)
 namespaces = false  # to disable scanning PEP 420 namespaces (true by default)
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements/run.txt"]}
 
 [tool.black]
 line-length = 115
