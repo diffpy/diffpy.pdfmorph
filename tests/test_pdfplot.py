@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from diffpy.pdfmorph.pdfmorph_api import morph_default_config, pdfmorph, plot_morph
-from diffpy.pdfmorph.tests.test_morphstretch import heaviside
+from tests.test_morphstretch import heaviside
 
 
 # smoke test

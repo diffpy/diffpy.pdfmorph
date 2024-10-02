@@ -183,5 +183,5 @@ Enjoy the software!
 Bug Reports
 -----------
 
-Please enjoy using our software! If you come accross any bugs in the 
+Please enjoy using our software! If you come accross any bugs in the
 application, please report them to diffpy-dev@googlegroups.com
