@@ -4,7 +4,7 @@
 import numpy as np
 
 from diffpy.pdfmorph.pdfmorph_api import morph_default_config, pdfmorph
-from diffpy.pdfmorph.tests.test_morphstretch import heaviside
+from tests.test_morphstretch import heaviside
 
 
 def test_morphfunc_verbose():
