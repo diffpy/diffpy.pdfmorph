@@ -104,14 +104,16 @@ To add "conda-forge" to the conda channels, run the following in a terminal. ::
 We want to install our packages in a suitable conda environment.
 The following creates and activates a new environment named ``diffpy.pdfmorph_env`` ::
 
-        conda create -n diffpy.pdfmorph_env python=3
+        conda create -n diffpy.pdfmorph_env diffpy.pdfmorph
         conda activate diffpy.pdfmorph_env
 
-Then, to fully install ``diffpy.pdfmorph`` in our active environment, run ::
+To confirm that the installation was successful, type::
 
-        conda install diffpy.pdfmorph
+        python -c "import diffpy.pdfmorph; print(diffpy.pdfmorph.__version__)"
 
-Another option is to use ``pip`` to download and install the latest release from
+        The output should print the latest version displayed on the badges above.
+
+If the above does not work, you can use ``pip`` to download and install the latest release from
 `Python Package Index <https://pypi.python.org>`_.
 To install using ``pip`` into your ``diffpy.pdfmorph_env`` environment, we will also have to install dependencies ::
 
@@ -126,6 +128,11 @@ If you prefer to install from sources, after installing the dependencies, obtain
 and run the following ::
 
         pip install .
+
+Getting Started
+---------------
+
+You may consult our `online documentation <https://diffpy.github.io/diffpy.pdfmorph>`_ for tutorials and API references.
 
 USING PDFmorph
 ------------------------------------------------------------------------
