@@ -4,6 +4,23 @@ Release Notes
 
 .. current developments
 
+0.1.3
+=====
+
+**Added:**
+
+* Add GitHub action to build wheel, release, upload.
+* Add issue and bug report templates.
+
+**Changed:**
+
+* README file installation instructions updated.
+
+**Fixed:**
+
+* Mathematical error in manual
+
+
 0.1.2
 =====
 
