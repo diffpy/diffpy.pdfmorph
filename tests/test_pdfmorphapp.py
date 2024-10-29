@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from diffpy.pdfmorph.pdfmorphapp import create_option_parser, multiple_morphs, single_morph
+from diffpy.pdfmorph.pdfmorphapp import create_option_parser, multiple_targets, single_morph
 
 thisfile = locals().get("__file__", "file.py")
 tests_dir = Path(thisfile).parent.resolve()
@@ -87,12 +87,12 @@ class TestApp:
         with pytest.raises(SystemExit):
             single_morph(self.parser, opts, pargs, stdout_flag=False)
         with pytest.raises(SystemExit):
-            multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+            multiple_targets(self.parser, opts, pargs, stdout_flag=False)
         (opts, pargs) = self.parser.parse_args(["too", "many", "files"])
         with pytest.raises(SystemExit):
             single_morph(self.parser, opts, pargs, stdout_flag=False)
         with pytest.raises(SystemExit):
-            multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+            multiple_targets(self.parser, opts, pargs, stdout_flag=False)
 
         # Make sure rmax greater than rmin
         (opts, pargs) = self.parser.parse_args([f"{nickel_PDF}", f"{nickel_PDF}", "--rmin", "10", "--rmax", "1"])
@@ -112,20 +112,20 @@ class TestApp:
         with pytest.raises(SystemExit):
             single_morph(self.parser, opts, pargs, stdout_flag=False)
         with pytest.raises(SystemExit):
-            multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+            multiple_targets(self.parser, opts, pargs, stdout_flag=False)
 
         # Ensure first parg is a FILE and second parg is a DIRECTORY
         (opts, pargs) = self.parser.parse_args([f"{nickel_PDF}", f"{nickel_PDF}"])
         with pytest.raises(SystemExit):
-            multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+            multiple_targets(self.parser, opts, pargs, stdout_flag=False)
         (opts, pargs) = self.parser.parse_args([f"{testsequence_dir}", f"{testsequence_dir}"])
         with pytest.raises(SystemExit):
-            multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+            multiple_targets(self.parser, opts, pargs, stdout_flag=False)
 
         # Try sorting by non-existing field
         (opts, pargs) = self.parser.parse_args([f"{nickel_PDF}", f"{testsequence_dir}", "--sort-by", "fake_field"])
         with pytest.raises(SystemExit):
-            multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+            multiple_targets(self.parser, opts, pargs, stdout_flag=False)
         (opts, pargs) = self.parser.parse_args(
             [
                 f"{nickel_PDF}",
@@ -137,21 +137,21 @@ class TestApp:
             ]
         )
         with pytest.raises(SystemExit):
-            multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+            multiple_targets(self.parser, opts, pargs, stdout_flag=False)
 
         # Try plotting an unknown parameter
         (opts, pargs) = self.parser.parse_args(
             [f"{nickel_PDF}", f"{testsequence_dir}", "--plot-parameter", "unknown"]
         )
         with pytest.raises(SystemExit):
-            multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+            multiple_targets(self.parser, opts, pargs, stdout_flag=False)
 
         # Try plotting an unrefined parameter
         (opts, pargs) = self.parser.parse_args(
             [f"{nickel_PDF}", f"{testsequence_dir}", "--plot-parameter", "stretch"]
         )
         with pytest.raises(SystemExit):
-            multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+            multiple_targets(self.parser, opts, pargs, stdout_flag=False)
 
     def test_morphsequence(self, setup_morphsequence):
         # Parse arguments sorting by field
@@ -164,12 +164,12 @@ class TestApp:
         morph_file = self.testfiles[0]
         for target_file in self.testfiles[1:]:
             pargs = [morph_file, target_file]
-            # store in same format of dictionary as multiple_morphs
+            # store in same format of dictionary as multiple_targets
             single_results.update({target_file.name: single_morph(self.parser, opts, pargs, stdout_flag=False)})
         pargs = [morph_file, testsequence_dir]
 
         # Run a morph sequence
-        sequence_results = multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+        sequence_results = multiple_targets(self.parser, opts, pargs, stdout_flag=False)
 
         # Compare results
         assert sequence_results == single_results
@@ -190,7 +190,7 @@ class TestApp:
             ]
         )
         pargs = [morph_file, testsequence_dir]
-        s_sequence_results = multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+        s_sequence_results = multiple_targets(self.parser, opts, pargs, stdout_flag=False)
         assert s_sequence_results == sequence_results
 
 
