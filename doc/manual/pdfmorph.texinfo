@@ -462,10 +462,10 @@ Long Yang.
 @item Let us start by getting the @math{R_W} of @code{SrFe2As2_150K.gr}
 compared to the other, higher-temperature PDFs in the directory. Run
 @example
-pdfmorph SrFe2As2_150K.gr . --multiple
+pdfmorph SrFe2As2_150K.gr . --multiple-targets
 @end example
 @itemize
-@item The @code{--multiple} tag tells @code{PDFmorph} to compare the morphed file
+@item The @code{--multiple-targets} tag tells @code{PDFmorph} to compare the morphed file
 @code{SrFe2As2_150K.gr} against all PDFs in a directory. The directory we have
 supplied is @code{.}, which is shorthand for the current working directory.
 In our case, this is the @code{morphMultiple} directory.
@@ -489,7 +489,7 @@ included are temperature, wavelength, and composition.}
 @end float
 @item By running
 @example
-pdfmorph SrFe2As2_150K.gr . --multiple --sort-by=temperature
+pdfmorph SrFe2As2_150K.gr . --multiple-targets --sort-by=temperature
 @end example
 we can sort the plotted @math{R_W} values by the temperature parameter included within each file.
 @itemize
@@ -506,7 +506,7 @@ instead of @code{temperature}.
 a phase change. To be more certain, let us apply morphs to take into account isotropic expansion and differences
 in incident flux (stretching and scaling).
 @example
-pdfmorph SrFe2As2_150K.gr . --scale=1 --stretch=0 --multiple \
+pdfmorph SrFe2As2_150K.gr . --scale=1 --stretch=0 --multiple-targets \
 --sort-by=temperature
 @end example
 The change in @math{R_W} has become more pronounced.
@@ -517,7 +517,7 @@ not significantly change the @math{R_W} values in this example.
 @item We can also change what is being plotted in the ordinate using @code{--plot-parameter}. In our case,
 it is useful to look at the @code{stretch} factor
 @example
-pdfmorph SrFe2As2_150K.gr . --scale=1 --stretch=0 --multiple \
+pdfmorph SrFe2As2_150K.gr . --scale=1 --stretch=0 --multiple-targets \
 --sort-by=temperature --plot-parameter=stretch
 @end example
 We can see that the stretch factor generally increases, but from @math{192K} to @math{198K}, there is no increase.
@@ -533,7 +533,7 @@ can be done with @url{https://www.diffpy.org/products/pdfgui, PDFgui}.
 @end float
 @item Finally, let us save all the morphed PDFs into a directory named @code{savedMorphs}.
 @example
-pdfmorph SrFe2As2_150K.gr . --scale=1 --stretch=0 --multiple \
+pdfmorph SrFe2As2_150K.gr . --scale=1 --stretch=0 --multiple-targets \
 --sort-by=temperature --plot-parameter=stretch \
 --save=savedMorphs
 @end example
@@ -877,8 +877,8 @@ the residual with the target PDF.
 @noindent @code{-s NAME, --save=NAME}
 @* @indent Save the morphed PDF into a file named @code{NAME}. You can use
 @code{-} to save to @code{stdout} instead.
-When you have the @code{--multiple} tag enabled, multiple morphed PDFs are
-generated. Using this command with the @code{--multiple} tag will save all
+When you have the @code{--multiple-targets} tag enabled, multiple morphed PDFs are
+generated. Using this command with the @code{--multiple-targets} tag will save all
 these morphs into a directory named @code{NAME} as well as a @code{.txt}
 file summary of refined morph parameters (if applicable) and @math{R_W}
 for each morph done. To specify names for each saved PDF file, use the
@@ -981,7 +981,7 @@ function of a sphere with radius @code{IPRADIUS}.
 @noindent @titlefont{@b{Plot options}}
 
 These options control plotting. The morphed and target PDFs will be plotted against each other with a
-difference curve shown below. The following changes occur when @code{--multiple} is enabled.
+difference curve shown below. The following changes occur when @code{--multiple-targets} is enabled.
 (1) The @math{R_W} for each morphed PDF compared to the target will be plotted unless
 another parameter is specified by @code{--plot-parameter}. (2) The plot will be a bar chart
 where the abscissa names are the file names of the target PDFs unless otherwise specified by
@@ -1020,11 +1020,11 @@ be useful as PDF amplitude can get very small for large @math{r}. No magnificati
 
 @noindent @titlefont{@b{Multiple morphs}}
 
-@code{PDFmorph} allows one to morph one PDF against multiple different targets when @code{--multiple}
+@code{PDFmorph} allows one to morph one PDF against multiple different targets when @code{--multiple-targets}
 is enabled. See @code{-s} and the description under "Plot options" for how saving and plotting
-change when @code{--multiple} is enabled.
+change when @code{--multiple-targets} is enabled.
 
-@noindent @code{--multiple}
+@noindent @code{--multiple-targets}
 @* @indent Changes usage of @code{PDFmorph} to
 @example
 pdfmorph <MORPHED_FILE> <TARGET_DIRECTORY>
@@ -1034,7 +1034,7 @@ in the directory @code{TARGET_DIRECTORY} as the target. Files in @code{TARGET_DI
 be sorted in ASCII sort order order unless a sorting parameter is specified by @code{sort-by}.
 
 @noindent @code{--sort-by=FIELD}
-@* @indent Used with @code{--multiple}. Sort the files in @code{TARGET_DIRECTORY} by some parameter
+@* @indent Used with @code{--multiple-targets}. Sort the files in @code{TARGET_DIRECTORY} by some parameter
 named @code{FIELD}. Parameters can be specified within each target PDF file by lines of the form
 @code{<PARAM_NAME> = <PARAM_VALUE>} in the header (anywhere above the @math{r} versus @math{G(r)}
 data table). @code{PDFmorph} will attempt to find a parameter named @code{FIELD} using a
@@ -1042,17 +1042,17 @@ case-insensitive search. Numerical @code{PARAM_VALUE} will be sorted in ascendin
 non-numerical ones will be sorted in ASCII sort order.
 
 @noindent @code{--reverse}
-@* @indent Used with @code{--multiple}. Sort the files in @code{TARGET_DIRECTORY} in reverse
+@* @indent Used with @code{--multiple-targets}. Sort the files in @code{TARGET_DIRECTORY} in reverse
 ASCII sort order. If a parameter is given by @code{--sort-by}, reverse the order given by
 @code{--sort-by}.
 
 @noindent @code{--serial-file=SERIALFILE}
-@* @indent Used with @code{--multiple} and @code{--sort-by}. Look for @code{FIELD} in a serial
+@* @indent Used with @code{--multiple-targets} and @code{--sort-by}. Look for @code{FIELD} in a serial
 file named @code{SERIALFILE} instead. Only serial file types supported by
 @url{https://www.diffpy.org/diffpy.utils, diffpy.utils} such as @code{.json} are allowed.
 
 @noindent @code{--save-names-file=NAMESFILE}
-@* @indent Used with @code{--multiple} and @code{-s}. Specify names for each manipulated PDF when
+@* @indent Used with @code{--multiple-targets} and @code{-s}. Specify names for each manipulated PDF when
 saving using a serial file named @code{NAMESFILE}. The format of @code{NAMESFILE} should be
 as follows: (1) Each target PDF file name is an entry in @code{NAMESFILE}. (2) For each entry,
 there should be a key @code{save_morph_as} whose value specified the name to save the manipulated
@@ -1076,7 +1076,7 @@ PDF as. An example @code{.json} @code{NAMESFILE} is below.
 such as @code{.json} are allowed.
 
 @noindent @code{--plot-parameter=PLOTPARAM}
-@* @indent Used with @code{--multiple} and when plotting is enabled. Choose a parameter @code{PLOTPARAM}
+@* @indent Used with @code{--multiple-targets} and when plotting is enabled. Choose a parameter @code{PLOTPARAM}
 to plot for each morph. When not specified, the @math{R_W} values for each morphed PDF compared to the
 target PDFs will be plotted. This option is not case sensitive meaning @code{--plot-parameter=Scale} and
 @code{--plot-parameter=scale} will both cause the parameter @code{scale} to be plotted.

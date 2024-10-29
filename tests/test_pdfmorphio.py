@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from diffpy.pdfmorph.pdfmorphapp import create_option_parser, multiple_morphs, single_morph
+from diffpy.pdfmorph.pdfmorphapp import create_option_parser, multiple_targets, single_morph
 
 # Support Python 2
 try:
@@ -61,7 +61,7 @@ class TestApp:
 
         (opts, pargs) = self.parser.parse_args(
             [
-                "--multiple",
+                "--multiple-targets",
                 "--sort-by",
                 "temperature",
                 "-s",
@@ -72,7 +72,7 @@ class TestApp:
             ]
         )
         pargs = [morph_file, testsequence_dir]
-        multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+        multiple_targets(self.parser, opts, pargs, stdout_flag=False)
 
         # Save a single succinct morph
         ssm = tmp_succinct.joinpath("single_succinct_morph.cgr")
@@ -99,7 +99,7 @@ class TestApp:
 
         (opts, pargs) = self.parser.parse_args(
             [
-                "--multiple",
+                "--multiple-targets",
                 "--sort-by",
                 "temperature",
                 "-s",
@@ -111,7 +111,7 @@ class TestApp:
             ]
         )
         pargs = [morph_file, testsequence_dir]
-        multiple_morphs(self.parser, opts, pargs, stdout_flag=False)
+        multiple_targets(self.parser, opts, pargs, stdout_flag=False)
 
         # Save a single verbose morph
         svm = tmp_verbose.joinpath("single_verbose_morph.cgr")

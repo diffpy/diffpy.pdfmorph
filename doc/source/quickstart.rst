@@ -203,7 +203,7 @@ selected directory and plot resulting :math:`R_w` values from each morph.
 2. Let us start by getting the Rw of ``SrFe2As2_150K.gr`` compared to all other files in the
    directory. Run ::
 
-       pdfmorph SrFe2As2_150K.gr . --multiple
+       pdfmorph SrFe2As2_150K.gr . --multiple-targets
 
    The multiple tag indicates we are comparing PDF file (first input) against all PDFs in
    a directory (second input). Our choice of file was ``SeFe2As2_150K.gr``
@@ -211,7 +211,7 @@ selected directory and plot resulting :math:`R_w` values from each morph.
 3. After running this, we get chart of Rw values for each target file. However, this chart can
    be a bit confusing to interpret. To get a more understandable plot, run ::
 
-       pdfmorph SrFe2As2_150K.gr . --multiple --sort-by=temperature
+       pdfmorph SrFe2As2_150K.gr . --multiple-targets --sort-by=temperature
 
    This plots the Rw against the temperature parameter value provided at the top of each file.
    Parameters are entries of the form ``<parameter_name> = <parameter_value>`` and are located
@@ -220,7 +220,7 @@ selected directory and plot resulting :math:`R_w` values from each morph.
    To confirm, let us now apply morphs onto ``SrFe2As2_150K.gr`` with all other files in ``morphMultiple``
    as targets ::
 
-       pdfmorph --scale=1 --stretch=0 SrFe2As2_150K.gr . --multiple --sort-by=temperature
+       pdfmorph --scale=1 --stretch=0 SrFe2As2_150K.gr . --multiple-targets --sort-by=temperature
 
    Note that we are not applying a smear since it takes a long time to apply and does not significantly
    change the Rw values in this example.

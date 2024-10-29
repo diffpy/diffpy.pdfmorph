@@ -124,7 +124,7 @@ def create_morphs_directory(save_directory):
     return str(morphs_subdirectory.resolve())
 
 
-def get_multisave_names(target_list: list, save_names_file=None):
+def get_multisave_names(target_list: list, save_names_file=None, mm=False):
     """Create or import a dictionary that specifies names to save morphs as.
     First attempt to import names from a specified file. If names for certain morphs not found,
     use default naming scheme: 'Morph_with_Target_<target file name>.cgr'.
@@ -134,9 +134,11 @@ def get_multisave_names(target_list: list, save_names_file=None):
     Parameters
     ----------
     target_list: list
-        Target PDFs used for each morph.
+        Target (or Morph if mm enabled) PDFs used for each morph.
     save_names_file
         Name of file to import save names dictionary from (default None).
+    mm: bool
+        Rather than multiple targets, multiple morphs are being done.
 
     Returns
     -------
@@ -154,7 +156,10 @@ def get_multisave_names(target_list: list, save_names_file=None):
     # Apply default naming scheme to missing targets
     for target_file in target_list:
         if target_file.name not in save_names.keys():
-            save_names.update({target_file.name: {__save_morph_as__: f"Morph_with_Target_{target_file.stem}.cgr"}})
+            if not mm:
+                save_names.update({target_file.name: {__save_morph_as__: f"Morph_with_Target_{target_file.stem}.cgr"}})
+            else:
+                save_names.update({target_file.name: {__save_morph_as__: f"Morph_of_{target_file.stem}.cgr"}})
     return save_names
 
 
