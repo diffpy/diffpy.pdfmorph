@@ -157,7 +157,9 @@ def get_multisave_names(target_list: list, save_names_file=None, mm=False):
     for target_file in target_list:
         if target_file.name not in save_names.keys():
             if not mm:
-                save_names.update({target_file.name: {__save_morph_as__: f"Morph_with_Target_{target_file.stem}.cgr"}})
+                save_names.update(
+                    {target_file.name: {__save_morph_as__: f"Morph_with_Target_{target_file.stem}.cgr"}}
+                )
             else:
                 save_names.update({target_file.name: {__save_morph_as__: f"Morph_of_{target_file.stem}.cgr"}})
     return save_names
