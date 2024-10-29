@@ -732,12 +732,13 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
             morph_results,
             morph_file_names,
             save_directory=save_directory,
-            morph_directory=morph_directory,
-            target_file=target_file,
+            morph_file=target_file,
+            target_directory=morph_directory,
             field=field,
             field_list=field_list,
             verbose=opts.verbose,
             stdout_flag=stdout_flag,
+            mm=True,
         )
     except (FileNotFoundError, RuntimeError):
         save_fail_message = "Unable to save summary to directory."
