@@ -17,7 +17,7 @@
 from diffpy.pdfmorph.pdfmorphapp import create_option_parser, single_morph
 
 
-def pdfmorph(file1, file2, **kwargs):
+def pdfmorph(file1, file2, stdout_flag=False, **kwargs):
     """Run PDFmorph at Python level.
 
     Parameters
@@ -48,4 +48,4 @@ def pdfmorph(file1, file2, **kwargs):
     (opts, pargs) = parser.parse_args(inputs)
     pargs = [file1, file2]
 
-    return single_morph(parser, opts, pargs, return_morph=True)
+    return single_morph(parser, opts, pargs, stdout_flag=stdout_flag, return_morph=True)
