@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 
+<<<<<<< Updated upstream
 from pathlib import Path
 
 from diffpy.pdfmorph.pdfmorphapp import create_option_parser, multiple_morphs, multiple_targets, single_morph
+=======
+from diffpy.pdfmorph.pdfmorphapp import create_option_parser, single_morph, multiple_targets, multiple_morphs
+>>>>>>> Stashed changes
 
 
 def pdfmorph(file1, file2, **kwargs):
