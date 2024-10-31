@@ -36,7 +36,7 @@ def pdfmorph(file1, file2, **kwargs):
 
 
 def pdfmorph_multiple_targets(file, dir, **kwargs):
-    """Run PDFmorph at Python level.
+    """Run PDFmorph with multiple targets at Python level.
 
         Parameters
         ----------
@@ -66,7 +66,7 @@ def pdfmorph_multiple_targets(file, dir, **kwargs):
 
 
 def pdfmorph_multiple_morphs(dir, file, **kwargs):
-    """Run PDFmorph at Python level.
+    """Run PDFmorph for multiple morphs at Python level.
 
         Parameters
         ----------
