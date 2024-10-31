@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from diffpy.pdfmorph.pdfmorphapp import create_option_parser, single_morph, multiple_targets, multiple_morphs
+from diffpy.pdfmorph.pdfmorphapp import create_option_parser, multiple_morphs, multiple_targets, single_morph
 
 
 def pdfmorph(file1, file2, **kwargs):
@@ -38,20 +38,20 @@ def pdfmorph(file1, file2, **kwargs):
 def pdfmorph_multiple_targets(file, dir, **kwargs):
     """Run PDFmorph with multiple targets at Python level.
 
-        Parameters
-        ----------
-        file1: str
-            Path-like object to the file to be morphed.
-        file2: str
-            Path-like object to the target file.
-        kwargs: dict
-            See the PDFmorph manual for options.
+    Parameters
+    ----------
+    file1: str
+        Path-like object to the file to be morphed.
+    file2: str
+        Path-like object to the target file.
+    kwargs: dict
+        See the PDFmorph manual for options.
 
-        Returns
-        -------
-        dict:
-            Summary of morphs.
-        """
+    Returns
+    -------
+    dict:
+        Summary of morphs.
+    """
 
     parser = create_option_parser()
 
@@ -68,20 +68,20 @@ def pdfmorph_multiple_targets(file, dir, **kwargs):
 def pdfmorph_multiple_morphs(dir, file, **kwargs):
     """Run PDFmorph for multiple morphs at Python level.
 
-        Parameters
-        ----------
-        file1: str
-            Path-like object to the file to be morphed.
-        file2: str
-            Path-like object to the target file.
-        kwargs: dict
-            See the PDFmorph manual for options.
+    Parameters
+    ----------
+    file1: str
+        Path-like object to the file to be morphed.
+    file2: str
+        Path-like object to the target file.
+    kwargs: dict
+        See the PDFmorph manual for options.
 
-        Returns
-        -------
-        dict:
-            Summary of morphs.
-        """
+    Returns
+    -------
+    dict:
+        Summary of morphs.
+    """
 
     parser = create_option_parser()
 
