@@ -1,14 +1,20 @@
 #!/usr/bin/env python
 
-<<<<<<< Updated upstream
-from pathlib import Path
+##############################################################################
+#
+# diffpy.pdfmorph   by DANSE Diffraction group
+#                   Simon J. L. Billinge
+#                   (c) 2010 Trustees of the Columbia University
+#                   in the City of New York.  All rights reserved.
+#
+# File coded by:    Andrew Yang
+#
+# See AUTHORS.txt for a list of people who contributed.
+# See LICENSE.txt for license information.
+#
+##############################################################################
 
 from diffpy.pdfmorph.pdfmorphapp import create_option_parser, multiple_morphs, multiple_targets, single_morph
-
-=======
-from diffpy.pdfmorph.pdfmorphapp import create_option_parser, multiple_morphs, multiple_targets, single_morph
-
->>>>>>> Stashed changes
 
 
 def pdfmorph(file1, file2, **kwargs):
