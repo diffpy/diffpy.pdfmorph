@@ -533,6 +533,7 @@ def multiple_targets(parser, opts, pargs, stdout_flag=True):
 
     # Get list of files from target directory
     target_list = list(target_directory.iterdir())
+    to_remove = []
     for target in target_list:
         if target.is_dir():
             target_list.remove(target)
