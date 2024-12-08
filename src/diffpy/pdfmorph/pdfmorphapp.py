@@ -536,9 +536,9 @@ def multiple_targets(parser, opts, pargs, stdout_flag=True):
     to_remove = []
     for target in target_list:
         if target.is_dir():
-            target_list.remove(target)
-    for morph in to_remove:
-        morph_list.remove(morph)
+            to_remove.append(target)
+    for target in to_remove:
+        target_list.remove(target)
 
     # Do not morph morph_file against itself if it is in the same directory
     if morph_file in target_list:
