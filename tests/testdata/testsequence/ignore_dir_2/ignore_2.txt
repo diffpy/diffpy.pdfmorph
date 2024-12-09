@@ -1,0 +1,1 @@
+All directories should be ignored by the multiple-morph/target command searches.
