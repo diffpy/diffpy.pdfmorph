@@ -31,7 +31,9 @@ from diffpy.pdfmorph.version import __version__
 def create_option_parser():
     import optparse
 
-    prog_short = Path(sys.argv[0]).name  # Program name, compatible w/ all OS paths
+    prog_short = Path(
+        sys.argv[0]
+    ).name  # Program name, compatible w/ all OS paths
 
     class CustomParser(optparse.OptionParser):
         def __init__(self, *args, **kwargs):
@@ -56,21 +58,34 @@ def create_option_parser():
         epilog="\n".join(
             [
                 "Please report bugs to diffpy-users@googlegroups.com.",
-                "For more information, see the PDFmorph website at https://www.diffpy.org/diffpy.pdfmorph.",
+                (
+                    "For more information, see the PDFmorph website at "
+                    "https://www.diffpy.org/diffpy.pdfmorph."
+                ),
             ]
         ),
     )
 
-    parser.add_option("-V", "--version", action="version", help="Show program version and exit.")
+    parser.add_option(
+        "-V",
+        "--version",
+        action="version",
+        help="Show program version and exit.",
+    )
     parser.version = __version__
     parser.add_option(
         "-s",
         "--save",
         metavar="NAME",
         dest="slocation",
-        help="""Save the manipulated PDF to a file named NAME. Use \'-\' for stdout.
- When --multiple-<targets/morphs> is enabled, save each manipulated PDF as a file in a directory named NAME;
- you can specify names for each saved PDF file using --save-names-file.""",
+        help=(
+            "Save the manipulated PDF to a file named NAME. "
+            "Use '-' for stdout.\n"
+            "When --multiple-<targets/morphs> is enabled, "
+            "save each manipulated PDF as a file in a directory named NAME;\n"
+            "you can specify names for each saved PDF file using "
+            "--save-names-file."
+        ),
     )
     parser.add_option(
         "-v",
@@ -79,13 +94,24 @@ def create_option_parser():
         action="store_true",
         help="Print additional header details to saved files.",
     )
-    parser.add_option("--rmin", type="float", help="Minimum r-value to use for PDF comparisons.")
-    parser.add_option("--rmax", type="float", help="Maximum r-value to use for PDF comparisons.")
+    parser.add_option(
+        "--rmin",
+        type="float",
+        help="Minimum r-value to use for PDF comparisons.",
+    )
+    parser.add_option(
+        "--rmax",
+        type="float",
+        help="Maximum r-value to use for PDF comparisons.",
+    )
     parser.add_option(
         "--pearson",
         action="store_true",
         dest="pearson",
-        help="Maximize agreement in the Pearson function. Note that this is insensitive to scale.",
+        help=(
+            "Maximize agreement in the Pearson function. "
+            "Note that this is insensitive to scale."
+        ),
     )
     parser.add_option(
         "--addpearson",
@@ -99,10 +125,14 @@ def create_option_parser():
     group = optparse.OptionGroup(
         parser,
         "Manipulations",
-        """These options select the manipulations that are to be applied to
- the PDF from FILE1. The passed values will be refined unless specifically
- excluded with the -a or -x options. If no option is specified, the PDFs from FILE1 and FILE2 will
- be plotted without any manipulations.""",
+        (
+            "These options select the manipulations that are to be applied to "
+            "the PDF from FILE1. "
+            "The passed values will be refined unless specifically "
+            "excluded with the -a or -x options. "
+            "If no option is specified, the PDFs from FILE1 and FILE2 will "
+            "be plotted without any manipulations."
+        ),
     )
     parser.add_option_group(group)
     group.add_option(
@@ -168,43 +198,59 @@ def create_option_parser():
         "--radius",
         type="float",
         metavar="RADIUS",
-        help="""Apply characteristic function of sphere with radius RADIUS.
- If PRADIUS is also specified, instead apply characteristic function of spheroid with equatorial
- radius RADIUS and polar radius PRADIUS.""",
+        help=(
+            "Apply characteristic function of sphere with radius "
+            "RADIUS. If PRADIUS is also specified, instead apply "
+            "characteristic function of spheroid with equatorial "
+            "radius RADIUS and polar radius PRADIUS."
+        ),
     )
     group.add_option(
         "--pradius",
         type="float",
         metavar="PRADIUS",
-        help="""Apply characteristic function of spheroid with equatorial
- radius RADIUS and polar radius PRADIUS. If only PRADIUS is specified, instead apply
- characteristic function of sphere with radius PRADIUS.""",
+        help=(
+            "Apply characteristic function of spheroid with "
+            "equatorial radius RADIUS and polar radius PRADIUS. If only "
+            "PRADIUS is specified, instead apply characteristic function of "
+            "sphere with radius PRADIUS."
+        ),
     )
     group.add_option(
         "--iradius",
         type="float",
         metavar="IRADIUS",
-        help="""Apply inverse characteristic function of sphere with radius IRADIUS.
-         If IPRADIUS is also specified, instead apply inverse characteristic function of spheroid
-         with equatorial radius IRADIUS and polar radius IPRADIUS.""",
+        help=(
+            "Apply inverse characteristic function of sphere with radius "
+            "IRADIUS. If IPRADIUS is also specified, instead apply inverse "
+            "characteristic function of spheroid with equatorial radius "
+            "IRADIUS and polar radius IPRADIUS."
+        ),
     )
     group.add_option(
         "--ipradius",
         type="float",
         metavar="IPRADIUS",
-        help="""Apply inverse characteristic function of spheroid with equatorial radius IRADIUS
-         and polar radius IPRADIUS. If only IPRADIUS is specified, instead apply inverse characteristic
-         function of sphere with radius IPRADIUS.""",
+        help=(
+            "Apply inverse characteristic function of spheroid with "
+            "equatorial radius IRADIUS and polar radius IPRADIUS. If only "
+            "IPRADIUS is specified, instead apply inverse characteristic "
+            "function of sphere with radius IPRADIUS."
+        ),
     )
 
     # Plot Options
     group = optparse.OptionGroup(
         parser,
         "Plot Options",
-        """These options control plotting.
- The manipulated and target PDFs will be plotted against each other with a
- difference curve below. When --multiple-<targets/morphs> is enabled, the value of a parameter (specified by
- --plot-parameter) will be plotted instead.""",
+        (
+            "These options control plotting. The manipulated and target PDFs "
+            "will be plotted against each other with a difference curve "
+            "below. "
+            "When --multiple-<targets/morphs> is enabled, the value of a "
+            "parameter (specified by --plot-parameter) will be plotted "
+            "instead."
+        ),
     )
     parser.add_option_group(group)
     group.add_option(
@@ -218,54 +264,88 @@ def create_option_parser():
         "--mlabel",
         metavar="MLABEL",
         dest="mlabel",
-        help="Set label for morphed data to MLABEL on plot. Default label is FILE1.",
+        help=(
+            "Set label for morphed data to MLABEL on plot. "
+            "Default label is FILE1."
+        ),
     )
     group.add_option(
         "--tlabel",
         metavar="TLABEL",
         dest="tlabel",
-        help="Set label for target data to TLABEL on plot. Default label is FILE2.",
+        help=(
+            "Set label for target data to TLABEL on plot. "
+            "Default label is FILE2."
+        ),
     )
-    group.add_option("--pmin", type="float", help="Minimum r-value to plot. Defaults to RMIN.")
-    group.add_option("--pmax", type="float", help="Maximum r-value to plot. Defaults to RMAX.")
-    group.add_option("--maglim", type="float", help="Magnify plot curves beyond r=MAGLIM by MAG.")
-    group.add_option("--mag", type="float", help="Magnify plot curves beyond r=MAGLIM by MAG.")
-    group.add_option("--lwidth", type="float", help="Line thickness of plotted curves.")
+    group.add_option(
+        "--pmin",
+        type="float",
+        help="Minimum r-value to plot. Defaults to RMIN.",
+    )
+    group.add_option(
+        "--pmax",
+        type="float",
+        help="Maximum r-value to plot. Defaults to RMAX.",
+    )
+    group.add_option(
+        "--maglim",
+        type="float",
+        help="Magnify plot curves beyond r=MAGLIM by MAG.",
+    )
+    group.add_option(
+        "--mag",
+        type="float",
+        help="Magnify plot curves beyond r=MAGLIM by MAG.",
+    )
+    group.add_option(
+        "--lwidth", type="float", help="Line thickness of plotted curves."
+    )
 
     # Multiple morph options
     group = optparse.OptionGroup(
         parser,
         "Multiple Morphs",
-        """This program can morph a PDF against multiple targets in one command.
- See -s and Plot Options for how saving and plotting functionality changes when performing multiple morphs.""",
+        (
+            "This program can morph a PDF against multiple targets in one "
+            "command. See -s and Plot Options for how saving and plotting "
+            "functionality changes when performing multiple morphs."
+        ),
     )
     parser.add_option_group(group)
     group.add_option(
         "--multiple-morphs",
         dest="multiple_morphs",
         action="store_true",
-        help=f"""Changes usage to \'{prog_short} [options] FILE DIRECTORY\'. FILE
- will be morphed with each file in DIRECTORY as target.
- Files in DIRECTORY are sorted by alphabetical order unless a field is
- specified by --sort-by.""",
+        help=(
+            f"Changes usage to '{prog_short} [options] FILE DIRECTORY'. "
+            f"FILE will be morphed with each file in DIRECTORY as target. "
+            f"Files in DIRECTORY are sorted by alphabetical order unless a "
+            f"field is specified by --sort-by."
+        ),
     )
     group.add_option(
         "--multiple-targets",
         dest="multiple_targets",
         action="store_true",
-        help=f"""Changes usage to \'{prog_short} [options] DIRECTORY FILE\'. Each file
- in DIRECTORY will be morphed with FILE as target.
- Files in DIRECTORY are sorted by alphabetical order unless a field is
- specified by --sort-by.""",
+        help=(
+            f"Changes usage to '{prog_short} [options] DIRECTORY FILE'. "
+            f"Each file in DIRECTORY will be morphed with FILE as target. "
+            f"Files in DIRECTORY are sorted by alphabetical order unless a "
+            f"field is specified by --sort-by."
+        ),
     )
     group.add_option(
         "--sort-by",
         metavar="FIELD",
         dest="field",
-        help="""Used with --multiple-<targets/morphs> to sort files in DIRECTORY by FIELD.
- If the FIELD being used has a numerical value, sort from lowest to highest.
- Otherwise, sort in ASCII sort order.
- FIELD must be included in the header of all the PDF files.""",
+        help=(
+            "Used with --multiple-<targets/morphs> to sort files in DIRECTORY "
+            "by FIELD. "
+            "If the FIELD being used has a numerical value, sort from lowest "
+            "to highest. Otherwise, sort in ASCII sort order. FIELD must be "
+            "included in the header of all the PDF files."
+        ),
     )
     group.add_option(
         "--reverse",
@@ -284,23 +364,30 @@ def create_option_parser():
         "--save-names-file",
         metavar="NAMESFILE",
         dest="snamesfile",
-        help=f"""Used when both -s and --multiple-<targets/morphs> are enabled.
- Specify names for each manipulated PDF when saving (see -s) using a serial file
- NAMESFILE. The format of NAMESFILE should be as follows: each target PDF
- is an entry in NAMESFILE. For each entry, there should be a key {__save_morph_as__}
- whose value specifies the name to save the manipulated PDF as. An example .json
- serial file is shown in the PDFmorph manual.""",
+        help=(
+            "Used when both -s and --multiple-<targets/morphs> are enabled. "
+            "Specify names for each manipulated PDF when saving (see -s) "
+            "using a serial file NAMESFILE. The format of NAMESFILE should be "
+            "as follows: each target PDF is an entry in NAMESFILE. For each "
+            "entry, there should be a key {__save_morph_as__} whose value "
+            "specifies the name to save the manipulated PDF as. An example "
+            ".json serial file is shown in the PDFmorph manual."
+        ),
     )
     group.add_option(
         "--plot-parameter",
         metavar="PLOTPARAM",
         dest="plotparam",
-        help="""Used when both plotting and --multiple-<targets/morphs> are enabled.
- Choose a PLOTPARAM to plot for each morph (i.e. adding --plot-parameter=Pearson means the
- program will display a plot of the Pearson correlation coefficient for each morph-target
- pair). PLOTPARAM is not case sensitive, so both Pearson and pearson indicate the same
- parameter. When PLOTPARAM is not specified, Rw values for each morph-target pair will be
- plotted. PLOTPARAM will be displayed as the vertical axis label for the plot.""",
+        help=(
+            "Used when both plotting and --multiple-<targets/morphs> are "
+            "enabled. Choose a PLOTPARAM to plot for each morph (i.e. adding "
+            "--plot-parameter=Pearson means the program will display a plot "
+            "of the Pearson correlation coefficient for each morph-target pair"
+            "). PLOTPARAM is not case sensitive, so both Pearson and pearson "
+            "indicate the same parameter. When PLOTPARAM is not specified, Rw "
+            "values for each morph-target pair will be plotted. PLOTPARAM "
+            "will be displayed as the vertical axis label for the plot."
+        ),
     )
 
     # Defaults
@@ -320,7 +407,9 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
     if len(pargs) < 2:
         parser.error("You must supply FILE1 and FILE2.")
     elif len(pargs) > 2:
-        parser.error("Too many arguments. Make sure you only supply FILE1 and FILE2.")
+        parser.error(
+            "Too many arguments. Make sure you only supply FILE1 and FILE2."
+        )
 
     # Get the PDFs
     x_morph, y_morph = getPDFFromFile(pargs[0])
@@ -341,7 +430,11 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
     config["rmin"] = opts.rmin
     config["rmax"] = opts.rmax
     config["rstep"] = None
-    if opts.rmin is not None and opts.rmax is not None and opts.rmax <= opts.rmin:
+    if (
+        opts.rmin is not None
+        and opts.rmax is not None
+        and opts.rmax <= opts.rmin
+    ):
         e = "rmin must be less than rmax"
         parser.custom_error(e)
 
@@ -443,11 +536,15 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
             refiner.refine(*refpars)
         except ValueError as e:
             parser.custom_error(str(e))
-    # Smear is not being refined, but baselineslope needs to refined to apply smear
-    # Note that baselineslope is only added to the refine list if smear is applied
+    # Smear is not being refined, but baselineslope needs to refined to apply
+    # smear
+    # Note that baselineslope is only added to the refine list if smear is
+    # applied
     elif "baselineslope" in refpars:
         try:
-            refiner.refine("baselineslope", baselineslope=config["baselineslope"])
+            refiner.refine(
+                "baselineslope", baselineslope=config["baselineslope"]
+            )
         except ValueError as e:
             parser.custom_error(str(e))
     else:
@@ -461,7 +558,11 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
     chain(x_morph, y_morph, x_target, y_target)
 
     # Input morph parameters
-    morph_inputs = {"scale": scale_in, "stretch": stretch_in, "smear": smear_in}
+    morph_inputs = {
+        "scale": scale_in,
+        "stretch": stretch_in,
+        "smear": smear_in,
+    }
     morph_inputs.update({"hshift": hshift_in, "vshift": vshift_in})
 
     # Output morph parameters
@@ -517,19 +618,29 @@ def single_morph(parser, opts, pargs, stdout_flag=True):
 
 
 def multiple_targets(parser, opts, pargs, stdout_flag=True):
-    # Custom error messages since usage is distinct when --multiple tag is applied
+    # Custom error messages since usage is distinct when --multiple tag is
+    # applied
     if len(pargs) < 2:
-        parser.custom_error("You must supply FILE and DIRECTORY. See --multiple-targets under --help for usage.")
+        parser.custom_error(
+            "You must supply FILE and DIRECTORY. "
+            "See --multiple-targets under --help for usage."
+        )
     elif len(pargs) > 2:
-        parser.custom_error("Too many arguments. You must only supply a FILE and a DIRECTORY.")
+        parser.custom_error(
+            "Too many arguments. You must only supply a FILE and a DIRECTORY."
+        )
 
     # Parse paths
     morph_file = Path(pargs[0])
     if not morph_file.is_file():
-        parser.custom_error(f"{morph_file} is not a file. Go to --help for usage.")
+        parser.custom_error(
+            f"{morph_file} is not a file. Go to --help for usage."
+        )
     target_directory = Path(pargs[1])
     if not target_directory.is_dir():
-        parser.custom_error(f"{target_directory} is not a directory. Go to --help for usage.")
+        parser.custom_error(
+            f"{target_directory} is not a directory. Go to --help for usage."
+        )
 
     # Get list of files from target directory
     target_list = list(target_directory.iterdir())
@@ -554,13 +665,21 @@ def multiple_targets(parser, opts, pargs, stdout_flag=True):
     if field is not None:
         try:
             target_list, field_list = tools.field_sort(
-                target_list, field, opts.reverse, opts.serfile, get_field_values=True
+                target_list,
+                field,
+                opts.reverse,
+                opts.serfile,
+                get_field_values=True,
             )
         except KeyError:
             if opts.serfile is not None:
-                parser.custom_error("The requested field was not found in the metadata file.")
+                parser.custom_error(
+                    "The requested field was not found in the metadata file."
+                )
             else:
-                parser.custom_error("The requested field is missing from a PDF file header.")
+                parser.custom_error(
+                    "The requested field is missing from a PDF file header."
+                )
     else:
         # Default is alphabetical sort
         target_list.sort(reverse=opts.reverse)
@@ -571,7 +690,9 @@ def multiple_targets(parser, opts, pargs, stdout_flag=True):
 
     # Set up saving
     save_directory = opts.slocation  # User-given directory for saves
-    save_names_file = opts.snamesfile  # User-given serialfile with names for each morph
+    save_names_file = (
+        opts.snamesfile
+    )  # User-given serialfile with names for each morph
     save_morphs_here = None  # Subdirectory for saving morphed PDFs
     save_names = {}  # Dictionary of names to save each morph as
     if save_directory is not None:
@@ -584,7 +705,9 @@ def multiple_targets(parser, opts, pargs, stdout_flag=True):
             parser.custom_error(save_fail_message)
 
         try:
-            save_names = io.get_multisave_names(target_list, save_names_file=save_names_file)
+            save_names = io.get_multisave_names(
+                target_list, save_names_file=save_names_file
+            )
             # Could not create directory or find names to save morphs as
         except FileNotFoundError:
             save_fail_message = "\nUnable to read from save names file"
@@ -594,7 +717,8 @@ def multiple_targets(parser, opts, pargs, stdout_flag=True):
     morph_results = {}
     for target_file in target_list:
         if target_file.is_file:
-            # Set the save file destination to be a file within the SLOC directory
+            # Set the save file destination to be a file within the SLOC
+            # directory
             if save_directory is not None:
                 save_as = save_names[target_file.name][__save_morph_as__]
                 opts.slocation = Path(save_morphs_here).joinpath(save_as)
@@ -602,7 +726,9 @@ def multiple_targets(parser, opts, pargs, stdout_flag=True):
             pargs = [morph_file, target_file]
             morph_results.update(
                 {
-                    target_file.name: single_morph(parser, opts, pargs, stdout_flag=False),
+                    target_file.name: single_morph(
+                        parser, opts, pargs, stdout_flag=False
+                    ),
                 }
             )
 
@@ -610,7 +736,11 @@ def multiple_targets(parser, opts, pargs, stdout_flag=True):
     for key in morph_results.keys():
         target_file_names.append(key)
 
-    morph_inputs = {"scale": opts.scale, "stretch": opts.stretch, "smear": opts.smear}
+    morph_inputs = {
+        "scale": opts.scale,
+        "stretch": opts.stretch,
+        "smear": opts.smear,
+    }
     morph_inputs.update({"hshift": opts.hshift, "vshift": opts.vshift})
 
     try:
@@ -640,41 +770,61 @@ def multiple_targets(parser, opts, pargs, stdout_flag=True):
         # Find parameter if specified
         if opts.plotparam is not None:
             param_name = opts.plotparam
-            param_list = tools.case_insensitive_dictionary_search(opts.plotparam, plot_results)
-        # Not an available parameter to plot or no values found for the parameter
+            param_list = tools.case_insensitive_dictionary_search(
+                opts.plotparam, plot_results
+            )
+        # Not an available parameter to plot or no values found for the
+        # parameter
         if param_list is None:
-            parser.custom_error("Cannot find specified plot parameter. No plot shown.")
+            parser.custom_error(
+                "Cannot find specified plot parameter. No plot shown."
+            )
         else:
             try:
                 if field_list is not None:
-                    pdfplot.plot_param(field_list, param_list, param_name, field)
+                    pdfplot.plot_param(
+                        field_list, param_list, param_name, field
+                    )
                 else:
-                    pdfplot.plot_param(target_file_names, param_list, param_name)
+                    pdfplot.plot_param(
+                        target_file_names, param_list, param_name
+                    )
             # Can occur for non-refined plotting parameters
-            # i.e. --smear is not selected as an option, but smear is the plotting parameter
+            # i.e. --smear is not selected as an option, but smear is the
+            # plotting parameter
             except ValueError:
                 parser.custom_error(
-                    "The plot parameter is missing values for at least one morph and target pair. "
-                    "No plot shown."
+                    "The plot parameter is missing values for at least one "
+                    "morph and target pair. No plot shown."
                 )
 
     return morph_results
 
 
 def multiple_morphs(parser, opts, pargs, stdout_flag=True):
-    # Custom error messages since usage is distinct when --multiple tag is applied
+    # Custom error messages since usage is distinct when --multiple tag is
+    # applied
     if len(pargs) < 2:
-        parser.custom_error("You must supply DIRECTORY and FILE. See --multiple-morphs under --help for usage.")
+        parser.custom_error(
+            "You must supply DIRECTORY and FILE. "
+            "See --multiple-morphs under --help for usage."
+        )
     elif len(pargs) > 2:
-        parser.custom_error("Too many arguments. You must only supply a DIRECTORY and FILE.")
+        parser.custom_error(
+            "Too many arguments. You must only supply a DIRECTORY and FILE."
+        )
 
     # Parse paths
     target_file = Path(pargs[1])
     if not target_file.is_file():
-        parser.custom_error(f"{target_file} is not a file. Go to --help for usage.")
+        parser.custom_error(
+            f"{target_file} is not a file. Go to --help for usage."
+        )
     morph_directory = Path(pargs[0])
     if not morph_directory.is_dir():
-        parser.custom_error(f"{morph_directory} is not a directory. Go to --help for usage.")
+        parser.custom_error(
+            f"{morph_directory} is not a directory. Go to --help for usage."
+        )
 
     # Get list of files from morph directory
     morph_list = list(morph_directory.iterdir())
@@ -699,13 +849,21 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
     if field is not None:
         try:
             morph_list, field_list = tools.field_sort(
-                morph_list, field, opts.reverse, opts.serfile, get_field_values=True
+                morph_list,
+                field,
+                opts.reverse,
+                opts.serfile,
+                get_field_values=True,
             )
         except KeyError:
             if opts.serfile is not None:
-                parser.custom_error("The requested field was not found in the metadata file.")
+                parser.custom_error(
+                    "The requested field was not found in the metadata file."
+                )
             else:
-                parser.custom_error("The requested field is missing from a PDF file header.")
+                parser.custom_error(
+                    "The requested field is missing from a PDF file header."
+                )
     else:
         # Default is alphabetical sort
         morph_list.sort(reverse=opts.reverse)
@@ -716,7 +874,9 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
 
     # Set up saving
     save_directory = opts.slocation  # User-given directory for saves
-    save_names_file = opts.snamesfile  # User-given serialfile with names for each morph
+    save_names_file = (
+        opts.snamesfile
+    )  # User-given serialfile with names for each morph
     save_morphs_here = None  # Subdirectory for saving morphed PDFs
     save_names = {}  # Dictionary of names to save each morph as
     if save_directory is not None:
@@ -729,7 +889,9 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
             parser.custom_error(save_fail_message)
 
         try:
-            save_names = io.get_multisave_names(morph_list, save_names_file=save_names_file)
+            save_names = io.get_multisave_names(
+                morph_list, save_names_file=save_names_file
+            )
             # Could not create directory or find names to save morphs as
         except FileNotFoundError:
             save_fail_message = "\nUnable to read from save names file"
@@ -739,7 +901,8 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
     morph_results = {}
     for morph_file in morph_list:
         if morph_file.is_file:
-            # Set the save file destination to be a file within the SLOC directory
+            # Set the save file destination to be a file within the SLOC
+            # directory
             if save_directory is not None:
                 save_as = save_names[morph_file.name][__save_morph_as__]
                 opts.slocation = Path(save_morphs_here).joinpath(save_as)
@@ -747,7 +910,9 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
             pargs = [morph_file, target_file]
             morph_results.update(
                 {
-                    morph_file.name: single_morph(parser, opts, pargs, stdout_flag=False),
+                    morph_file.name: single_morph(
+                        parser, opts, pargs, stdout_flag=False
+                    ),
                 }
             )
 
@@ -755,7 +920,11 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
     for key in morph_results.keys():
         morph_file_names.append(key)
 
-    morph_inputs = {"scale": opts.scale, "stretch": opts.stretch, "smear": opts.smear}
+    morph_inputs = {
+        "scale": opts.scale,
+        "stretch": opts.stretch,
+        "smear": opts.smear,
+    }
     morph_inputs.update({"hshift": opts.hshift, "vshift": opts.vshift})
 
     try:
@@ -786,22 +955,32 @@ def multiple_morphs(parser, opts, pargs, stdout_flag=True):
         # Find parameter if specified
         if opts.plotparam is not None:
             param_name = opts.plotparam
-            param_list = tools.case_insensitive_dictionary_search(opts.plotparam, plot_results)
-        # Not an available parameter to plot or no values found for the parameter
+            param_list = tools.case_insensitive_dictionary_search(
+                opts.plotparam, plot_results
+            )
+        # Not an available parameter to plot or no values found for the
+        # parameter
         if param_list is None:
-            parser.custom_error("Cannot find specified plot parameter. No plot shown.")
+            parser.custom_error(
+                "Cannot find specified plot parameter. No plot shown."
+            )
         else:
             try:
                 if field_list is not None:
-                    pdfplot.plot_param(field_list, param_list, param_name, field)
+                    pdfplot.plot_param(
+                        field_list, param_list, param_name, field
+                    )
                 else:
-                    pdfplot.plot_param(morph_file_names, param_list, param_name)
+                    pdfplot.plot_param(
+                        morph_file_names, param_list, param_name
+                    )
             # Can occur for non-refined plotting parameters
-            # i.e. --smear is not selected as an option, but smear is the plotting parameter
+            # i.e. --smear is not selected as an option, but smear is the
+            # plotting parameter
             except ValueError:
                 parser.custom_error(
-                    "The plot parameter is missing values for at least one morph and target pair. "
-                    "No plot shown."
+                    "The plot parameter is missing values for at least one "
+                    "morph and target pair. No plot shown."
                 )
 
     return morph_results

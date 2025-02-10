@@ -40,7 +40,9 @@ _morph_step_dict = dict(
     ],
     qdamp=morphs.MorphResolutionDamping,
 )
-_default_config = dict(scale=None, stretch=None, smear=None, baselineslope=None, qdamp=None)
+_default_config = dict(
+    scale=None, stretch=None, smear=None, baselineslope=None, qdamp=None
+)
 
 
 def morph_default_config(**kwargs):
@@ -141,7 +143,8 @@ def pdfmorph(
 
         - morph_chain: diffpy.pdfmorph.morphs.morphchain.MorphChain
               The instance of processed morph chain.
-              Calling ``x_morph, y_morph, x_target, y_target = morph_chain.xyallout``
+              Calling
+              ``x_morph, y_morph, x_target, y_target = morph_chain.xyallout``
               will conveniently return morphed data and reference data
         - morphed_cfg: dict
               A dictionary of refined morphing parameters
@@ -154,8 +157,9 @@ def pdfmorph(
 
     Examples
     --------
-    # morphing (x_morph, y_morph) pair to (x_target, y_target) pair with scaling
-    from diffpy.pdfmorph.pdfmorph_api import pdfmorph, morph_default_config, plot_morph
+    # morphing (x_morph, y_morph) pair to (x_target, y_target) pair with
+    scaling from diffpy.pdfmorph.pdfmorph_api import pdfmorph,
+    morph_default_config, plot_morph
 
     morph_cfg = morph_default_config(scale=1.01)
     morph_rv_dict = pdfmorph(x_morph, y_morph, x_target, y_target, **morph_cfg)
@@ -172,7 +176,11 @@ def pdfmorph(
     # input config
     rv_cfg = dict(kwargs)
     # configure morph operations
-    active_morphs = [k for k, v in rv_cfg.items() if (v is not None) and k in _morph_step_dict]
+    active_morphs = [
+        k
+        for k, v in rv_cfg.items()
+        if (v is not None) and k in _morph_step_dict
+    ]
     rv_cfg["rmin"] = rmin
     rv_cfg["rmax"] = rmax
     rv_cfg["rstep"] = rstep
@@ -230,7 +238,9 @@ def pdfmorph(
             print("== INFO: Following steps are fixed during morphing ==:\n")
             print("\n".join(fixed_operations))
         print("== INFO: Refined morph parameters ==:\n")
-        output = "\n".join(["# %s = %f" % (k, v) for k, v in rv_cfg.items() if v is not None])
+        output = "\n".join(
+            ["# %s = %f" % (k, v) for k, v in rv_cfg.items() if v is not None]
+        )
         output += "\n# Rw = %f" % rw
         output += "\n# Pearson = %f" % pcc
         print(output)
@@ -250,14 +260,16 @@ def plot_morph(chain, ax=None, **kwargs):
         An instance of processed morph chain.
     ax: matplotlib.axes.Axes, optional
         An instance of Axes class to plot the morphing result.
-        If ax is None, instances of new Figure and Axes will be created. Default to None.
+        If ax is None, instances of new Figure and Axes will be created.
+        Default to None.
     kwargs:
         Additional keyword arguments will be passed to ``ax.plot(...**kwargs)``
 
     Returns
     -------
     l_list: list
-        A list of ``matplotlib.lines.Line2D`` objects representing the plotted data.
+        A list of ``matplotlib.lines.Line2D`` objects representing the
+        plotted data.
     """
     if ax is None:
         fig, ax = plt.subplots()

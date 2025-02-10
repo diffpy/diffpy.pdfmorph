@@ -43,9 +43,10 @@ class MorphRGrid(Morph):
 
     Notes
     -----
-        If any of these is not defined or outside the bounds of the input arrays,
-        then it will be taken to be the most inclusive value from the input arrays.
-        These modified values will be stored as the above attributes.
+        If any of these is not defined or outside the bounds of the input
+        arrays, then it will be taken to be the most inclusive value from the
+        input arrays. These modified values will be stored as the above
+        attributes.
     """
 
     # Define input output types
@@ -63,7 +64,10 @@ class MorphRGrid(Morph):
         r_step_target = self.x_target_in[1] - self.x_target_in[0]
         r_step_morph = self.x_morph_in[1] - self.x_morph_in[0]
         rstepinc = max(r_step_target, r_step_morph)
-        rmaxinc = min(self.x_target_in[-1] + r_step_target, self.x_morph_in[-1] + r_step_morph)
+        rmaxinc = min(
+            self.x_target_in[-1] + r_step_target,
+            self.x_morph_in[-1] + r_step_morph,
+        )
         if self.rmin is None or self.rmin < rmininc:
             self.rmin = rmininc
         if self.rmax is None or self.rmax > rmaxinc:
@@ -71,10 +75,16 @@ class MorphRGrid(Morph):
         if self.rstep is None or self.rstep < rstepinc:
             self.rstep = rstepinc
         # Make sure that rmax is exclusive
-        self.x_morph_out = numpy.arange(self.rmin, self.rmax - epsilon, self.rstep)
-        self.y_morph_out = numpy.interp(self.x_morph_out, self.x_morph_in, self.y_morph_in)
+        self.x_morph_out = numpy.arange(
+            self.rmin, self.rmax - epsilon, self.rstep
+        )
+        self.y_morph_out = numpy.interp(
+            self.x_morph_out, self.x_morph_in, self.y_morph_in
+        )
         self.x_target_out = self.x_morph_out.copy()
-        self.y_target_out = numpy.interp(self.x_target_out, self.x_target_in, self.y_target_in)
+        self.y_target_out = numpy.interp(
+            self.x_target_out, self.x_target_in, self.y_target_in
+        )
         return self.xyallout
 
 

@@ -77,13 +77,16 @@ class TestTools:
         path_sequence = []
         for file in absolute_sf:
             path_sequence.append(Path(file).absolute())
-        sorted_path_sequence, fvs = tools.field_sort(path_sequence, "temperature", get_field_values=True)
+        sorted_path_sequence, fvs = tools.field_sort(
+            path_sequence, "temperature", get_field_values=True
+        )
         sorted_sequence = []
         for path in sorted_path_sequence:
             print(path)
             sorted_sequence.append(path.name)
 
-        # Temperature sort should produce same result as alphanumerical if leading character is removed
+        # Temperature sort should produce same result as alphanumerical if
+        # leading character is removed
         sequence_files.sort(key=lambda entry: entry[2:])
         assert sequence_files == sorted_sequence
 
@@ -91,7 +94,9 @@ class TestTools:
         assert fvs == [174, 180, 186, 192, 198, 204, 210]
 
         # Now reverse the sort
-        reversed_path_sequence = tools.field_sort(path_sequence, "temperature", reverse=True)
+        reversed_path_sequence = tools.field_sort(
+            path_sequence, "temperature", reverse=True
+        )
         reversed_sequence = []
         for path in reversed_path_sequence:
             reversed_sequence.append(path.name)
@@ -100,9 +105,14 @@ class TestTools:
         sequence_files.sort()
         assert sequence_files == reversed_sequence
 
-        # Check we get the same sequence when we load header information from a serial file
-        serial_file = os.path.join(testdata_dir, "testsequence_serialfile.json")
-        metadata_path_sequence = tools.field_sort(path_sequence, "temperature", serfile=serial_file, reverse=True)
+        # Check we get the same sequence when we load header information from
+        # a serial file
+        serial_file = os.path.join(
+            testdata_dir, "testsequence_serialfile.json"
+        )
+        metadata_path_sequence = tools.field_sort(
+            path_sequence, "temperature", serfile=serial_file, reverse=True
+        )
         metadata_sequence = []
         for path in metadata_path_sequence:
             metadata_sequence.append(path.name)
@@ -132,7 +142,12 @@ class TestTools:
 
         # Check get_values_from_dictionary_collection output gives target
         for collection_type in all_types:
-            assert tools.get_values_from_dictionary_collection(collection_type, target_key="target") == target_list
+            assert (
+                tools.get_values_from_dictionary_collection(
+                    collection_type, target_key="target"
+                )
+                == target_list
+            )
 
 
 # End of class TestTools
